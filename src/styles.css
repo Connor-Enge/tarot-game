@@ -1484,3 +1484,23 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .codex__combo-n { flex: 0 0 auto; width: 16px; text-align: right; font-variant-numeric: tabular-nums; opacity: 0.7; }
 .codex__combo em { color: var(--gold-2); }
 .reduce-motion .codex__combo { animation: none; }
+
+/* --- the relic screen: an alcove, tokens set in sockets --------------------- */
+.alcove { width: min(100%, 320px); height: auto; margin: 0 auto -6px; display: block; filter: drop-shadow(0 10px 24px rgba(0,0,0,0.5)); }
+.relic-title { position: relative; margin-bottom: 0; }
+.relic-title::after { content: ''; display: block; width: 90px; height: 1px; margin: 8px auto 0; background: linear-gradient(90deg, transparent, rgba(214,178,94,0.6), transparent); }
+.relic { grid-template-columns: 60px 1fr; position: relative; padding: 14px 16px; }
+.relic::before, .relic::after {
+  content: ''; position: absolute; width: 9px; height: 9px; pointer-events: none;
+  border-color: rgba(214,178,94,0.6); border-style: solid;
+}
+.relic::before { top: 4px; left: 4px; border-width: 1px 0 0 1px; }
+.relic::after { bottom: 4px; right: 4px; border-width: 0 1px 1px 0; }
+.relic__socket {
+  width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center;
+  background: radial-gradient(circle at 50% 40%, rgba(214,178,94,0.16), rgba(0,0,0,0.35) 70%);
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(214,178,94,0.35), 0 0 16px rgba(214,178,94,0.12);
+}
+.relic__socket .relic__art { width: 40px; height: 40px; }
+.relic__name { color: var(--gold-2); font-size: 1.15rem; }
+.relic:hover .relic__socket, .relic:focus-visible .relic__socket { box-shadow: inset 0 2px 6px rgba(0,0,0,0.6), inset 0 0 0 1px var(--gold-2), 0 0 22px rgba(243,220,138,0.35); }

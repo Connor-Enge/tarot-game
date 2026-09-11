@@ -236,3 +236,33 @@ export function VowArt({ id, className }: { id: string; className?: string }) {
     </svg>
   );
 }
+
+/**
+ * The alcove where relics are found: a niche in dark stone, a low shelf,
+ * candlelight pooling on it. Drawn 200 x 80, above the offer.
+ */
+export function AlcoveArt({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 200 80" className={className} aria-hidden preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <radialGradient id="alcoveGlow" cx="50%" cy="70%" r="55%">
+          <stop offset="0%" stopColor="#f3dc8a" stopOpacity={0.45} />
+          <stop offset="55%" stopColor="#d6b25e" stopOpacity={0.12} />
+          <stop offset="100%" stopColor="#d6b25e" stopOpacity={0} />
+        </radialGradient>
+      </defs>
+      <path d="M0 80 V30 Q0 0 30 0 H170 Q200 0 200 30 V80 Z" fill="rgba(10,8,18,0.9)" />
+      <path d="M40 80 V34 Q40 14 60 14 H140 Q160 14 160 34 V80 Z" fill="#050410" />
+      <ellipse cx={100} cy={64} rx={70} ry={26} fill="url(#alcoveGlow)" />
+      <path d="M44 64 H156" stroke={GOLD_FLAT} strokeWidth={0.8} opacity={0.7} />
+      <path d="M46 66 H154" stroke={GOLD_FLAT} strokeWidth={0.4} opacity={0.35} />
+      <path d="M98 64 V54 H102 V64 Z" fill={GOLD_FLAT} opacity={0.55} />
+      <path d="M100 53 q-2.2 -4 0 -7 q2.2 3 0 7" fill="#f3dc8a" opacity={0.95} />
+      <circle cx={100} cy={50} r={6} fill="#f3dc8a" opacity={0.12} />
+      <path d="M70 64 q4 -6 8 0 M126 64 l3 -7 l3 7" fill="none" stroke={GOLD_FLAT} strokeWidth={0.6} opacity={0.4} />
+      {[0, 1, 2].map((i) => (
+        <path key={i} d={`M${52 + i * 6} 14 v-${4 + i * 2}`} stroke={GOLD_FLAT} strokeWidth={0.5} opacity={0.25} />
+      ))}
+    </svg>
+  );
+}
