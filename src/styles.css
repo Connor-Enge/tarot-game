@@ -101,10 +101,10 @@ em { color: var(--gold); font-style: normal; }
 .reduce-motion .ambient { display: none; }
 
 /* --- title --------------------------------------------------------------- */
-.screen--title { justify-content: center; text-align: center; gap: 28px; }
+.screen--title { justify-content: center; text-align: center; gap: 22px; }
 .row { display: flex; gap: 10px; }
 .row > .btn { flex: 1; }
-.fan { position: relative; height: 170px; display: flex; justify-content: center; align-items: flex-end; margin-bottom: 8px; }
+.fan { position: relative; height: 150px; display: flex; justify-content: center; align-items: flex-end; margin-bottom: 8px; }
 .fan__card {
   position: absolute; bottom: 0; left: 50%;
   transform-origin: 50% 140%;

@@ -35,7 +35,7 @@ export function ReaderMark({ knowledge: k }: { knowledge: Knowledge }) {
       </svg>
       <div className="reader__text">
         <div>{title}</div>
-        <div className="muted small">{known} of {CARDS.length} known</div>
+        <div className="muted small">{known} of {CARDS.length} known · {k.deaths} deaths · {k.ascensions} returns</div>
       </div>
     </div>
   );

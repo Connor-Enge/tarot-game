@@ -113,10 +113,7 @@ export function TitleScreen() {
           </button>
         </div>
       </div>
-      <p className="muted small">
-        {k.runs === 0 ? 'The deck is unread.' : `${k.runs} descents · ${k.deaths} deaths · ${k.ascensions} returns`}
-      </p>
-      <ReaderMark knowledge={k} />
+      {k.runs === 0 ? <p className="muted small">The deck is unread.</p> : <ReaderMark knowledge={k} />}
       <div className="today" aria-label="card of the day">
         <Card cardId={today} size="xs" />
         <span className="muted small">Today's card · {getCard(today).name}</span>
