@@ -46,6 +46,7 @@ function ReadingScreenInner() {
         <Stats vitality={run.vitality} clarity={run.clarity} />
       </header>
 
+      <div className="reading__left">
       <section className="scene">
         <SceneArt id={scene.id} className="scene__art" />
         <p className="scene__place muted">{scene.place}</p>
@@ -78,7 +79,9 @@ function ReadingScreenInner() {
           );
         })}
       </section>
+      </div>
 
+      <div className="reading__right">
       <section className={`hand ${active.candidates.length > 3 ? 'hand--four' : ''}`} aria-label={`candidates for ${seatsNamed ? SLOTS[active.slot].name : `seat ${run.activeSlot + 1}`}: choose one`} key={handKey}>
         {active.candidates.map((c, i) => {
           const card = getCard(c.cardId);
@@ -131,6 +134,7 @@ function ReadingScreenInner() {
           {run.activeSlot === SLOT_IDS.length - 1 ? 'Read' : 'Place'}
         </button>
       </footer>
+      </div>
       {codexOpen && <CodexDetail cardId={codexOpen} onClose={() => openCodex(null)} />}
       {deckOpen && <DeckSheet run={run} onClose={() => openDeck(false)} />}
       {zoom && (

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { CARDS, dailySeed, DEPTHS, DESCENTS, getCard, getDescent, maxDepthUnlocked } from '../../engine';
 import { ReaderMark } from '../components/ReaderMark';
 import { useGame } from '../../store';
@@ -22,6 +22,23 @@ export function TitleScreen() {
   const maxDepth = maxDepthUnlocked(k.records?.standard?.returns ?? 0);
   const [lockedNote, setLockedNote] = useState<string | null>(null);
   const [fanDown, setFanDown] = useState(false);
+  // Foil shimmer follows device tilt where the browser allows it without a prompt, else the pointer.
+  useEffect(() => {
+    const root = document.documentElement;
+    const set = (x: number) => root.style.setProperty('--shimmer', `${Math.max(0, Math.min(100, x))}%`);
+    const onTilt = (e: DeviceOrientationEvent) => {
+      if (e.gamma == null) return;
+      set(50 + (e.gamma / 45) * 50);
+    };
+    const onMove = (e: PointerEvent) => set((e.clientX / window.innerWidth) * 100);
+    window.addEventListener('deviceorientation', onTilt);
+    window.addEventListener('pointermove', onMove, { passive: true });
+    return () => {
+      window.removeEventListener('deviceorientation', onTilt);
+      window.removeEventListener('pointermove', onMove);
+      root.style.removeProperty('--shimmer');
+    };
+  }, []);
   const known = Object.values(k.cards).filter((c) => c.tier > 0).length;
   const current = getDescent(descent);
   const anyUnlocked = DESCENTS.some((d, i) => i > 0 && d.unlocked(k));

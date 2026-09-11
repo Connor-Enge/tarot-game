@@ -342,6 +342,14 @@ Localization was considered and deferred: all authored text already lives
 in three data files (`cards.ts`, `minorText.ts`, `scenes.ts`) plus relics
 and sigils, so a translation is a data swap when it is wanted.
 
+**Tablet and landscape**: from 700px wide the reading screen becomes two
+columns, scene and spread on the left, hand and actions on the right, with
+larger cards. Short landscape hides the scene vignette.
+
+**Discard viewer** separates cards read from cards passed over. The title
+fan's foil shimmers with device tilt (where no permission prompt is needed)
+or the pointer.
+
 ## Balance
 
 `scripts/sim.ts` runs whole descents under three policies. Run it with

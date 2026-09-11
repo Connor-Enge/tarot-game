@@ -649,3 +649,37 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .card:focus-visible { outline-offset: 4px; border-radius: 8px; }
 .node:focus-visible, .descent-chip:focus-visible, .relic-chip:focus-visible { border-radius: 50%; }
 .best-seat { font-size: 0.95rem; color: var(--gold-2); }
+
+/* --- foil shimmer ------------------------------------------------------------ */
+.fan .card__inner::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen; opacity: 0.55;
+  background: linear-gradient(115deg, transparent 0%, transparent calc(var(--shimmer, 50%) - 18%), rgba(255,240,200,0.55) var(--shimmer, 50%), transparent calc(var(--shimmer, 50%) + 18%), transparent 100%);
+  transition: background 120ms linear;
+}
+
+/* --- discard groups ---------------------------------------------------------- */
+.deck-groups { display: flex; flex-direction: column; gap: 10px; max-height: 50vh; overflow-y: auto; text-align: left; }
+.deck-groups .deck-grid { max-height: none; overflow: visible; }
+.deck-grid--dim { opacity: 0.6; }
+
+/* --- tablet / landscape ------------------------------------------------------ */
+@media (min-width: 700px) and (min-height: 480px) {
+  .screen { max-width: 980px; }
+  .screen--reading { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto 1fr; column-gap: 28px; align-items: start; }
+  .screen--reading > .topbar { grid-column: 1 / -1; }
+  .screen--reading > .relic-strip { grid-column: 1 / -1; }
+  .screen--reading > .nudge { grid-column: 1 / -1; }
+  .reading__left, .reading__right { display: flex; flex-direction: column; gap: 16px; min-height: 60vh; }
+  .reading__right { justify-content: flex-end; }
+  .reading__right .hand { align-items: center; }
+  .card--lg { --w: 150px; }
+  .card--sm { --w: 84px; }
+  .screen--resolution .narration { max-width: 60ch; margin: 0 auto; }
+}
+@media (min-width: 700px) and (max-height: 479px) {
+  .screen { max-width: 980px; }
+  .screen--reading { display: grid; grid-template-columns: 1fr 1fr; column-gap: 20px; }
+  .screen--reading > .topbar, .screen--reading > .relic-strip, .screen--reading > .nudge { grid-column: 1 / -1; }
+  .scene__art { display: none; }
+  .card--lg { --w: 96px; }
+}
