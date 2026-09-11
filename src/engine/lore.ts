@@ -566,6 +566,70 @@ export const LORE: Record<string, Lore> = {
   },
 };
 
+/**
+ * Keywords for the 56 Minor Arcana, upright and reversed, written per
+ * card rather than templated by rank. The Major Arcana keep the keywords
+ * in cards.ts.
+ */
+export const MINOR_KEYWORDS: Record<string, { upright: string[]; reversed: string[] }> = {
+  'wands-1': { upright: ['inspiration', 'new energy'], reversed: ['false start', 'delay'] },
+  'wands-2': { upright: ['planning', 'discovery'], reversed: ['fear of change', 'indecision'] },
+  'wands-3': { upright: ['expansion', 'foresight'], reversed: ['obstacles', 'delay'] },
+  'wands-4': { upright: ['celebration', 'homecoming'], reversed: ['instability', 'tension at home'] },
+  'wands-5': { upright: ['competition', 'conflict'], reversed: ['avoidance', 'resolution'] },
+  'wands-6': { upright: ['victory', 'recognition'], reversed: ['ego', 'fall from favour'] },
+  'wands-7': { upright: ['perseverance', 'defence'], reversed: ['overwhelm', 'giving up'] },
+  'wands-8': { upright: ['speed', 'news'], reversed: ['delay', 'miscommunication'] },
+  'wands-9': { upright: ['resilience', 'the last push'], reversed: ['exhaustion', 'paranoia'] },
+  'wands-10': { upright: ['burden', 'responsibility'], reversed: ['release', 'collapse'] },
+  'wands-11': { upright: ['enthusiasm', 'exploration'], reversed: ['haste', 'bad news'] },
+  'wands-12': { upright: ['passion', 'adventure'], reversed: ['recklessness', 'impatience'] },
+  'wands-13': { upright: ['confidence', 'warmth'], reversed: ['jealousy', 'insecurity'] },
+  'wands-14': { upright: ['vision', 'leadership'], reversed: ['tyranny', 'impulsiveness'] },
+  'cups-1': { upright: ['love', 'new feeling'], reversed: ['emptiness', 'blocked feeling'] },
+  'cups-2': { upright: ['partnership', 'mutual love'], reversed: ['imbalance', 'breakup'] },
+  'cups-3': { upright: ['friendship', 'celebration'], reversed: ['gossip', 'excess'] },
+  'cups-4': { upright: ['apathy', 'contemplation'], reversed: ['renewed interest', 'withdrawal'] },
+  'cups-5': { upright: ['grief', 'regret'], reversed: ['acceptance', 'moving on'] },
+  'cups-6': { upright: ['nostalgia', 'innocence'], reversed: ['stuck in the past', 'naivety'] },
+  'cups-7': { upright: ['choices', 'fantasy'], reversed: ['clarity', 'decision'] },
+  'cups-8': { upright: ['walking away', 'searching'], reversed: ['drifting', 'fear of change'] },
+  'cups-9': { upright: ['wishes granted', 'contentment'], reversed: ['dissatisfaction', 'indulgence'] },
+  'cups-10': { upright: ['harmony', 'loving relationships'], reversed: ['disharmony', 'unhappiness'] },
+  'cups-11': { upright: ['imagination', 'a tender message'], reversed: ['immaturity', 'escapism'] },
+  'cups-12': { upright: ['romance', 'charm'], reversed: ['moodiness', 'empty promises'] },
+  'cups-13': { upright: ['compassion', 'intuition'], reversed: ['overwhelm', 'codependence'] },
+  'cups-14': { upright: ['emotional balance', 'wise counsel'], reversed: ['coldness', 'manipulation'] },
+  'swords-1': { upright: ['clarity', 'breakthrough'], reversed: ['confusion', 'cruelty'] },
+  'swords-2': { upright: ['stalemate', 'avoidance'], reversed: ['decision', 'information'] },
+  'swords-3': { upright: ['heartbreak', 'grief'], reversed: ['healing', 'forgiveness'] },
+  'swords-4': { upright: ['rest', 'recovery'], reversed: ['restlessness', 'burnout'] },
+  'swords-5': { upright: ['hollow victory', 'conflict'], reversed: ['reconciliation', 'resentment'] },
+  'swords-6': { upright: ['transition', 'moving on'], reversed: ['baggage', 'stuck'] },
+  'swords-7': { upright: ['strategy', 'deception'], reversed: ['confession', 'exposure'] },
+  'swords-8': { upright: ['restriction', 'self-doubt'], reversed: ['release', 'new perspective'] },
+  'swords-9': { upright: ['anxiety', 'sleepless worry'], reversed: ['hope', 'fear faced'] },
+  'swords-10': { upright: ['rock bottom', 'painful ending'], reversed: ['recovery', 'survival'] },
+  'swords-11': { upright: ['curiosity', 'vigilance'], reversed: ['gossip', 'all talk'] },
+  'swords-12': { upright: ['ambition', 'directness'], reversed: ['aggression', 'rashness'] },
+  'swords-13': { upright: ['clarity', 'independence'], reversed: ['bitterness', 'coldness'] },
+  'swords-14': { upright: ['intellect', 'authority'], reversed: ['manipulation', 'tyranny'] },
+  'pentacles-1': { upright: ['opportunity', 'prosperity'], reversed: ['missed chance', 'poor planning'] },
+  'pentacles-2': { upright: ['balance', 'adaptability'], reversed: ['overcommitment', 'disorganisation'] },
+  'pentacles-3': { upright: ['craft', 'teamwork'], reversed: ['poor work', 'disunity'] },
+  'pentacles-4': { upright: ['security', 'control'], reversed: ['letting go', 'loss of control'] },
+  'pentacles-5': { upright: ['hardship', 'isolation'], reversed: ['recovery', 'help accepted'] },
+  'pentacles-6': { upright: ['generosity', 'charity'], reversed: ['debt', 'strings attached'] },
+  'pentacles-7': { upright: ['patience', 'assessment'], reversed: ['impatience', 'wasted effort'] },
+  'pentacles-8': { upright: ['diligence', 'craftsmanship'], reversed: ['perfectionism', 'drudgery'] },
+  'pentacles-9': { upright: ['self-sufficiency', 'luxury'], reversed: ['overspending', 'loneliness'] },
+  'pentacles-10': { upright: ['legacy', 'family wealth'], reversed: ['family conflict', 'squandered legacy'] },
+  'pentacles-11': { upright: ['study', 'ambition'], reversed: ['procrastination', 'lack of focus'] },
+  'pentacles-12': { upright: ['reliability', 'routine'], reversed: ['stagnation', 'stubbornness'] },
+  'pentacles-13': { upright: ['nurture', 'practicality'], reversed: ['self-neglect', 'materialism'] },
+  'pentacles-14': { upright: ['wealth', 'mastery'], reversed: ['greed', 'stubbornness'] },
+};
+
 /** The guide page for a card, by id. Every card has one; a missing id is a bug caught by tests. */
 export function getLore(id: string): Lore {
   const l = LORE[id];

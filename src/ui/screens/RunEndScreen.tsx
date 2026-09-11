@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getCard, getDescent, getRelic, getVow, getWeather, KIND_GLYPH, reckon, reckoningText, SCENES, SIGILS, SLOT_IDS, SLOT_POSITION, SLOTS, tallyText, type RunState } from '../../engine';
+import { getCard, getDescent, getLore, getRelic, getVow, getWeather, KIND_GLYPH, reckon, reckoningText, SCENES, SIGILS, SLOT_IDS, SLOT_POSITION, SLOTS, tallyText, type RunState } from '../../engine';
 import { shareText, useGame } from '../../store';
 import { Card } from '../components/Card';
 import { RelicArt } from '../art/relics';
@@ -189,7 +189,7 @@ function RunEndScreenInner() {
                     {d.reversed && <span className="muted"> · reversed</span>}
                   </div>
                   {replay > 0 && <p className="narration__omen rise" style={{ animationDelay: `${500 + i * 900}ms` }}>{d.reversed ? card.omen.reversed : card.omen.upright}</p>}
-                  <p className="reveal__meaning"><span className="reveal__fleuron" aria-hidden>❧</span>{d.reversed && tier >= 3 ? card.meaning.reversed : card.meaning.upright}</p>
+                  <p className="reveal__meaning"><span className="reveal__fleuron" aria-hidden>❧</span>{d.reversed && tier >= 3 ? getLore(d.cardId).reversed : getLore(d.cardId).upright}</p>
                   {(() => {
                     const r = lastReckoning[i];
                     return (

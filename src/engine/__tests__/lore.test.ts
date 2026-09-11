@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { CARDS } from '../cards';
-import { getLore, LORE } from '../lore';
+import { getLore, LORE, MINOR_KEYWORDS } from '../lore';
 
 describe('lore', () => {
   it('every one of the 78 cards has a full guide page', () => {
@@ -15,5 +15,21 @@ describe('lore', () => {
       expect(l.description.includes(c.name), `${c.id} description names the card`).toBe(true);
     }
     expect(Object.keys(LORE).length).toBe(78);
+  });
+  it('every Minor has its own keywords, upright and reversed, and the cards carry them', () => {
+    const minors = CARDS.filter((c) => c.arcana === 'minor');
+    expect(minors.length).toBe(56);
+    for (const c of minors) {
+      const kw = MINOR_KEYWORDS[c.id];
+      expect(kw, c.id).toBeDefined();
+      expect(kw.upright.length).toBeGreaterThanOrEqual(2);
+      expect(kw.reversed.length).toBeGreaterThanOrEqual(2);
+      expect(c.keywords).toEqual(kw);
+    }
+    // No two cards of a suit share the same upright keywords.
+    for (const suit of ['wands', 'cups', 'swords', 'pentacles']) {
+      const seen = new Set(minors.filter((c) => c.suit === suit).map((c) => c.keywords.upright.join('|')));
+      expect(seen.size).toBe(14);
+    }
   });
 });

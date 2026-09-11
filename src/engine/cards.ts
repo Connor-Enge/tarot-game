@@ -14,6 +14,7 @@
  */
 
 import { MINOR_TEXT } from './minorText';
+import { MINOR_KEYWORDS } from './lore';
 
 export type Suit = 'wands' | 'cups' | 'swords' | 'pentacles';
 
@@ -235,7 +236,7 @@ function buildMinor(s: SuitDef, r: RankDef): Card {
     number: r.n,
     suit: s.suit,
     tags: { upright: uniq([s.element, ...s.tags, ...r.up]), reversed: uniq([s.element, ...r.rev]) },
-    keywords: { upright: r.kwUp, reversed: r.kwRev },
+    keywords: MINOR_KEYWORDS[`${s.suit}-${r.n}`] ?? { upright: r.kwUp, reversed: r.kwRev },
     meaning: text
       ? { upright: text.m[0], reversed: text.m[1] }
       : { upright: `In the realm of ${s.domain}: ${r.theme}.`, reversed: `In the realm of ${s.domain}: ${r.themeRev}.` },

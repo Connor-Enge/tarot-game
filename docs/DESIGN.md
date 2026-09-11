@@ -123,7 +123,10 @@ one-line meanings were far too thin): every one of the 78 cards has a
 full page in the Codex, in the shape of a printed guidebook: a
 description of the picture and what it symbolises, the upright meaning,
 how it reads for relationships and for career, and the reversed
-meaning, with upright and reversed keywords above. Pages are shown by
+meaning, with upright and reversed keywords above. The 56 Minors' keywords
+are written per card too (`MINOR_KEYWORDS`), replacing the old
+rank templates, so a whisper of the Ten of Cups says "harmony", not
+"completion". Pages are shown by
 tier: keywords at glimpsed, the page at known, the reversed half at
 mastered. Nothing of it ever appears on a card face or in a reading.
 
