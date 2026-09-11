@@ -39,6 +39,8 @@ import {
   newSigils,
   newKnowledgeSigils,
   noteRecord,
+  KIND_GLYPH,
+  SCENES,
   noteSigils,
   noteResolved,
   noteRunStarted,
@@ -157,7 +159,11 @@ function learn(k: Knowledge, run: RunState, mode: RunMode): { knowledge: Knowled
     if (returned) next = noteAscension(next, finalSpread(run));
     else next = noteDeath(next, finalSpread(run));
     const good = run.history.filter((h) => h.resolution.tier === 'boon' || h.resolution.tier === 'triumph').length;
-    next = noteRecord(next, mode.kind === 'free' ? mode.descent : mode.kind, run.history.length, returned, mode.kind === 'free' ? (mode.depth ?? 0) : 0, { cards: finalSpread(run), good });
+    next = noteRecord(next, mode.kind === 'free' ? mode.descent : mode.kind, run.history.length, returned, mode.kind === 'free' ? (mode.depth ?? 0) : 0, {
+      cards: finalSpread(run),
+      good,
+      road: run.history.map((h) => KIND_GLYPH[SCENES[h.sceneId].kind]).join(''),
+    });
     next = noteLast(next, finalSpread(run), last.resolution.narration.at(-1) ?? '', returned);
     earned = newSigils(run, next);
     next = noteSigils(next, earned);

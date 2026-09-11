@@ -55,7 +55,7 @@ export interface Knowledge {
       bestDepth: number;
       deepestReturn?: number;
       /** The finest run so far: returned beats died, then deeper, then more good readings. */
-      best?: { cards: { cardId: string; reversed: boolean }[]; depth: number; returned: boolean; good: number };
+      best?: { cards: { cardId: string; reversed: boolean }[]; depth: number; returned: boolean; good: number; road?: string };
     }
   >;
   runs: number;
@@ -230,12 +230,12 @@ export function noteRecord(
   depth: number,
   returned: boolean,
   difficulty = 0,
-  spread?: { cards: { cardId: string; reversed: boolean }[]; good: number },
+  spread?: { cards: { cardId: string; reversed: boolean }[]; good: number; road?: string },
 ): Knowledge {
   const prev = k.records?.[descent] ?? { runs: 0, returns: 0, bestDepth: 0, deepestReturn: 0 };
   let best = prev.best;
   if (spread) {
-    const candidate = { cards: spread.cards.map((c) => ({ cardId: c.cardId, reversed: c.reversed })), depth, returned, good: spread.good };
+    const candidate = { cards: spread.cards.map((c) => ({ cardId: c.cardId, reversed: c.reversed })), depth, returned, good: spread.good, road: spread.road };
     const beats = !best || (candidate.returned && !best.returned) || (candidate.returned === best.returned && (candidate.depth > best.depth || (candidate.depth === best.depth && candidate.good > best.good)));
     if (beats) best = candidate;
   }

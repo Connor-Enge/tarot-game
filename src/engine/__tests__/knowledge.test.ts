@@ -171,6 +171,20 @@ describe('resetRecords', () => {
   });
 });
 
+describe('noteRecord', () => {
+  it('keeps the road taken alongside the finest spread', async () => {
+    const { noteRecord } = await import('../knowledge');
+    const spread = { cards: [{ cardId: 'major-0', reversed: false }], good: 2, road: '⛩✧⚔' };
+    let k = noteRecord(emptyKnowledge(), 'standard', 3, false, 0, spread);
+    expect(k.records?.standard.best?.road).toBe('⛩✧⚔');
+    // A shallower death does not replace it; a return does, road and all.
+    k = noteRecord(k, 'standard', 2, false, 0, { ...spread, good: 0, road: '⚔' });
+    expect(k.records?.standard.best?.road).toBe('⛩✧⚔');
+    k = noteRecord(k, 'standard', 9, true, 0, { ...spread, road: '⛩✧⚔♨⚔✧⛩♨◉' });
+    expect(k.records?.standard.best?.road).toBe('⛩✧⚔♨⚔✧⛩♨◉');
+  });
+});
+
 describe('daily streak', () => {
   it('counts consecutive days and survives a same-day replay', async () => {
     const { noteDaily, dailyStreakAlive } = await import('../knowledge');

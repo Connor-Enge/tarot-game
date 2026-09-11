@@ -4,6 +4,7 @@ const TIER_GLYPH = { calamity: '✖', harm: '▽', neutral: '◇', boon: '△', 
 import { useState } from 'react';
 import { useSettings } from '../../settings';
 import { useGame } from '../../store';
+import { TierFlourish } from '../art/flourish';
 import { Card } from '../components/Card';
 import { CodexDetail } from '../components/CodexDetail';
 import { Stats } from '../components/Stat';
@@ -44,6 +45,7 @@ function ResolutionScreenInner() {
       </header>
 
       <section className="spread spread--final">
+        <TierFlourish tier={resolution.tier} />
         {SLOT_IDS.map((id, i) => (
           <div className="deal" style={{ animationDelay: `${i * 80}ms` }} key={id}>
             <Card cardId={last.reading[id].cardId} reversed={last.reading[id].reversed} size="sm" mark={run.marks[last.reading[id].cardId]} />

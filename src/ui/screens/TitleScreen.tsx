@@ -124,6 +124,9 @@ export function TitleScreen() {
               <span className="muted small">
                 Finest · {k.records[current.id].best!.returned ? 'returned' : `scene ${k.records[current.id].best!.depth}`} · {k.records[current.id].best!.good} good
               </span>
+              {k.records[current.id].best!.road && (
+                <span className="best__road" aria-label="the road taken">{k.records[current.id].best!.road}</span>
+              )}
             </div>
           )}
         </div>

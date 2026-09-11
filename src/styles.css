@@ -779,3 +779,19 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .toast--sticky { animation: rise 300ms ease both; cursor: pointer; border-color: var(--gold-2); }
 
 .finest { color: var(--gold-2); letter-spacing: 0.06em; }
+
+/* --- resolution flourish -------------------------------------------------- */
+.spread--final { isolation: isolate; }
+.spread--final .deal { position: relative; z-index: 1; }
+.flourish {
+  position: absolute; left: 50%; top: 52%; width: 140%; height: 170%; max-width: 640px;
+  transform: translate(-50%, -50%); z-index: 0; pointer-events: none;
+  opacity: 0; animation: fade-in 1600ms ease 400ms both;
+}
+.flourish__spin { transform-origin: 0 0; animation: flourish-spin 120s linear infinite; }
+.flourish--boon .flourish__spin { animation-duration: 80s; animation-direction: reverse; }
+.flourish__shard { animation: shard-fall 6s ease-in infinite both; }
+@keyframes flourish-spin { to { transform: rotate(360deg); } }
+@keyframes shard-fall { 0% { transform: translateY(-6px); opacity: 0; } 20% { opacity: 0.55; } 100% { transform: translateY(26px); opacity: 0; } }
+.reduce-motion .flourish__spin, .reduce-motion .flourish__shard { animation: none; }
+.best__road { font-family: Georgia, serif; letter-spacing: 0.4em; color: var(--muted); font-size: 0.9rem; padding-left: 0.4em; }
