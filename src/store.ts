@@ -462,7 +462,7 @@ export const useGame = create<GameStore>((set, get) => ({
     const next = cutDeckRun(run, at);
     if (next === run) return;
     buzz([6, 30, 10]);
-    sfx.redraw();
+    sfx.riffle();
     set({ run: next });
   },
   takeVow: (id) => {

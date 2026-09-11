@@ -1360,3 +1360,7 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .record::before { top: 0; }
 .record::after { bottom: 0; }
 .record__cell .muted { letter-spacing: 0.1em; text-transform: uppercase; font-size: 0.62rem; }
+
+/* --- cutting the deck: the lifted half ------------------------------------- */
+.cut__edge { transition: transform 160ms ease, filter 160ms ease; transform-origin: bottom center; }
+.cut__edge--lifted { transform: translateY(calc(var(--i) * 0.4px - 7px)) rotate(-4deg); filter: brightness(1.25); border-top-color: var(--gold-2); }

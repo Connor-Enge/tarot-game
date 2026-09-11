@@ -23,7 +23,13 @@ function MapScreenInner() {
   const cutDeck = useGame((s) => s.cutDeck);
   const takeVow = useGame((s) => s.takeVow);
   const vowRecord = useGame((s) => s.knowledge.vows);
-  const [cutAt, setCutAt] = useState<number | null>(null);
+  const [cutAt, setCutAtRaw] = useState<number | null>(null);
+  const setCutAt = (v: number | null) => {
+    setCutAtRaw((prev) => {
+      if (v !== null && prev !== null && v !== prev) sfx.cutTick();
+      return v;
+    });
+  };
   const [peek, setPeek] = useState<number | null>(null); // history index
   const foretell = useGame((s) => s.foretell);
   const [foretelling, setForetelling] = useState(false);
@@ -165,9 +171,11 @@ function MapScreenInner() {
               setCutAt(Math.round(frac * (run.deck.draw.length - 2)) + 1);
             }}
           >
-            {Array.from({ length: 26 }, (_, i) => (
-              <span key={i} className="cut__edge" style={{ '--i': i } as React.CSSProperties} />
-            ))}
+            {Array.from({ length: 26 }, (_, i) => {
+              const frac = cutAt !== null ? (cutAt - 1) / (run.deck.draw.length - 2) : null;
+              const lifted = frac !== null && i / 26 < frac;
+              return <span key={i} className={`cut__edge ${lifted ? 'cut__edge--lifted' : ''}`} style={{ '--i': i } as React.CSSProperties} />;
+            })}
             {cutAt !== null && <span className="cut__marker" style={{ left: `${((cutAt - 1) / (run.deck.draw.length - 2)) * 100}%` }} />}
           </div>
           <div className="row">

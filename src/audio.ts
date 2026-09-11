@@ -152,6 +152,13 @@ export const sfx = {
     tone(82.5, 3.0, 'triangle', 0.03, 0.3);
     noise(1.2, 0.05, 0.2, 200);
   },
+  /** One card edge passing under the thumb. */
+  cutTick: () => noise(0.018, 0.035, 0, 3200),
+  /** The deck riffled back together: a quick run of ticks, speeding up, then a soft thump. */
+  riffle: () => {
+    for (let i = 0; i < 14; i++) noise(0.02, 0.04, i * (0.055 - i * 0.002), 2600 + i * 60);
+    tone(90, 0.25, 'sine', 0.06, 0.75);
+  },
   /** Going under: a slow fall of three tones and water closing over. */
   under: () => {
     [130, 98, 65].forEach((f, i) => tone(f, 1.8, 'sine', 0.07, i * 0.45));
