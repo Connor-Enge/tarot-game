@@ -21,6 +21,8 @@ export interface CardKnowledge {
   witnessed?: { upright?: boolean; reversed?: boolean };
   /** How readings went when this card sat in each seat. Consequence, not meaning. */
   seatOutcomes?: Partial<Record<SlotId, { good: number; bad: number }>>;
+  /** Times this card was on the table when the player died. */
+  deathsWith?: number;
 }
 
 export interface Knowledge {
@@ -85,7 +87,7 @@ export function noteDeath(k: Knowledge, finalSpread: { cardId: string; reversed:
   let cards = { ...k.cards };
   for (const c of finalSpread) {
     const e = entry({ ...k, cards }, c.cardId);
-    cards[c.cardId] = raise(e, c.reversed ? 3 : 2);
+    cards[c.cardId] = { ...raise(e, c.reversed ? 3 : 2), deathsWith: (e.deathsWith ?? 0) + 1 };
   }
   return { ...k, cards, seatsNamed: true, deaths: k.deaths + 1 };
 }

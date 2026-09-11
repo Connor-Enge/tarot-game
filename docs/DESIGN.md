@@ -223,6 +223,15 @@ the shared defs inlined so the foil and paper survive rasterization.
 **Card of the day**: the title screen shows one card chosen by the daily
 seed. Pure ornament; it never explains itself.
 
+**The Abyss moment**: the terminal scene has its own backdrop (a breathing
+weight at the bottom of the screen), a low swell on entry, brighter seat
+glyphs, and a slower narration reveal.
+
+**Codex filters and Ledger**: filter cards by suit and by seen/known. The
+Ledger aggregates play: most read card, kindest and cruelest (net good minus
+bad over at least three reads), most often on the table at death, busiest
+seat. All of it is consequence.
+
 Queued:
 - Scene-specific relic flavor (the satchel on the bridge is a real relic).
 

@@ -1,4 +1,9 @@
-import { CARDS, COMBO_IDS, comboNote, SIGILS, SLOTS, type Tier } from '../../engine';
+import { useState } from 'react';
+import { CARDS, COMBO_IDS, comboNote, getCard, SIGILS, SLOT_IDS, SLOTS, type Tier } from '../../engine';
+
+type SuitFilter = 'all' | 'major' | 'wands' | 'cups' | 'swords' | 'pentacles';
+type TierFilter = 'all' | 'seen' | 'known';
+const SUIT_LABEL: Record<SuitFilter, string> = { all: 'All', major: '✦', wands: '⚚', cups: '♆', swords: '⚔', pentacles: '⛤' };
 import { useGame } from '../../store';
 import { Card } from '../components/Card';
 import { CodexDetail } from '../components/CodexDetail';
@@ -13,6 +18,17 @@ export function CodexScreen() {
   const knownCount = Object.values(k.cards).filter((c) => c.tier > 0).length;
   const combos = k.combos ?? [];
   const sigils = new Set(k.sigils ?? []);
+  const [suit, setSuit] = useState<SuitFilter>('all');
+  const [tf, setTf] = useState<TierFilter>('all');
+  const shown = CARDS.filter((c) => {
+    if (suit === 'major' && c.arcana !== 'major') return false;
+    if (suit !== 'all' && suit !== 'major' && c.suit !== suit) return false;
+    const e = k.cards[c.id];
+    if (tf === 'seen' && !e) return false;
+    if (tf === 'known' && (e?.tier ?? 0) < 2) return false;
+    return true;
+  });
+  const ledger = buildLedger(k);
 
   return (
     <main className="screen screen--codex">
@@ -67,8 +83,38 @@ export function CodexScreen() {
         </div>
       </section>
 
+      {ledger && (
+        <section className="ledger">
+          <div className="muted small">Ledger</div>
+          {ledger.map(([label, value]) => (
+            <div key={label} className="ledger__row">
+              <span className="muted">{label}</span>
+              <span>{value}</span>
+            </div>
+          ))}
+        </section>
+      )}
+
+      <div className="filters">
+        <div className="filters__row">
+          {(Object.keys(SUIT_LABEL) as SuitFilter[]).map((f) => (
+            <button key={f} type="button" className={`chip ${suit === f ? 'chip--on' : ''}`} onClick={() => setSuit(f)}>
+              {SUIT_LABEL[f]}
+            </button>
+          ))}
+        </div>
+        <div className="filters__row">
+          {(['all', 'seen', 'known'] as TierFilter[]).map((f) => (
+            <button key={f} type="button" className={`chip ${tf === f ? 'chip--on' : ''}`} onClick={() => setTf(f)}>
+              {f}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <section className="codex__grid">
-        {CARDS.map((c) => {
+        {shown.length === 0 && <p className="muted small">Nothing here yet.</p>}
+        {shown.map((c) => {
           const e = k.cards[c.id];
           const tier: Tier = e?.tier ?? 0;
           const seen = !!e;
@@ -84,5 +130,37 @@ export function CodexScreen() {
       {open && <CodexDetail cardId={open} onClose={() => openCodex(null)} />}
     </main>
   );
+}
+
+/** Aggregate what the player has done. Consequence, never meaning. */
+function buildLedger(k: ReturnType<typeof useGame.getState>['knowledge']): [string, string][] | null {
+  const entries = Object.entries(k.cards);
+  if (entries.length === 0) return null;
+  const rows: [string, string][] = [];
+  const mostRead = entries.slice().sort((a, b) => b[1].resolved - a[1].resolved)[0];
+  if (mostRead && mostRead[1].resolved > 0) rows.push(['Most read', `${getCard(mostRead[0]).name} · ${mostRead[1].resolved}×`]);
+  const rated = entries
+    .map(([id, e]) => {
+      let good = 0;
+      let bad = 0;
+      for (const s of SLOT_IDS) {
+        good += e.seatOutcomes?.[s]?.good ?? 0;
+        bad += e.seatOutcomes?.[s]?.bad ?? 0;
+      }
+      return { id, n: e.resolved, score: good - bad, good, bad };
+    })
+    .filter((r) => r.n >= 3);
+  if (rated.length) {
+    const best = rated.slice().sort((a, b) => b.score - a.score)[0];
+    const worst = rated.slice().sort((a, b) => a.score - b.score)[0];
+    if (best.score > 0) rows.push(['Kindest', `${getCard(best.id).name} · ${best.good} good`]);
+    if (worst.score < 0) rows.push(['Cruelest', `${getCard(worst.id).name} · ${worst.bad} bad`]);
+  }
+  const fatal = entries.slice().sort((a, b) => (b[1].deathsWith ?? 0) - (a[1].deathsWith ?? 0))[0];
+  if (fatal && (fatal[1].deathsWith ?? 0) > 0) rows.push(['On the table at death', `${getCard(fatal[0]).name} · ${fatal[1].deathsWith}×`]);
+  const seatTotals = SLOT_IDS.map((s) => [s, entries.reduce((a, [, e]) => a + (e.seats[s] ?? 0), 0)] as const);
+  const busiest = seatTotals.slice().sort((a, b) => b[1] - a[1])[0];
+  if (busiest && busiest[1] > 0 && k.seatsNamed) rows.push(['Busiest seat', `${SLOTS[busiest[0]].glyph} ${SLOTS[busiest[0]].name}`]);
+  return rows.length ? rows : null;
 }
 

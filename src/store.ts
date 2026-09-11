@@ -138,9 +138,12 @@ export const useGame = create<GameStore>((set, get) => ({
   chooseNode: (index) => {
     const { run } = get();
     if (!run) return;
-    buzz(6);
-    sfx.node();
-    set({ run: chooseNodeRun(run, index), lifted: null });
+    const next = chooseNodeRun(run, index);
+    const abyss = next.map[next.layer]?.[index]?.kind === 'abyss';
+    buzz(abyss ? [20, 60, 40] : 6);
+    if (abyss) sfx.abyss();
+    else sfx.node();
+    set({ run: next, lifted: null });
   },
 
   lift: (index) => {

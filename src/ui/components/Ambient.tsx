@@ -25,6 +25,14 @@ export function Ambient() {
     };
     resize();
     window.addEventListener('resize', resize);
+    const touch = { x: -1, y: -1, t: 0 };
+    const onPointer = (e: PointerEvent) => {
+      touch.x = e.clientX / w;
+      touch.y = e.clientY / h;
+      touch.t = performance.now();
+    };
+    window.addEventListener('pointerdown', onPointer, { passive: true });
+    window.addEventListener('pointermove', onPointer, { passive: true });
     let last = performance.now();
     const frame = (t: number) => {
       const dt = Math.min(t - last, 50);
@@ -33,6 +41,19 @@ export function Ambient() {
       ctx.clearRect(0, 0, w, h);
       for (const m of motes) {
         if (!reduce) {
+          // drift away from a recent touch
+          const age = t - touch.t;
+          if (age < 900 && touch.x >= 0) {
+            const dx = m.x - touch.x;
+            const dy = (m.y - touch.y) * (h / w);
+            const d2 = dx * dx + dy * dy;
+            if (d2 < 0.04) {
+              const f = ((0.04 - d2) / 0.04) * 0.00035 * (1 - age / 900);
+              const len = Math.sqrt(d2) || 0.001;
+              m.x += (dx / len) * f * dt;
+              m.y += (dy / len) * f * dt * (w / h);
+            }
+          }
           m.x += m.vx * dt;
           m.y += m.vy * dt;
           m.p += dt * 0.002;
@@ -52,6 +73,8 @@ export function Ambient() {
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener('resize', resize);
+      window.removeEventListener('pointerdown', onPointer);
+      window.removeEventListener('pointermove', onPointer);
     };
   }, []);
   return <canvas ref={ref} className="ambient" aria-hidden />;

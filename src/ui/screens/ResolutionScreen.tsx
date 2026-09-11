@@ -13,9 +13,10 @@ export function ResolutionScreen() {
   const curse = cursed ? getRelic(cursed) : null;
   const scene = currentScene(run);
   const last = run.history[run.history.length - 1];
+  const step = scene.terminal ? 900 : 550;
 
   return (
-    <main className={`screen screen--resolution tier--${resolution.tier}`}>
+    <main className={`screen screen--resolution tier--${resolution.tier} ${scene.terminal ? 'screen--abyss' : ''}`}>
       <header className="topbar">
         <span className="muted small">{scene.place}</span>
         <Stats vitality={run.vitality} clarity={run.clarity} />
@@ -34,7 +35,7 @@ export function ResolutionScreen() {
           const last = i === resolution.narration.length - 1;
           const seat = i < SLOT_IDS.length ? SLOTS[SLOT_IDS[i]].glyph : null;
           return (
-            <p key={i} className={`rise ${last ? 'narration__outcome' : 'narration__omen'}`} style={{ animationDelay: `${400 + i * 550}ms` }}>
+            <p key={i} className={`rise ${last ? 'narration__outcome' : 'narration__omen'}`} style={{ animationDelay: `${400 + i * step}ms` }}>
               {seat && <span className="narration__seat">{seat}</span>}
               {last && <span className="narration__tier">{TIER_GLYPH[resolution.tier]} </span>}
               {line}
@@ -42,18 +43,18 @@ export function ResolutionScreen() {
           );
         })}
         {curse && (
-          <p className="curse rise" style={{ animationDelay: `${400 + resolution.narration.length * 550}ms` }}>
+          <p className="curse rise" style={{ animationDelay: `${400 + resolution.narration.length * step}ms` }}>
             <span className="curse__glyph">{curse.glyph}</span> <strong>{curse.name}</strong> follows you now. <span className="muted">{curse.text}</span>
           </p>
         )}
-        <p className="deltas rise" style={{ animationDelay: `${400 + resolution.narration.length * 550}ms` }}>
+        <p className="deltas rise" style={{ animationDelay: `${400 + resolution.narration.length * step}ms` }}>
           {resolution.deltas.vitality !== 0 && <span className="stat--vit">♥ {fmt(resolution.deltas.vitality)}</span>}
           {resolution.deltas.clarity !== 0 && <span className="stat--cla">◈ {fmt(resolution.deltas.clarity)}</span>}
         </p>
       </section>
 
       <footer className="actions">
-        <button className="btn btn--primary rise" style={{ animationDelay: `${600 + resolution.narration.length * 550}ms` }} onClick={advance}>
+        <button className="btn btn--primary rise" style={{ animationDelay: `${600 + resolution.narration.length * step}ms` }} onClick={advance}>
           {offer ? 'Look closer' : resolution.tier === 'calamity' ? 'Crawl on' : 'Walk on'}
         </button>
       </footer>

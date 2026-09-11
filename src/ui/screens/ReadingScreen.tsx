@@ -34,7 +34,7 @@ export function ReadingScreen() {
   const handKey = active.candidates.map((c) => c.cardId).join('|');
 
   return (
-    <main className="screen screen--reading">
+    <main className={`screen screen--reading ${scene.terminal ? 'screen--abyss' : ''}`}>
       <header className="topbar">
         <span className="muted small">
           {sceneNumber(run)} / {totalScenes(run)}

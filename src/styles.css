@@ -464,3 +464,27 @@ em { color: var(--gold); font-style: normal; }
 a.btn { text-decoration: none; display: grid; place-items: center; }
 .today { display: flex; align-items: center; justify-content: center; gap: 10px; }
 .today .card { cursor: default; }
+
+/* --- the abyss ----------------------------------------------------------- */
+.screen--abyss .scene__prompt { color: var(--gold-2); letter-spacing: 0.03em; }
+.screen--abyss::after {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: -1;
+  background: radial-gradient(120% 100% at 50% 110%, rgba(0,0,0,0.85), transparent 55%),
+              radial-gradient(60% 40% at 50% 0%, rgba(90,60,140,0.25), transparent 70%);
+  animation: abyss-breathe 6s ease-in-out infinite;
+}
+@keyframes abyss-breathe { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
+.screen--abyss .seat--active .seat__glyph { text-shadow: 0 0 18px rgba(214,178,94,0.9), 0 0 40px rgba(214,178,94,0.4); }
+.reduce-motion .screen--abyss::after { animation: none; }
+
+/* --- codex filters / ledger --------------------------------------------- */
+.filters { display: flex; flex-direction: column; gap: 6px; }
+.filters__row { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip {
+  font: inherit; font-size: 0.8rem; padding: 6px 12px; border-radius: 999px; cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); color: var(--muted);
+}
+.chip--on { border-color: var(--gold); color: var(--gold-2); background: rgba(214,178,94,0.1); }
+.ledger { display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; border-radius: 12px; background: rgba(255,255,255,0.03); }
+.ledger__row { display: flex; justify-content: space-between; gap: 12px; font-size: 0.9rem; }
+.ledger__row span:last-child { text-align: right; }
