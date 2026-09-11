@@ -47,7 +47,7 @@ export function Constellation({ knowledge: k, live = [] }: { knowledge: Knowledg
           const a = arm * (Math.PI / 2) + 1.35 + 0.35 + 0.16;
           const r = 124;
           return (
-            <text key={suit} x={150 + Math.cos(a) * r} y={150 + Math.sin(a) * r} textAnchor="middle" dominantBaseline="middle" className="sky__arm">
+            <text key={suit} x={150 + Math.cos(a) * r} y={150 + Math.sin(a) * r} textAnchor="middle" dominantBaseline="middle" className="sky__arm" fill="rgba(141,134,163,0.75)" fontSize={6.5} fontFamily="Georgia, serif" letterSpacing="0.14em">
               {SUIT_GLYPH[suit]}
             </text>
           );
@@ -69,6 +69,7 @@ export function Constellation({ knowledge: k, live = [] }: { knowledge: Knowledg
             stroke="#8fc3e0"
             strokeWidth={0.7}
             strokeLinejoin="round"
+            opacity={0.55}
             pathLength={1}
             style={{ animationDuration: `${Math.min(6, 0.3 * live.length)}s` }}
           />
@@ -101,7 +102,7 @@ export function Constellation({ knowledge: k, live = [] }: { knowledge: Knowledg
           walk the last road again
         </button>
       )}
-      <SkyShare k={k} />
+      <SkyShare k={k} live={live} />
       <p className="muted small center">
         {focus
           ? `${getCard(focus).name} · read alongside ${focusSet.size - 1} other card${focusSet.size === 2 ? '' : 's'}`
@@ -113,7 +114,7 @@ export function Constellation({ knowledge: k, live = [] }: { knowledge: Knowledg
   );
 }
 
-function SkyShare({ k }: { k: Knowledge }) {
+function SkyShare({ k, live }: { k: Knowledge; live: string[] }) {
   const [url, setUrl] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const lit = Object.values(k.cards).filter((c) => c.tier > 0).length;
@@ -121,7 +122,7 @@ function SkyShare({ k }: { k: Knowledge }) {
     if (busy) return;
     setBusy(true);
     try {
-      const blob = await renderSkyImage(k, `${lit} of ${CARDS.length} lit · ${Object.keys(k.links ?? {}).length} bonds · ${k.runs} descents`);
+      const blob = await renderSkyImage(k, `${lit} of ${CARDS.length} lit · ${Object.keys(k.links ?? {}).length} bonds · ${k.runs} descents${live.length ? ` · ${live.length} on the last road` : ''}`, live);
       if (!blob) return;
       const file = new File([blob], 'arcana-sky.png', { type: 'image/png' });
       if (navigator.canShare?.({ files: [file] })) {

@@ -165,9 +165,9 @@ function esc(s: string): string {
 }
 
 /** Rasterize the Codex sky to a square PNG. */
-export async function renderSkyImage(k: Knowledge, caption: string): Promise<Blob | null> {
+export async function renderSkyImage(k: Knowledge, caption: string, live: string[] = []): Promise<Blob | null> {
   const S = 1080;
-  const inner = renderToStaticMarkup(createElement(Constellation, { knowledge: k }));
+  const inner = renderToStaticMarkup(createElement(Constellation, { knowledge: k, live }));
   const svgInner = inner.match(/<svg[^>]*>([\s\S]*?)<\/svg>/)?.[1] ?? '';
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${S}" height="${S}" viewBox="0 0 ${S} ${S}">
     <defs><radialGradient id="skyBg" cx="0.5" cy="0.5" r="0.7"><stop offset="0" stop-color="#2a2450" /><stop offset="1" stop-color="#0b0a12" /></radialGradient></defs>

@@ -1364,3 +1364,4 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 /* --- cutting the deck: the lifted half ------------------------------------- */
 .cut__edge { transition: transform 160ms ease, filter 160ms ease; transform-origin: bottom center; }
 .cut__edge--lifted { transform: translateY(calc(var(--i) * 0.4px - 7px)) rotate(-4deg); filter: brightness(1.25); border-top-color: var(--gold-2); }
+.welcome { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; margin-bottom: 4px; }

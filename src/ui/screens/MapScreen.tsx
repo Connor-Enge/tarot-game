@@ -4,6 +4,7 @@ import { ActBanner } from '../art/banners';
 import { RoadStrip } from '../art/road';
 import { VowArt } from '../art/relics';
 import { MemorySheet } from '../components/Memory';
+import { HowToPlay } from '../components/HowToPlay';
 
 const TIER_MARK = { calamity: '✖', harm: '▽', neutral: '◇', boon: '△', triumph: '★' } as const;
 
@@ -31,6 +32,7 @@ function MapScreenInner() {
     });
   };
   const [peek, setPeek] = useState<number | null>(null); // history index
+  const [howTo, setHowTo] = useState(false);
   const foretell = useGame((s) => s.foretell);
   const [foretelling, setForetelling] = useState(false);
   const canForetell = run.clarity >= foretellCost(run);
@@ -190,6 +192,12 @@ function MapScreenInner() {
         </section>
       ) : (
         <div className="map__prompt">
+          {firstDescent && run.layer === 0 && run.node === null && (
+            <p className="welcome muted small center rise">
+              Your first descent. The marks say what kind of place waits, not what happens there.
+              <button type="button" className="chip chip--inline" onClick={() => setHowTo(true)}>how it goes</button>
+            </p>
+          )}
           <p className="scene__prompt center">{foretelling ? 'Which door?' : run.layer === 0 ? 'Choose where the descent begins.' : 'Choose the way down.'}</p>
           <button className={`btn btn--small ${foretelling ? 'btn--on' : ''}`} disabled={!canForetell && !foretelling} onClick={() => setForetelling((f) => !f)} title="Learn what waits behind one door">
             {foretelling ? 'Never mind' : foretellCost(run) === 0 ? 'Foretell · free' : `Foretell ◈${foretellCost(run)}`}
@@ -288,6 +296,7 @@ function MapScreenInner() {
         })}
       </section>
 
+      {howTo && <HowToPlay onClose={() => setHowTo(false)} />}
       {peek !== null && run.history[peek] && (
         <MemorySheet run={run} index={peek} onClose={() => setPeek(null)} onStep={(i) => setPeek(Math.max(0, Math.min(run.history.length - 1, i)))} />
       )}
