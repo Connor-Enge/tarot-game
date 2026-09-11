@@ -74,6 +74,8 @@ export interface SimOptions {
   vow?: boolean;
   /** Take every trade the Stranger offers. */
   trade?: boolean;
+  /** Carry this card as a signature. */
+  signature?: string;
 }
 
 export function simulate(n: number, pick: Policy, node: NodePolicy = randomNode, seed = 1, config: RunConfig = {}, opts: SimOptions = {}): SimResult & { vowsKept: number } {
@@ -84,7 +86,7 @@ export function simulate(n: number, pick: Policy, node: NodePolicy = randomNode,
   const tiers = Object.fromEntries(TIERS.map((t) => [t, 0])) as Record<OutcomeTier, number>;
   let vowsKept = 0;
   for (let i = 0; i < n; i++) {
-    let run = startRun(rng.int(0xffffffff), config);
+    let run = startRun(rng.int(0xffffffff), { ...config, signature: opts.signature ?? config.signature });
     if (opts.vow) run = takeVow(run, vowOffer(run.seed)[0]);
     let guard = 0;
     while (!isOver(run) && guard++ < 60) {

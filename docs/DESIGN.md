@@ -570,6 +570,10 @@ because it never spends clarity.
 The Stranger appears once per run; the clarity trade asks four for two so
 a hoarder's spare clarity is not a free heal.
 
+`npx vite-node scripts/sim-signature.ts 1000 major-19` measures a signature.
+It moves survival by a point or less for every policy: a signature is
+identity, not power, which is the point.
+
 ## Authoring a scene
 
 1. Write `place` (one line of texture) and `prompt` (one line, underwritten
