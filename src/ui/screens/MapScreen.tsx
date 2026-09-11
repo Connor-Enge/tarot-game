@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { actOfLayer, canCut, canTakeVow, currentAct, cycleLength, foretellCost, getVow, KIND_GLYPH, SCENES, visitedNodes, vowOffer, wellTurn } from '../../engine';
+import { actOfLayer, canCut, canTakeVow, currentAct, cycleLength, foretellCost, getVow, KIND_GLYPH, RITES, ritesWalked, SCENES, visitedNodes, vowOffer, wellTurn } from '../../engine';
 import { ActBanner, ActMark } from '../art/banners';
 import { RoadStrip } from '../art/road';
 import { VowArt } from '../art/relics';
@@ -24,6 +24,8 @@ function MapScreenInner() {
   const cutDeck = useGame((s) => s.cutDeck);
   const takeVow = useGame((s) => s.takeVow);
   const vowRecord = useGame((s) => s.knowledge.vows);
+  const omenLog = useGame((s) => s.knowledge.omenLog);
+  const ritesKnown = ritesWalked(omenLog);
   const [cutAt, setCutAtRaw] = useState<number | null>(null);
   const setCutAt = (v: number | null) => {
     setCutAtRaw((prev) => {
@@ -296,6 +298,11 @@ function MapScreenInner() {
                     <span className="node__glyph">{KIND_GLYPH[node.kind]}</span>
                     {tierHere && <span className={`node__tier node__tier--${tierHere}`} aria-hidden>{TIER_MARK[tierHere]}</span>}
                     {run.foretold.includes(node.id) && <span className="node__place">{SCENES[node.sceneId].place}</span>}
+                    {(() => {
+                      const rite = SCENES[node.sceneId].rite;
+                      const known = rite && !wasHere && (ritesKnown.includes(rite) || run.foretold.includes(node.id));
+                      return known ? <span className={`node__rite node__rite--${rite}`} title={RITES[rite].name} aria-label={`keeps ${RITES[rite].name}`}>{RITES[rite].glyph}</span> : null;
+                    })()}
                   </button>
                 );
               })}

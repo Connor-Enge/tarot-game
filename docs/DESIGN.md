@@ -503,7 +503,10 @@ last one. Moonlit (the hollow) deals the Wake one more. The Bare Table
 even on a neutral reading. Doors still show only the kind of place; the
 rite is learned by walking in, and remembered: the Codex keeps a rites
 shelf, one glyph each, silhouettes until walked (`ritesWalked` reads the
-omen log, so no new state). None of them touches a meaning.
+omen log, so no new state). Once a rite has been walked, its glyph
+sits on any door that keeps it, and a foretold door shows its rite with
+its place. Doors you have not learned still show only their kind. None
+of them touches a meaning.
 
 ## The Abyss deals from what you have read
 
