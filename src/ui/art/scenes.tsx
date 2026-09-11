@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import { Chain, Cloud, Figure, Flame, GOLD_FLAT, INK, Lightning, Moon, Mountains, PALE, Pillar, Star, Sun, Tree, Water } from './primitives';
+import { Chain, Cloud, Figure, Flame, GOLD_FLAT, INK, Lantern, Lightning, Moon, Mountains, PALE, Pillar, Star, Sun, Tree, Water } from './primitives';
 
 /**
  * A small vignette per scene, drawn in a 200 x 60 window. Silhouettes on a
@@ -196,6 +196,52 @@ const ART: Record<string, () => ReactElement> = {
       <ellipse cx={100} cy={57} rx={5} ry={2} fill={GOLD_FLAT} opacity={0.8} />
     </g>
   ),
+  ferry: () => (
+    <g>
+      <path d="M0 34 Q100 30 200 34 V60 H0 Z" fill="#050410" opacity={0.7} />
+      {[40, 42, 44].map((y, i) => (
+        <path key={y} d={`M0 ${y + i * 4} q25 -2 50 0 t50 0 t50 0 t50 0`} fill="none" stroke={HAZE} strokeWidth={0.6} opacity={0.5 - i * 0.12} />
+      ))}
+      <path d="M62 44 L138 44 L128 52 L72 52 Z" fill={DARK} />
+      <line x1={118} y1={16} x2={124} y2={50} stroke={GOLD_FLAT} strokeWidth={1} />
+      <Figure x={112} y={45} h={22} arms="hold" fill={DARK} cloak />
+      <Figure x={84} y={45} h={18} arms="down" fill={DARK} />
+      <Lantern x={66} y={38} />
+      <path d="M0 22 L26 24 L40 34 L0 34 Z" fill={DARK} opacity={0.8} />
+      <path d="M200 20 L172 24 L160 34 L200 34 Z" fill={DARK} opacity={0.5} />
+    </g>
+  ),
+  hollow: () => (
+    <g>
+      <path d="M60 60 C64 36 58 20 78 6 L122 6 C142 20 136 36 140 60 Z" fill={DARK} />
+      <path d="M88 60 C90 44 86 34 100 22 C114 34 110 44 112 60 Z" fill="#050410" />
+      <ellipse cx={100} cy={40} rx={4} ry={8} fill={GOLD_FLAT} opacity={0.35} />
+      <ellipse cx={100} cy={40} rx={1.6} ry={3.5} fill={GOLD_FLAT} opacity={0.9} />
+      {[0, 1, 2].map((i) => (
+        <ellipse key={i} cx={100} cy={40} rx={10 + i * 9} ry={16 + i * 8} fill="none" stroke={GOLD_FLAT} strokeWidth={0.5} opacity={0.22 - i * 0.06} />
+      ))}
+      <path d="M78 6 L58 0 M122 6 L142 0 M70 12 L48 8 M130 12 L152 8" stroke={DARK} strokeWidth={4} strokeLinecap="round" />
+      <ellipse cx={100} cy={59} rx={54} ry={3} fill={HAZE} />
+    </g>
+  ),
+  feast: () => (
+    <g>
+      <Pillar x={10} y={4} h={56} w={5} dark />
+      <Pillar x={190} y={4} h={56} w={5} dark />
+      <path d="M0 8 L200 8" stroke={DARK} strokeWidth={1.2} strokeDasharray="6 10" opacity={0.6} />
+      <path d="M30 40 L170 40 L164 60 L36 60 Z" fill={DARK} />
+      <rect x={30} y={38} width={140} height={3} fill={PALE} opacity={0.5} />
+      {[46, 66, 86, 106, 126, 146].map((x, i) => (
+        <g key={x}>
+          <Figure x={x} y={40} h={20} arms={i % 2 ? 'up' : 'down'} fill={DARK} />
+          <circle cx={x} cy={24} r={2.2} fill="none" stroke={GOLD_FLAT} strokeWidth={0.5} opacity={0.35} />
+        </g>
+      ))}
+      {[56, 76, 96, 116, 136].map((x) => <Flame key={x} x={x} y={46} s={2.6} />)}
+      <Moon x={100} y={16} r={4} />
+      <ellipse cx={100} cy={58} rx={70} ry={3} fill={HAZE} />
+    </g>
+  ),
   abyss: () => (
     <g>
       <rect x={0} y={0} width={200} height={60} fill="#060410" opacity={0.9} />
@@ -250,4 +296,3 @@ export function SceneArt({ id, className }: { id: string; className?: string }) 
 
 // Keep the import list honest for tree-shaking of unused primitives.
 void Water;
-void Pillar;
