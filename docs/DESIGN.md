@@ -314,7 +314,10 @@ glimpsing the card, like a whisper. Tracks streak and totals. Two other
 questions rotate in: which seat was it read in (`seatQuestion`), and,
 once the omen log spans three places, where was it read (`placeQuestion`,
 three scene tiles from places you have actually stood). Both only ever ask
-you to remember what happened; neither leaks a meaning.
+you to remember what happened; neither leaks a meaning. A streak of ten
+in one sitting earns a keepsake: the card that made the tenth answer is
+charged in the next free descent, then spent. The title names it until
+it is taken.
 
 **Journal**: each scene shows Clarity spent (redraws, whispers).
 

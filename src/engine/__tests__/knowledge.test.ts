@@ -256,3 +256,16 @@ describe('almanac', () => {
     expect(resetRecords(k).almanac).toBeUndefined();
   });
 });
+
+describe('keepsake', () => {
+  it('is set by Study and spent by the run that takes it', async () => {
+    const { noteKeepsake, takeKeepsake, resetRecords } = await import('../knowledge');
+    let k = emptyKnowledge();
+    expect(takeKeepsake(k)).toEqual({ knowledge: k });
+    k = noteKeepsake(k, 'major-7');
+    const taken = takeKeepsake(k);
+    expect(taken.keepsake).toBe('major-7');
+    expect(taken.knowledge.keepsake).toBeUndefined();
+    expect(resetRecords(noteKeepsake(emptyKnowledge(), 'cups-2')).keepsake).toBeUndefined();
+  });
+});

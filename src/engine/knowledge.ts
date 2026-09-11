@@ -46,6 +46,8 @@ export interface Knowledge {
   daily?: { last: string; streak: number; best: number };
   /** The almanac: how each daily descent ended, by its YYYY-MM-DD label. */
   almanac?: Record<string, AlmanacEntry>;
+  /** A card earned in Study, carried charged into the next free descent, then spent. */
+  keepsake?: string;
   /** Study: correct answers and best streak. */
   study?: { correct: number; asked: number; bestStreak: number };
   /** Omens witnessed, in order. Capped. */
@@ -197,6 +199,20 @@ export function dailyStreakAlive(k: Knowledge, today: string): number {
   const y = new Date(`${today}T00:00:00Z`);
   y.setUTCDate(y.getUTCDate() - 1);
   return d.last === y.toISOString().slice(0, 10) ? d.streak : 0;
+}
+
+/** A Study streak this long earns a keepsake: the card that made the tenth answer. */
+export const STUDY_KEEPSAKE_STREAK = 10;
+
+export function noteKeepsake(k: Knowledge, cardId: string): Knowledge {
+  return { ...k, keepsake: cardId };
+}
+
+/** Spend the keepsake: it is charged in the run that takes it, and gone after. */
+export function takeKeepsake(k: Knowledge): { knowledge: Knowledge; keepsake?: string } {
+  if (!k.keepsake) return { knowledge: k };
+  const { keepsake, ...rest } = k;
+  return { knowledge: rest, keepsake };
 }
 
 export function noteStudyResult(k: Knowledge, correct: boolean, streak: number): Knowledge {
@@ -468,8 +484,9 @@ export function parseShare(text: string, descentNames: { id: string; name: strin
 
 /** Forget the road, keep the cards: counters, records, sigils and study go; card knowledge, links and the book stay. */
 export function resetRecords(k: Knowledge): Knowledge {
-  const { records: _r, last: _l, sigils: _s, study: _st, vows: _v, almanac: _a, ...rest } = k;
+  const { records: _r, last: _l, sigils: _s, study: _st, vows: _v, almanac: _a, keepsake: _k, ...rest } = k;
   void _r; void _l; void _s; void _st; void _v; void _a;
+  void _k;
   return { ...rest, runs: 0, deaths: 0, ascensions: 0 };
 }
 

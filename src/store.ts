@@ -39,6 +39,9 @@ import {
   resetRecords,
   SIGILS,
   placeQuestion,
+  noteKeepsake,
+  takeKeepsake,
+  STUDY_KEEPSAKE_STREAK,
   studyQuestion,
   seatQuestion,
   createRng,
@@ -249,7 +252,12 @@ export const useGame = create<GameStore>((set, get) => ({
     const streak = correct ? study.streak + 1 : 0;
     let next = noteStudyResult(knowledge, correct, streak);
     if (correct) {
-      next = noteStudy(next, 'kind' in q ? q.cardId : cardId);
+      const answered = 'kind' in q ? q.cardId : cardId;
+      next = noteStudy(next, answered);
+      if (streak === STUDY_KEEPSAKE_STREAK) {
+        next = noteKeepsake(next, answered);
+        get().showToast('✦', `${getCard(answered).name} is yours to carry: charged in your next descent.`);
+      }
       const fresh = newKnowledgeSigils(next);
       next = noteSigils(next, fresh);
       if (fresh.length) {
@@ -293,8 +301,11 @@ export const useGame = create<GameStore>((set, get) => ({
     saveKnowledge(knowledge);
     startDrone();
     const depth = d.id === 'standard' ? (opts?.depth ?? get().depth) : 0;
-    const config = { ...d.config, ...(depth ? depthConfig(depth) : {}), ...(first ? { majorsFirst: true } : {}), signature: knowledge.signature };
-    set({ run: startRun(seed, config), mode: { kind: 'free', descent: d.id, depth }, knowledge, screen: 'run', lifted: null, earned: [], firstDescent: first });
+    // A keepsake from Study rides charged into this descent, and is spent by it.
+    const taken = takeKeepsake(knowledge);
+    if (taken.keepsake) saveKnowledge(taken.knowledge);
+    const config = { ...d.config, ...(depth ? depthConfig(depth) : {}), ...(first ? { majorsFirst: true } : {}), signature: knowledge.signature, charged: taken.keepsake ? [...(d.config.charged ?? []), taken.keepsake] : d.config.charged };
+    set({ run: startRun(seed, config), mode: { kind: 'free', descent: d.id, depth }, knowledge: taken.knowledge, screen: 'run', lifted: null, earned: [], firstDescent: first });
   },
 
   newDaily: () => {

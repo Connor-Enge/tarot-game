@@ -202,6 +202,11 @@ export function TitleScreen() {
         </div>
       )}
       <div className="stack">
+        {k.keepsake && (
+          <p className="keepsake muted small center">
+            <span className="keepsake__mark">✦</span> Keepsake · {getCard(k.keepsake).name} · charged in your next descent
+          </p>
+        )}
         <button className="btn btn--primary" onClick={() => newRun()}>
           {current.id === 'standard' ? 'Descend' : `Descend · ${current.name}`}
         </button>
