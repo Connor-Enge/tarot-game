@@ -53,12 +53,23 @@ export function TitleScreen() {
   }, []);
   const streak = dailyStreakAlive(k, todayLabel);
   // A different fan every visit, seeded off the run count so it feels alive but not random-noise.
+  // The fan is your deck once you have one: signature in the middle, your most-read cards around it.
   const fan = useMemo(() => {
+    const read = Object.entries(k.cards)
+      .filter(([, e]) => e.resolved > 0)
+      .sort((a, b) => b[1].resolved - a[1].resolved)
+      .map(([id]) => id)
+      .filter((id) => id !== k.signature);
+    if (k.runs > 0 && read.length + (k.signature ? 1 : 0) >= 5) {
+      const around = read.slice(0, k.signature ? 4 : 5);
+      const ordered = k.signature ? [around[0], around[2], k.signature, around[3], around[1]] : [around[3], around[1], around[0], around[2], around[4]];
+      return ordered;
+    }
     const pool = k.runs === 0 ? FAN_IDS : CARDS.filter((c) => c.arcana === 'major').map((c) => c.id);
     const start = (k.runs * 7) % pool.length;
     const step = pool.length === FAN_IDS.length ? 1 : 5;
     return Array.from({ length: 5 }, (_, i) => pool[(start + i * step) % pool.length]);
-  }, [k.runs]);
+  }, [k.runs, k.cards, k.signature]);
 
   return (
     <main className={`screen screen--title screen--${light}`}>
