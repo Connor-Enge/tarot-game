@@ -1111,3 +1111,23 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 @keyframes dream-float { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-4px) rotate(2deg); } }
 @keyframes dream-breathe { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
 .reduce-motion .dream__ghost, .reduce-motion .dream__wisp { animation: none; }
+
+/* --- wear: the deck ages with you ------------------------------------------ */
+.card__wear { position: absolute; inset: 0; pointer-events: none; border-radius: inherit; }
+.card--worn-1 .card__wear {
+  background: radial-gradient(120% 90% at 50% 50%, transparent 68%, rgba(90,60,20,0.18) 100%);
+}
+.card--worn-2 .card__wear {
+  background:
+    radial-gradient(120% 90% at 50% 50%, transparent 62%, rgba(90,60,20,0.26) 100%),
+    linear-gradient(100deg, transparent 39.5%, rgba(255,255,255,0.22) 40%, rgba(60,40,20,0.18) 40.6%, transparent 41.2%);
+}
+.card--worn-3 .card__wear {
+  background:
+    radial-gradient(120% 90% at 50% 50%, transparent 56%, rgba(90,60,20,0.34) 100%),
+    linear-gradient(100deg, transparent 39.5%, rgba(255,255,255,0.22) 40%, rgba(60,40,20,0.2) 40.6%, transparent 41.2%),
+    linear-gradient(-70deg, transparent 63%, rgba(255,255,255,0.18) 63.4%, rgba(60,40,20,0.18) 64%, transparent 64.6%),
+    radial-gradient(6px 6px at 12% 88%, rgba(60,40,20,0.3), transparent 70%),
+    radial-gradient(5px 5px at 88% 10%, rgba(60,40,20,0.25), transparent 70%);
+}
+.card--worn-3 .card__inner { filter: saturate(0.92) sepia(0.08); }
