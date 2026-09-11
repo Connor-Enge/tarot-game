@@ -631,3 +631,11 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .dream .card { cursor: inherit; }
 .about { padding: 12px 14px; border-radius: 12px; background: rgba(255,255,255,0.03); display: flex; flex-direction: column; gap: 8px; }
 .about summary { cursor: pointer; font-size: 1.05rem; }
+
+/* --- reveal all / segmented ------------------------------------------------ */
+.narration--all .rise { animation-delay: 0ms !important; animation-duration: 200ms !important; }
+.seg { display: flex; gap: 4px; padding: 3px; border-radius: 12px; background: rgba(255,255,255,0.05); }
+.seg__btn { flex: 1; font: inherit; font-size: 0.9rem; padding: 8px; border: none; border-radius: 10px; background: none; color: var(--muted); cursor: pointer; text-transform: capitalize; }
+.seg__btn--on { background: rgba(214,178,94,0.14); color: var(--gold-2); }
+.fan { cursor: pointer; }
+.fan .card { cursor: pointer; }

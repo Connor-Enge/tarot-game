@@ -21,6 +21,7 @@ export function TitleScreen() {
   const setDepth = useGame((s) => s.setDepth);
   const maxDepth = maxDepthUnlocked(k.records?.standard?.returns ?? 0);
   const [lockedNote, setLockedNote] = useState<string | null>(null);
+  const [fanDown, setFanDown] = useState(false);
   const known = Object.values(k.cards).filter((c) => c.tier > 0).length;
   const current = getDescent(descent);
   const anyUnlocked = DESCENTS.some((d, i) => i > 0 && d.unlocked(k));
@@ -38,10 +39,12 @@ export function TitleScreen() {
 
   return (
     <main className="screen screen--title">
-      <div className={`fan ${today === 'major-0' ? 'fan--fool' : ''}`} aria-hidden>
+      <div className={`fan ${today === 'major-0' ? 'fan--fool' : ''}`} aria-hidden onClick={() => setFanDown((d) => !d)}>
         {fan.map((id, i) => (
-          <div key={id} className="fan__card" style={{ '--i': i } as React.CSSProperties}>
-            <Card cardId={id} size="md" reversed={i === 1} />
+          <div key={id} className={`fan__card ${fanDown ? 'fan__card--down' : ''}`} style={{ '--i': i } as React.CSSProperties}>
+            <div className="flip-in" key={fanDown ? 'down' : 'up'}>
+              <Card cardId={id} size="md" reversed={i === 1} faceDown={fanDown} />
+            </div>
           </div>
         ))}
       </div>

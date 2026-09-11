@@ -1,6 +1,8 @@
 import { currentScene, getCard, getRelic, SLOT_IDS, SLOTS } from '../../engine';
 
 const TIER_GLYPH = { calamity: '✖', harm: '▽', neutral: '◇', boon: '△', triumph: '★' } as const;
+import { useState } from 'react';
+import { useSettings } from '../../settings';
 import { useGame } from '../../store';
 import { Card } from '../components/Card';
 import { CodexDetail } from '../components/CodexDetail';
@@ -12,6 +14,8 @@ function ResolutionScreenInner() {
   const codexOpen = useGame((s) => s.codexOpen);
   const openCodex = useGame((s) => s.openCodex);
   const omenLog = useGame((s) => s.knowledge.omenLog);
+  const readingSpeed = useSettings((s) => s.readingSpeed);
+  const [revealAll, setRevealAll] = useState(false);
   if (run.phase.kind !== 'resolved') return null;
   const { resolution, cursed, offer, found } = run.phase;
   const curse = cursed ? getRelic(cursed) : null;
@@ -19,7 +23,8 @@ function ResolutionScreenInner() {
   const scene = currentScene(run);
   const last = run.history[run.history.length - 1];
   const lastEntry = last;
-  const step = scene.terminal ? 900 : 550;
+  const pace = readingSpeed === 'slow' ? 1.5 : readingSpeed === 'fast' ? 0.45 : 1;
+  const step = Math.round((scene.terminal ? 900 : 550) * pace);
   // In a rest scene, something you have seen before surfaces as a dream.
   const dream = (() => {
     if (scene.kind !== 'rest' || !omenLog || omenLog.length === 0) return null;
@@ -46,7 +51,7 @@ function ResolutionScreenInner() {
         ))}
       </section>
 
-      <section className="narration">
+      <section className={`narration ${revealAll ? 'narration--all' : ''}`} onClick={() => setRevealAll(true)}>
         {resolution.narration.map((line, i) => {
           const last = i === resolution.narration.length - 1;
           const seat = i < SLOT_IDS.length ? SLOTS[SLOT_IDS[i]].glyph : null;

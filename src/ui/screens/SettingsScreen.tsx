@@ -12,7 +12,7 @@ export function SettingsScreen() {
   const [pasted, setPasted] = useState('');
   const [note, setNote] = useState<string | null>(null);
   const newRun = useGame((s) => s.newRun);
-  const { sound, reduceMotion, haptics, fixedTint, bigCards, set } = useSettings();
+  const { sound, reduceMotion, haptics, fixedTint, bigCards, readingSpeed, set } = useSettings();
   const [confirmReset, setConfirmReset] = useState(false);
   const [seed, setSeed] = useState('');
 
@@ -40,6 +40,17 @@ export function SettingsScreen() {
           <input type="checkbox" checked={haptics} onChange={(e) => set({ haptics: e.target.checked })} />
           <span className="toggle__track" />
         </label>
+        <div className="field">
+          <span>Reading pace</span>
+          <div className="seg">
+            {(['slow', 'normal', 'fast'] as const).map((v) => (
+              <button key={v} type="button" className={`seg__btn ${readingSpeed === v ? 'seg__btn--on' : ''}`} onClick={() => set({ readingSpeed: v })}>
+                {v}
+              </button>
+            ))}
+          </div>
+          <p className="muted small">How quickly the omens appear. Tap the narration to show it all at once.</p>
+        </div>
         <label className="toggle">
           <span>Larger cards in hand</span>
           <input type="checkbox" checked={bigCards} onChange={(e) => set({ bigCards: e.target.checked })} />

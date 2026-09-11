@@ -174,6 +174,16 @@ always holds a reversed card), Debt (Clarity capped at 2), The Weight
 | majors-only | the 22 Major Arcana | ~75% |
 | oracle | every affinity | ~100% |
 
+With Depths stacked (`npx vite-node scripts/sim.ts 1200 5`):
+
+| Depth | random | majors-only | oracle |
+|-------|--------|-------------|--------|
+| 3 | ~1% | ~33% | ~99% |
+| 5 | ~1% | ~25% | ~97% |
+
+A master still returns almost always; a half-learned deck is properly
+tested. That is the intended veteran curve.
+
 The levers that got there: a neutral reading costs 1 vitality times scene
 stakes (0 in rest scenes), harm scales with stakes, starting vitality is 10,
 and the harm threshold is a total of -1.5. Re-run the sim after any change
@@ -340,8 +350,12 @@ text includes the deepest scene reached this week.
 
 Bundle: ~378 KB JS (~120 KB gzipped); the Codex screen is code-split.
 
-Queued:
-- Localization scaffolding for the card and scene text.
+**Reading pace**: slow, normal, fast, in Settings. Tapping the narration
+shows all of it at once.
+
+Localization was considered and deferred: all authored text already lives
+in three data files (`cards.ts`, `minorText.ts`, `scenes.ts`) plus relics
+and sigils, so a translation is a data swap when it is wanted.
 
 ## Content debt
 

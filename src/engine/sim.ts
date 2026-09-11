@@ -4,6 +4,7 @@
  * affinity should usually return from the Abyss. The gap between them is the
  * space the player learns into.
  */
+import type { RunConfig } from './descents';
 import { createRng, type Rng } from './rng';
 import { scoreSlot } from './resolve';
 import { SCENES, TIERS, type OutcomeTier } from './scenes';
@@ -67,14 +68,14 @@ export interface SimResult {
   tiers: Record<OutcomeTier, number>;
 }
 
-export function simulate(n: number, pick: Policy, node: NodePolicy = randomNode, seed = 1): SimResult {
+export function simulate(n: number, pick: Policy, node: NodePolicy = randomNode, seed = 1, config: RunConfig = {}): SimResult {
   const rng = createRng(seed);
   let survived = 0;
   let scenes = 0;
   let vit = 0;
   const tiers = Object.fromEntries(TIERS.map((t) => [t, 0])) as Record<OutcomeTier, number>;
   for (let i = 0; i < n; i++) {
-    let run = startRun(rng.int(0xffffffff));
+    let run = startRun(rng.int(0xffffffff), config);
     let guard = 0;
     while (!isOver(run) && guard++ < 60) {
       if (run.phase.kind === 'map') run = chooseNode(run, node(run, rng));
