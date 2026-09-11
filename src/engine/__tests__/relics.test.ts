@@ -25,6 +25,28 @@ describe('relics', () => {
     expect(run.slots[3].candidates.length).toBe(4);
   });
 
+  it('lodestone deals four to the Vessel; feather halves reversals; still water drops the echo; tallow taxes walking on', () => {
+    const run = chooseNode(withRelics(startRun(11), ['lodestone']), 0);
+    expect(run.slots[0].candidates.length).toBe(4);
+    let plain = 0;
+    let light = 0;
+    for (let seed = 1; seed <= 40; seed++) {
+      const a = chooseNode(startRun(seed), 0);
+      const b = chooseNode(withRelics(startRun(seed), ['feather']), 0);
+      plain += a.slots[0].candidates.filter((c) => c.reversed).length;
+      light += b.slots[0].candidates.filter((c) => c.reversed).length;
+    }
+    expect(light).toBeLessThan(plain);
+    let still = chooseNode(withRelics(startRun(5), ['stillwater']), 0);
+    for (let i = 0; i < 4; i++) still = chooseCandidate(still, 0);
+    expect(still.echo).toBeNull();
+    let taxed = chooseNode(withRelics({ ...startRun(5), clarity: 3 }, ['tallow']), 0);
+    for (let i = 0; i < 4; i++) taxed = chooseCandidate(taxed, 0);
+    const before = taxed.clarity;
+    taxed = advance(taxed);
+    expect(taxed.clarity).toBe(Math.max(0, before - 1));
+  });
+
   it('splinter forces a reversed card in the Vessel', () => {
     for (let seed = 1; seed < 20; seed++) {
       const run = chooseNode(withRelics(startRun(seed), ['splinter']), 0);

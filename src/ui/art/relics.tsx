@@ -83,6 +83,43 @@ const ART: Record<string, () => ReactElement> = {
       <circle cx={20} cy={20} r={1.5} fill={PALE} />
     </g>
   ),
+  lodestone: () => (
+    <g>
+      <path d="M14 10 V22 a6 6 0 0 0 12 0 V10" fill="none" stroke={GOLD_FLAT} strokeWidth={1.6} strokeLinecap="round" />
+      <path d="M12 10 H17 M23 10 H28" stroke={PALE} strokeWidth={1.4} strokeLinecap="round" />
+      {[[20, 33], [16, 35], [24, 35]].map(([x, y], i) => (
+        <circle key={i} cx={x} cy={y} r={1} fill={GOLD_FLAT} opacity={0.7 - i * 0.2} />
+      ))}
+      <path d="M20 28 v3" stroke={GOLD_FLAT} strokeWidth={0.8} opacity={0.6} />
+    </g>
+  ),
+  feather: () => (
+    <g>
+      <path d="M12 30 Q14 14 28 8" fill="none" stroke={GOLD_FLAT} strokeWidth={1.2} strokeLinecap="round" />
+      <path d="M13 26 Q22 24 27 9 Q18 12 13 26 Z" fill={GOLD_FLAT} opacity={0.35} />
+      {[[15, 22], [17, 18], [20, 15], [23, 12]].map(([x, y], i) => (
+        <path key={i} d={`M${x} ${y} l5 -1.5`} stroke={GOLD_FLAT} strokeWidth={0.6} opacity={0.6} />
+      ))}
+      <path d="M12 30 l-2 3" stroke={DIM} strokeWidth={1} strokeLinecap="round" />
+    </g>
+  ),
+  stillwater: () => (
+    <g>
+      <path d="M8 22 Q14 19 20 22 T32 22" fill="none" stroke={RED} strokeWidth={1.3} strokeLinecap="round" />
+      <path d="M8 27 Q14 24 20 27 T32 27" fill="none" stroke={RED} strokeWidth={1} strokeLinecap="round" opacity={0.6} />
+      <path d="M16 10 a4 4 0 1 0 0.01 0" fill="none" stroke={RED} strokeWidth={1} strokeDasharray="1.5 2" opacity={0.7} />
+      <path d="M20 14 v4" stroke={RED} strokeWidth={0.8} opacity={0.5} strokeLinecap="round" />
+    </g>
+  ),
+  tallow: () => (
+    <g>
+      <path d="M16 32 V16 H24 V32 Z" fill={RED} opacity={0.35} />
+      <path d="M16 16 q2 6 -1 10 q4 -2 5 3 q1 -5 4 -3 q-2 -6 0 -10" fill={RED} opacity={0.5} />
+      <path d="M20 16 V11" stroke={RED} strokeWidth={0.9} strokeLinecap="round" />
+      <path d="M20 10 q-2 -3 0 -5 q2 2 0 5" fill={DIM} />
+      <path d="M12 33 H28" stroke={RED} strokeWidth={1} strokeLinecap="round" opacity={0.7} />
+    </g>
+  ),
   ash: () => (
     <g>
       <path d="M10 30 Q20 24 30 30" fill="none" stroke={RED} strokeWidth={1.3} strokeLinecap="round" />
@@ -181,6 +218,14 @@ const VOW_ART: Record<string, () => ReactElement> = {
     </g>
   ),
 };
+
+VOW_ART.thrift = () => (
+  <g>
+    <path d="M20 8 L32 20 L20 32 L8 20 Z" fill="none" stroke={PALE} strokeWidth={1.3} strokeLinejoin="round" />
+    <path d="M20 14 L26 20 L20 26 L14 20 Z" fill="none" stroke={GOLD_FLAT} strokeWidth={1} strokeLinejoin="round" />
+    <path d="M10 30 L30 10" stroke={PALE} strokeWidth={1} strokeLinecap="round" opacity={0.5} />
+  </g>
+);
 
 export function VowArt({ id, className }: { id: string; className?: string }) {
   const Art = VOW_ART[id];

@@ -24,6 +24,8 @@ export const RELICS: Record<string, Relic> = {
   bread: { id: 'bread', kind: 'boon', name: 'Hard Bread', glyph: '▭', text: 'Rest mends 2 more.' },
   thread: { id: 'thread', kind: 'boon', name: 'Red Thread', glyph: '∞', text: 'One more take-back this descent.' },
   compass: { id: 'compass', kind: 'boon', name: 'Bent Compass', glyph: '✦', text: 'Foretelling costs nothing.' },
+  lodestone: { id: 'lodestone', kind: 'boon', name: 'Lodestone', glyph: '⌖', text: 'The Vessel deals four cards.' },
+  feather: { id: 'feather', kind: 'boon', name: 'Grey Feather', glyph: '❦', text: 'Cards land reversed half as often.' },
 
   fog: { id: 'fog', kind: 'curse', name: 'Fog', glyph: '≋', text: 'One card in every seat is dealt face down.' },
   splinter: { id: 'splinter', kind: 'curse', name: 'Splinter', glyph: '⟋', text: 'The Vessel always holds a reversed card.' },
@@ -31,6 +33,8 @@ export const RELICS: Record<string, Relic> = {
   weight: { id: 'weight', kind: 'curse', name: 'The Weight', glyph: '⏚', text: 'Neutral readings cost one more.' },
   hush: { id: 'hush', kind: 'curse', name: 'Hush', glyph: '⊘', text: 'Whispers cost 2.' },
   ash: { id: 'ash', kind: 'curse', name: 'Ash', glyph: '⁂', text: 'Rest mends 1 less.' },
+  stillwater: { id: 'stillwater', kind: 'curse', name: 'Still Water', glyph: '≈', text: 'The last Wake no longer follows you.' },
+  tallow: { id: 'tallow', kind: 'curse', name: 'Tallow', glyph: '⌇', text: 'Lose 1 Clarity each time you walk on.' },
 };
 
 export const BOON_IDS = Object.values(RELICS).filter((r) => r.kind === 'boon').map((r) => r.id);

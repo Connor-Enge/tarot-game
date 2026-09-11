@@ -229,7 +229,8 @@ function dealSeat(run: RunState, rng: Rng, deck: DeckState, slot: SlotId): { dec
   let count = CANDIDATES_PER_SLOT;
   if (slot === 'threshold' && hasRelic(run, 'lens')) count++;
   if (slot === 'wake' && hasRelic(run, 'shard')) count++;
-  const dealt = draw(deck, rng, count, run.reversedChance);
+  if (slot === 'vessel' && hasRelic(run, 'lodestone')) count++;
+  const dealt = draw(deck, rng, count, hasRelic(run, 'feather') ? run.reversedChance / 2 : run.reversedChance);
   let cards = applyMarks(run, dealt.cards);
   // The signature lands upright the first time it is dealt, in the first Vessel.
   if (run.signature && slot === 'vessel' && run.history.length === 0) cards = cards.map((c) => (c.cardId === run.signature ? { ...c, reversed: false } : c));
@@ -485,7 +486,7 @@ function resolve(run: RunState): RunState {
     }
   }
 
-  const echo: DrawnCard | null = run.mods.noEcho ? null : { cardId: revealed.wake.cardId, reversed: revealed.wake.reversed };
+  const echo: DrawnCard | null = run.mods.noEcho || hasRelic(run, 'stillwater') ? null : { cardId: revealed.wake.cardId, reversed: revealed.wake.reversed };
   // At a rest that went well enough, someone is already sitting by the fire.
   let trade: Trade | undefined;
   if (scene.kind === 'rest' && !run.strangerMet && resolution.tier !== 'calamity' && resolution.tier !== 'harm') {
@@ -535,7 +536,7 @@ export function acceptTrade(run: RunState): RunState {
 /** After reading the resolution, take the offered relic (if any) or walk on to the map. */
 export function advance(run: RunState): RunState {
   if (run.phase.kind !== 'resolved') return run;
-  const clarity = clampClarity(run, run.clarity + (hasRelic(run, 'candle') ? 1 : 0));
+  const clarity = clampClarity(run, Math.max(0, run.clarity + (hasRelic(run, 'candle') ? 1 : 0) - (hasRelic(run, 'tallow') ? 1 : 0)));
   if (run.phase.offer && run.phase.offer.length) return { ...run, clarity, phase: { kind: 'relic', offer: run.phase.offer } };
   return { ...run, clarity, layer: run.layer + 1, node: null, slots: [], activeSlot: 0, phase: { kind: 'map' } };
 }
