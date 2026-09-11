@@ -63,8 +63,9 @@ function ReadingScreenInner() {
               <div className="seat__glyph" title={seatsNamed ? SLOTS[id].role : undefined}>
                 {SLOTS[id].glyph}
               </div>
-              <div className={chosen ? 'flip-in' : undefined} key={chosen ? chosen.cardId : 'empty'}>
+              <div className={`seat__card ${chosen ? 'flip-in' : ''}`} key={chosen ? chosen.cardId : 'empty'}>
                 <Card cardId={chosen?.cardId} reversed={chosen?.reversed} faceDown={!chosen} size="sm" mark={chosen ? run.marks[chosen.cardId] : undefined} />
+                {chosen && <span className="seat__seal" aria-hidden>{SLOTS[id].glyph}</span>}
               </div>
               {seatsNamed && <div className="seat__name">{SLOTS[id].name.replace(/^The /, '')}</div>}
             </div>

@@ -564,3 +564,14 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .big-cards .hand--four .card--lg { --w: min(23vw, 104px); }
 .narration__omen--tap { cursor: pointer; }
 .narration__omen--tap:active { opacity: 0.7; }
+
+/* --- seat seal / search -------------------------------------------------- */
+.seat__card { position: relative; }
+@keyframes seal { 0% { opacity: 0; transform: scale(2.4) rotate(-20deg); } 30% { opacity: 1; transform: scale(1) rotate(0); } 70% { opacity: 1; } 100% { opacity: 0; transform: scale(1.1); } }
+.seat__seal {
+  position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none;
+  font-size: 2rem; color: var(--gold-2); text-shadow: 0 0 14px rgba(243,220,138,0.9);
+  animation: seal 1100ms ease-out 380ms both;
+}
+.reduce-motion .seat__seal { animation: none; opacity: 0; }
+.input--search { min-height: 40px; padding: 8px 12px; font-size: 0.95rem; }

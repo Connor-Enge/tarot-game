@@ -112,7 +112,7 @@ function label(card: Card): string {
 }
 
 /** The full card face: frame, paper, art window, plates. viewBox 100 x 160. */
-export function CardArt({ cardId, className }: { cardId: string; className?: string }) {
+export function CardArt({ cardId, className, texture = true }: { cardId: string; className?: string; texture?: boolean }) {
   const card = getCard(cardId);
   const kind = card.arcana === 'major' ? 'major' : card.suit!;
   const art = card.arcana === 'major' ? MAJOR_ART[card.number]() : minorArt(card.suit!, card.number);
@@ -120,7 +120,7 @@ export function CardArt({ cardId, className }: { cardId: string; className?: str
   return (
     <svg viewBox="0 0 100 160" className={className} xmlns="http://www.w3.org/2000/svg">
       <rect x={0} y={0} width={100} height={160} rx={6} fill={PAPER[kind]} />
-      <rect x={0} y={0} width={100} height={160} rx={6} filter="url(#paper)" />
+      {texture && <rect x={0} y={0} width={100} height={160} rx={6} filter="url(#paper)" />}
       {/* frame */}
       <rect x={3} y={3} width={94} height={154} rx={4} fill="none" stroke={GOLD_FLAT} strokeWidth={1.2} />
       <rect x={6} y={6} width={88} height={148} rx={3} fill="none" stroke={INK} strokeWidth={0.5} opacity={0.6} />

@@ -302,6 +302,14 @@ Codex detail for its card. Still only what you have earned.
 
 **Larger cards** setting for the hand.
 
+**Robustness**: an error boundary catches any render failure and offers
+"Let the run go" (clears only the saved run) or "Try again". The Codex is
+never touched. Small card sizes skip the paper-texture filter, which keeps
+the Codex grid and journal cheap on phones.
+
+**Seat seal**: when a card lands, its seat glyph stamps over it in gold and
+fades. The map's ground hue shifts by act.
+
 Queued:
 - A weekly leaderboard line in the share text (best depth this week).
 - Localization scaffolding for the card and scene text.

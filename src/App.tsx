@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { currentNode, SCENES } from './engine';
+import { currentAct, currentNode, SCENES } from './engine';
 import { useSettings } from './settings';
 import { useGame } from './store';
 import { ArtDefs } from './ui/art/CardArt';
@@ -24,6 +24,7 @@ function useSceneHue() {
     if (!fixedTint && screen === 'run' && run) {
       const node = currentNode(run);
       if (node) hue = SCENES[node.sceneId].hue;
+      else hue = [250, 230, 300, 270][currentAct(run)] ?? 260;
       if (run.phase.kind === 'dead') hue = 0;
       if (run.phase.kind === 'ascended') hue = 45;
     }

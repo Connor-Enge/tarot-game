@@ -22,7 +22,9 @@ export function CodexScreen() {
   const [suit, setSuit] = useState<SuitFilter>('all');
   const [tf, setTf] = useState<TierFilter>('all');
   const [view, setView] = useState<'cards' | 'sky'>('cards');
+  const [q, setQ] = useState('');
   const shown = CARDS.filter((c) => {
+    if (q && !c.name.toLowerCase().includes(q.toLowerCase())) return false;
     if (suit === 'major' && c.arcana !== 'major') return false;
     if (suit !== 'all' && suit !== 'major' && c.suit !== suit) return false;
     const e = k.cards[c.id];
@@ -108,6 +110,7 @@ export function CodexScreen() {
       )}
 
       <div className="filters">
+        <input className="input input--search" placeholder="Find a card" value={q} onChange={(e) => setQ(e.target.value)} aria-label="find a card" />
         <div className="filters__row">
           {(Object.keys(SUIT_LABEL) as SuitFilter[]).map((f) => (
             <button key={f} type="button" className={`chip ${suit === f ? 'chip--on' : ''}`} onClick={() => setSuit(f)}>

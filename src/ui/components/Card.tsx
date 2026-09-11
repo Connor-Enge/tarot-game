@@ -75,7 +75,7 @@ export function Card({ cardId, reversed = false, faceDown = false, size = 'md', 
       aria-label={card ? `${card.name}${reversed ? ', reversed' : ''}` : 'face-down card'}
     >
       <div className="card__inner">
-        {faceDown || !card ? <CardBack className="card__svg" variant={variant} /> : <CardArt cardId={card.id} className="card__svg" />}
+        {faceDown || !card ? <CardBack className="card__svg" variant={variant} /> : <CardArt cardId={card.id} className="card__svg" texture={size === 'lg' || size === 'md'} />}
         {mark === 'scarred' && <div className="card__scar" aria-hidden />}
       </div>
       {whisper && <div className="card__whisper">{whisper}</div>}
