@@ -1334,3 +1334,19 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .omens__line em { font-style: italic; }
 .omens__mark { color: var(--gold); font-style: normal; text-align: center; }
 .omens__line--rev { color: var(--muted); }
+
+/* --- run end: illuminated reveal rows ---------------------------------------- */
+.reveal__row { position: relative; padding: 10px 12px 10px 14px; border-radius: 12px; background: linear-gradient(90deg, rgba(255,255,255,0.035), rgba(255,255,255,0.01)); border: 1px solid rgba(214,178,94,0.14); }
+.reveal__row::before { content: ''; position: absolute; left: 0; top: 10px; bottom: 10px; width: 3px; border-radius: 2px; background: var(--rule, var(--gold)); box-shadow: 0 0 10px var(--rule, var(--gold)); opacity: 0.85; }
+.reveal__row--wands { --rule: #e0a068; }
+.reveal__row--cups { --rule: #8fc3e0; }
+.reveal__row--swords { --rule: #d8d9e8; }
+.reveal__row--pentacles { --rule: #a9c98a; }
+.reveal__row--major { --rule: #f3dc8a; }
+.reveal__seat { display: flex; align-items: center; gap: 6px; }
+.reveal__seat::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(214,178,94,0.4), transparent); }
+.reveal__name { font-size: 1.1rem; }
+.reveal__meaning { line-height: 1.45; }
+.reveal__fleuron { color: var(--gold); margin-right: 6px; font-size: 0.85em; }
+/* the named-reading ribbon: cut tails */
+.narration__named { border-radius: 0; clip-path: polygon(0 0, 100% 0, calc(100% - 10px) 50%, 100% 100%, 0 100%, 10px 50%); padding: 8px 24px; background: linear-gradient(90deg, var(--gold) 0%, var(--gold-2) 50%, var(--gold) 100%); }

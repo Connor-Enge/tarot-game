@@ -170,7 +170,7 @@ function RunEndScreenInner() {
             const card = getCard(d.cardId);
             const tier = knowledge.cards[d.cardId]?.tier ?? 0;
             return (
-              <article key={id} className="reveal__row rise" style={{ animationDelay: `${200 + i * (replay ? 900 : 300)}ms` }}>
+              <article key={id} className={`reveal__row reveal__row--${card.arcana === 'major' ? 'major' : card.suit} rise`} style={{ animationDelay: `${200 + i * (replay ? 900 : 300)}ms` }}>
                 <div className="seat__card">
                   <Card cardId={d.cardId} reversed={d.reversed} size="sm" mark={run.marks[d.cardId]} />
                   {replay > 0 && <span className="seat__seal" style={{ animationDelay: `${200 + i * 900}ms` }} aria-hidden>{SLOTS[id].glyph}</span>}
@@ -184,7 +184,7 @@ function RunEndScreenInner() {
                     {d.reversed && <span className="muted"> · reversed</span>}
                   </div>
                   {replay > 0 && <p className="narration__omen rise" style={{ animationDelay: `${500 + i * 900}ms` }}>{d.reversed ? card.omen.reversed : card.omen.upright}</p>}
-                  <p className="reveal__meaning">{d.reversed && tier >= 3 ? card.meaning.reversed : card.meaning.upright}</p>
+                  <p className="reveal__meaning"><span className="reveal__fleuron" aria-hidden>❧</span>{d.reversed && tier >= 3 ? card.meaning.reversed : card.meaning.upright}</p>
                 </div>
               </article>
             );
