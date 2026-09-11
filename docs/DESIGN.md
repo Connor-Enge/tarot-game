@@ -528,14 +528,16 @@ the cheapest way to act on a suspicion about a card without knowing why.
 Once per run, at the first rest scene that goes at least neutrally, someone is
 already sitting by the fire with one trade, drawn from what applies: four
 clarity for two vitality; a boon you hold for a boon you do not; three vitality to be rid
-of a curse. Take it or walk on. Taking one earns the Dealt With sigil. The
+of a curse; two clarity to bless the card that sat in the Hand tonight (it
+is charged: upright from then on, and a little stronger). Take it or walk on. Taking one earns the Dealt With sigil. The
 trade never kills you and is never offered twice in a scene.
 
 ## Vows
 
 Before the first scene the map offers two vows, chosen by seed without
 touching the run's rng. A vow is a stated constraint (never redraw, never
-rest, never a reversed card in the Hand, every Threshold a Major...). Break
+rest, never a reversed card in the Hand, every Threshold a Major, never
+spend Clarity...). Break
 it once and it is gone for the run. Keep it to the Abyss and it pays out as
 you step in: 2 to 4 vitality, sometimes clarity. Keeping one earns the
 Sworn sigil. Vows are optional and cost nothing to refuse; they exist to
@@ -632,7 +634,7 @@ identity, not power, which is the point.
   omen is distinct.
 - **Scenes**: 30 exist (29 plus the Abyss), which was the target; more are welcome. Latest: the mill, the drowned chapel, the hunt.
 - **Named readings**: 24. Each is a memorable line, never a definition.
-- **Relics**: 10 boons, 6 curses. **Vows**: 6. **Weathers**: 9. **Trades**: 3. **Sigils**: 18.
+- **Relics**: 10 boons, 6 curses. **Vows**: 7. **Weathers**: 9. **Trades**: 4. **Sigils**: 18.
 - **Combos**: 24 named readings exist. This is the richest vein for "the
   combined meaning" and should keep growing with named, memorable results.
 - **Art**: all 78 faces are procedural SVG (`src/ui/art/`). Majors are

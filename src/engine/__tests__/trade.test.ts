@@ -28,4 +28,13 @@ describe("the Stranger's trade", () => {
     const r3 = resolved({ ...startRun(1), relics: ['fog'], vitality: 3 }, { trade: { id: 'lift-curse', give: 3, curse: 'fog' } });
     expect(acceptTrade(r3)).toBe(r3);
   });
+  it('blesses the card you acted with, for clarity', () => {
+    let run = resolved({ ...startRun(1), clarity: 3, marks: {} }, { trade: { id: 'bless-hand', give: 2, cardId: 'major-1' } });
+    run = acceptTrade(run);
+    expect(run.clarity).toBe(1);
+    expect(run.marks['major-1']).toBe('charged');
+    expect(run.traded).toBe(true);
+    const poor = resolved({ ...startRun(1), clarity: 1 }, { trade: { id: 'bless-hand', give: 2, cardId: 'major-1' } });
+    expect(acceptTrade(poor)).toBe(poor);
+  });
 });

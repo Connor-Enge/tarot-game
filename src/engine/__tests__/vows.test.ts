@@ -20,6 +20,15 @@ describe('vows', () => {
     expect(takeVow(run, 'silence').rngState).toBe(run.rngState);
   });
 
+  it('thrift keeps only while no clarity is spent', () => {
+    const v = getVow('thrift');
+    const entry = { sceneId: 'crossing', reading: {} as never, resolution: {} as never };
+    expect(v.keeps({ ...entry }, SCENES.crossing)).toBe(true);
+    expect(v.keeps({ ...entry, spent: { redraws: 0, whispers: 0 } }, SCENES.crossing)).toBe(true);
+    expect(v.keeps({ ...entry, spent: { redraws: 1, whispers: 0 } }, SCENES.crossing)).toBe(false);
+    expect(v.keeps({ ...entry, spent: { redraws: 0, whispers: 1 } }, SCENES.crossing)).toBe(false);
+  });
+
   it('can only be taken before the first scene', () => {
     let run = startRun(7);
     expect(canTakeVow(run)).toBe(true);

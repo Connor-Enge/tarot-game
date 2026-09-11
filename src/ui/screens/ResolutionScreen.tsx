@@ -123,6 +123,7 @@ function ResolutionScreenInner() {
                 {tradeText(trade)}
                 {trade.id === 'swap-boon' && <span className="muted"> {getRelic(trade.give).name} for {getRelic(trade.get).name}: {getRelic(trade.get).text}</span>}
                 {trade.id === 'lift-curse' && <span className="muted"> {getRelic(trade.curse).name} would leave you.</span>}
+                {trade.id === 'bless-hand' && <span className="muted"> {getCard(trade.cardId).name} would land upright from now on, and read a little stronger.</span>}
               </p>
               <button type="button" className="btn btn--small" onClick={acceptTrade}>Take it</button>
             </div>

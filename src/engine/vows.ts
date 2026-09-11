@@ -26,6 +26,7 @@ export const VOWS: Vow[] = [
   { id: 'small-wake', glyph: '☾', name: 'Small Wake', text: 'Never leave a Major Arcana in the Wake.', reward: { vitality: 2, clarity: 1 }, keeps: (e) => !isMajor(e.reading.wake.cardId) },
   { id: 'long-way', glyph: '⛩', name: 'The Long Way', text: 'Never rest.', reward: { vitality: 4 }, keeps: (_e, scene) => scene.kind !== 'rest' },
   { id: 'high-threshold', glyph: '△', name: 'High Threshold', text: 'Every Threshold holds a Major Arcana.', reward: { vitality: 4 }, keeps: (e) => isMajor(e.reading.threshold.cardId) },
+  { id: 'thrift', glyph: '◈', name: 'Thrift', text: 'Never spend Clarity. No redraws, no whispers.', reward: { vitality: 3, clarity: 3 }, keeps: (e) => (e.spent?.redraws ?? 0) + (e.spent?.whispers ?? 0) === 0 },
 ];
 
 export const VOW_IDS = VOWS.map((v) => v.id);

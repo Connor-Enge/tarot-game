@@ -39,13 +39,15 @@ export type Phase =
 export type Trade =
   | { id: 'clarity-for-vitality'; give: number; get: number }
   | { id: 'swap-boon'; give: string; get: string }
-  | { id: 'lift-curse'; give: number; curse: string };
+  | { id: 'lift-curse'; give: number; curse: string }
+  | { id: 'bless-hand'; give: number; cardId: string };
 
 export function tradeText(t: Trade): string {
   switch (t.id) {
     case 'clarity-for-vitality': return `Give ◈${t.give} for ♥${t.get}.`;
     case 'swap-boon': return `Give up what you carry for something else of theirs.`;
     case 'lift-curse': return `Give ♥${t.give} and be rid of what follows you.`;
+    case 'bless-hand': return `Give ◈${t.give} and they will bless the card you acted with tonight.`;
   }
 }
 
@@ -492,6 +494,7 @@ function resolve(run: RunState): RunState {
     if (boons.length && unheld.length) options.push({ id: 'swap-boon', give: rng.pick(boons), get: rng.pick(unheld) });
     const curses = relics.filter((id) => CURSE_IDS.includes(id));
     if (curses.length && vitality > 4) options.push({ id: 'lift-curse', give: 3, curse: curses[0] });
+    if (clarity >= 2 && marks[revealed.hand.cardId] !== 'charged') options.push({ id: 'bless-hand', give: 2, cardId: revealed.hand.cardId });
     if (options.length) trade = rng.pick(options);
   }
   const base = withRng({ ...gained, deck, history, vitality, clarity, marks, relics, echo, vow, strangerMet: run.strangerMet || !!trade }, rng);
@@ -521,6 +524,9 @@ export function acceptTrade(run: RunState): RunState {
     case 'lift-curse':
       if (run.vitality <= t.give) return run;
       return { ...run, vitality: run.vitality - t.give, relics: run.relics.filter((id) => id !== t.curse), phase, traded: true };
+    case 'bless-hand':
+      if (run.clarity < t.give) return run;
+      return { ...run, clarity: run.clarity - t.give, marks: { ...run.marks, [t.cardId]: 'charged' }, phase, traded: true };
   }
 }
 
