@@ -138,6 +138,7 @@ export function SettingsScreen() {
         </details>
 
         <div className="field field--danger">
+          <span className="danger__label">Danger</span>
           {!confirmReset ? (
             <button className="btn" onClick={() => setConfirmReset(true)}>
               Forget everything

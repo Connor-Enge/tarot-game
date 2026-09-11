@@ -398,6 +398,9 @@ sim when authoring a scene's affinities.
 **Fog tint**: a card hidden by Fog lets a faint suit color through its
 back. The deck sheet shows the run seed and where it was cut.
 
+**Bonds**: the Codex detail names the four cards this one has most often
+been read beside, with counts. Tap one to follow the thread.
+
 ### Pillar sweep: where text reaches the screen
 
 Every surface that can show text about a card, and what gates it:
@@ -460,6 +463,24 @@ and the harm threshold is a total of -1.5. Re-run the sim after any change
 to scenes, thresholds, or deltas and keep the three numbers in roughly that
 shape: blind play should usually die, a half-learned deck should usually
 return, a fully learned deck should never lose.
+
+## Authoring a scene
+
+1. Write `place` (one line of texture) and `prompt` (one line, underwritten
+   on purpose). Then five `outcomes`, calamity to triumph, each a single
+   consequence the cards could plausibly have caused.
+2. Pick `kind` (threat, passage, mystery, rest), `hue`, `minAct`, `stakes`
+   (1 in act one, 2 or 3 in act two), and `mend` for rest scenes.
+3. Set per-seat `affinity`: three to five tags per seat, weights between -2
+   and +2, at least one negative per seat so a wrong card can hurt. Think
+   about what the Hand should *do* here and what the Wake should leave.
+4. Optionally name a `relic` the scene's boon hands over.
+5. Draw a 200×60 vignette in `ui/art/scenes.tsx` with the primitives.
+6. Run `npx vite-node scripts/sim-all.ts 800` and check the standard row
+   still sits near random 26% / majors-only 82% / oracle 100%.
+7. Open the dev server with `?oracle` and read the scene a few times. If
+   every candidate scores 0, the affinities are too narrow; if the oracle
+   always finds +2 in every seat, they are too generous.
 
 ## Content debt
 

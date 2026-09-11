@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CARDS, SLOT_IDS, SLOTS, witnessed, type Tier } from '../../engine';
+import { CARDS, getCard, SLOT_IDS, SLOTS, witnessed, type Tier } from '../../engine';
 import { useGame } from '../../store';
 import { Card } from './Card';
 
@@ -7,6 +7,7 @@ export const TIER_LABEL: Record<Tier, string> = { 0: 'unread', 1: 'glimpsed', 2:
 
 /** Bottom sheet: everything the player has earned about one card. */
 export function CodexDetail({ cardId, onClose }: { cardId: string; onClose: () => void }) {
+  const openCodex = useGame((s) => s.openCodex);
   const k = useGame((s) => s.knowledge);
   const card = CARDS.find((c) => c.id === cardId)!;
   const e = k.cards[cardId];
@@ -26,6 +27,11 @@ export function CodexDetail({ cardId, onClose }: { cardId: string; onClose: () =
   })();
   const nothing = !e;
   const [flipped, setFlipped] = useState(false);
+  const bonds = Object.entries(k.links ?? {})
+    .filter(([key]) => key.split('|').includes(cardId))
+    .map(([key, n]) => ({ other: key.split('|').find((id) => id !== cardId)!, n }))
+    .sort((a, b) => b.n - a.n)
+    .slice(0, 4);
   return (
     <div className="sheet" role="dialog" aria-label={card.name} onClick={onClose}>
       <div className="sheet__body" onClick={(ev) => ev.stopPropagation()}>
@@ -55,6 +61,19 @@ export function CodexDetail({ cardId, onClose }: { cardId: string; onClose: () =
           <div className="best-seat">
             Sits well in <span className="seat__glyph">{SLOTS[best.seat].glyph}</span>
             {k.seatsNamed ? ` ${SLOTS[best.seat].name}` : ''} <span className="muted small">· {best.n} reads</span>
+          </div>
+        )}
+        {bonds.length > 0 && (
+          <div className="bonds">
+            <div className="muted small">Read beside</div>
+            <div className="bonds__row">
+              {bonds.map((b) => (
+                <button key={b.other} type="button" className="bond" onClick={() => openCodex(b.other)} aria-label={getCard(b.other).name}>
+                  <Card cardId={b.other} size="xs" faceDown={!k.cards[b.other] && !k.dealt?.[b.other]} />
+                  <span className="muted small">×{b.n}</span>
+                </button>
+              ))}
+            </div>
           </div>
         )}
         {seatsSeen.length > 0 && (
