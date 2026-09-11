@@ -54,6 +54,7 @@ export function Card({ cardId, reversed = false, faceDown = false, size = 'md', 
     mark && `card--${mark}`,
     echo && 'card--echo',
     hiddenSuit && `card--fog-${hiddenSuit}`,
+    card && !faceDown && `card--suit-${card.arcana === 'major' ? 'major' : card.suit}`,
   ]
     .filter(Boolean)
     .join(' ');

@@ -40,6 +40,7 @@ import {
   newKnowledgeSigils,
   noteRecord,
   KIND_GLYPH,
+  getRelic,
   SCENES,
   noteSigils,
   noteResolved,
@@ -439,7 +440,10 @@ export function shareText(run: RunState, mode: RunMode, knowledge?: Knowledge): 
   const spread = finalSpread(run)
     .map((c) => `${getCard(c.cardId).name}${c.reversed ? ' (rev)' : ''}`)
     .join(' · ');
-  const tiers = run.history.map((h) => ({ calamity: '✖', harm: '▽', neutral: '◇', boon: '△', triumph: '★' })[h.resolution.tier]).join('');
+  const tierGlyph = { calamity: '✖', harm: '▽', neutral: '◇', boon: '△', triumph: '★' } as const;
+  // Each scene as the map showed it, paired with how the reading went there.
+  const tiers = run.history.map((h) => `${KIND_GLYPH[SCENES[h.sceneId].kind]}${tierGlyph[h.resolution.tier]}`).join(' ');
+  const carried = run.relics.length ? `\nCarried: ${run.relics.map((r) => getRelic(r).name).join(', ')}` : '';
   const head =
     mode.kind === 'daily'
       ? `Arcana Descent · Daily ${mode.label}`
@@ -449,7 +453,7 @@ export function shareText(run: RunState, mode: RunMode, knowledge?: Knowledge): 
   const streak = mode.kind === 'daily' && knowledge?.daily && knowledge.daily.streak > 1 ? `\nStreak: ${knowledge.daily.streak} days` : '';
   const who = knowledge ? `${streak}\n— ${readerTitle(knowledge)}, ${Object.values(knowledge.cards).filter((c) => c.tier > 0).length} of 78 known` : '';
   const weekly = mode.kind === 'weekly' && knowledge?.records?.weekly ? `\nDeepest this week: ${Math.max(knowledge.records.weekly.bestDepth, run.history.length)} of ${run.map.length}` : '';
-  return `${head}\n${end}\n${tiers}\n${spread}${weekly}${who}`;
+  return `${head}\n${end}\n${tiers}\n${spread}${carried}${weekly}${who}`;
 }
 
 // Persist the run after every change so a closed tab can resume.

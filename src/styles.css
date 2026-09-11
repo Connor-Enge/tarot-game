@@ -795,3 +795,17 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 @keyframes shard-fall { 0% { transform: translateY(-6px); opacity: 0; } 20% { opacity: 0.55; } 100% { transform: translateY(26px); opacity: 0; } }
 .reduce-motion .flourish__spin, .reduce-motion .flourish__shard { animation: none; }
 .best__road { font-family: Georgia, serif; letter-spacing: 0.4em; color: var(--muted); font-size: 0.9rem; padding-left: 0.4em; }
+
+/* --- hand: fanned candidates, suit-lit lift ------------------------------ */
+.hand .deal { transition: rotate 220ms ease, translate 220ms ease; }
+.hand .deal:first-child { rotate: -5deg; translate: 0 6px; }
+.hand .deal:last-child { rotate: 5deg; translate: 0 6px; }
+.hand--four .deal:nth-child(2) { rotate: -1.5deg; translate: 0 1px; }
+.hand--four .deal:nth-child(3) { rotate: 1.5deg; translate: 0 1px; }
+.hand .deal:has(.card--lifted) { rotate: 0deg; translate: 0 0; }
+.card--lifted.card--suit-wands .card__inner { box-shadow: 0 14px 28px rgba(0,0,0,0.6), 0 0 0 1.5px #e0a068, 0 0 28px rgba(224,160,104,0.5); }
+.card--lifted.card--suit-cups .card__inner { box-shadow: 0 14px 28px rgba(0,0,0,0.6), 0 0 0 1.5px #8fc3e0, 0 0 28px rgba(143,195,224,0.5); }
+.card--lifted.card--suit-swords .card__inner { box-shadow: 0 14px 28px rgba(0,0,0,0.6), 0 0 0 1.5px #c8c9d8, 0 0 28px rgba(200,201,216,0.45); }
+.card--lifted.card--suit-pentacles .card__inner { box-shadow: 0 14px 28px rgba(0,0,0,0.6), 0 0 0 1.5px #a9c98a, 0 0 28px rgba(169,201,138,0.5); }
+.card--lifted.card--suit-major .card__inner { box-shadow: 0 14px 28px rgba(0,0,0,0.6), 0 0 0 1.5px var(--gold-2), 0 0 34px rgba(243,220,138,0.55); }
+.reduce-motion .hand .deal { transition: none; }
