@@ -46,6 +46,7 @@ export const SIGILS: Sigil[] = [
   { id: 'three-vows', glyph: '⚭', name: 'Oathbound', text: 'Keep three different vows.', when: (_r, k) => Object.values(k.vows ?? {}).filter((v) => v.kept >= 1).length >= 3 },
   { id: 'well-worn', glyph: '❂', name: 'Well Worn', text: 'Read one card twenty-five times.', when: (_r, k) => Object.values(k.cards).some((c) => c.resolved >= 25) },
   { id: 'every-rite', glyph: '⧖', name: 'Every Rite', text: 'Walk every rite a scene can keep.', when: (_r, k) => ritesWalked(k.omenLog).length === Object.keys(RITES).length },
+  { id: 'answered', glyph: '◈', name: 'Answered in Clarity', text: 'Return with every seat answering in Clarity.', when: (r) => ascended(r) && !!r.mods.seatTick },
   ...(['wands', 'cups', 'swords', 'pentacles'] as const).map((suit) => {
     const NAMES: Record<string, [string, string]> = { wands: ['Fire Read Through', '⚚'], cups: ['Water Read Through', '♆'], swords: ['Air Read Through', '⚔'], pentacles: ['Earth Read Through', '⛤'] };
     return {

@@ -2006,3 +2006,5 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .sofar__tick { margin: 2px 0 0; font-weight: 600; }
 .sofar__tick--helped { color: var(--cla, #8fc3e0); }
 .sofar__tick--hurt { color: #f0a09e; }
+
+.settings__help { margin: -6px 0 2px; }

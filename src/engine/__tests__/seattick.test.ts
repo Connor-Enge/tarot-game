@@ -30,3 +30,15 @@ describe('seat tick', () => {
     }
   });
 });
+
+describe('answered in clarity', () => {
+  it('is earned by returning with the rule on, and not without it', async () => {
+    const { SIGILS } = await import('../sigils');
+    const sigil = SIGILS.find((s) => s.id === 'answered')!;
+    const { emptyKnowledge } = await import('../knowledge');
+    const on = { ...startRun(1, { seatTick: true }), phase: { kind: 'ascended' as const, resolution: { slots: [], comboIds: [], comboNotes: [], total: 0, tier: 'boon' as const, deltas: { vitality: 0, clarity: 0 }, narration: [] } } };
+    const off = { ...startRun(1), phase: on.phase };
+    expect(sigil.when(on, emptyKnowledge())).toBe(true);
+    expect(sigil.when(off, emptyKnowledge())).toBe(false);
+  });
+});

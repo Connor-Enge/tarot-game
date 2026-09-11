@@ -109,7 +109,8 @@ has "Every seat answers in Clarity" (`seatTick`, off by default, taken
 into the run's mods at the start of the next descent): a seat the card
 cost takes one Clarity the moment it lands, a seat it served gives one
 back, never below zero. The plate under the spread says so. The
-balance guard runs with it off.
+balance guard runs with it off. Returning with it on earns the sigil
+Answered in Clarity.
 
 ### The 3-of-1 choice
 
@@ -812,7 +813,7 @@ identity, not power, which is the point.
   omen is distinct.
 - **Scenes**: 30 exist (29 plus the Abyss), which was the target; more are welcome. Latest: the mill, the drowned chapel, the hunt.
 - **Named readings**: 34. Each is a memorable line, never a definition.
-- **Relics**: 12 boons, 8 curses. **Vows**: 7. **Weathers**: 14. **Trades**: 6. **Sigils**: 30. **Rites**: 7.
+- **Relics**: 12 boons, 8 curses. **Vows**: 7. **Weathers**: 14. **Trades**: 6. **Sigils**: 31. **Rites**: 7.
 - **Combos**: 37 named readings exist (three of them readings of tone: four upright, four reversed, one suit). Their banners are coloured by what they are: pale gold for four upright, violet for four reversed, the suit's colour for one suit, and a dark red ribbon for any named reading that drags the total down. This is the richest vein for "the
   combined meaning" and should keep growing with named, memorable results.
 - **Art**: all 78 faces are procedural SVG (`src/ui/art/`). Majors are

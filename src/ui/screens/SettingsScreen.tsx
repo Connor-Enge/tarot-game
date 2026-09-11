@@ -65,10 +65,11 @@ export function SettingsScreen() {
           <span className="toggle__track" />
         </label>
         <label className="toggle">
-          <span>Every seat answers in Clarity <span className="muted small">· a seat that costs you takes ◈1 at once, one that serves you gives ◈1 back. From your next descent.</span></span>
+          <span>Every seat answers in Clarity</span>
           <input type="checkbox" checked={seatTick} onChange={(e) => set({ seatTick: e.target.checked })} />
           <span className="toggle__track" />
         </label>
+        <p className="muted small settings__help">A seat that costs you takes ◈1 the moment the card lands; one that serves you gives ◈1 back, never below zero. From your next descent.</p>
         <label className="toggle">
           <span>Glyphs only, no seat names</span>
           <input type="checkbox" checked={hideSeatNames} onChange={(e) => set({ hideSeatNames: e.target.checked })} />
