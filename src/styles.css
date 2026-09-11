@@ -1530,7 +1530,10 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 @keyframes tide { 0% { transform: translateY(6%); } 100% { transform: translateY(0); } }
 
 /* --- title: a small vignette for the day's weather -------------------------- */
-.weather__art { display: block; width: 150px; height: auto; margin: 6px auto -2px; opacity: 0.9; }
+.weather__art {
+  display: block; width: 100%; max-width: 360px; aspect-ratio: 150 / 44; height: auto; margin: 8px auto 6px;
+  border-radius: 10px; box-shadow: 0 8px 22px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(214,178,94,0.15);
+}
 
 /* --- the trade card: a socket for the trader, a ledger of what goes and comes --- */
 .trade { position: relative; padding: 14px; gap: 14px; border-radius: 16px; overflow: hidden; }

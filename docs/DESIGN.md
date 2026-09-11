@@ -489,6 +489,11 @@ Every surface that can show text about a card, and what gates it:
 
 ## Daily weather
 
+The title shows the day's weather as a small sky: a gradient tinted by
+the weather, a few stars, tonight's moon drawn at its true phase, and the
+weather's vignette on the ground line. The three forecast lines sit
+under it.
+
 The daily seed also picks the card of the day, shown on the title, and
 that card is charged in the Daily: upright when dealt, and a little
 stronger. A daily streak of seven charges the week's card as well; the

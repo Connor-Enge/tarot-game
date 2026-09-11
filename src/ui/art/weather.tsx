@@ -117,12 +117,70 @@ const ART: Record<string, () => ReactElement> = {
   ),
 };
 
-export function WeatherArt({ id, className }: { id: string; className?: string }) {
+/** The sky behind each weather: two stops, top to horizon. */
+const SKY: Record<string, [string, string]> = {
+  clear: ['#0b1030', '#1c2350'],
+  'reversed-winds': ['#141a3a', '#2b2a4a'],
+  'thin-air': ['#1a2240', '#3a4670'],
+  lantern: ['#120c18', '#3a2a1e'],
+  salted: ['#10142a', '#2a3050'],
+  fog: ['#1c1e2c', '#3a3c4c'],
+  heavy: ['#1a1a26', '#2e2c3a'],
+  still: ['#0c1a2c', '#1e3a52'],
+  long: ['#0e0c1e', '#2a2038'],
+  short: ['#141224', '#2c2646'],
+  feathered: ['#1a1830', '#3c3560'],
+  candlelit: ['#160e10', '#3c2418'],
+  guttering: ['#1a0c10', '#3a1418'],
+  'black-tide': ['#050410', '#0e0c1e'],
+};
+
+/** A moon at the given phase, 0 new through 0.5 full to 1 new again. The shadow disc is clipped to the moon. */
+function MoonArt({ x, y, r, phase }: { x: number; y: number; r: number; phase: number }) {
+  const lit = 1 - Math.abs(phase - 0.5) * 2; // 0 new, 1 full
+  const waxing = phase < 0.5;
+  const k = lit * r * 2; // 0: shadow covers the moon; 2r: shadow clear of it
+  const clip = `moon-clip-${Math.round(phase * 1000)}`;
+  return (
+    <g>
+      <clipPath id={clip}>
+        <circle cx={x} cy={y} r={r} />
+      </clipPath>
+      <circle cx={x} cy={y} r={r + 3} fill={PALE} opacity={0.05 + lit * 0.1} />
+      <circle cx={x} cy={y} r={r} fill={PALE} opacity={0.92} />
+      <circle cx={x + (waxing ? -k : k)} cy={y} r={r} fill="#0b1030" opacity={0.94} clipPath={`url(#${clip})`} />
+      <circle cx={x} cy={y} r={r} fill="none" stroke={PALE} strokeWidth={0.3} opacity={0.5} />
+    </g>
+  );
+}
+
+/**
+ * The day's weather as a small sky: a gradient tinted by the weather, a
+ * few stars, tonight's moon at its phase, and the weather's vignette on
+ * the ground line. Wide as the title, 150 x 44.
+ */
+export function WeatherArt({ id, phase, className }: { id: string; phase?: number; className?: string }) {
   const Art = ART[id];
   if (!Art) return null;
+  const [top, low] = SKY[id] ?? SKY.clear;
+  const gid = `wsky-${id}`;
   return (
-    <svg viewBox="0 0 150 36" className={className} aria-hidden preserveAspectRatio="xMidYMid meet">
-      <Art />
+    <svg viewBox="0 0 150 44" className={className} aria-hidden preserveAspectRatio="none">
+      <defs>
+        <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor={top} />
+          <stop offset="1" stopColor={low} />
+        </linearGradient>
+      </defs>
+      <rect x={0} y={0} width={150} height={44} fill={`url(#${gid})`} />
+      {[[9, 6], [31, 13], [52, 4], [97, 9], [121, 5], [143, 15], [70, 3]].map(([x, y], i) => (
+        <circle key={i} cx={x} cy={y} r={0.55 + (i % 3) * 0.2} fill={PALE} opacity={0.35 + (i % 2) * 0.25} className="live-star" style={{ animationDelay: `${(i * 7) % 5 * -0.6}s` }} />
+      ))}
+      {phase !== undefined && <MoonArt x={132} y={11} r={4.5} phase={phase} />}
+      <g transform="translate(0 8)">
+        <Art />
+      </g>
+      <rect x={0} y={0} width={150} height={44} fill="none" stroke={GOLD_FLAT} strokeWidth={0.6} opacity={0.5} />
     </svg>
   );
 }

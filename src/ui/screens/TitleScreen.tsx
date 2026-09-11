@@ -218,7 +218,7 @@ export function TitleScreen() {
             Weekly <span className="weather__glyph">{weekWeather.glyph}</span>
           </button>
         </div>
-        <WeatherArt id={weather.id} className="weather__art" />
+        <WeatherArt id={weather.id} phase={moonPhase()} className="weather__art" />
         <p className="weather muted small center">
           Today · <span className="weather__name">{weather.glyph} {weather.name}</span> · {weather.text}
           <br />
