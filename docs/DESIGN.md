@@ -473,7 +473,9 @@ Every surface that can show text about a card, and what gates it:
 The daily seed also picks one of nine named conditions (Clear, Reversed
 Winds, Thin Air, Lantern Light, Salted Road, Fog, Heavy Air, Still Water,
 The Long Road). Everyone walking today's road walks in the same weather.
-The title names it before you commit; share text carries it.
+The title names it before you commit; share text carries it. The Weekly
+has weather too, from the week's seed, on top of its longer road and its
+two extra hearts.
 
 ## Signature
 

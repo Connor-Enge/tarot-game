@@ -62,7 +62,7 @@ function RunEndScreenInner() {
         outcome: last.resolution.narration.at(-1),
         stops: run.history.map((h) => ({ glyph: KIND_GLYPH[SCENES[h.sceneId].kind], tier: h.resolution.tier })),
         notes: [
-          mode.kind === 'daily' && mode.weather ? `${getWeather(mode.weather).glyph} ${getWeather(mode.weather).name}` : '',
+          (mode.kind === 'daily' || mode.kind === 'weekly') && mode.weather ? `${getWeather(mode.weather).glyph} ${getWeather(mode.weather).name}` : '',
           run.vow ? `${getVow(run.vow.id).glyph} ${getVow(run.vow.id).name} · ${run.vow.kept ? 'kept' : run.vow.broken ? 'broken' : 'held'}` : '',
         ].filter(Boolean).join('   ·   ') || undefined,
       });
@@ -102,7 +102,7 @@ function RunEndScreenInner() {
       })()}
       {finest && <p className="finest center">Your finest descent yet.</p>}
       {mode.kind === 'daily' && <p className="muted small center">Daily descent · {mode.label}{mode.weather ? ` · ${getWeather(mode.weather).glyph} ${getWeather(mode.weather).name}` : ''}</p>}
-      {mode.kind === 'weekly' && <p className="muted small center">Weekly descent · {mode.label}</p>}
+      {mode.kind === 'weekly' && <p className="muted small center">Weekly descent · {mode.label}{mode.weather ? ` · ${getWeather(mode.weather).glyph} ${getWeather(mode.weather).name}` : ''}</p>}
       {earned.length > 0 && (
         <div className="sigil-banner rise" style={{ animationDelay: '900ms' }}>
           {earned.map((id) => {

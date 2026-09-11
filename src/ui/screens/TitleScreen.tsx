@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { CARDS, dailySeed, dailyStreakAlive, dailyWeather, daylight, DEPTHS, DESCENTS, getCard, getDescent, maxDepthUnlocked } from '../../engine';
+import { CARDS, dailySeed, dailyStreakAlive, dailyWeather, daylight, weeklySeed, weeklyWeather, DEPTHS, DESCENTS, getCard, getDescent, maxDepthUnlocked } from '../../engine';
 import { CardBack, type BackVariant } from '../art/CardArt';
 import { StreakFlames } from '../art/flames';
 import { TitleSky } from '../art/sky';
@@ -47,9 +47,9 @@ export function TitleScreen() {
   const light = daylight();
   const current = getDescent(descent);
   const anyUnlocked = DESCENTS.some((d, i) => i > 0 && d.unlocked(k));
-  const { today, todayLabel, weather } = useMemo(() => {
+  const { today, todayLabel, weather, weekWeather } = useMemo(() => {
     const { seed, label } = dailySeed();
-    return { today: CARDS[seed % CARDS.length].id, todayLabel: label, weather: dailyWeather(seed) };
+    return { today: CARDS[seed % CARDS.length].id, todayLabel: label, weather: dailyWeather(seed), weekWeather: weeklyWeather(weeklySeed().seed) };
   }, []);
   const streak = dailyStreakAlive(k, todayLabel);
   // A different fan every visit, seeded off the run count so it feels alive but not random-noise.
@@ -178,12 +178,14 @@ export function TitleScreen() {
           <button className="btn" onClick={newDaily} title={`${weather.name}: ${weather.text}`}>
             Daily{streak > 1 ? ` · ${streak}` : ''} {streak > 1 && <StreakFlames n={streak} className="btn__flames" />}<span className="weather__glyph">{weather.glyph}</span>
           </button>
-          <button className="btn" onClick={newWeekly} title="A longer road, shared by everyone this week">
-            Weekly
+          <button className="btn" onClick={newWeekly} title={`A longer road, shared by everyone this week. ${weekWeather.name}: ${weekWeather.text}`}>
+            Weekly <span className="weather__glyph">{weekWeather.glyph}</span>
           </button>
         </div>
         <p className="weather muted small center">
-          Today's weather · <span className="weather__name">{weather.glyph} {weather.name}</span> · {weather.text}
+          Today · <span className="weather__name">{weather.glyph} {weather.name}</span> · {weather.text}
+          <br />
+          This week · <span className="weather__name">{weekWeather.glyph} {weekWeather.name}</span> · {weekWeather.text}
         </p>
         <div className="row">
           <button className="btn btn--codex" onClick={() => goto('codex')}>

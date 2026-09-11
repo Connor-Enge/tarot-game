@@ -35,3 +35,9 @@ export function getWeather(id: string): Weather {
 export function dailyWeather(seed: number): Weather {
   return WEATHERS[((seed >>> 0) % 7919) % WEATHERS.length];
 }
+
+/** The weather for a weekly seed. The Weekly is already the long road, so that one is skipped. */
+export function weeklyWeather(seed: number): Weather {
+  const pool = WEATHERS.filter((w) => w.id !== 'long');
+  return pool[((seed >>> 0) % 7919) % pool.length];
+}

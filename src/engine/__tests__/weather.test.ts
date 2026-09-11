@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { dailySeed } from '../rng';
 import { startRun } from '../run';
-import { dailyWeather, WEATHERS } from '../weather';
+import { dailyWeather, weeklyWeather, WEATHERS } from '../weather';
 
 describe('daily weather', () => {
   it('is stable for a seed and covers the list over a month', () => {
@@ -21,5 +21,11 @@ describe('daily weather', () => {
       expect(run.vitality).toBeGreaterThan(0);
       expect(run.deck.draw.length).toBeGreaterThan(20);
     }
+  });
+});
+
+describe('weekly weather', () => {
+  it('never picks the long road', () => {
+    for (let i = 0; i < 200; i++) expect(weeklyWeather(i * 7919 + 3).id).not.toBe('long');
   });
 });

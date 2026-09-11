@@ -60,7 +60,7 @@ export function App() {
     document.documentElement.style.setProperty('--mote-hue', warm ? '45' : '');
     document.documentElement.classList.toggle('afterglow', warm);
   }, [afterglow, screen, run]);
-  const weather = screen === 'run' && mode.kind === 'daily' && mode.weather && mode.weather !== 'clear' ? mode.weather : null;
+  const weather = screen === 'run' && (mode.kind === 'daily' || mode.kind === 'weekly') && mode.weather && mode.weather !== 'clear' ? mode.weather : null;
   const low = screen === 'run' && !!run && run.vitality > 0 && run.vitality <= 2 && run.phase.kind !== 'dead' && run.phase.kind !== 'ascended';
   useEffect(() => {
     document.documentElement.classList.toggle('low-vitality', low);

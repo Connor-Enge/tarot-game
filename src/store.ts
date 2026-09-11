@@ -47,6 +47,7 @@ import {
   getRelic,
   getVow,
   dailyWeather,
+  weeklyWeather,
   getWeather,
   SCENES,
   noteSigils,
@@ -67,7 +68,7 @@ import {
 } from './engine';
 
 export type Screen = 'title' | 'run' | 'codex' | 'settings';
-export type RunMode = { kind: 'free'; descent: string; depth?: number } | { kind: 'daily'; label: string; weather?: string } | { kind: 'weekly'; label: string };
+export type RunMode = { kind: 'free'; descent: string; depth?: number } | { kind: 'daily'; label: string; weather?: string } | { kind: 'weekly'; label: string; weather?: string };
 
 interface GameStore {
   screen: Screen;
@@ -303,7 +304,10 @@ export const useGame = create<GameStore>((set, get) => ({
     const knowledge = noteRunStarted(get().knowledge);
     saveKnowledge(knowledge);
     startDrone();
-    set({ run: startRun(seed, WEEKLY_CONFIG), mode: { kind: 'weekly', label }, knowledge, screen: 'run', lifted: null, earned: [], firstDescent: false });
+    // The week has weather too. The long road keeps its length and its two extra hearts on top of the weather's.
+    const weather = weeklyWeather(seed);
+    const config = { ...WEEKLY_CONFIG, ...weather.config, actLayers: WEEKLY_CONFIG.actLayers, startingVitality: (weather.config.startingVitality ?? 10) + 2 };
+    set({ run: startRun(seed, config), mode: { kind: 'weekly', label, weather: weather.id }, knowledge, screen: 'run', lifted: null, earned: [], firstDescent: false });
   },
 
   chooseNode: (index) => {
@@ -510,7 +514,7 @@ export function shareText(run: RunState, mode: RunMode, knowledge?: Knowledge): 
     mode.kind === 'daily'
       ? `Arcana Descent · Daily ${mode.label}${mode.weather ? ` · ${getWeather(mode.weather).name}` : ''}`
       : mode.kind === 'weekly'
-        ? `Arcana Descent · Weekly ${mode.label}`
+        ? `Arcana Descent · Weekly ${mode.label}${mode.weather ? ` · ${getWeather(mode.weather).name}` : ''}`
         : `Arcana Descent · ${getDescent(mode.descent).name}${mode.depth ? ` · Depth ${mode.depth}` : ''} · seed ${run.seed.toString(36)}`;
   const streak = mode.kind === 'daily' && knowledge?.daily && knowledge.daily.streak > 1 ? `\nStreak: ${knowledge.daily.streak} days` : '';
   const who = knowledge ? `${streak}\n— ${readerTitle(knowledge)}, ${Object.values(knowledge.cards).filter((c) => c.tier > 0).length} of 78 known` : '';
