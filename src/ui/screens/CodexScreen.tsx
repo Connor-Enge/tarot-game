@@ -16,6 +16,7 @@ import { Backs } from '../components/Backs';
 import { ColourKey } from '../components/ColourKey';
 import { Rites } from '../components/Rites';
 import { Study } from '../components/Study';
+import { Table } from '../components/Table';
 
 /** Everything the player has earned the right to know. Nothing else. */
 export function CodexScreen() {
@@ -29,7 +30,7 @@ export function CodexScreen() {
   const sigils = new Set(k.sigils ?? []);
   const [suit, setSuit] = useState<SuitFilter>('all');
   const [tf, setTf] = useState<TierFilter>('all');
-  const [view, setView] = useState<'cards' | 'sky' | 'book' | 'study'>('cards');
+  const [view, setView] = useState<'cards' | 'sky' | 'book' | 'study' | 'table'>('cards');
   const [q, setQ] = useState('');
   const [building, setBuilding] = useState(false);
   const toggleChosen = useGame((s) => s.toggleChosen);
@@ -79,8 +80,12 @@ export function CodexScreen() {
         <button className={`tab ${view === 'study' ? 'tab--on' : ''}`} onClick={() => setView('study')}>
           Study
         </button>
+        <button className={`tab ${view === 'table' ? 'tab--on' : ''}`} onClick={() => setView('table')}>
+          Table
+        </button>
       </div>
       {view === 'study' && <Study />}
+      {view === 'table' && <Table />}
       {view === 'sky' && (
         <Constellation
           knowledge={k}

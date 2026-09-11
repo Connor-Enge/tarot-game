@@ -623,6 +623,22 @@ with the deck's size on the button. Cards land wrong more often there
 (0.35). It has its own back, a quill over the line it has written. It is the one place the game lets the reader stack the deck,
 and it is gated behind knowing enough of it to stack it well.
 
+## The Table
+
+A practice spread in the Codex. The player picks a scene they have read at,
+lays cards they have glimpsed into the four seats of the mini cross, turns
+any of them reversed, and watches the reckoning land seat by seat: the same
+sentences and scores the real table gives, with nothing at stake. Once all
+four are down the named readings settle too, but only the ones the player
+has already found are named; the rest count and are called "something in
+the four together you have not yet named". Nothing new is shown: scenes come
+from the omen log, cards from tier one and up, named readings from the
+Codex. The point is to make the story legible by experiment: swap the
+Situation card, turn the Guidance, see what moves.
+
+Engine: `engine/table.ts` (`tableScenes`, `tableCards`, `layTable`,
+`nextEmptySeat`), built on `readingSoFar` and `resolveReading`.
+
 ## The Long Night
 
 A descent unlocked by five deaths and one return: every scene is read
