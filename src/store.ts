@@ -248,10 +248,10 @@ export const useGame = create<GameStore>((set, get) => ({
         const sg = SIGILS.find((x) => x.id === fresh[0]);
         if (sg) get().showToast(sg.glyph, `${sg.name} · ${sg.text}`);
       }
-      sfx.whisper();
-      buzz([5, 30, 5]);
+      sfx.studyRight(streak);
+      buzz(streak % 5 === 0 ? [5, 30, 5, 30, 20] : [5, 30, 5]);
     } else {
-      sfx.resolve('harm');
+      sfx.studyWrong();
       buzz(30);
     }
     saveKnowledge(next);

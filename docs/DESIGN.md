@@ -534,13 +534,13 @@ Across descents (`npx vite-node scripts/sim-all.ts 800`):
 
 | Descent | random | majors-only | oracle |
 |---------|--------|-------------|--------|
-| The Descent | 29% | 83% | 100% |
-| The Short Road | 46% | 85% | 100% |
-| Arcana Only | 38% | 100% | 100% |
-| The Inverted | 1% | 21% | 98% |
-| Fogbound | 27% | 80% | 100% |
-| Thin Blood | 8% | 63% | 100% |
-| Weekly | 28% | 82% | 100% |
+| The Descent | 29% | 82% | 100% |
+| The Short Road | 47% | 87% | 100% |
+| Arcana Only | 41% | 100% | 100% |
+| The Inverted | 1% | 23% | 99% |
+| Fogbound | 28% | 83% | 100% |
+| Thin Blood | 8% | 66% | 100% |
+| Weekly | 27% | 85% | 100% |
 
 Arcana Only was found at 94% for blind play (the majors are all dense,
 well-fitting cards) and tuned with 45% reversed, 8 vitality, and +1 neutral

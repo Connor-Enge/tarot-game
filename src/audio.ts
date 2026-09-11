@@ -181,6 +181,17 @@ export const sfx = {
     noise(0.2, 0.06, 0, 900);
     [880, 830.6, 740].forEach((f, i) => tone(f, 0.9, 'triangle', 0.045, i * 0.22, -12));
   },
+  /** Study: a right answer, a bright pair of notes; a streak of five, a little peal. */
+  studyRight: (streak = 1) => {
+    tone(1046.5, 0.35, 'sine', 0.05);
+    tone(1568, 0.5, 'sine', 0.04, 0.12);
+    if (streak > 0 && streak % 5 === 0) [1760, 2093, 2637].forEach((f, i) => tone(f, 0.6, 'sine', 0.03, 0.3 + i * 0.1));
+  },
+  /** Study: a wrong answer, a dull knock. */
+  studyWrong: () => {
+    noise(0.1, 0.05, 0, 400);
+    tone(196, 0.4, 'triangle', 0.05);
+  },
   /** A new act opens: a deep gong. */
   banner: () => {
     tone(55, 3.2, 'sine', 0.08);
