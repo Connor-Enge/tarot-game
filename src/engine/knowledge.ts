@@ -185,6 +185,24 @@ export function noteStudyResult(k: Knowledge, correct: boolean, streak: number):
  * witnessed cards, one of which it belongs to. Pure; the caller supplies
  * randomness. Returns null when fewer than three cards have been witnessed.
  */
+/**
+ * A seat question: one omen you witnessed, the card that did it, and the
+ * four seats. Which seat was it read in? Any seat where that card, in that
+ * orientation, has been witnessed counts. Null without an omen log.
+ */
+export function seatQuestion(
+  k: Knowledge,
+  rng: { int(max: number): number },
+  cardOmen: (cardId: string, reversed: boolean) => string,
+  filter: (cardId: string) => boolean = () => true,
+): { kind: 'seat'; omen: string; cardId: string; reversed: boolean; seats: SlotId[] } | null {
+  const log = (k.omenLog ?? []).filter((e) => filter(e.cardId));
+  if (log.length === 0) return null;
+  const e = log[rng.int(log.length)];
+  const seats = Array.from(new Set(log.filter((x) => x.cardId === e.cardId && x.reversed === e.reversed).map((x) => x.seat)));
+  return { kind: 'seat', omen: cardOmen(e.cardId, e.reversed), cardId: e.cardId, reversed: e.reversed, seats };
+}
+
 export function studyQuestion(
   k: Knowledge,
   rng: { int(max: number): number; shuffle<T>(arr: readonly T[]): T[] },

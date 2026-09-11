@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { getCard } from '../../engine';
+import { getCard, SLOT_IDS, SLOTS } from '../../engine';
 import { useGame } from '../../store';
 import { StreakFlames } from '../art/flames';
 import { Card } from './Card';
@@ -40,6 +40,44 @@ export function Study() {
   }
   const { q, picked, streak } = study;
   const stats = k.study;
+  if ('kind' in q) {
+    const right = picked !== null && q.seats.includes(picked as never);
+    return (
+      <section className="study">
+        {filterRow}
+        <div className="study__meta muted small">
+          <StreakFlames n={streak} className="study__flames" /> streak {streak}
+          {stats && ` · ${stats.correct} / ${stats.asked} · best ${stats.bestStreak}`}
+        </div>
+        <div className="study__cardwrap study__seatcard">
+          <Card cardId={q.cardId} reversed={q.reversed} size="lg" />
+        </div>
+        <blockquote className="study__omen" key={q.omen}>
+          <span className="study__flourish" aria-hidden>❧</span>
+          {q.omen}
+          <span className="study__flourish study__flourish--end" aria-hidden>❧</span>
+        </blockquote>
+        <p className="muted small center">In which seat did it do this?</p>
+        <div className="study__seats">
+          {SLOT_IDS.map((id) => {
+            const state = picked ? (q.seats.includes(id) ? 'right' : id === picked ? 'wrong' : 'dim') : '';
+            return (
+              <button key={id} type="button" className={`study__seat study__seat--${state}`} onClick={() => answerStudy(id)} disabled={picked !== null} aria-label={k.seatsNamed ? SLOTS[id].name : `seat ${SLOT_IDS.indexOf(id) + 1}`}>
+                <span className="seat__glyph">{SLOTS[id].glyph}</span>
+                {k.seatsNamed && <span className="study__seatname">{SLOTS[id].name.replace(/^The /, '')}</span>}
+              </button>
+            );
+          })}
+        </div>
+        {picked && (
+          <button className="btn btn--primary" onClick={askStudy}>
+            {right ? 'Again' : 'Another'}
+          </button>
+        )}
+      </section>
+    );
+  }
+  const cq = q;
   return (
     <section className="study">
       {filterRow}
@@ -47,30 +85,30 @@ export function Study() {
         <StreakFlames n={streak} className="study__flames" /> streak {streak}
         {stats && ` · ${stats.correct} / ${stats.asked} · best ${stats.bestStreak}`}
       </div>
-      <blockquote className="study__omen" key={q.omen}>
+      <blockquote className="study__omen" key={cq.omen}>
         <span className="study__flourish" aria-hidden>❧</span>
-        {q.omen}
+        {cq.omen}
         <span className="study__flourish study__flourish--end" aria-hidden>❧</span>
       </blockquote>
-      <p className="muted small center">Which card did this{q.reversed ? ', reversed' : ''}?</p>
+      <p className="muted small center">Which card did this{cq.reversed ? ', reversed' : ''}?</p>
       <div className="study__choices">
-        {q.choices.map((id, i) => {
-          const state = picked ? (id === q.answer ? 'right' : id === picked ? 'wrong' : 'dim') : '';
+        {cq.choices.map((id, i) => {
+          const state = picked ? (id === cq.answer ? 'right' : id === picked ? 'wrong' : 'dim') : '';
           return (
-            <div key={`${q.omen}-${id}`} className={`study__choice study__choice--${state} deal`} style={{ animationDelay: `${i * 110}ms` }}>
+            <div key={`${cq.omen}-${id}`} className={`study__choice study__choice--${state} deal`} style={{ animationDelay: `${i * 110}ms` }}>
               <div className="study__cardwrap">
-                <Card cardId={id} size="lg" reversed={picked !== null && id === q.answer && q.reversed} onClick={() => answerStudy(id)} />
-                {picked && id === q.answer && <span className="study__stamp" aria-hidden>✦</span>}
-                {picked && id === picked && id !== q.answer && <span className="study__stamp study__stamp--wrong" aria-hidden>✖</span>}
+                <Card cardId={id} size="lg" reversed={picked !== null && id === cq.answer && cq.reversed} onClick={() => answerStudy(id)} />
+                {picked && id === cq.answer && <span className="study__stamp" aria-hidden>✦</span>}
+                {picked && id === picked && id !== cq.answer && <span className="study__stamp study__stamp--wrong" aria-hidden>✖</span>}
               </div>
-              {picked && id === q.answer && <div className="study__label">{getCard(id).name}</div>}
+              {picked && id === cq.answer && <div className="study__label">{getCard(id).name}</div>}
             </div>
           );
         })}
       </div>
       {picked && (
         <button className="btn btn--primary" onClick={askStudy}>
-          {picked === q.answer ? 'Again' : 'Another'}
+          {picked === cq.answer ? 'Again' : 'Another'}
         </button>
       )}
     </section>

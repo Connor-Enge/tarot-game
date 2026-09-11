@@ -38,6 +38,7 @@ import {
   resetRecords,
   SIGILS,
   studyQuestion,
+  seatQuestion,
   createRng,
   newSigils,
   newKnowledgeSigils,
@@ -89,7 +90,7 @@ interface GameStore {
   /** The player's very first run: show the three wordless nudges. */
   firstDescent: boolean;
   /** Study mode. */
-  study: { q: ReturnType<typeof studyQuestion>; streak: number; picked: string | null } | null;
+  study: { q: ReturnType<typeof studyQuestion> | ReturnType<typeof seatQuestion>; streak: number; picked: string | null } | null;
   studyFilter: string;
   setStudyFilter: (f: string) => void;
   askStudy: () => void;
@@ -225,17 +226,22 @@ export const useGame = create<GameStore>((set, get) => ({
       const c = getCard(id);
       return studyFilter === 'major' ? c.arcana === 'major' : c.suit === studyFilter;
     };
-    const q = studyQuestion(knowledge, createRng(randomSeed()), (id, r) => (r ? getCard(id).omen.reversed : getCard(id).omen.upright), filter);
+    const rng = createRng(randomSeed());
+    const omen = (id: string, r: boolean) => (r ? getCard(id).omen.reversed : getCard(id).omen.upright);
+    // Every third question or so asks where, not which.
+    const seatQ = rng.int(3) === 0 ? seatQuestion(knowledge, rng, omen, filter) : null;
+    const q = seatQ ?? studyQuestion(knowledge, rng, omen, filter);
     set({ study: { q, streak: study?.streak ?? 0, picked: null } });
   },
   answerStudy: (cardId) => {
     const { knowledge, study } = get();
     if (!study?.q || study.picked) return;
-    const correct = cardId === study.q.answer;
+    const q = study.q;
+    const correct = 'kind' in q && q.kind === 'seat' ? (q.seats as string[]).includes(cardId) : 'answer' in q && cardId === q.answer;
     const streak = correct ? study.streak + 1 : 0;
     let next = noteStudyResult(knowledge, correct, streak);
     if (correct) {
-      next = noteStudy(next, cardId);
+      next = noteStudy(next, 'kind' in q && q.kind === 'seat' ? q.cardId : cardId);
       const fresh = newKnowledgeSigils(next);
       next = noteSigils(next, fresh);
       if (fresh.length) {
