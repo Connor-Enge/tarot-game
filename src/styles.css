@@ -18,6 +18,7 @@
 html, body, #root { height: 100%; }
 body {
   margin: 0;
+  -webkit-touch-callout: none;
   background: var(--bg);
   color: var(--ink);
   font-family: var(--font);
@@ -176,6 +177,8 @@ em { color: var(--gold); font-style: normal; }
 
 /* --- cards --------------------------------------------------------------- */
 .card {
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
   --w: var(--card-w);
   width: var(--w);
   aspect-ratio: 5 / 8;

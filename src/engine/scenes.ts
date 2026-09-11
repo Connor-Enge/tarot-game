@@ -86,7 +86,7 @@ export const SCENES: Record<string, Scene> = {
     outcomes: {
       calamity: 'The ropes part. You fall a long way and stop suddenly.',
       harm: 'The bridge sways and you cross on your knees, bleeding from the rope.',
-      neutral: 'You cross. The breathing below does not change.',
+      neutral: 'You cross on the balls of your feet. Below, the breathing keeps its own time.',
       boon: 'You cross lightly, and find a satchel snagged on the far post.',
       triumph: 'The gorge is quiet as you cross, and on the far side, the path is clearer than before.',
     },
@@ -109,7 +109,7 @@ export const SCENES: Record<string, Scene> = {
     outcomes: {
       calamity: 'You wake with the fire cold, your pack gone, and a knife you did not own in your hand.',
       harm: 'The stranger talks until dawn. You leave tired, poorer, and unsure what you agreed to.',
-      neutral: 'You share the fire and part in the morning without names.',
+      neutral: 'You share the fire. In the morning the stranger is gone, and the ash is still warm.',
       boon: 'The stranger tells you a thing about the road ahead, and it turns out to be true.',
       triumph: 'By morning you know their name, and something they left you burns quietly in your pocket.',
     },
@@ -130,7 +130,7 @@ export const SCENES: Record<string, Scene> = {
     },
     outcomes: {
       calamity: 'The door opens onto the same field, and the door behind you is gone.',
-      harm: 'You force the lock and cut your hand on a mechanism that was not there before.',
+      harm: 'You force the lock. Something inside it forces back, and you leave a little of your hand in the keyhole.',
       neutral: 'The door opens onto the same field. You walk through anyway.',
       boon: 'The door opens onto a road you had not seen, and it is downhill.',
       triumph: 'The door opens onto somewhere else entirely, and it has been waiting for you.',
@@ -176,7 +176,7 @@ export const SCENES: Record<string, Scene> = {
     outcomes: {
       calamity: 'You lean in to hear better. The singing stops. The well is much deeper than it looked.',
       harm: 'The song stays in your head for days and crowds out something you needed to remember.',
-      neutral: 'You listen for a while and move on with the tune half-remembered.',
+      neutral: 'You listen until the song loops, then walk on humming the wrong half of it.',
       boon: 'You drop something in, and the song changes to one you know.',
       triumph: 'You drop something in, and the well gives back something better, still wet.',
     },
@@ -199,7 +199,7 @@ export const SCENES: Record<string, Scene> = {
     outcomes: {
       calamity: 'The third floor finishes falling while you are on the second.',
       harm: 'You climb, and the stairs teach you why they were abandoned.',
-      neutral: 'You look at it for a while. It looks back.',
+      neutral: 'You climb as far as the stairs go and sit where the third floor used to be.',
       boon: 'Under the rubble: a thing someone hid before the tower came down.',
       triumph: 'The ruin is a map, if you stand in the right place. You stand in the right place.',
     },
@@ -221,7 +221,7 @@ export const SCENES: Record<string, Scene> = {
     },
     outcomes: {
       calamity: 'You sleep. Something else uses the hollow too, and it does not share.',
-      harm: 'You sleep badly and wake with the sense that the hill has moved.',
+      harm: 'You sleep badly, and wake certain the hill has turned over in the night with you inside it.',
       neutral: 'You rest. Nothing comes.',
       boon: 'You sleep deeply and wake mended in ways you did not know you were broken.',
       triumph: 'You sleep, and you dream the next stretch of road, and in the morning it is exactly so.',
@@ -245,7 +245,7 @@ export const SCENES: Record<string, Scene> = {
     outcomes: {
       calamity: 'You buy something. The price was not written in coin.',
       harm: 'You leave with less than you came with and cannot say what you bought.',
-      neutral: 'You touch nothing, and nothing touches you.',
+      neutral: 'You walk the whole market with your hands in your pockets, and the prices watch you go.',
       boon: 'One stall has exactly what you needed, and takes only what you can spare.',
       triumph: 'You leave a thing you did not need and take a thing you did, and the town lets you.',
     },
@@ -268,7 +268,7 @@ export const SCENES: Record<string, Scene> = {
     outcomes: {
       calamity: 'You look too long. When you turn away, it does not.',
       harm: 'You see something in your face you did not want confirmed.',
-      neutral: 'It catches up with you, and you move on together.',
+      neutral: 'You wait for it to catch up. When it does, you both pretend it never lagged.',
       boon: 'It shows you a card you have not drawn yet.',
       triumph: 'You look, and it looks back, and for once you both agree.',
     },

@@ -350,6 +350,11 @@ text includes the deepest scene reached this week.
 
 Bundle: ~378 KB JS (~120 KB gzipped); the Codex screen is code-split.
 
+**Install**: an SVG app icon (three fanned cards, the Star on top) with
+192 and 512 PNG renders, apple-touch-icon, description meta, and the
+service worker precaching them. Cards suppress the iOS touch callout so a
+long press magnifies instead of selecting.
+
 **Reading pace**: slow, normal, fast, in Settings. Tapping the narration
 shows all of it at once.
 
