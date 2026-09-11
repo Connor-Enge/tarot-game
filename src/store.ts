@@ -304,6 +304,7 @@ export const useGame = create<GameStore>((set, get) => ({
     buzz(abyss ? [20, 60, 40] : 6);
     if (abyss) sfx.abyss();
     else sfx.node();
+    if (next.vow?.kept && !run.vow?.kept) sfx.vowKept();
     const knowledge = noteDealt(get().knowledge, dealtIn(next));
     if (knowledge !== get().knowledge) saveKnowledge(knowledge);
     set({ run: next, lifted: null, knowledge });
@@ -336,6 +337,10 @@ export const useGame = create<GameStore>((set, get) => ({
     buzz(tier === 'calamity' ? [40, 30, 80] : tier === 'triumph' ? [15, 20, 15, 20, 30] : 20);
     sfx.place(suit);
     if (tier) sfx.resolve(tier);
+    if (next.vow?.broken && !run.vow?.broken) {
+      sfx.vowBroken();
+      buzz([30, 40, 60]);
+    }
     if (next.phase.kind === 'dead') {
       stopDrone();
       sfx.death();
@@ -433,7 +438,7 @@ export const useGame = create<GameStore>((set, get) => ({
     const next = takeVowRun(run, id);
     if (next === run) return;
     buzz([10, 40, 20]);
-    sfx.place('major');
+    sfx.vow();
     set({ run: next });
   },
 

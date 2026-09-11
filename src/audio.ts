@@ -159,6 +159,35 @@ export const sfx = {
   ascend: () => {
     [261, 329, 392, 523, 659, 784].forEach((f, i) => tone(f, 1.8, 'sine', 0.05, i * 0.12));
   },
+  /** Someone by the fire: a low knock and a two-note murmur. */
+  stranger: () => {
+    noise(0.12, 0.07, 0, 500);
+    tone(146.8, 0.5, 'triangle', 0.05, 0.15);
+    tone(174.6, 0.7, 'triangle', 0.045, 0.42);
+  },
+  /** A vow sworn: a struck bell held. */
+  vow: () => {
+    tone(880, 1.6, 'sine', 0.06);
+    tone(1318.5, 1.2, 'sine', 0.025, 0.02, 4);
+    tone(440, 1.8, 'triangle', 0.02, 0.05);
+  },
+  /** A vow kept: the bell, and a rising answer. */
+  vowKept: () => {
+    tone(880, 1.2, 'sine', 0.05);
+    [1046.5, 1318.5, 1760].forEach((f, i) => tone(f, 1.4, 'sine', 0.035, 0.25 + i * 0.16));
+  },
+  /** A vow broken: the bell cracked, falling. */
+  vowBroken: () => {
+    noise(0.2, 0.06, 0, 900);
+    [880, 830.6, 740].forEach((f, i) => tone(f, 0.9, 'triangle', 0.045, i * 0.22, -12));
+  },
+  /** A new act opens: a deep gong. */
+  banner: () => {
+    tone(55, 3.2, 'sine', 0.08);
+    tone(110.5, 2.6, 'sine', 0.04, 0.05, 6);
+    tone(165, 2.0, 'triangle', 0.015, 0.1);
+    noise(0.5, 0.03, 0, 300);
+  },
 };
 
 /** A slow, low pad that follows the scene hue (as a filter cutoff). Starts silent, fades in. */

@@ -2,7 +2,8 @@ import { currentScene, getCard, getRelic, SLOT_IDS, SLOTS, tradeText } from '../
 import { StrangerArt } from '../art/stranger';
 
 const TIER_GLYPH = { calamity: '✖', harm: '▽', neutral: '◇', boon: '△', triumph: '★' } as const;
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { sfx } from '../../audio';
 import { useSettings } from '../../settings';
 import { useGame } from '../../store';
 import { TierFlourish } from '../art/flourish';
@@ -20,6 +21,13 @@ function ResolutionScreenInner() {
   const omenLog = useGame((s) => s.knowledge.omenLog);
   const readingSpeed = useSettings((s) => s.readingSpeed);
   const [revealAll, setRevealAll] = useState(false);
+  const hasTrade = run.phase.kind === 'resolved' && !!run.phase.trade;
+  const narrationLen = run.phase.kind === 'resolved' ? run.phase.resolution.narration.length : 0;
+  useEffect(() => {
+    if (!hasTrade) return;
+    const t = window.setTimeout(() => sfx.stranger(), 500 + narrationLen * 400);
+    return () => window.clearTimeout(t);
+  }, [hasTrade, narrationLen]);
   if (run.phase.kind !== 'resolved') return null;
   const { resolution, cursed, offer, found, trade, traded } = run.phase;
   const curse = cursed ? getRelic(cursed) : null;

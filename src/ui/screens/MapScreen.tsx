@@ -8,6 +8,7 @@ import { Card } from '../components/Card';
 const TIER_MARK = { calamity: '✖', harm: '▽', neutral: '◇', boon: '△', triumph: '★' } as const;
 
 const ACT_NAMES = ['', 'The Shallows', 'The Deep', 'The Abyss'];
+import { sfx } from '../../audio';
 import { useGame } from '../../store';
 import { Stats } from '../components/Stat';
 
@@ -39,6 +40,7 @@ function MapScreenInner() {
   useEffect(() => {
     if (!newAct) return;
     setBanner(act);
+    sfx.banner();
     const t = window.setTimeout(() => setBanner(null), 2600);
     return () => window.clearTimeout(t);
   }, [newAct, act]);
