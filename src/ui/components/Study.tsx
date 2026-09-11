@@ -13,17 +13,35 @@ export function Study() {
   const askStudy = useGame((s) => s.askStudy);
   const answerStudy = useGame((s) => s.answerStudy);
   const k = useGame((s) => s.knowledge);
+  const studyFilter = useGame((s) => s.studyFilter);
+  const setStudyFilter = useGame((s) => s.setStudyFilter);
+  const FILTERS: [string, string][] = [['all', 'All'], ['major', '✦'], ['wands', '⚚'], ['cups', '♆'], ['swords', '⚔'], ['pentacles', '⛤']];
+  const filterRow = (
+    <div className="filters__row">
+      {FILTERS.map(([f, label]) => (
+        <button key={f} type="button" className={`chip ${studyFilter === f ? 'chip--on' : ''}`} onClick={() => setStudyFilter(f)}>
+          {label}
+        </button>
+      ))}
+    </div>
+  );
   useEffect(() => {
     if (!study) askStudy();
   }, [study, askStudy]);
   if (!study) return null;
   if (!study.q) {
-    return <p className="muted small center">Witness three cards first. Study needs something to remember.</p>;
+    return (
+      <section className="study">
+        {filterRow}
+        <p className="muted small center">Witness three cards of this kind first. Study needs something to remember.</p>
+      </section>
+    );
   }
   const { q, picked, streak } = study;
   const stats = k.study;
   return (
     <section className="study">
+      {filterRow}
       <div className="study__meta muted small">
         streak {streak}
         {stats && ` · ${stats.correct} / ${stats.asked} · best ${stats.bestStreak}`}

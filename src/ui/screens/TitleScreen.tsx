@@ -156,8 +156,14 @@ export function TitleScreen() {
           </button>
         </div>
         <div className="row">
-          <button className="btn" onClick={() => goto('codex')}>
-            Codex {known > 0 && <span className="pill">{known}</span>}
+          <button className="btn btn--codex" onClick={() => goto('codex')}>
+            Codex
+            {known > 0 && (
+              <svg className="ring" viewBox="0 0 24 24" aria-label={`${known} of ${CARDS.length} known`}>
+                <circle cx={12} cy={12} r={9} fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth={2.5} />
+                <circle cx={12} cy={12} r={9} fill="none" stroke="#f3dc8a" strokeWidth={2.5} strokeDasharray={`${(known / CARDS.length) * 56.5} 56.5`} strokeLinecap="round" transform="rotate(-90 12 12)" />
+              </svg>
+            )}
           </button>
           <button className="btn" onClick={() => goto('settings')} aria-label="Settings">
             ⚙

@@ -186,3 +186,15 @@ describe('daily streak', () => {
     expect(k.daily).toEqual({ last: '2026-09-14', streak: 1, best: 2 });
   });
 });
+
+describe('study filter', () => {
+  it('draws only from the filtered pool', async () => {
+    const { studyQuestion } = await import('../knowledge');
+    const { createRng } = await import('../rng');
+    let k = emptyKnowledge();
+    for (const id of ['major-0', 'major-1', 'major-2', 'cups-1', 'cups-2', 'cups-3']) k = noteResolved(k, id, 'hand', false);
+    const q = studyQuestion(k, createRng(3), () => 'x', (id) => id.startsWith('cups-'))!;
+    expect(q.choices.every((id) => id.startsWith('cups-'))).toBe(true);
+    expect(studyQuestion(k, createRng(3), () => 'x', (id) => id.startsWith('swords-'))).toBeNull();
+  });
+});

@@ -185,9 +185,11 @@ export function studyQuestion(
   k: Knowledge,
   rng: { int(max: number): number; shuffle<T>(arr: readonly T[]): T[] },
   cardOmen: (cardId: string, reversed: boolean) => string,
+  filter: (cardId: string) => boolean = () => true,
 ): { omen: string; answer: string; reversed: boolean; choices: string[] } | null {
   const pool: { cardId: string; reversed: boolean }[] = [];
   for (const [id, e] of Object.entries(k.cards)) {
+    if (!filter(id)) continue;
     if (e.witnessed?.upright) pool.push({ cardId: id, reversed: false });
     if (e.witnessed?.reversed) pool.push({ cardId: id, reversed: true });
   }

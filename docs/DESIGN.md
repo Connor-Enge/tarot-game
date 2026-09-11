@@ -422,6 +422,10 @@ Daily button; it survives a same-day replay and lapses after a missed day.
 **Named, the first time**: the first time a reading produces a combo, its
 line arrives as a toast. The Codex "unseen" filter lists cards never dealt.
 
+**Study drills**: filter Study to the majors or one suit. The title's Codex
+button carries a progress ring of cards known. Daily share text notes a
+streak of two days or more.
+
 ### Pillar sweep: where text reaches the screen
 
 Every surface that can show text about a card, and what gates it:

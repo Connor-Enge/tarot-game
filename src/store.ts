@@ -75,6 +75,8 @@ interface GameStore {
   firstDescent: boolean;
   /** Study mode. */
   study: { q: ReturnType<typeof studyQuestion>; streak: number; picked: string | null } | null;
+  studyFilter: string;
+  setStudyFilter: (f: string) => void;
   askStudy: () => void;
   answerStudy: (cardId: string) => void;
   /** A return this session: the title and map glow warm until the next run ends. */
@@ -185,9 +187,16 @@ export const useGame = create<GameStore>((set, get) => ({
     set({ knowledge: k });
   },
   study: null,
+  studyFilter: 'all',
+  setStudyFilter: (f) => set({ studyFilter: f, study: null }),
   askStudy: () => {
-    const { knowledge, study } = get();
-    const q = studyQuestion(knowledge, createRng(randomSeed()), (id, r) => (r ? getCard(id).omen.reversed : getCard(id).omen.upright));
+    const { knowledge, study, studyFilter } = get();
+    const filter = (id: string) => {
+      if (studyFilter === 'all') return true;
+      const c = getCard(id);
+      return studyFilter === 'major' ? c.arcana === 'major' : c.suit === studyFilter;
+    };
+    const q = studyQuestion(knowledge, createRng(randomSeed()), (id, r) => (r ? getCard(id).omen.reversed : getCard(id).omen.upright), filter);
     set({ study: { q, streak: study?.streak ?? 0, picked: null } });
   },
   answerStudy: (cardId) => {
@@ -418,7 +427,8 @@ export function shareText(run: RunState, mode: RunMode, knowledge?: Knowledge): 
       : mode.kind === 'weekly'
         ? `Arcana Descent · Weekly ${mode.label}`
         : `Arcana Descent · ${getDescent(mode.descent).name}${mode.depth ? ` · Depth ${mode.depth}` : ''} · seed ${run.seed.toString(36)}`;
-  const who = knowledge ? `\n— ${readerTitle(knowledge)}, ${Object.values(knowledge.cards).filter((c) => c.tier > 0).length} of 78 known` : '';
+  const streak = mode.kind === 'daily' && knowledge?.daily && knowledge.daily.streak > 1 ? `\nStreak: ${knowledge.daily.streak} days` : '';
+  const who = knowledge ? `${streak}\n— ${readerTitle(knowledge)}, ${Object.values(knowledge.cards).filter((c) => c.tier > 0).length} of 78 known` : '';
   const weekly = mode.kind === 'weekly' && knowledge?.records?.weekly ? `\nDeepest this week: ${Math.max(knowledge.records.weekly.bestDepth, run.history.length)} of ${run.map.length}` : '';
   return `${head}\n${end}\n${tiers}\n${spread}${weekly}${who}`;
 }
