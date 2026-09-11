@@ -5,6 +5,8 @@ import type { Rng } from './rng';
 export interface DrawnCard {
   cardId: string;
   reversed: boolean;
+  /** Dealt face down (Fog curse). The player chooses blind; the seat reveals it. */
+  hidden?: boolean;
 }
 
 export interface DeckState {

@@ -8,6 +8,7 @@ import { CodexScreen } from './ui/screens/CodexScreen';
 import { GalleryScreen } from './ui/screens/GalleryScreen';
 import { MapScreen } from './ui/screens/MapScreen';
 import { ReadingScreen } from './ui/screens/ReadingScreen';
+import { RelicScreen } from './ui/screens/RelicScreen';
 import { ResolutionScreen } from './ui/screens/ResolutionScreen';
 import { SettingsScreen } from './ui/screens/SettingsScreen';
 import { RunEndScreen } from './ui/screens/RunEndScreen';
@@ -61,6 +62,10 @@ export function App() {
       case 'resolved':
         view = <ResolutionScreen />;
         key = `resolved-${run.layer}`;
+        break;
+      case 'relic':
+        view = <RelicScreen />;
+        key = `relic-${run.layer}`;
         break;
       case 'dead':
       case 'ascended':

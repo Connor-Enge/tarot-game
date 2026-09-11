@@ -162,6 +162,8 @@ em { color: var(--gold); font-style: normal; }
   gap: 10px;
   padding: 16px 0 14px;
 }
+.hand--four .card--lg { --w: min(21vw, 96px); }
+.hand--four { gap: 6px; }
 
 .actions { display: flex; gap: 10px; }
 .actions .btn { flex: 1; }
@@ -346,3 +348,32 @@ em { color: var(--gold); font-style: normal; }
 .sheet__card .card { cursor: default; }
 .sheet__title { font-size: 1.2rem; }
 .sheet__omens { display: flex; flex-direction: column; gap: 4px; padding: 8px 0; }
+
+/* --- relics -------------------------------------------------------------- */
+.screen--relic { justify-content: center; gap: 20px; }
+.relic-offer { display: flex; flex-direction: column; gap: 14px; }
+.relic {
+  font: inherit; color: var(--ink); text-align: left; cursor: pointer;
+  display: grid; grid-template-columns: 44px 1fr; grid-template-rows: auto auto; column-gap: 12px; align-items: center;
+  padding: 16px; border-radius: 16px;
+  background: linear-gradient(160deg, rgba(214,178,94,0.14), rgba(214,178,94,0.04));
+  border: 1px solid rgba(214,178,94,0.45);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  transition: transform 100ms ease;
+}
+.relic:active { transform: scale(0.98); }
+.relic__glyph { grid-row: 1 / span 2; font-size: 1.8rem; color: var(--gold-2); text-align: center; }
+.relic__name { font-size: 1.1rem; }
+.relic__text { color: var(--muted); font-size: 0.9rem; }
+.relic-strip { display: flex; flex-direction: column; gap: 6px; align-items: center; }
+.relic-strip__row { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+.relic-chip {
+  width: 30px; height: 30px; border-radius: 50%; font: inherit; font-size: 0.95rem; cursor: pointer;
+  border: 1px solid rgba(214,178,94,0.5); background: rgba(214,178,94,0.1); color: var(--gold-2);
+  display: grid; place-items: center;
+}
+.relic-chip--curse { border-color: rgba(214,96,94,0.5); background: rgba(214,96,94,0.1); color: #f0a09e; }
+.relic-chip--on { background: rgba(255,255,255,0.14); }
+.relic-strip__text { font-size: 0.85rem; text-align: center; }
+.curse { color: #f0a09e; }
+.curse__glyph { font-size: 1.1rem; }

@@ -1,10 +1,11 @@
 import { createDeck, discard, draw, type DeckState, type DrawnCard } from './deck';
 import { resolveReading, type Reading, type Resolution } from './resolve';
 import { createRng, type Rng } from './rng';
+import { BOON_IDS, CURSE_IDS } from './relics';
 import { actOfLayer, buildMap, SCENES, SLOT_IDS, type MapNode, type Scene, type SlotId } from './scenes';
 
 export const CANDIDATES_PER_SLOT = 3;
-export const STARTING_VITALITY = 12;
+export const STARTING_VITALITY = 10;
 export const STARTING_CLARITY = 2;
 export const REDRAW_COST = 1;
 export const WHISPER_COST = 1;
@@ -23,7 +24,8 @@ export interface SlotState {
 export type Phase =
   | { kind: 'map' }                 // choosing the next node
   | { kind: 'reading' }             // choosing cards, seat by seat
-  | { kind: 'resolved'; resolution: Resolution }
+  | { kind: 'resolved'; resolution: Resolution; offer?: string[]; cursed?: string }
+  | { kind: 'relic'; offer: string[] }
   | { kind: 'dead'; resolution: Resolution }
   | { kind: 'ascended'; resolution: Resolution };
 
@@ -45,6 +47,9 @@ export interface RunState {
   vitality: number;
   clarity: number;
   marks: Record<string, Mark>;
+  /** Relic ids held this run (boons and curses). */
+  relics: string[];
+  freeRedrawUsed: boolean;
   slots: SlotState[];
   activeSlot: number;
   phase: Phase;
@@ -67,6 +72,22 @@ export function currentScene(run: RunState): Scene {
   const node = currentNode(run);
   if (!node) throw new Error('No scene: run is choosing a map node');
   return SCENES[node.sceneId];
+}
+
+export function hasRelic(run: RunState, id: string): boolean {
+  return run.relics.includes(id);
+}
+
+export function whisperCost(run: RunState): number {
+  return hasRelic(run, 'hush') ? WHISPER_COST * 2 : WHISPER_COST;
+}
+
+export function redrawCost(run: RunState): number {
+  return hasRelic(run, 'coin') && !run.freeRedrawUsed ? 0 : REDRAW_COST;
+}
+
+function clampClarity(run: RunState, clarity: number): number {
+  return hasRelic(run, 'debt') ? Math.min(clarity, 2) : clarity;
 }
 
 export function currentAct(run: RunState): number {
@@ -95,6 +116,8 @@ export function startRun(seed: number): RunState {
     vitality: STARTING_VITALITY,
     clarity: STARTING_CLARITY,
     marks: {},
+    relics: [],
+    freeRedrawUsed: false,
     slots: [],
     activeSlot: 0,
     phase: { kind: 'map' },
@@ -113,8 +136,21 @@ function applyMarks(run: RunState, cards: DrawnCard[]): DrawnCard[] {
 }
 
 function dealSeat(run: RunState, rng: Rng, deck: DeckState, slot: SlotId): { deck: DeckState; state: SlotState } {
-  const dealt = draw(deck, rng, CANDIDATES_PER_SLOT);
-  return { deck: dealt.deck, state: { slot, candidates: applyMarks(run, dealt.cards), chosen: null, whispered: [] } };
+  let count = CANDIDATES_PER_SLOT;
+  if (slot === 'threshold' && hasRelic(run, 'lens')) count++;
+  if (slot === 'wake' && hasRelic(run, 'shard')) count++;
+  const dealt = draw(deck, rng, count);
+  let cards = applyMarks(run, dealt.cards);
+  if (slot === 'hand' && hasRelic(run, 'salt')) cards = cards.map((c) => (run.marks[c.cardId] === 'scarred' ? c : { ...c, reversed: false }));
+  if (slot === 'vessel' && hasRelic(run, 'splinter') && cards.length && !cards.some((c) => c.reversed)) {
+    const i = cards.findIndex((c) => run.marks[c.cardId] !== 'charged');
+    if (i >= 0) cards = cards.map((c, j) => (j === i ? { ...c, reversed: true } : c));
+  }
+  if (hasRelic(run, 'fog') && cards.length) {
+    const i = rng.int(cards.length);
+    cards = cards.map((c, j) => (j === i ? { ...c, hidden: true } : c));
+  }
+  return { deck: dealt.deck, state: { slot, candidates: cards, chosen: null, whispered: [] } };
 }
 
 /** Pick a node in the current layer and sit down to read. */
@@ -125,7 +161,7 @@ export function chooseNode(run: RunState, index: number): RunState {
   const rng = rngOf(run);
   const first = dealSeat(run, rng, run.deck, SLOT_IDS[0]);
   return withRng(
-    { ...run, node: index, deck: first.deck, slots: [first.state], activeSlot: 0, phase: { kind: 'reading' } },
+    { ...run, node: index, deck: first.deck, slots: [first.state], activeSlot: 0, freeRedrawUsed: false, phase: { kind: 'reading' } },
     rng,
   );
 }
@@ -159,25 +195,28 @@ export function chooseCandidate(run: RunState, index: number): RunState {
 /** Spend Clarity to re-deal the active seat's three candidates. */
 export function redrawActive(run: RunState): RunState {
   if (run.phase.kind !== 'reading') return run;
-  if (run.clarity < REDRAW_COST) return run;
+  const cost = redrawCost(run);
+  if (run.clarity < cost) return run;
   const slot = run.slots[run.activeSlot];
   if (!slot || slot.chosen !== null) return run;
   const rng = rngOf(run);
   const deck = discard(run.deck, slot.candidates);
   const next = dealSeat(run, rng, deck, slot.slot);
   const slots = run.slots.map((s, i) => (i === run.activeSlot ? next.state : s));
-  return withRng({ ...run, deck: next.deck, slots, clarity: run.clarity - REDRAW_COST }, rng);
+  return withRng({ ...run, deck: next.deck, slots, clarity: run.clarity - cost, freeRedrawUsed: run.freeRedrawUsed || cost === 0 }, rng);
 }
 
 /** Spend Clarity to hear one keyword of a candidate. The UI shows it; the Codex remembers it. */
 export function whisper(run: RunState, index: number): RunState {
   if (run.phase.kind !== 'reading') return run;
-  if (run.clarity < WHISPER_COST) return run;
+  const cost = whisperCost(run);
+  if (run.clarity < cost) return run;
   const slot = run.slots[run.activeSlot];
   if (!slot || slot.chosen !== null) return run;
   if (index < 0 || index >= slot.candidates.length || slot.whispered.includes(index)) return run;
+  if (slot.candidates[index].hidden) return run;
   const slots = run.slots.map((s, i) => (i === run.activeSlot ? { ...s, whispered: [...s.whispered, index] } : s));
-  return { ...run, slots, clarity: run.clarity - WHISPER_COST };
+  return { ...run, slots, clarity: run.clarity - cost };
 }
 
 export function readingOf(run: RunState): Reading | null {
@@ -191,27 +230,60 @@ function resolve(run: RunState): RunState {
   const reading = readingOf(run);
   if (!reading) return run;
   const scene = currentScene(run);
-  const resolution = resolveReading(scene, reading, run.marks);
+  const resolution = resolveReading(scene, reading, run.marks, {
+    chargedBonus: hasRelic(run, 'ring') ? 2 : undefined,
+    extraNeutralCost: hasRelic(run, 'weight') ? 1 : undefined,
+    mendBonus: hasRelic(run, 'bread') ? 2 : undefined,
+  });
   const vitality = run.vitality + resolution.deltas.vitality;
-  const clarity = run.clarity + resolution.deltas.clarity;
-  const played = SLOT_IDS.map((s) => reading[s]);
+  const clarity = clampClarity(run, run.clarity + resolution.deltas.clarity);
+  // Reveal anything chosen blind.
+  const revealed = {} as Reading;
+  for (const s of SLOT_IDS) revealed[s] = { ...reading[s], hidden: false };
+  const played = SLOT_IDS.map((s) => revealed[s]);
   const deck = discard(run.deck, played);
-  const history = [...run.history, { sceneId: scene.id, reading, resolution }];
+  const history = [...run.history, { sceneId: scene.id, reading: revealed, resolution }];
 
   const marks = { ...run.marks };
   if (resolution.tier === 'triumph') for (const c of played) marks[c.cardId] = 'charged';
   if (resolution.tier === 'calamity') for (const c of played) marks[c.cardId] = 'scarred';
 
-  const base = { ...run, deck, history, vitality, clarity, marks };
+  const rng = rngOf(run);
+  let relics = run.relics;
+  let offer: string[] | undefined;
+  let cursed: string | undefined;
+  if (resolution.tier === 'triumph' && !scene.terminal) {
+    const pool = rng.shuffle(BOON_IDS.filter((id) => !relics.includes(id)));
+    if (pool.length) offer = pool.slice(0, 2);
+  }
+  if (resolution.tier === 'calamity' && !scene.terminal) {
+    const pool = CURSE_IDS.filter((id) => !relics.includes(id));
+    if (pool.length) {
+      cursed = rng.pick(pool);
+      relics = [...relics, cursed];
+    }
+  }
+
+  const base = withRng({ ...run, deck, history, vitality, clarity, marks, relics }, rng);
   if (vitality <= 0) return { ...base, vitality: 0, phase: { kind: 'dead', resolution } };
   if (scene.terminal) return { ...base, phase: { kind: 'ascended', resolution } };
-  return { ...base, phase: { kind: 'resolved', resolution } };
+  return { ...base, phase: { kind: 'resolved', resolution, offer, cursed } };
 }
 
-/** After reading the resolution, walk on to the map. */
+/** After reading the resolution, take the offered relic (if any) or walk on to the map. */
 export function advance(run: RunState): RunState {
   if (run.phase.kind !== 'resolved') return run;
-  return { ...run, layer: run.layer + 1, node: null, slots: [], activeSlot: 0, phase: { kind: 'map' } };
+  const clarity = clampClarity(run, run.clarity + (hasRelic(run, 'candle') ? 1 : 0));
+  if (run.phase.offer && run.phase.offer.length) return { ...run, clarity, phase: { kind: 'relic', offer: run.phase.offer } };
+  return { ...run, clarity, layer: run.layer + 1, node: null, slots: [], activeSlot: 0, phase: { kind: 'map' } };
+}
+
+/** Take one of the offered boons, then walk on. */
+export function chooseRelic(run: RunState, index: number): RunState {
+  if (run.phase.kind !== 'relic') return run;
+  const id = run.phase.offer[index];
+  if (!id) return run;
+  return { ...run, relics: [...run.relics, id], layer: run.layer + 1, node: null, slots: [], activeSlot: 0, phase: { kind: 'map' } };
 }
 
 export function isOver(run: RunState): boolean {

@@ -1,4 +1,4 @@
-import { currentScene, SLOT_IDS } from '../../engine';
+import { currentScene, getRelic, SLOT_IDS } from '../../engine';
 import { useGame } from '../../store';
 import { Card } from '../components/Card';
 import { Stats } from '../components/Stat';
@@ -7,7 +7,8 @@ export function ResolutionScreen() {
   const run = useGame((s) => s.run)!;
   const advance = useGame((s) => s.advance);
   if (run.phase.kind !== 'resolved') return null;
-  const { resolution } = run.phase;
+  const { resolution, cursed, offer } = run.phase;
+  const curse = cursed ? getRelic(cursed) : null;
   const scene = currentScene(run);
   const last = run.history[run.history.length - 1];
 
@@ -32,6 +33,11 @@ export function ResolutionScreen() {
             {line}
           </p>
         ))}
+        {curse && (
+          <p className="curse rise" style={{ animationDelay: `${400 + resolution.narration.length * 550}ms` }}>
+            <span className="curse__glyph">{curse.glyph}</span> <strong>{curse.name}</strong> follows you now. <span className="muted">{curse.text}</span>
+          </p>
+        )}
         <p className="deltas rise" style={{ animationDelay: `${400 + resolution.narration.length * 550}ms` }}>
           {resolution.deltas.vitality !== 0 && <span className="stat--vit">♥ {fmt(resolution.deltas.vitality)}</span>}
           {resolution.deltas.clarity !== 0 && <span className="stat--cla">◈ {fmt(resolution.deltas.clarity)}</span>}
@@ -40,7 +46,7 @@ export function ResolutionScreen() {
 
       <footer className="actions">
         <button className="btn btn--primary rise" style={{ animationDelay: `${600 + resolution.narration.length * 550}ms` }} onClick={advance}>
-          {resolution.tier === 'triumph' ? 'Walk on, lighter' : resolution.tier === 'calamity' ? 'Crawl on' : 'Walk on'}
+          {offer ? 'Look closer' : resolution.tier === 'calamity' ? 'Crawl on' : 'Walk on'}
         </button>
       </footer>
     </main>

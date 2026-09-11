@@ -149,7 +149,13 @@ export function comboNote(id: string): string | undefined {
 export type Marks = Record<string, 'charged' | 'scarred'>;
 export const CHARGED_BONUS = 1;
 
-export function scoreSlot(scene: Scene, slot: SlotId, drawn: DrawnCard, marks: Marks = {}): SlotResolution {
+export interface ResolveOptions {
+  chargedBonus?: number;
+  extraNeutralCost?: number;
+  mendBonus?: number;
+}
+
+export function scoreSlot(scene: Scene, slot: SlotId, drawn: DrawnCard, marks: Marks = {}, chargedBonus = CHARGED_BONUS): SlotResolution {
   const card = getCard(drawn.cardId);
   const tags = cardTags(card, drawn.reversed);
   const affinity = scene.affinity[slot];
@@ -165,28 +171,34 @@ export function scoreSlot(scene: Scene, slot: SlotId, drawn: DrawnCard, marks: M
   // Reversed cards are slightly unstable regardless of fit.
   if (drawn.reversed) score -= 0.5;
   // A card that carried you to triumph remembers it.
-  if (marks[drawn.cardId] === 'charged') score += CHARGED_BONUS;
+  if (marks[drawn.cardId] === 'charged') score += chargedBonus;
   return { slot, card, reversed: drawn.reversed, score, hits };
 }
 
+export const THRESHOLDS = { triumph: 6, boon: 3, neutral: -1.5, harm: -5 };
+
 export function tierFor(total: number): OutcomeTier {
-  if (total >= 6) return 'triumph';
-  if (total >= 3) return 'boon';
-  if (total > -2) return 'neutral';
-  if (total > -5) return 'harm';
+  if (total >= THRESHOLDS.triumph) return 'triumph';
+  if (total >= THRESHOLDS.boon) return 'boon';
+  if (total > THRESHOLDS.neutral) return 'neutral';
+  if (total > THRESHOLDS.harm) return 'harm';
   return 'calamity';
 }
 
+/**
+ * The descent wears on you: a neutral reading still costs a point, except
+ * where the scene mends. Harm scales with stakes; healing scales with mend.
+ */
 const BASE_DELTAS: Record<OutcomeTier, { vitality: number; clarity: number }> = {
   calamity: { vitality: -4, clarity: 0 },
   harm: { vitality: -2, clarity: 0 },
-  neutral: { vitality: 0, clarity: 1 },
+  neutral: { vitality: -1, clarity: 1 },
   boon: { vitality: 1, clarity: 1 },
   triumph: { vitality: 2, clarity: 2 },
 };
 
-export function resolveReading(scene: Scene, reading: Reading, marks: Marks = {}): Resolution {
-  const slots = SLOT_IDS.map((s) => scoreSlot(scene, s, reading[s], marks));
+export function resolveReading(scene: Scene, reading: Reading, marks: Marks = {}, opts: ResolveOptions = {}): Resolution {
+  const slots = SLOT_IDS.map((s) => scoreSlot(scene, s, reading[s], marks, opts.chargedBonus ?? CHARGED_BONUS));
   const comboNotes: string[] = [];
   const comboIds: string[] = [];
   let total = slots.reduce((a, s) => a + s.score, 0);
@@ -199,10 +211,12 @@ export function resolveReading(scene: Scene, reading: Reading, marks: Marks = {}
   }
   const tier = tierFor(total);
   const base = BASE_DELTAS[tier];
-  const deltas = {
-    vitality: base.vitality < 0 ? base.vitality * scene.stakes : base.vitality * (scene.mend ?? 1),
-    clarity: base.clarity,
-  };
+  const mend = scene.mend ? scene.mend + (opts.mendBonus ?? 0) : undefined;
+  let vitality: number;
+  if (tier === 'neutral') vitality = mend ? 0 : base.vitality * scene.stakes - (opts.extraNeutralCost ?? 0);
+  else if (base.vitality < 0) vitality = base.vitality * scene.stakes;
+  else vitality = base.vitality * (mend ?? 1);
+  const deltas = { vitality, clarity: base.clarity };
   const narration = [
     ...slots.map((s) => (s.reversed ? s.card.omen.reversed : s.card.omen.upright)),
     ...comboNotes,

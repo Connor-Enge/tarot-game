@@ -14,6 +14,7 @@ npm install
 npm run dev        # http://localhost:5173, also on your LAN for phone testing
 npm test           # engine tests (vitest)
 npm run build      # typecheck + production build
+npx vite-node scripts/sim.ts 2000   # balance simulator (random vs informed policies)
 ```
 
 ## Layout

@@ -153,11 +153,37 @@ by seed, and "Forget everything" (wipes the Codex).
 
 **Offline**: a small service worker caches the app after first load.
 
+**Relics** (`relics.ts`): a triumph in a non-terminal scene offers two boons,
+take one. A calamity inflicts a curse. Effects are stated plainly; the
+mystery is the deck, not the rules. Boons: Cracked Lens (Threshold deals
+four), Mirror Shard (Wake deals four), A Pinch of Salt (Hand never reversed),
+Second Coin (first redraw free), Small Bell (whispers give two words), Candle
+Stub (+1 Clarity on walking on), Iron Ring (charged +2), Hard Bread (rest
+mends more). Curses: Fog (one card per seat face down), Splinter (Vessel
+always holds a reversed card), Debt (Clarity capped at 2), The Weight
+(neutral costs one more), Hush (whispers cost 2).
+
+## Balance
+
+`scripts/sim.ts` runs whole descents under three policies. Run it with
+`npx vite-node scripts/sim.ts 2000`.
+
+| Policy | Knows | Survives |
+|--------|-------|----------|
+| random | nothing | ~26% |
+| majors-only | the 22 Major Arcana | ~75% |
+| oracle | every affinity | ~100% |
+
+The levers that got there: a neutral reading costs 1 vitality times scene
+stakes (0 in rest scenes), harm scales with stakes, starting vitality is 10,
+and the harm threshold is a total of -1.5. Re-run the sim after any change
+to scenes, thresholds, or deltas and keep the three numbers in roughly that
+shape: blind play should usually die, a half-learned deck should usually
+return, a fully learned deck should never lose.
+
 Queued:
-- Boons/curses as persistent seat modifiers for the run ("the Wake always
-  deals 4"; "the Threshold is always reversed").
-- Balance pass with a Monte Carlo sim (random vs. greedy policy survival).
 - Reversed-only and majors-only deck variants as unlockable descents.
+- Scene-specific relic flavor (the satchel on the bridge is a real relic).
 
 ## Content debt
 

@@ -4,6 +4,7 @@ import {
   advance as advanceRun,
   chooseCandidate,
   chooseNode as chooseNodeRun,
+  chooseRelic as chooseRelicRun,
   dailySeed,
   finalSpread,
   getCard,
@@ -41,6 +42,7 @@ interface GameStore {
   newRun: (seed?: number) => void;
   newDaily: () => void;
   chooseNode: (index: number) => void;
+  chooseRelic: (index: number) => void;
   lift: (index: number | null) => void;
   confirm: () => void;
   redraw: () => void;
@@ -126,7 +128,7 @@ export const useGame = create<GameStore>((set, get) => ({
       set({ run: next, lifted: null });
       return;
     }
-    const tier = next.phase.kind === 'map' ? null : next.phase.resolution.tier;
+    const tier = 'resolution' in next.phase ? next.phase.resolution.tier : null;
     buzz(tier === 'calamity' ? [40, 30, 80] : tier === 'triumph' ? [15, 20, 15, 20, 30] : 20);
     sfx.place();
     if (tier) sfx.resolve(tier);
@@ -171,6 +173,14 @@ export const useGame = create<GameStore>((set, get) => ({
     if (!run) return;
     sfx.flip();
     set({ run: advanceRun(run), lifted: null });
+  },
+
+  chooseRelic: (index) => {
+    const { run } = get();
+    if (!run) return;
+    buzz([8, 30, 8]);
+    sfx.whisper();
+    set({ run: chooseRelicRun(run, index), lifted: null });
   },
 
   endRun: () => {
