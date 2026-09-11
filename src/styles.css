@@ -1154,3 +1154,13 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 /* --- tap targets ------------------------------------------------------------- */
 .deck-pill { min-height: 32px; padding-top: 6px; padding-bottom: 6px; }
 .cut__strip:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; border-radius: 8px; }
+
+/* --- resolution: each card answers its omen ------------------------------- */
+.laid { position: relative; }
+.laid__pulse {
+  position: absolute; inset: -4px; border-radius: 12px; pointer-events: none; opacity: 0;
+  box-shadow: 0 0 0 2px var(--gold-2), 0 0 22px rgba(243,220,138,0.8);
+  animation: laid-pulse 1100ms ease-out both;
+}
+@keyframes laid-pulse { 0% { opacity: 0; transform: scale(0.96); } 20% { opacity: 1; transform: scale(1.02); } 100% { opacity: 0; transform: scale(1.06); } }
+.reduce-motion .laid__pulse { animation: none; }

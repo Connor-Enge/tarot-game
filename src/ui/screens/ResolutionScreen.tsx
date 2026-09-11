@@ -58,8 +58,9 @@ function ResolutionScreenInner() {
       <section className="spread spread--final">
         <TierFlourish tier={resolution.tier} />
         {SLOT_IDS.map((id, i) => (
-          <div className="deal" style={{ animationDelay: `${i * 80}ms` }} key={id}>
+          <div className="deal laid" style={{ animationDelay: `${i * 80}ms` }} key={id}>
             <Card cardId={last.reading[id].cardId} reversed={last.reading[id].reversed} size="sm" mark={run.marks[last.reading[id].cardId]} />
+            <span className="laid__pulse" style={{ animationDelay: `${400 + i * step}ms` }} aria-hidden />
           </div>
         ))}
       </section>
