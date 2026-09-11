@@ -18,6 +18,7 @@ import {
   noteAscension,
   noteCombos,
   noteDeath,
+  noteLinks,
   newSigils,
   noteRecord,
   noteSigils,
@@ -28,6 +29,7 @@ import {
   redrawActive,
   resetKnowledge,
   saveKnowledge,
+  SLOT_IDS,
   startRun,
   whisper as whisperRun,
   type Knowledge,
@@ -99,6 +101,7 @@ function learn(k: Knowledge, run: RunState, mode: RunMode): { knowledge: Knowled
     }
   }
   next = noteCombos(next, last.resolution.comboIds);
+  next = noteLinks(next, SLOT_IDS.map((s) => last.reading[s].cardId));
   let earned: string[] = [];
   if (run.phase.kind === 'dead' || run.phase.kind === 'ascended') {
     const returned = run.phase.kind === 'ascended';
@@ -179,16 +182,19 @@ export const useGame = create<GameStore>((set, get) => ({
   confirm: () => {
     const { run, lifted, knowledge } = get();
     if (!run || lifted === null) return;
+    const placed = run.slots[run.activeSlot]?.candidates[lifted];
+    const placedCard = placed ? getCard(placed.cardId) : null;
+    const suit = placedCard ? (placedCard.arcana === 'major' ? 'major' : placedCard.suit) : undefined;
     const next = chooseCandidate(run, lifted);
     if (next.phase.kind === 'reading') {
       buzz(10);
-      sfx.place();
+      sfx.place(suit);
       set({ run: next, lifted: null });
       return;
     }
     const tier = 'resolution' in next.phase ? next.phase.resolution.tier : null;
     buzz(tier === 'calamity' ? [40, 30, 80] : tier === 'triumph' ? [15, 20, 15, 20, 30] : 20);
-    sfx.place();
+    sfx.place(suit);
     if (tier) sfx.resolve(tier);
     if (next.phase.kind === 'dead') {
       stopDrone();

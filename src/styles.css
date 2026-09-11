@@ -538,3 +538,8 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .depth__label { flex: 1; text-align: center; font-size: 0.95rem; }
 .reader { display: flex; align-items: center; justify-content: center; gap: 12px; }
 .reader__text { text-align: left; font-size: 1rem; }
+
+/* --- scene art / sky ------------------------------------------------------ */
+.scene__art { display: block; width: min(100%, 320px); height: auto; margin: 0 auto 4px; opacity: 0.9; }
+.sky { display: flex; flex-direction: column; gap: 8px; }
+.sky__svg { width: 100%; height: auto; aspect-ratio: 1; border-radius: 16px; background: radial-gradient(60% 60% at 50% 50%, rgba(60,45,110,0.35), transparent 70%); }

@@ -75,10 +75,32 @@ function noise(dur: number, gain = 0.08, when = 0, lp = 1200) {
 export const sfx = {
   /** A card lifted from the hand: paper slide. */
   lift: () => noise(0.09, 0.05, 0, 2400),
-  /** A card placed in its seat: soft thump + low tick. */
-  place: () => {
+  /** A card placed in its seat: soft thump + a tone by suit. */
+  place: (suit?: 'wands' | 'cups' | 'swords' | 'pentacles' | 'major') => {
     noise(0.06, 0.09, 0, 600);
-    tone(180, 0.12, 'triangle', 0.08);
+    switch (suit) {
+      case 'wands':
+        tone(220, 0.16, 'triangle', 0.07);
+        tone(330, 0.1, 'triangle', 0.03, 0.04);
+        break;
+      case 'cups':
+        tone(330, 0.3, 'sine', 0.06);
+        tone(495, 0.25, 'sine', 0.025, 0.06);
+        break;
+      case 'swords':
+        tone(440, 0.09, 'sawtooth', 0.025);
+        tone(880, 0.12, 'sine', 0.04, 0.02);
+        break;
+      case 'pentacles':
+        tone(165, 0.22, 'triangle', 0.08);
+        break;
+      case 'major':
+        tone(262, 0.3, 'sine', 0.06);
+        tone(392, 0.35, 'sine', 0.05, 0.08);
+        break;
+      default:
+        tone(180, 0.12, 'triangle', 0.08);
+    }
   },
   /** Seat flip. */
   flip: () => {

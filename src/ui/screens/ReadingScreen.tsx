@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { activeSlotState, currentScene, getCard, hasRelic, redrawCost, sceneNumber, SLOT_IDS, SLOTS, totalScenes, whisperCost, whisperWords } from '../../engine';
 import { useGame } from '../../store';
 import { Card } from '../components/Card';
+import { SceneArt } from '../art/scenes';
 import { CodexDetail } from '../components/CodexDetail';
 import { DeckSheet } from '../components/DeckSheet';
 import { RelicStrip } from '../components/RelicStrip';
@@ -46,6 +47,7 @@ export function ReadingScreen() {
       </header>
 
       <section className="scene">
+        <SceneArt id={scene.id} className="scene__art" />
         <p className="scene__place muted">{scene.place}</p>
         <p className="scene__prompt">{scene.prompt}</p>
       </section>

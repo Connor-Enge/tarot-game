@@ -34,6 +34,8 @@ export interface Knowledge {
   combos?: string[];
   /** Milestones earned. */
   sigils?: string[];
+  /** Cards that have sat in the same reading: "a|b" (sorted) -> count. */
+  links?: Record<string, number>;
   /** Per-descent records. */
   records?: Record<string, { runs: number; returns: number; bestDepth: number; deepestReturn?: number }>;
   runs: number;
@@ -99,6 +101,18 @@ export function noteAscension(k: Knowledge, finalSpread: { cardId: string }[]): 
     cards[c.cardId] = raise(entry({ ...k, cards }, c.cardId), 3);
   }
   return { ...k, cards, seatsNamed: true, ascensions: k.ascensions + 1 };
+}
+
+/** Four cards were read together. Remember each pair. */
+export function noteLinks(k: Knowledge, cardIds: string[]): Knowledge {
+  const links = { ...k.links };
+  const ids = Array.from(new Set(cardIds)).sort();
+  for (let i = 0; i < ids.length; i++)
+    for (let j = i + 1; j < ids.length; j++) {
+      const key = `${ids[i]}|${ids[j]}`;
+      links[key] = (links[key] ?? 0) + 1;
+    }
+  return { ...k, links };
 }
 
 export function noteCombos(k: Knowledge, ids: string[]): Knowledge {

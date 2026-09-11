@@ -7,6 +7,7 @@ const SUIT_LABEL: Record<SuitFilter, string> = { all: 'All', major: '✦', wands
 import { useGame } from '../../store';
 import { Card } from '../components/Card';
 import { CodexDetail } from '../components/CodexDetail';
+import { Constellation } from '../components/Constellation';
 
 /** Everything the player has earned the right to know. Nothing else. */
 export function CodexScreen() {
@@ -20,6 +21,7 @@ export function CodexScreen() {
   const sigils = new Set(k.sigils ?? []);
   const [suit, setSuit] = useState<SuitFilter>('all');
   const [tf, setTf] = useState<TierFilter>('all');
+  const [view, setView] = useState<'cards' | 'sky'>('cards');
   const shown = CARDS.filter((c) => {
     if (suit === 'major' && c.arcana !== 'major') return false;
     if (suit !== 'all' && suit !== 'major' && c.suit !== suit) return false;
@@ -41,6 +43,16 @@ export function CodexScreen() {
         </span>
       </header>
 
+      <div className="tabs">
+        <button className={`tab ${view === 'cards' ? 'tab--on' : ''}`} onClick={() => setView('cards')}>
+          The deck
+        </button>
+        <button className={`tab ${view === 'sky' ? 'tab--on' : ''}`} onClick={() => setView('sky')}>
+          The sky
+        </button>
+      </div>
+      {view === 'sky' && <Constellation knowledge={k} />}
+      {view === 'cards' && (<>
       <div className="progress" aria-hidden>
         <div className="progress__bar" style={{ width: `${(100 * knownCount) / CARDS.length}%` }} />
       </div>
@@ -127,6 +139,7 @@ export function CodexScreen() {
         })}
       </section>
 
+      </>)}
       {open && <CodexDetail cardId={open} onClose={() => openCodex(null)} />}
     </main>
   );

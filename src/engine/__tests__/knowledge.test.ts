@@ -83,3 +83,13 @@ describe('whisperWords', () => {
     expect(whisperWords(['x'], 'threshold', 2)).toEqual(['x']);
   });
 });
+
+describe('links', () => {
+  it('counts sorted pairs from a reading', async () => {
+    const { noteLinks } = await import('../knowledge');
+    let k = noteLinks(emptyKnowledge(), ['b', 'a', 'c', 'a']);
+    expect(Object.keys(k.links!).sort()).toEqual(['a|b', 'a|c', 'b|c']);
+    k = noteLinks(k, ['a', 'b']);
+    expect(k.links!['a|b']).toBe(2);
+  });
+});

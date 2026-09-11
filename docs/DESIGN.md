@@ -268,9 +268,23 @@ the deck known. Titles from Novice to Oracle by that share.
 
 **Settings**: haptics toggle and "one color, no scene tint".
 
+**Scene vignettes** (`ui/art/scenes.tsx`): a 200×60 silhouette per scene
+above the prompt, drawn with the card primitives so world and deck share a
+hand. Transparent ground, so the scene hue shows through.
+
+**The sky**: a Codex tab that draws all 78 cards as stars (majors in the
+inner ring, each suit an arm of a spiral). Stars light when seen and
+brighten by tier. Every reading joins its four cards with lines
+(`knowledge.links`), weighted by how often they've sat together. Tap a
+star to see its bonds. Your readings, as a constellation.
+
+**Suit tones**: placing a card plays a tone by suit (wands bright triangle,
+cups soft sine fifth, swords a sharp saw, pentacles low triangle, majors a
+two-note chord).
+
 Queued:
-- Scene art: a small illustration per scene above the prompt.
-- Sound design pass: per-suit placement tones.
+- Scene vignette on the map when a node is visited (memory of the road).
+- A "reading of the day" replay of a random past reading on the title.
 
 ## Content debt
 
