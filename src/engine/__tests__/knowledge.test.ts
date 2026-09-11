@@ -212,3 +212,23 @@ describe('study filter', () => {
     expect(studyQuestion(k, createRng(3), () => 'x', (id) => id.startsWith('swords-'))).toBeNull();
   });
 });
+
+describe('almanac', () => {
+  it('keeps the best of a day and lays out a month', async () => {
+    const { emptyKnowledge, noteAlmanac, monthLabels, weekdayOf, resetRecords } = await import('../knowledge');
+    let k = emptyKnowledge();
+    k = noteAlmanac(k, '2026-09-11', { depth: 4, returned: false, good: 1 });
+    k = noteAlmanac(k, '2026-09-11', { depth: 3, returned: false, good: 1 });
+    expect(k.almanac?.['2026-09-11'].depth).toBe(4);
+    k = noteAlmanac(k, '2026-09-11', { depth: 2, returned: true, good: 1 });
+    expect(k.almanac?.['2026-09-11'].returned).toBe(true);
+    k = noteAlmanac(k, '2026-09-11', { depth: 9, returned: false, good: 1 });
+    expect(k.almanac?.['2026-09-11'].returned).toBe(true);
+    expect(monthLabels('2026-09')).toHaveLength(30);
+    expect(monthLabels('2026-02')).toHaveLength(28);
+    expect(monthLabels('2028-02')).toHaveLength(29);
+    expect(weekdayOf('2026-09-11')).toBe(4); // a Friday
+    expect(weekdayOf('2026-09-14')).toBe(0); // a Monday
+    expect(resetRecords(k).almanac).toBeUndefined();
+  });
+});

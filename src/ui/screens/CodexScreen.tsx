@@ -10,6 +10,7 @@ import { useGame } from '../../store';
 import { Card } from '../components/Card';
 import { CodexDetail } from '../components/CodexDetail';
 import { Constellation } from '../components/Constellation';
+import { Almanac } from '../components/Almanac';
 import { Study } from '../components/Study';
 
 /** Everything the player has earned the right to know. Nothing else. */
@@ -79,7 +80,10 @@ export function CodexScreen() {
           live={run ? Array.from(new Set(run.history.flatMap((h) => SLOT_IDS.map((sl) => h.reading[sl].cardId)))) : []}
         />
       )}
-      {view === 'book' && <OmenBook onOpen={openCodex} />}
+      {view === 'book' && (<>
+        <Almanac knowledge={k} />
+        <OmenBook onOpen={openCodex} />
+      </>)}
       {view === 'cards' && (<>
       <div className="suits" aria-label="known cards by suit">
         {([['major', 'Majors'], ['wands', 'Wands'], ['cups', 'Cups'], ['swords', 'Swords'], ['pentacles', 'Pentacles']] as const).map(([suit, label]) => {

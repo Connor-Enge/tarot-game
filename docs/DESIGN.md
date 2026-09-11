@@ -477,6 +477,16 @@ The title names it before you commit; share text carries it. The Weekly
 has weather too, from the week's seed, on top of its longer road and its
 two extra hearts.
 
+## The almanac
+
+Every daily descent writes one line into the almanac, keyed by its date:
+depth, whether you returned, how many readings went well, and the day's
+weather. A day keeps its best result (a return beats a death, then depth).
+The Codex's book tab opens on a month grid: gold where you came back,
+ember where you did not, deeper color for longer roads, the weather glyph
+in the corner. Tap a day for its line. It carries nothing about the cards,
+so it is safe to show in full. Cleared by "forget my records".
+
 ## Signature
 
 Once a card is mastered (tier 3), its Codex page offers to make it your

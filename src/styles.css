@@ -1217,3 +1217,31 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .sky__replay { align-self: center; }
 .reduce-motion .sky__road { animation: none; stroke-dashoffset: 0; }
 .reduce-motion .sky__live-in { animation: none; }
+
+/* --- almanac: a month of daily descents ------------------------------------ */
+.alm { display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(214,178,94,0.18); }
+.alm__head { display: grid; grid-template-columns: 40px 1fr 40px; align-items: center; }
+.alm__nav { padding: 6px 0; font-size: 1.1rem; line-height: 1; }
+.alm__month { text-align: center; letter-spacing: 0.12em; text-transform: uppercase; font-size: 0.8rem; color: var(--gold); }
+.alm__grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.alm__dow { text-align: center; font-size: 0.65rem; letter-spacing: 0.1em; }
+.alm__day {
+  position: relative; aspect-ratio: 1; border-radius: 8px; border: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.03);
+  color: var(--muted); font-family: inherit; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; padding: 0; cursor: default;
+}
+.alm__day:not(:disabled) { cursor: pointer; }
+.alm__day--future { opacity: 0.35; }
+.alm__day--today { border-color: var(--gold); box-shadow: inset 0 0 0 1px rgba(214,178,94,0.5); }
+.alm__day--returned { color: #1a1408; border-color: transparent; }
+.alm__day--returned.alm__day--d1 { background: rgba(214,178,94,0.55); }
+.alm__day--returned.alm__day--d2 { background: rgba(214,178,94,0.75); }
+.alm__day--returned.alm__day--d3 { background: var(--gold); }
+.alm__day--returned.alm__day--d4 { background: var(--gold-2); box-shadow: 0 0 10px rgba(243,220,138,0.4); }
+.alm__day--died { color: #f0d8d4; border-color: transparent; }
+.alm__day--died.alm__day--d1 { background: rgba(214,96,94,0.28); }
+.alm__day--died.alm__day--d2 { background: rgba(214,96,94,0.42); }
+.alm__day--died.alm__day--d3 { background: rgba(214,96,94,0.58); }
+.alm__day--died.alm__day--d4 { background: rgba(214,96,94,0.75); }
+.alm__day--pick { outline: 2px solid var(--gold-2); outline-offset: 1px; }
+.alm__weather { position: absolute; right: 2px; bottom: 0; font-size: 0.55rem; opacity: 0.85; }
+.alm__foot { margin: 0; }

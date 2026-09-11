@@ -44,6 +44,8 @@ export interface Knowledge {
   dealt?: Record<string, true>;
   /** Daily descents: last day played, current streak, best streak. */
   daily?: { last: string; streak: number; best: number };
+  /** The almanac: how each daily descent ended, by its YYYY-MM-DD label. */
+  almanac?: Record<string, AlmanacEntry>;
   /** Study: correct answers and best streak. */
   study?: { correct: number; asked: number; bestStreak: number };
   /** Omens witnessed, in order. Capped. */
@@ -150,6 +152,28 @@ export function noteDealt(k: Knowledge, cardIds: string[]): Knowledge {
   const dealt = { ...k.dealt };
   for (const id of fresh) dealt[id] = true;
   return { ...k, dealt };
+}
+
+export type AlmanacEntry = { depth: number; returned: boolean; weather?: string; good: number };
+
+/** A daily descent ended. The almanac keeps the best of the day: a return beats a death, then depth. */
+export function noteAlmanac(k: Knowledge, label: string, entry: AlmanacEntry): Knowledge {
+  const prev = k.almanac?.[label];
+  const better = !prev || (entry.returned && !prev.returned) || (entry.returned === prev.returned && entry.depth > prev.depth);
+  if (!better) return k;
+  return { ...k, almanac: { ...(k.almanac ?? {}), [label]: entry } };
+}
+
+/** Days of a month (YYYY-MM) as labels, for the almanac grid. */
+export function monthLabels(month: string): string[] {
+  const [y, m] = month.split('-').map(Number);
+  const days = new Date(Date.UTC(y, m, 0)).getUTCDate();
+  return Array.from({ length: days }, (_, i) => `${month}-${String(i + 1).padStart(2, '0')}`);
+}
+
+/** Weekday (0 = Monday) of a YYYY-MM-DD label, UTC. */
+export function weekdayOf(label: string): number {
+  return (new Date(`${label}T00:00:00Z`).getUTCDay() + 6) % 7;
 }
 
 /** A daily descent began on `label` (YYYY-MM-DD, UTC). Consecutive days build a streak. */
@@ -419,8 +443,8 @@ export function parseShare(text: string, descentNames: { id: string; name: strin
 
 /** Forget the road, keep the cards: counters, records, sigils and study go; card knowledge, links and the book stay. */
 export function resetRecords(k: Knowledge): Knowledge {
-  const { records: _r, last: _l, sigils: _s, study: _st, vows: _v, ...rest } = k;
-  void _r; void _l; void _s; void _st; void _v;
+  const { records: _r, last: _l, sigils: _s, study: _st, vows: _v, almanac: _a, ...rest } = k;
+  void _r; void _l; void _s; void _st; void _v; void _a;
   return { ...rest, runs: 0, deaths: 0, ascensions: 0 };
 }
 

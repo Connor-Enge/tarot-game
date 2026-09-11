@@ -28,6 +28,7 @@ import {
   noteDeath,
   noteDealt,
   noteDaily,
+  noteAlmanac,
   comboNote,
   noteLinks,
   noteLast,
@@ -181,6 +182,7 @@ function learn(k: Knowledge, run: RunState, mode: RunMode): { knowledge: Knowled
     });
     next = noteLast(next, finalSpread(run), last.resolution.narration.at(-1) ?? '', returned);
     if (run.vow) next = noteVow(next, run.vow.id, run.vow.kept ? 'kept' : run.vow.broken ? 'broken' : 'open');
+    if (mode.kind === 'daily') next = noteAlmanac(next, mode.label, { depth: run.history.length, returned, weather: mode.weather, good });
     earned = newSigils(run, next);
     next = noteSigils(next, earned);
   }
