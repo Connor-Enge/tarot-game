@@ -1,4 +1,5 @@
-import { createDeck, discard, draw, type DeckState, type DrawnCard } from './deck';
+import { createDeck, discard, draw, REVERSED_CHANCE, type DeckState, type DrawnCard } from './deck';
+import type { RunConfig } from './descents';
 import { resolveReading, type Reading, type Resolution } from './resolve';
 import { createRng, type Rng } from './rng';
 import { BOON_IDS, CURSE_IDS } from './relics';
@@ -37,6 +38,8 @@ export interface HistoryEntry {
 
 export interface RunState {
   seed: number;
+  /** Chance a dealt card lands reversed, fixed for the run. */
+  reversedChance: number;
   rngState: number;
   deck: DeckState;
   map: MapNode[][];
@@ -102,21 +105,22 @@ export function totalScenes(run: RunState): number {
   return run.map.length;
 }
 
-export function startRun(seed: number): RunState {
+export function startRun(seed: number, config: RunConfig = {}): RunState {
   const rng = createRng(seed);
   const map = buildMap(rng);
-  const deck = createDeck(rng);
+  const deck = createDeck(rng, config.deck);
   return {
     seed,
+    reversedChance: config.reversedChance ?? REVERSED_CHANCE,
     rngState: rng.state(),
     deck,
     map,
     layer: 0,
     node: null,
-    vitality: STARTING_VITALITY,
-    clarity: STARTING_CLARITY,
+    vitality: config.startingVitality ?? STARTING_VITALITY,
+    clarity: config.startingClarity ?? STARTING_CLARITY,
     marks: {},
-    relics: [],
+    relics: [...(config.startingRelics ?? [])],
     freeRedrawUsed: false,
     slots: [],
     activeSlot: 0,
@@ -139,7 +143,7 @@ function dealSeat(run: RunState, rng: Rng, deck: DeckState, slot: SlotId): { dec
   let count = CANDIDATES_PER_SLOT;
   if (slot === 'threshold' && hasRelic(run, 'lens')) count++;
   if (slot === 'wake' && hasRelic(run, 'shard')) count++;
-  const dealt = draw(deck, rng, count);
+  const dealt = draw(deck, rng, count, run.reversedChance);
   let cards = applyMarks(run, dealt.cards);
   if (slot === 'hand' && hasRelic(run, 'salt')) cards = cards.map((c) => (run.marks[c.cardId] === 'scarred' ? c : { ...c, reversed: false }));
   if (slot === 'vessel' && hasRelic(run, 'splinter') && cards.length && !cards.some((c) => c.reversed)) {

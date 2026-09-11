@@ -21,7 +21,7 @@ export function createDeck(rng: Rng, cardIds: readonly string[] = CARDS.map((c) 
 }
 
 /** Draw `n` cards. Reshuffles the discard pile into the draw pile when empty. */
-export function draw(deck: DeckState, rng: Rng, n: number): { deck: DeckState; cards: DrawnCard[] } {
+export function draw(deck: DeckState, rng: Rng, n: number, reversedChance = REVERSED_CHANCE): { deck: DeckState; cards: DrawnCard[] } {
   let drawPile = deck.draw.slice();
   let discard = deck.discard.slice();
   const cards: DrawnCard[] = [];
@@ -32,7 +32,7 @@ export function draw(deck: DeckState, rng: Rng, n: number): { deck: DeckState; c
       discard = [];
     }
     const cardId = drawPile.pop()!;
-    cards.push({ cardId, reversed: rng.next() < REVERSED_CHANCE });
+    cards.push({ cardId, reversed: rng.next() < reversedChance });
   }
   return { deck: { draw: drawPile, discard }, cards };
 }

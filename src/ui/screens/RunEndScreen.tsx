@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getCard, SCENES, SLOT_IDS, SLOTS } from '../../engine';
+import { getCard, getDescent, getRelic, SCENES, SLOT_IDS, SLOTS } from '../../engine';
 import { shareText, useGame } from '../../store';
 import { Card } from '../components/Card';
 
@@ -77,6 +77,16 @@ export function RunEndScreen() {
         </section>
       ) : (
         <section className="journal">
+          <div className="summary rise">
+            <div className="summary__cell"><span className="summary__n">{run.history.length}</span><span className="muted small">scenes</span></div>
+            <div className="summary__cell"><span className="summary__n">{run.history.filter((h) => h.resolution.tier === 'triumph' || h.resolution.tier === 'boon').length}</span><span className="muted small">good</span></div>
+            <div className="summary__cell"><span className="summary__n">{run.history.filter((h) => h.resolution.tier === 'harm' || h.resolution.tier === 'calamity').length}</span><span className="muted small">bad</span></div>
+            <div className="summary__cell"><span className="summary__n">{Object.values(run.marks).filter((m) => m === 'charged').length}</span><span className="muted small">charged</span></div>
+            <div className="summary__cell"><span className="summary__n">{run.relics.length ? run.relics.map((r) => getRelic(r).glyph).join(' ') : '—'}</span><span className="muted small">relics</span></div>
+          </div>
+          <p className="muted small center">
+            {mode.kind === 'daily' ? `Daily ${mode.label}` : getDescent(mode.descent).name} · seed {run.seed.toString(36)}
+          </p>
           {run.history.map((h, i) => (
             <article key={i} className={`journal__row tier--${h.resolution.tier} rise`} style={{ animationDelay: `${i * 80}ms` }}>
               <div className="journal__head">

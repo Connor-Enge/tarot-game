@@ -1,4 +1,7 @@
+import { useLayoutEffect, useRef, useState } from 'react';
 import { actOfLayer, currentAct, KIND_GLYPH, visitedNodes } from '../../engine';
+
+const ACT_NAMES = ['', 'The Shallows', 'The Deep', 'The Abyss'];
 import { useGame } from '../../store';
 import { Stats } from '../components/Stat';
 
@@ -13,6 +16,42 @@ export function MapScreen() {
   const visited = visitedNodes(run);
   const visitedIds = new Set(visited.map((n) => n.id));
   const act = currentAct(run);
+  const mapRef = useRef<HTMLElement>(null);
+  const [lines, setLines] = useState<{ x1: number; y1: number; x2: number; y2: number; kind: 'done' | 'open' }[]>([]);
+  const [size, setSize] = useState({ w: 0, h: 0 });
+
+  useLayoutEffect(() => {
+    const el = mapRef.current;
+    if (!el) return;
+    const measure = () => {
+      const box = el.getBoundingClientRect();
+      const center = (id: string) => {
+        const n = el.querySelector<HTMLElement>(`[data-node="${id}"]`);
+        if (!n) return null;
+        const r = n.getBoundingClientRect();
+        return { x: r.left - box.left + r.width / 2, y: r.top - box.top + r.height / 2 };
+      };
+      const out: typeof lines = [];
+      for (let i = 1; i < visited.length; i++) {
+        const a = center(visited[i - 1].id);
+        const b = center(visited[i].id);
+        if (a && b) out.push({ x1: a.x, y1: a.y, x2: b.x, y2: b.y, kind: 'done' });
+      }
+      const from = visited.length ? center(visited[visited.length - 1].id) : null;
+      if (from) {
+        for (const n of run.map[run.layer] ?? []) {
+          const b = center(n.id);
+          if (b) out.push({ x1: from.x, y1: from.y, x2: b.x, y2: b.y, kind: 'open' });
+        }
+      }
+      setLines(out);
+      setSize({ w: box.width, h: box.height });
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [run.layer, run.history.length]);
 
   return (
     <main className="screen screen--map">
@@ -23,19 +62,26 @@ export function MapScreen() {
 
       <p className="scene__prompt center">{run.layer === 0 ? 'Choose where the descent begins.' : 'Choose the way down.'}</p>
 
-      <section className="map" aria-label="the descent">
+      <section className="map" aria-label="the descent" ref={mapRef}>
+        <svg className="map__lines" width={size.w} height={size.h} aria-hidden>
+          {lines.map((l, i) => (
+            <line key={i} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} className={`map__line map__line--${l.kind}`} />
+          ))}
+        </svg>
         {run.map.map((layer, li) => {
           const isCurrent = li === run.layer;
           const isPast = li < run.layer;
           const actStart = li > 0 && actOfLayer(li) !== actOfLayer(li - 1);
           return (
             <div key={li} className={`map__layer ${isCurrent ? 'map__layer--current' : ''} ${isPast ? 'map__layer--past' : ''} ${actStart ? 'map__layer--act' : ''}`}>
+              {(li === 0 || actStart) && <div className="map__act">{ACT_NAMES[actOfLayer(li)]}</div>}
               {layer.map((node, ni) => {
                 const wasHere = visitedIds.has(node.id);
                 return (
                   <button
                     key={node.id}
                     type="button"
+                    data-node={node.id}
                     className={`node node--${node.kind} ${wasHere ? 'node--visited' : ''} ${isCurrent ? 'node--choosable' : ''}`}
                     disabled={!isCurrent}
                     onClick={() => chooseNode(ni)}

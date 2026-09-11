@@ -1,6 +1,7 @@
 import { activeSlotState, currentScene, getCard, hasRelic, redrawCost, sceneNumber, SLOT_IDS, SLOTS, totalScenes, whisperCost } from '../../engine';
 import { useGame } from '../../store';
 import { Card } from '../components/Card';
+import { CodexDetail } from '../components/CodexDetail';
 import { RelicStrip } from '../components/RelicStrip';
 import { Stats } from '../components/Stat';
 
@@ -12,6 +13,8 @@ export function ReadingScreen() {
   const redraw = useGame((s) => s.redraw);
   const whisperLifted = useGame((s) => s.whisperLifted);
   const seatsNamed = useGame((s) => s.knowledge.seatsNamed);
+  const codexOpen = useGame((s) => s.codexOpen);
+  const openCodex = useGame((s) => s.openCodex);
 
   const scene = currentScene(run);
   const active = activeSlotState(run);
@@ -83,6 +86,15 @@ export function ReadingScreen() {
       </section>
 
       <footer className="actions">
+        <button
+          className="btn btn--icon"
+          disabled={lifted === null || !!active.candidates[lifted]?.hidden}
+          onClick={() => lifted !== null && openCodex(active.candidates[lifted].cardId)}
+          aria-label="Consult the Codex"
+          title="What you know of the lifted card"
+        >
+          ☷
+        </button>
         <button className="btn" disabled={!canRedraw} onClick={redraw} title="Deal three new cards for this seat">
           Redraw {rCost === 0 ? '· free' : `◈${rCost}`}
         </button>
@@ -93,6 +105,7 @@ export function ReadingScreen() {
           {run.activeSlot === SLOT_IDS.length - 1 ? 'Read' : 'Place'}
         </button>
       </footer>
+      {codexOpen && <CodexDetail cardId={codexOpen} onClose={() => openCodex(null)} />}
     </main>
   );
 }

@@ -1,4 +1,6 @@
-import { currentScene, getRelic, SLOT_IDS } from '../../engine';
+import { currentScene, getRelic, SLOT_IDS, SLOTS } from '../../engine';
+
+const TIER_GLYPH = { calamity: '✖', harm: '▽', neutral: '◇', boon: '△', triumph: '★' } as const;
 import { useGame } from '../../store';
 import { Card } from '../components/Card';
 import { Stats } from '../components/Stat';
@@ -28,11 +30,17 @@ export function ResolutionScreen() {
       </section>
 
       <section className="narration">
-        {resolution.narration.map((line, i) => (
-          <p key={i} className={`rise ${i === resolution.narration.length - 1 ? 'narration__outcome' : 'narration__omen'}`} style={{ animationDelay: `${400 + i * 550}ms` }}>
-            {line}
-          </p>
-        ))}
+        {resolution.narration.map((line, i) => {
+          const last = i === resolution.narration.length - 1;
+          const seat = i < SLOT_IDS.length ? SLOTS[SLOT_IDS[i]].glyph : null;
+          return (
+            <p key={i} className={`rise ${last ? 'narration__outcome' : 'narration__omen'}`} style={{ animationDelay: `${400 + i * 550}ms` }}>
+              {seat && <span className="narration__seat">{seat}</span>}
+              {last && <span className="narration__tier">{TIER_GLYPH[resolution.tier]} </span>}
+              {line}
+            </p>
+          );
+        })}
         {curse && (
           <p className="curse rise" style={{ animationDelay: `${400 + resolution.narration.length * 550}ms` }}>
             <span className="curse__glyph">{curse.glyph}</span> <strong>{curse.name}</strong> follows you now. <span className="muted">{curse.text}</span>

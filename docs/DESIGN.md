@@ -181,9 +181,20 @@ to scenes, thresholds, or deltas and keep the three numbers in roughly that
 shape: blind play should usually die, a half-learned deck should usually
 return, a fully learned deck should never lose.
 
+**Descents** (`descents.ts`): run variants unlocked by play. The unlock
+condition is stated on the title screen (it is a rule, not a meaning).
+Arcana Only (22 majors, after one return), The Inverted (60% reversed, after
+three deaths), Fogbound (start with Fog and 4 Clarity, after five runs),
+Thin Blood (6 vitality, after two returns). Each is a `RunConfig` passed to
+`startRun`, so adding one is a data change.
+
+**Consult the Codex mid-reading**: the ☷ button opens the detail sheet for
+the lifted candidate. It shows only what the Codex already holds, so it is
+a memory aid, never a hint.
+
 Queued:
-- Reversed-only and majors-only deck variants as unlockable descents.
 - Scene-specific relic flavor (the satchel on the bridge is a real relic).
+- Per-descent records (best depth, returns) on the title screen.
 
 ## Content debt
 

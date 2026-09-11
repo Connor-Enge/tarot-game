@@ -6,6 +6,7 @@ import {
   chooseNode as chooseNodeRun,
   chooseRelic as chooseRelicRun,
   dailySeed,
+  getDescent,
   finalSpread,
   getCard,
   loadKnowledge,
@@ -26,7 +27,7 @@ import {
 } from './engine';
 
 export type Screen = 'title' | 'run' | 'codex' | 'settings';
-export type RunMode = { kind: 'free' } | { kind: 'daily'; label: string };
+export type RunMode = { kind: 'free'; descent: string } | { kind: 'daily'; label: string };
 
 interface GameStore {
   screen: Screen;
@@ -37,8 +38,11 @@ interface GameStore {
   lifted: number | null;
   /** Card opened in the Codex detail view. */
   codexOpen: string | null;
+  /** Chosen descent variant for free runs. */
+  descent: string;
 
   goto: (screen: Screen) => void;
+  setDescent: (id: string) => void;
   newRun: (seed?: number) => void;
   newDaily: () => void;
   chooseNode: (index: number) => void;
@@ -80,18 +84,22 @@ function learn(k: Knowledge, run: RunState): Knowledge {
 export const useGame = create<GameStore>((set, get) => ({
   screen: 'title',
   run: null,
-  mode: { kind: 'free' },
+  mode: { kind: 'free', descent: 'standard' },
   knowledge: loadKnowledge(),
   lifted: null,
   codexOpen: null,
+  descent: 'standard',
 
   goto: (screen) => set({ screen, codexOpen: null }),
+  setDescent: (id) => set({ descent: id }),
 
   newRun: (seed = randomSeed()) => {
+    const { descent } = get();
+    const d = getDescent(descent);
     const knowledge = noteRunStarted(get().knowledge);
     saveKnowledge(knowledge);
     startDrone();
-    set({ run: startRun(seed), mode: { kind: 'free' }, knowledge, screen: 'run', lifted: null });
+    set({ run: startRun(seed, d.config), mode: { kind: 'free', descent: d.id }, knowledge, screen: 'run', lifted: null });
   },
 
   newDaily: () => {
@@ -185,7 +193,7 @@ export const useGame = create<GameStore>((set, get) => ({
 
   endRun: () => {
     stopDrone();
-    set({ run: null, screen: 'title', lifted: null });
+    set({ run: null, screen: 'title', lifted: null, codexOpen: null });
   },
 
   openCodex: (cardId) => set({ codexOpen: cardId }),
@@ -200,6 +208,9 @@ export function shareText(run: RunState, mode: RunMode): string {
     .map((c) => `${getCard(c.cardId).name}${c.reversed ? ' (rev)' : ''}`)
     .join(' · ');
   const tiers = run.history.map((h) => ({ calamity: '✖', harm: '▽', neutral: '◇', boon: '△', triumph: '★' })[h.resolution.tier]).join('');
-  const head = mode.kind === 'daily' ? `Arcana Descent · Daily ${mode.label}` : `Arcana Descent · seed ${run.seed.toString(36)}`;
+  const head =
+    mode.kind === 'daily'
+      ? `Arcana Descent · Daily ${mode.label}`
+      : `Arcana Descent · ${getDescent(mode.descent).name} · seed ${run.seed.toString(36)}`;
   return `${head}\n${end}\n${tiers}\n${spread}`;
 }

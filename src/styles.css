@@ -135,6 +135,7 @@ em { color: var(--gold); font-style: normal; }
 .btn:disabled { opacity: 0.35; cursor: default; }
 .btn--primary { background: linear-gradient(160deg, var(--gold-2), var(--gold)); color: #1a1408; border-color: transparent; font-weight: 600; }
 .btn--ghost { background: none; border: none; padding-left: 0; }
+.btn--icon { flex: 0 0 52px !important; padding: 0; font-size: 1.2rem; }
 .btn--danger { background: rgba(214,96,94,0.18); border-color: rgba(214,96,94,0.5); color: #f0a09e; }
 .pill {
   display: inline-block; font-size: 0.7rem; padding: 2px 8px; border-radius: 999px;
@@ -224,18 +225,25 @@ em { color: var(--gold); font-style: normal; }
 
 /* --- map ----------------------------------------------------------------- */
 .screen--map { gap: 12px; }
-.map { flex: 1; display: flex; flex-direction: column; gap: 18px; padding: 8px 0 12px; position: relative; }
-.map::before {
-  content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px;
-  background: repeating-linear-gradient(to bottom, rgba(214,178,94,0.35) 0 4px, transparent 4px 10px);
+.map {
+  flex: 1; display: flex; flex-direction: column; gap: 18px; padding: 8px 0 12px; position: relative;
+  background: linear-gradient(180deg, transparent, rgba(0,0,0,0.35));
+  border-radius: 16px;
 }
+.map__lines { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
+.map__line { stroke-linecap: round; }
+.map__line--done { stroke: var(--gold); stroke-width: 2; opacity: 0.8; }
+.map__line--open { stroke: var(--gold); stroke-width: 1; stroke-dasharray: 3 5; opacity: 0.5; }
 .map__layer { display: flex; justify-content: center; gap: 26px; position: relative; opacity: 0.45; transition: opacity 300ms; }
 .map__layer--current, .map__layer--past { opacity: 1; }
-.map__layer--act::before {
-  content: ''; position: absolute; left: 10%; right: 10%; top: -10px; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(214,178,94,0.4), transparent);
+.map__layer--act { margin-top: 22px; }
+.map__act {
+  position: absolute; left: 0; right: 0; top: -22px; text-align: center;
+  font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); opacity: 0.85;
 }
+.map__layer:first-child { margin-top: 22px; }
 .node {
+  position: relative; z-index: 1;
   width: 46px; height: 46px; border-radius: 50%;
   border: 1px solid rgba(255,255,255,0.18);
   background: rgba(255,255,255,0.04);
@@ -261,7 +269,9 @@ em { color: var(--gold); font-style: normal; }
 /* --- resolution ---------------------------------------------------------- */
 .spread--final { perspective: none; }
 .narration { flex: 1; display: flex; flex-direction: column; gap: 10px; padding: 8px 4px; }
-.narration__omen { color: var(--muted); font-style: italic; }
+.narration__omen { color: var(--muted); font-style: italic; display: flex; gap: 10px; align-items: baseline; }
+.narration__seat { color: var(--gold); font-style: normal; font-size: 0.9rem; min-width: 1em; }
+.narration__tier { color: inherit; opacity: 0.8; }
 .narration__outcome { font-size: 1.1rem; }
 .deltas { display: flex; gap: 14px; font-size: 1.1rem; padding-top: 8px; }
 .tier--calamity .narration__outcome { color: var(--vit); }
@@ -377,3 +387,20 @@ em { color: var(--gold); font-style: normal; }
 .relic-strip__text { font-size: 0.85rem; text-align: center; }
 .curse { color: #f0a09e; }
 .curse__glyph { font-size: 1.1rem; }
+
+/* --- descents ------------------------------------------------------------ */
+.descents { display: flex; flex-direction: column; gap: 8px; align-items: center; }
+.descents__row { display: flex; gap: 8px; }
+.descent-chip {
+  width: 44px; height: 44px; border-radius: 50%; font: inherit; font-size: 1.15rem; cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.05); color: var(--muted);
+  display: grid; place-items: center; transition: transform 100ms ease, background 200ms;
+}
+.descent-chip--on { border-color: var(--gold); color: var(--gold-2); background: rgba(214,178,94,0.12); }
+.descent-chip--locked { opacity: 0.5; font-size: 0.85rem; }
+.descent-chip:active { transform: scale(0.94); }
+
+/* --- run summary --------------------------------------------------------- */
+.summary { display: flex; justify-content: space-between; padding: 12px 8px; border-radius: 12px; background: rgba(255,255,255,0.04); }
+.summary__cell { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 0; }
+.summary__n { font-size: 1.15rem; color: var(--gold-2); white-space: nowrap; }

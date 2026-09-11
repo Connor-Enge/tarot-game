@@ -1,5 +1,6 @@
 export * from './cards';
 export * from './deck';
+export * from './descents';
 export * from './knowledge';
 export * from './relics';
 export * from './resolve';
