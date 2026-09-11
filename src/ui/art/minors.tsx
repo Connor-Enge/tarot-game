@@ -13,17 +13,56 @@ const GREEN = '#5a7a3a';
 const SNOW = '#eef0f6';
 const STONE = '#8c8a94';
 
-/** Suit-specific ornament behind each Ace. */
-function AceFlourish({ suit }: { suit: Suit }) {
+/**
+ * Each Ace is the suit given from a cloud, with the reference deck's
+ * furniture: leaves falling from the living wand over a castle; five streams
+ * pouring from the cup while a dove descends; a crown and laurel on the
+ * sword's point over grey peaks; a garden gate and lilies under the coin.
+ */
+function AceScene({ suit }: { suit: Suit }): ReactElement {
   switch (suit) {
     case 'wands':
-      return <g>{[30, 44, 58, 72].map((x, i) => <path key={i} d={`M${x} 96 q2 -8 5 -12 q0 8 -5 12`} fill={GOLD_FLAT} stroke={INK} strokeWidth={0.4} />)}</g>;
+      return (
+        <g>
+          <Water y={78} rows={2} />
+          <Mountains y={80} opacity={0.25} />
+          <path d="M8 76 h14 v-10 h-14 z M10 66 h3 v-4 h-3 z M17 66 h3 v-4 h-3 z" fill={STONE} opacity={0.8} />
+          <Ground y={92} fill={GREEN} opacity={0.6} />
+          {[[30, 24], [62, 30], [36, 74], [66, 62], [58, 84], [28, 50]].map(([x, y], i) => (
+            <path key={i} d={`M${x} ${y} q2 -6 5 -8 q0 6 -5 8`} fill={GREEN} stroke={INK} strokeWidth={0.3} opacity={0.9} transform={`rotate(${i * 50} ${x} ${y})`} />
+          ))}
+        </g>
+      );
     case 'cups':
-      return <g><path d="M40 70 q8 10 20 6" fill="none" stroke="#6ab7d6" strokeWidth={1.6} /><path d="M62 74 q6 8 4 18" fill="none" stroke="#6ab7d6" strokeWidth={1.2} /></g>;
+      return (
+        <g>
+          <Water y={88} rows={4} />
+          {[8, 20, 62, 72].map((x, i) => <path key={x} d={`M${x} ${94 + (i % 2) * 4} l-3 -6 l3 2 l3 -2 z`} fill="#7a3fa0" opacity={0.8} />)}
+          {[38, 44, 50, 56, 62].map((x, i) => <path key={x} d={`M${x} 64 q${(i - 2) * 3} 10 ${(i - 2) * 6} 22`} fill="none" stroke="#6ab7d6" strokeWidth={1.4} strokeLinecap="round" />)}
+          <path d="M44 22 q4 -6 8 -2 q-2 4 -6 4 l-4 3 z M52 20 l6 -4 l-2 6 z" fill={PALE} stroke={INK} strokeWidth={0.5} />
+          <circle cx={50} cy={34} r={1.6} fill={PALE} stroke={INK} strokeWidth={0.4} />
+        </g>
+      );
     case 'swords':
-      return <path d="M40 30 l4 -6 l4 4 l4 -6 l4 6 l4 -4 l4 6 v6 h-24 z" fill={GOLD_FLAT} stroke={INK} strokeWidth={0.5} />;
+      return (
+        <g>
+          <Mountains y={90} opacity={0.6} fill={STONE} />
+          <path d="M40 30 l4 -6 l4 4 l4 -6 l4 6 l4 -4 l4 6 v6 h-24 z" fill={GOLD_FLAT} stroke={INK} strokeWidth={0.5} />
+          <path d="M36 40 q14 -14 28 0" fill="none" stroke={GREEN} strokeWidth={2} />
+          {[[38, 38], [46, 30], [56, 30], [64, 38]].map(([x, y], i) => <ellipse key={i} cx={x} cy={y} rx={2.6} ry={1.2} fill={GREEN} transform={`rotate(${i * 30 - 45} ${x} ${y})`} />)}
+          {[[26, 40], [70, 50], [30, 66]].map(([x, y], i) => <path key={i} d={`M${x} ${y} q3 1 4 -2`} fill="none" stroke={GOLD_FLAT} strokeWidth={0.8} />)}
+        </g>
+      );
     default:
-      return <g><Tree x={14} y={96} h={18} /><Tree x={70} y={98} h={16} /></g>;
+      return (
+        <g>
+          <Ground y={88} fill={GREEN} opacity={0.6} />
+          <path d="M14 88 V60 q26 -26 52 0 V88" fill="none" stroke={GREEN} strokeWidth={4} opacity={0.8} />
+          {[18, 26, 54, 62].map((x, i) => <circle key={x} cx={x} cy={58 + (i % 2) * 5} r={2.2} fill={BLOOD} opacity={0.7} />)}
+          <Mountains y={62} opacity={0.2} />
+          {[10, 22, 58, 70].map((x) => <path key={x} d={`M${x} 96 v-8 M${x} 88 l-3 -4 l3 1 l3 -1 z`} fill={PALE} stroke={INK} strokeWidth={0.4} />)}
+        </g>
+      );
   }
 }
 
@@ -544,15 +583,13 @@ const SCENES: Record<Suit, Record<number, () => ReactElement>> = { wands: WANDS,
 
 export function minorArt(suit: Suit, rank: number): ReactElement {
   const Sym = SUIT_SYMBOL[suit];
-  const Scenery = SUIT_SCENERY[suit];
   if (rank === 1) {
     return (
       <g>
-        <Scenery />
+        <AceScene suit={suit} />
         <Cloud x={-10} y={64} w={36} />
         {/* an open hand from the cloud */}
         <path d="M14 60 q8 -6 18 -2 l6 -3 q2 3 -2 5 l3 -1 q2 3 -3 5 q-4 4 -12 4 q-8 0 -10 -4 z" fill={PALE} stroke={INK} strokeWidth={0.7} strokeLinejoin="round" />
-        <AceFlourish suit={suit} />
         <Sym x={50} y={52} s={17} />
         {Array.from({ length: 8 }, (_, i) => {
           const a = (i / 8) * Math.PI * 2;
