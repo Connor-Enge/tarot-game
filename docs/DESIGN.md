@@ -408,6 +408,14 @@ a run's end. Share text ends with the reader's title and cards known.
 Hover titles were reviewed: every `title` attribute is a card name, a seat
 role gated by the seats-named flag, a sigil rule, or a UI hint.
 
+**Toast**: a brief banner for things that land outside a run, first used
+for sigils earned in Study.
+
+**Forget the road, keep the cards**: a second reset in Settings that clears
+descents, deaths, returns, records, sigils and Study but keeps every card,
+bond and page of the book. The title notes how many cards have never been
+dealt once half the deck has passed through your hands.
+
 ### Pillar sweep: where text reaches the screen
 
 Every surface that can show text about a card, and what gates it:

@@ -327,6 +327,13 @@ export function parseShare(text: string, descentNames: { id: string; name: strin
   return out;
 }
 
+/** Forget the road, keep the cards: counters, records, sigils and study go; card knowledge, links and the book stay. */
+export function resetRecords(k: Knowledge): Knowledge {
+  const { records: _r, last: _l, sigils: _s, study: _st, ...rest } = k;
+  void _r; void _l; void _s; void _st;
+  return { ...rest, runs: 0, deaths: 0, ascensions: 0 };
+}
+
 export const READER_TITLES = ['Unread', 'Novice', 'Reader', 'Adept', 'Seer', 'Oracle'] as const;
 
 /** A title by share of the deck known: Novice at the first card, Oracle at the last fifth. */

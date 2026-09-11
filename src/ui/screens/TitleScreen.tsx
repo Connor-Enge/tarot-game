@@ -164,6 +164,9 @@ export function TitleScreen() {
         </div>
       </div>
       {k.runs === 0 ? <p className="muted small">The deck is unread.</p> : <ReaderMark knowledge={k} />}
+      {Object.keys(k.dealt ?? {}).length >= CARDS.length / 2 && Object.keys(k.dealt ?? {}).length < CARDS.length && (
+        <p className="muted small">{CARDS.length - Object.keys(k.dealt ?? {}).length} cards have never been dealt to you.</p>
+      )}
       {k.last && (
         <div className="last" aria-label="your last reading">
           <div className="muted small">{k.last.returned ? 'Last time, you came back.' : 'Last time, this ended you.'}</div>

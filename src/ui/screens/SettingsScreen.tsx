@@ -7,6 +7,8 @@ export function SettingsScreen() {
   const goto = useGame((s) => s.goto);
   const run = useGame((s) => s.run);
   const resetCodex = useGame((s) => s.resetCodex);
+  const resetRecordsOnly = useGame((s) => s.resetRecordsOnly);
+  const [confirmRoad, setConfirmRoad] = useState(false);
   const importCodex = useGame((s) => s.importCodex);
   const knowledge = useGame((s) => s.knowledge);
   const [pasted, setPasted] = useState('');
@@ -139,6 +141,27 @@ export function SettingsScreen() {
 
         <div className="field field--danger">
           <span className="danger__label">Danger</span>
+          {!confirmRoad ? (
+            <button className="btn" onClick={() => setConfirmRoad(true)}>
+              Forget the road, keep the cards
+            </button>
+          ) : (
+            <div className="row">
+              <button className="btn" onClick={() => setConfirmRoad(false)}>
+                Keep
+              </button>
+              <button
+                className="btn btn--danger"
+                onClick={() => {
+                  resetRecordsOnly();
+                  setConfirmRoad(false);
+                }}
+              >
+                Forget the road
+              </button>
+            </div>
+          )}
+          <p className="muted small">Descents, deaths, returns, records, sigils and Study go back to zero. Everything you know about the cards stays.</p>
           {!confirmReset ? (
             <button className="btn" onClick={() => setConfirmReset(true)}>
               Forget everything

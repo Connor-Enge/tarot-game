@@ -104,10 +104,16 @@ export function App() {
         break;
     }
   }
+  const toast = useGame((s) => s.toast);
   return (
     <>
       <ArtDefs />
       <Ambient />
+      {toast && (
+        <div className="toast" key={toast.id} role="status">
+          <span className="sigil__glyph">{toast.glyph}</span> {toast.text}
+        </div>
+      )}
       <Fader viewKey={key}>{view}</Fader>
     </>
   );

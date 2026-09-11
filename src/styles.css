@@ -757,3 +757,13 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .bond .card { cursor: inherit; }
 .field--danger { border-top-color: rgba(214,96,94,0.4); }
 .danger__label { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: #f0a09e; }
+
+/* --- toast ------------------------------------------------------------------ */
+.toast {
+  position: fixed; left: 50%; top: calc(14px + var(--safe-top)); transform: translateX(-50%); z-index: 30;
+  padding: 10px 16px; border-radius: 999px; font-size: 0.9rem; white-space: nowrap; max-width: 92vw; overflow: hidden; text-overflow: ellipsis;
+  background: linear-gradient(160deg, rgba(40,32,70,0.95), rgba(20,16,36,0.95)); border: 1px solid rgba(214,178,94,0.5);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  animation: toast-in 3200ms ease both;
+}
+@keyframes toast-in { 0% { opacity: 0; transform: translate(-50%, -10px); } 8% { opacity: 1; transform: translate(-50%, 0); } 85% { opacity: 1; } 100% { opacity: 0; } }

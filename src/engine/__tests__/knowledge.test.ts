@@ -152,3 +152,21 @@ describe('dealt + parseShare', () => {
     expect(parseShare('', names)).toBeNull();
   });
 });
+
+describe('resetRecords', () => {
+  it('keeps cards, links and the book; clears the road', async () => {
+    const { resetRecords, noteLinks, noteRecord, noteSigils } = await import('../knowledge');
+    let k = noteResolved(emptyKnowledge(), 'major-1', 'hand', false, 'good');
+    k = noteLinks(k, ['major-1', 'cups-2']);
+    k = noteRecord(k, 'standard', 4, true);
+    k = noteSigils(k, ['first-return']);
+    k = { ...k, runs: 3, deaths: 1, ascensions: 1 };
+    const r = resetRecords(k);
+    expect(r.cards['major-1']).toEqual(k.cards['major-1']);
+    expect(r.links).toEqual(k.links);
+    expect(r.records).toBeUndefined();
+    expect(r.sigils).toBeUndefined();
+    expect(r.runs).toBe(0);
+    expect(r.ascensions).toBe(0);
+  });
+});

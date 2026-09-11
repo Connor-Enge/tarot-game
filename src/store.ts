@@ -28,6 +28,8 @@ import {
   noteStudy,
   noteStudyResult,
   readerTitle,
+  resetRecords,
+  SIGILS,
   studyQuestion,
   createRng,
   newSigils,
@@ -75,6 +77,10 @@ interface GameStore {
   answerStudy: (cardId: string) => void;
   /** A return this session: the title and map glow warm until the next run ends. */
   afterglow: boolean;
+  /** A brief banner. */
+  toast: { glyph: string; text: string; id: number } | null;
+  showToast: (glyph: string, text: string) => void;
+  resetRecordsOnly: () => void;
   /** Discard viewer open. */
   deckOpen: boolean;
   openDeck: (open: boolean) => void;
@@ -163,6 +169,19 @@ export const useGame = create<GameStore>((set, get) => ({
   earned: [],
   firstDescent: false,
   afterglow: false,
+  toast: null,
+  showToast: (glyph, text) => {
+    const id = Date.now();
+    set({ toast: { glyph, text, id } });
+    setTimeout(() => {
+      if (get().toast?.id === id) set({ toast: null });
+    }, 3200);
+  },
+  resetRecordsOnly: () => {
+    const k = resetRecords(get().knowledge);
+    saveKnowledge(k);
+    set({ knowledge: k });
+  },
   study: null,
   askStudy: () => {
     const { knowledge, study } = get();
@@ -177,7 +196,12 @@ export const useGame = create<GameStore>((set, get) => ({
     let next = noteStudyResult(knowledge, correct, streak);
     if (correct) {
       next = noteStudy(next, cardId);
-      next = noteSigils(next, newKnowledgeSigils(next));
+      const fresh = newKnowledgeSigils(next);
+      next = noteSigils(next, fresh);
+      if (fresh.length) {
+        const sg = SIGILS.find((x) => x.id === fresh[0]);
+        if (sg) get().showToast(sg.glyph, `${sg.name} · ${sg.text}`);
+      }
       sfx.whisper();
       buzz([5, 30, 5]);
     } else {
