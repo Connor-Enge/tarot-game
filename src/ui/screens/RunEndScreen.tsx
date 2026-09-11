@@ -21,6 +21,7 @@ function RunEndScreenInner() {
   const [tab, setTab] = useState<'reveal' | 'journal'>('reveal');
   const [copied, setCopied] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [replay, setReplay] = useState(0);
   const [busy, setBusy] = useState(false);
   if (run.phase.kind !== 'dead' && run.phase.kind !== 'ascended') return null;
   const dead = run.phase.kind === 'dead';
@@ -107,15 +108,23 @@ function RunEndScreenInner() {
       </div>
 
       {tab === 'reveal' ? (
-        <section className="reveal">
-          <p className="muted small">{dead ? 'What killed you, you now understand.' : 'What carried you, you now understand.'}</p>
+        <section className="reveal" key={replay}>
+          <p className="muted small reveal__lead">
+            {dead ? 'What killed you, you now understand.' : 'What carried you, you now understand.'}
+            <button type="button" className="chip chip--inline" onClick={() => setReplay((n) => n + 1)}>
+              read again
+            </button>
+          </p>
           {SLOT_IDS.map((id, i) => {
             const d = last.reading[id];
             const card = getCard(d.cardId);
             const tier = knowledge.cards[d.cardId]?.tier ?? 0;
             return (
-              <article key={id} className="reveal__row rise" style={{ animationDelay: `${200 + i * 300}ms` }}>
-                <Card cardId={d.cardId} reversed={d.reversed} size="sm" mark={run.marks[d.cardId]} />
+              <article key={id} className="reveal__row rise" style={{ animationDelay: `${200 + i * (replay ? 900 : 300)}ms` }}>
+                <div className="seat__card">
+                  <Card cardId={d.cardId} reversed={d.reversed} size="sm" mark={run.marks[d.cardId]} />
+                  {replay > 0 && <span className="seat__seal" style={{ animationDelay: `${200 + i * 900}ms` }} aria-hidden>{SLOTS[id].glyph}</span>}
+                </div>
                 <div className="reveal__text">
                   <div className="reveal__seat">
                     {SLOTS[id].glyph} {SLOTS[id].name}
@@ -124,6 +133,7 @@ function RunEndScreenInner() {
                     {card.name}
                     {d.reversed && <span className="muted"> · reversed</span>}
                   </div>
+                  {replay > 0 && <p className="narration__omen rise" style={{ animationDelay: `${500 + i * 900}ms` }}>{d.reversed ? card.omen.reversed : card.omen.upright}</p>}
                   <p className="reveal__meaning">{d.reversed && tier >= 3 ? card.meaning.reversed : card.meaning.upright}</p>
                 </div>
               </article>

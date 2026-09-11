@@ -730,3 +730,6 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .reduce-motion.low-vitality .stat--vit, .reduce-motion.low-vitality .view::after { animation: none; }
 .best { display: flex; flex-direction: column; align-items: center; gap: 4px; padding-top: 4px; }
 .best .card { cursor: default; }
+
+.reveal__lead { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.chip--inline { padding: 4px 10px; font-size: 0.72rem; }

@@ -372,6 +372,15 @@ slow double thump runs under the drone. It stops the moment you mend.
 death, then depth, then good readings) and shows that final spread on the
 title screen.
 
+**Glyphs only**: a setting hides seat names again after they are earned,
+for players who prefer the first-run feel.
+
+**Suit gathering**: when three or more placed seats share a suit, the
+screen's hue shifts to that suit's color. No text; the room just changes.
+
+**Read again**: the end screen can replay the final spread's four omens
+with the seat seals, slowly, before the meanings.
+
 ### Pillar sweep: where text reaches the screen
 
 Every surface that can show text about a card, and what gates it:

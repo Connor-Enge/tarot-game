@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect } from 'react';
-import { currentAct, currentNode, SCENES } from './engine';
+import { currentAct, currentNode, getCard, SCENES } from './engine';
 import { setHeartbeat } from './audio';
 import { useSettings } from './settings';
 import { useGame } from './store';
@@ -26,6 +26,14 @@ function useSceneHue() {
       const node = currentNode(run);
       if (node) hue = SCENES[node.sceneId].hue;
       else hue = [250, 230, 300, 270][currentAct(run)] ?? 260;
+      // When a suit gathers in the spread, the room takes its color.
+      if (run.phase.kind === 'reading') {
+        const suits = run.slots.filter((s) => s.chosen !== null).map((s) => getCard(s.candidates[s.chosen!].cardId).suit);
+        const counts = new Map<string, number>();
+        for (const su of suits) if (su) counts.set(su, (counts.get(su) ?? 0) + 1);
+        const SUIT_HUE: Record<string, number> = { wands: 25, cups: 200, swords: 245, pentacles: 110 };
+        for (const [su, n] of counts) if (n >= 3) hue = SUIT_HUE[su];
+      }
       if (run.phase.kind === 'dead') hue = 0;
       if (run.phase.kind === 'ascended') hue = 45;
     }

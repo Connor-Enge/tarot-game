@@ -12,7 +12,7 @@ export function SettingsScreen() {
   const [pasted, setPasted] = useState('');
   const [note, setNote] = useState<string | null>(null);
   const newRun = useGame((s) => s.newRun);
-  const { sound, reduceMotion, haptics, fixedTint, bigCards, readingSpeed, set } = useSettings();
+  const { sound, reduceMotion, haptics, fixedTint, bigCards, readingSpeed, hideSeatNames, set } = useSettings();
   const [confirmReset, setConfirmReset] = useState(false);
   const [seed, setSeed] = useState('');
 
@@ -54,6 +54,11 @@ export function SettingsScreen() {
         <label className="toggle">
           <span>Larger cards in hand</span>
           <input type="checkbox" checked={bigCards} onChange={(e) => set({ bigCards: e.target.checked })} />
+          <span className="toggle__track" />
+        </label>
+        <label className="toggle">
+          <span>Glyphs only, no seat names</span>
+          <input type="checkbox" checked={hideSeatNames} onChange={(e) => set({ hideSeatNames: e.target.checked })} />
           <span className="toggle__track" />
         </label>
         <label className="toggle">

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSettings } from '../../settings';
 import { activeSlotState, canTakeBack, currentScene, getCard, hasRelic, redrawCost, sceneNumber, SLOT_IDS, SLOTS, totalScenes, whisperCost, whisperWords } from '../../engine';
 import { useGame } from '../../store';
 import { Card } from '../components/Card';
@@ -16,7 +17,8 @@ function ReadingScreenInner() {
   const redraw = useGame((s) => s.redraw);
   const whisperLifted = useGame((s) => s.whisperLifted);
   const takeBack = useGame((s) => s.takeBack);
-  const seatsNamed = useGame((s) => s.knowledge.seatsNamed);
+  const hideSeatNames = useSettings((s) => s.hideSeatNames);
+  const seatsNamed = useGame((s) => s.knowledge.seatsNamed) && !hideSeatNames;
   const codexOpen = useGame((s) => s.codexOpen);
   const openCodex = useGame((s) => s.openCodex);
   const firstDescent = useGame((s) => s.firstDescent);
