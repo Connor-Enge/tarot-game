@@ -1775,3 +1775,12 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .scene__rite--tithe { color: #e6a59a; border-color: rgba(230,120,100,0.4); background: rgba(200,80,60,0.1); }
 .scene__rite--moonlit { color: #bfe6f5; border-color: rgba(120,190,220,0.4); background: rgba(90,150,200,0.1); }
 .reduce-motion .scene__rite { animation: none; }
+
+/* --- rites shelf in the Codex ------------------------------------------------ */
+.rites { display: flex; flex-direction: column; gap: 6px; }
+.rites__row { display: flex; justify-content: center; gap: 8px; }
+.rites__item { background: rgba(214,178,94,0.07); border: 1px solid rgba(214,178,94,0.35); color: var(--gold-2); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: grid; place-items: center; font-size: 1.15rem; transition: transform 200ms ease, box-shadow 200ms ease; }
+.rites__item--dim { color: transparent; border-style: dashed; border-color: rgba(214,178,94,0.2); background: none; }
+.rites__item--dim .rites__glyph { text-shadow: 0 0 0 rgba(214,178,94,0.3); }
+.rites__item--pick { transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0,0,0,0.5), 0 0 0 1.5px var(--gold-2); }
+.rites__cap { margin: 0; min-height: 2.4em; }

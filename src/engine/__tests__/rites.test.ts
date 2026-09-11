@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { chooseCandidate, chooseNode, startRun, whisper, type RunState } from '../run';
-import { RITES, SCENES } from '../scenes';
+import { RITES, ritesWalked, SCENES } from '../scenes';
+import { resolveReading } from '../resolve';
 
 /** Put a scene with the given rite at the first door. */
 function enter(seed: number, sceneId: string, extra: Parameters<typeof startRun>[1] = {}): RunState {
@@ -13,7 +14,7 @@ describe('rites', () => {
   it('every rite is stated, and the scenes that carry one exist', () => {
     for (const r of Object.values(RITES)) expect(r.text.length).toBeGreaterThan(10);
     const carried = Object.values(SCENES).filter((s) => s.rite).map((s) => s.rite);
-    expect(carried.length).toBeGreaterThanOrEqual(5);
+    expect(carried.length).toBeGreaterThanOrEqual(6);
     for (const rite of Object.keys(RITES)) expect(carried).toContain(rite);
   });
   it('the Bare Table deals one fewer to every seat', () => {
@@ -43,6 +44,26 @@ describe('rites', () => {
     const thin = startRun(6, { startingVitality: 1 });
     const map = thin.map.map((layer, i) => (i === 0 ? layer.map((n, j) => (j === 0 ? { ...n, sceneId: 'toll' } : n)) : layer));
     expect(chooseNode({ ...thin, map }, 0).vitality).toBe(1);
+  });
+  it('the Ember mends one on a neutral reading', () => {
+    let found = false;
+    for (let seed = 1; seed < 60 && !found; seed++) {
+      let run = enter(seed, 'hearth');
+      for (let i = 0; i < 4; i++) run = chooseCandidate(run, 0);
+      const entry = run.history[0];
+      if (entry.resolution.tier !== 'neutral') continue;
+      found = true;
+      expect(entry.resolution.deltas.vitality).toBe(1);
+      const plain = resolveReading({ ...SCENES.hearth, rite: undefined }, entry.reading);
+      expect(plain.tier).toBe('neutral');
+      expect(plain.deltas.vitality).toBe(0);
+    }
+    expect(found).toBe(true);
+  });
+  it('rites walked are read from the omen log', () => {
+    expect(ritesWalked(undefined)).toEqual([]);
+    expect(ritesWalked([{ scene: 'crossing' }])).toEqual([]);
+    expect(ritesWalked([{ scene: 'mirror' }, { scene: 'toll' }, { scene: 'mirror' }])).toEqual(['mirror', 'tithe']);
   });
   it('the Mirror reads every card the other way up', () => {
     let run = enter(7, 'mirror', { reversedChance: 1 });

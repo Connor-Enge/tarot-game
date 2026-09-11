@@ -327,7 +327,7 @@ export function resolveReading(scene: Scene, reading: Reading, marks: Marks = {}
   const base = BASE_DELTAS[tier];
   const mend = scene.mend ? scene.mend + (opts.mendBonus ?? 0) : undefined;
   let vitality: number;
-  if (tier === 'neutral') vitality = mend ? 0 : base.vitality * scene.stakes - (opts.extraNeutralCost ?? 0);
+  if (tier === 'neutral') vitality = scene.rite === 'ember' ? 1 : mend ? 0 : base.vitality * scene.stakes - (opts.extraNeutralCost ?? 0);
   else if (base.vitality < 0) vitality = base.vitality * scene.stakes;
   else vitality = base.vitality * (mend ?? 1);
   const deltas = { vitality, clarity: base.clarity };

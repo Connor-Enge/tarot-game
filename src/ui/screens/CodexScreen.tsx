@@ -14,6 +14,7 @@ import { Almanac } from '../components/Almanac';
 import { WeekRoad } from '../components/WeekRoad';
 import { Backs } from '../components/Backs';
 import { ColourKey } from '../components/ColourKey';
+import { Rites } from '../components/Rites';
 import { Study } from '../components/Study';
 
 /** Everything the player has earned the right to know. Nothing else. */
@@ -107,6 +108,7 @@ export function CodexScreen() {
         })}
       </div>
       <Backs knowledge={k} />
+      <Rites knowledge={k} />
       <ColourKey />
       <div className="legend" aria-label="tiers">
         <span><i className="codex__dot--t1" /> glimpsed</span>
