@@ -269,3 +269,16 @@ describe('keepsake', () => {
     expect(resetRecords(noteKeepsake(emptyKnowledge(), 'cups-2')).keepsake).toBeUndefined();
   });
 });
+
+describe('best seat', () => {
+  it('names the position a card has come out ahead in, over at least two reads', async () => {
+    const { bestSeat } = await import('../knowledge');
+    expect(bestSeat(undefined)).toBeNull();
+    const e = { tier: 1 as const, resolved: 5, seats: { hand: 3, wake: 2 }, seatOutcomes: { hand: { good: 1, bad: 2 }, wake: { good: 2, bad: 0 } } };
+    expect(bestSeat(e)?.seat).toBe('wake');
+    const one = { tier: 1 as const, resolved: 1, seats: { hand: 1 }, seatOutcomes: { hand: { good: 1, bad: 0 } } };
+    expect(bestSeat(one)).toBeNull();
+    const bad = { tier: 1 as const, resolved: 4, seats: { hand: 4 }, seatOutcomes: { hand: { good: 1, bad: 3 } } };
+    expect(bestSeat(bad)).toBeNull();
+  });
+});

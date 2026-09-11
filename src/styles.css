@@ -2020,3 +2020,6 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .last__cards--cross .last__slot:nth-child(4) { grid-area: four; }
 .last__seal { position: absolute; right: -14px; top: -6px; padding: 0; animation: none; opacity: 0.95; }
 .last__seal .verdict { width: 52px; height: 52px; transform: rotate(10deg); }
+
+/* the position a card has sat best in, as a numeral on its Codex cell */
+.codex__best { position: absolute; left: -4px; bottom: -4px; width: 16px; height: 16px; border-radius: 50%; display: grid; place-items: center; font-size: 0.6rem; background: #14101f; color: var(--gold-2); border: 1px solid rgba(214,178,94,0.6); box-shadow: 0 2px 5px rgba(0,0,0,0.5); }

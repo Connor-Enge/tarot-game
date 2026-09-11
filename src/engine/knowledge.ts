@@ -1,4 +1,4 @@
-import type { OutcomeTier, SlotId } from './scenes';
+import { SLOT_IDS, type OutcomeTier, type SlotId } from './scenes';
 
 /**
  * The Codex: what the player has *earned the right to know* about each card.
@@ -309,6 +309,23 @@ export function noteCombos(k: Knowledge, ids: string[]): Knowledge {
 
 /** The Chosen needs at least this many cards. */
 export const CHOSEN_MIN = 30;
+
+/**
+ * The seat a card has sat best in: the position with the highest good-minus-bad
+ * rate over at least two reads, or null if none has come out ahead.
+ */
+export function bestSeat(e: CardKnowledge | undefined): { seat: SlotId; score: number; n: number } | null {
+  if (!e) return null;
+  let top: { seat: SlotId; score: number; n: number } | null = null;
+  for (const s of SLOT_IDS) {
+    const n = e.seats[s] ?? 0;
+    const o = e.seatOutcomes?.[s];
+    if (n < 2 || !o) continue;
+    const score = (o.good - o.bad) / n;
+    if (!top || score > top.score) top = { seat: s, score, n };
+  }
+  return top && top.score > 0 ? top : null;
+}
 
 /** Toggle a card in the Chosen deck. Only a known card (tier 1 or more) may be chosen. */
 export function toggleChosen(k: Knowledge, id: string): Knowledge {

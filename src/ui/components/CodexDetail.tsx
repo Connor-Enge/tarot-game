@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CARDS, getCard, getLore, SCENES, SLOT_IDS, SLOT_POSITION, SLOTS, witnessed, type Tier } from '../../engine';
+import { bestSeat, CARDS, getCard, getLore, SCENES, SLOT_IDS, SLOT_POSITION, SLOTS, witnessed, type Tier } from '../../engine';
 import { SceneArt } from '../art/scenes';
 import { useGame } from '../../store';
 import { Card } from './Card';
@@ -16,18 +16,7 @@ export function CodexDetail({ cardId, onClose }: { cardId: string; onClose: () =
   const e = k.cards[cardId];
   const tier: Tier = e?.tier ?? 0;
   const seatsSeen = SLOT_IDS.filter((s) => (e?.seats[s] ?? 0) > 0);
-  const best = (() => {
-    if (!e) return null;
-    let top: { seat: (typeof SLOT_IDS)[number]; score: number; n: number } | null = null;
-    for (const s of SLOT_IDS) {
-      const n = e.seats[s] ?? 0;
-      const o = e.seatOutcomes?.[s];
-      if (n < 2 || !o) continue;
-      const score = (o.good - o.bad) / n;
-      if (!top || score > top.score) top = { seat: s, score, n };
-    }
-    return top && top.score > 0 ? top : null;
-  })();
+  const best = bestSeat(e);
   const nothing = !e;
   const [flipped, setFlipped] = useState(false);
   // Where this card has been read: each scene once, with the best it did there.

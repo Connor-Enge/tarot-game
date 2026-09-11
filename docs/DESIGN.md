@@ -268,7 +268,7 @@ Arcana on top of the deck (`majorsFirst`), so the first scene is read with
 the iconic cards, and shows three wordless nudges ("Lift one." / "Place it
 in the ◯." / "Read."). Nothing about meaning is said.
 
-**Seat memory**: the Codex detail sheet shows, per seat, how many times the
+**Seat memory** (the Codex grid shows a card's best position as a small numeral on its cell, from `bestSeat`, so a glance across the shelf says where each card has earned its place): the Codex detail sheet shows, per seat, how many times the
 card was read there and a good/even/bad bar. This is consequence, not
 meaning, and it is the most direct learning tool in the game.
 

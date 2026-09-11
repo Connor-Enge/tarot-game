@@ -1,5 +1,5 @@
 import { Fragment, useState } from 'react';
-import { CARDS, CHOSEN_MIN, chosenDeck, COMBO_IDS, comboNote, comboScore, getDescent, getCard, getVow, KIND_GLYPH, SCENES, SIGILS, SLOT_IDS, SLOTS, type Tier } from '../../engine';
+import { bestSeat, CARDS, CHOSEN_MIN, chosenDeck, COMBO_IDS, comboNote, comboScore, getDescent, SLOT_POSITION, getCard, getVow, KIND_GLYPH, SCENES, SIGILS, SLOT_IDS, SLOTS, type Tier } from '../../engine';
 import { SceneArt } from '../art/scenes';
 import { SigilToken } from '../art/sigil';
 
@@ -233,6 +233,10 @@ export function CodexScreen() {
               >
                 <Card cardId={c.id} size="xs" faceDown={!seen} />
                 {tier > 0 && !building && <span className={`codex__dot codex__dot--t${tier}`} />}
+                {!building && (() => {
+                  const b = bestSeat(e);
+                  return b ? <span className="codex__best" title={`sits best as ${SLOT_POSITION[b.seat].n} · ${SLOT_POSITION[b.seat].role}`}>{SLOT_POSITION[b.seat].n}</span> : null;
+                })()}
                 {building && inDeck && <span className="codex__pick" aria-hidden>✓</span>}
               </button>
             );
