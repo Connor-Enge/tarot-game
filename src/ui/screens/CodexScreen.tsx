@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CARDS, COMBO_IDS, comboNote, getCard, SIGILS, SLOT_IDS, SLOTS, type Tier } from '../../engine';
+import { CARDS, COMBO_IDS, comboNote, getCard, SCENES, SIGILS, SLOT_IDS, SLOTS, type Tier } from '../../engine';
 
 type SuitFilter = 'all' | 'major' | 'wands' | 'cups' | 'swords' | 'pentacles';
 type TierFilter = 'all' | 'seen' | 'known';
@@ -21,7 +21,7 @@ export function CodexScreen() {
   const sigils = new Set(k.sigils ?? []);
   const [suit, setSuit] = useState<SuitFilter>('all');
   const [tf, setTf] = useState<TierFilter>('all');
-  const [view, setView] = useState<'cards' | 'sky'>('cards');
+  const [view, setView] = useState<'cards' | 'sky' | 'book'>('cards');
   const [q, setQ] = useState('');
   const shown = CARDS.filter((c) => {
     if (q && !c.name.toLowerCase().includes(q.toLowerCase())) return false;
@@ -52,8 +52,12 @@ export function CodexScreen() {
         <button className={`tab ${view === 'sky' ? 'tab--on' : ''}`} onClick={() => setView('sky')}>
           The sky
         </button>
+        <button className={`tab ${view === 'book' ? 'tab--on' : ''}`} onClick={() => setView('book')}>
+          The book
+        </button>
       </div>
       {view === 'sky' && <Constellation knowledge={k} />}
+      {view === 'book' && <OmenBook onOpen={openCodex} />}
       {view === 'cards' && (<>
       <div className="progress" aria-hidden>
         <div className="progress__bar" style={{ width: `${(100 * knownCount) / CARDS.length}%` }} />
@@ -180,3 +184,41 @@ function buildLedger(k: ReturnType<typeof useGame.getState>['knowledge']): [stri
   return rows.length ? rows : null;
 }
 
+
+const TIER_MARK: Record<string, string> = { calamity: '✖', harm: '▽', neutral: '◇', boon: '△', triumph: '★' };
+
+/** Every omen witnessed, newest descent first. Reading it back is how meaning settles. */
+function OmenBook({ onOpen }: { onOpen: (id: string) => void }) {
+  const k = useGame((s) => s.knowledge);
+  const log = k.omenLog ?? [];
+  if (log.length === 0) return <p className="muted small center">Nothing witnessed yet. Every reading writes four lines here.</p>;
+  const runs = new Map<number, typeof log>();
+  for (const e of log) runs.set(e.run, [...(runs.get(e.run) ?? []), e]);
+  const ordered = Array.from(runs.entries()).sort((a, b) => b[0] - a[0]);
+  return (
+    <section className="book">
+      {ordered.map(([run, entries]) => (
+        <div key={run} className="book__run">
+          <div className="book__head muted small">Descent {run}</div>
+          {entries.map((e, i) => {
+            const card = getCard(e.cardId);
+            const omen = e.reversed ? card.omen.reversed : card.omen.upright;
+            const newScene = i === 0 || entries[i - 1].scene !== e.scene;
+            return (
+              <div key={i}>
+                {newScene && <div className="book__scene muted small">{SCENES[e.scene]?.prompt ?? e.scene}</div>}
+                <button type="button" className={`book__line tier--${e.tier}`} onClick={() => onOpen(e.cardId)}>
+                  <Card cardId={e.cardId} reversed={e.reversed} size="xs" />
+                  <span className="book__text">
+                    <span className="book__seat">{SLOTS[e.seat].glyph}</span> {omen}
+                  </span>
+                  <span className="book__tier">{TIER_MARK[e.tier]}</span>
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      ))}
+    </section>
+  );
+}

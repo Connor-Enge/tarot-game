@@ -21,6 +21,7 @@ import {
   noteDeath,
   noteLinks,
   noteLast,
+  noteOmens,
   newSigils,
   noteRecord,
   noteSigils,
@@ -108,6 +109,10 @@ function learn(k: Knowledge, run: RunState, mode: RunMode): { knowledge: Knowled
   }
   next = noteCombos(next, last.resolution.comboIds);
   next = noteLinks(next, SLOT_IDS.map((s) => last.reading[s].cardId));
+  next = noteOmens(
+    next,
+    SLOT_IDS.map((s) => ({ scene: last.sceneId, seat: s, cardId: last.reading[s].cardId, reversed: last.reading[s].reversed, tier })),
+  );
   let earned: string[] = [];
   if (run.phase.kind === 'dead' || run.phase.kind === 'ascended') {
     const returned = run.phase.kind === 'ascended';
@@ -134,7 +139,10 @@ export const useGame = create<GameStore>((set, get) => ({
   earned: [],
   firstDescent: false,
   deckOpen: false,
-  openDeck: (open) => set({ deckOpen: open }),
+  openDeck: (open) => {
+    if (open) sfx.page();
+    set({ deckOpen: open });
+  },
 
   goto: (screen) => set({ screen, codexOpen: null }),
   setDescent: (id) => set({ descent: id }),
@@ -280,7 +288,10 @@ export const useGame = create<GameStore>((set, get) => ({
     set({ run: null, screen: 'title', lifted: null, codexOpen: null });
   },
 
-  openCodex: (cardId) => set({ codexOpen: cardId }),
+  openCodex: (cardId) => {
+    if (cardId) sfx.page();
+    set({ codexOpen: cardId });
+  },
 
   resetCodex: () => set({ knowledge: resetKnowledge() }),
 }));

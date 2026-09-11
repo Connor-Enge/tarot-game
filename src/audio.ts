@@ -107,6 +107,11 @@ export const sfx = {
     noise(0.12, 0.06, 0, 3000);
     tone(520, 0.08, 'sine', 0.04, 0.05);
   },
+  /** A sheet sliding up: paper. */
+  page: () => {
+    noise(0.14, 0.05, 0, 1600);
+    noise(0.1, 0.03, 0.06, 900);
+  },
   whisper: () => {
     tone(880, 0.5, 'sine', 0.05);
     tone(1320, 0.6, 'sine', 0.03, 0.08, 6);

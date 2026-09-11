@@ -93,3 +93,15 @@ describe('links', () => {
     expect(k.links!['a|b']).toBe(2);
   });
 });
+
+describe('omen log', () => {
+  it('appends in order with the run number and caps', async () => {
+    const { noteOmens, OMEN_LOG_CAP } = await import('../knowledge');
+    let k = { ...emptyKnowledge(), runs: 3 };
+    k = noteOmens(k, [{ scene: 'crossing', seat: 'hand', cardId: 'major-0', reversed: false, tier: 'boon' }]);
+    expect(k.omenLog?.[0]).toEqual({ run: 3, scene: 'crossing', seat: 'hand', cardId: 'major-0', reversed: false, tier: 'boon' });
+    for (let i = 0; i < OMEN_LOG_CAP; i++) k = noteOmens(k, [{ scene: 'well', seat: 'wake', cardId: 'cups-1', reversed: true, tier: 'neutral' }]);
+    expect(k.omenLog?.length).toBe(OMEN_LOG_CAP);
+    expect(k.omenLog?.at(-1)?.cardId).toBe('cups-1');
+  });
+});

@@ -575,3 +575,19 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 }
 .reduce-motion .seat__seal { animation: none; opacity: 0; }
 .input--search { min-height: 40px; padding: 8px 12px; font-size: 0.95rem; }
+
+/* --- the book -------------------------------------------------------------- */
+.book { display: flex; flex-direction: column; gap: 14px; }
+.book__run { display: flex; flex-direction: column; gap: 6px; }
+.book__head { letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); }
+.book__scene { padding: 6px 0 2px; }
+.book__line {
+  width: 100%; display: flex; align-items: center; gap: 10px; text-align: left; cursor: pointer;
+  font: inherit; color: var(--ink); background: rgba(255,255,255,0.03); border: none; border-radius: 10px; padding: 6px 8px;
+}
+.book__line .card { cursor: inherit; }
+.book__text { flex: 1; font-style: italic; color: var(--muted); font-size: 0.9rem; }
+.book__seat { color: var(--gold); font-style: normal; }
+.book__tier { color: var(--muted); }
+.tier--triumph .book__tier { color: var(--gold-2); }
+.tier--calamity .book__tier { color: var(--vit); }

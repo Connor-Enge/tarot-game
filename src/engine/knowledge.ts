@@ -36,6 +36,8 @@ export interface Knowledge {
   sigils?: string[];
   /** Cards that have sat in the same reading: "a|b" (sorted) -> count. */
   links?: Record<string, number>;
+  /** Omens witnessed, in order. Capped. */
+  omenLog?: { run: number; scene: string; seat: SlotId; cardId: string; reversed: boolean; tier: string }[];
   /** The final spread of the most recent run, for the title screen. */
   last?: { cards: { cardId: string; reversed: boolean }[]; outcome: string; returned: boolean; when: number };
   /** Per-descent records. */
@@ -115,6 +117,14 @@ export function noteLinks(k: Knowledge, cardIds: string[]): Knowledge {
       links[key] = (links[key] ?? 0) + 1;
     }
   return { ...k, links };
+}
+
+export const OMEN_LOG_CAP = 240;
+
+export function noteOmens(k: Knowledge, entries: { scene: string; seat: SlotId; cardId: string; reversed: boolean; tier: string }[]): Knowledge {
+  const run = k.runs;
+  const log = [...(k.omenLog ?? []), ...entries.map((e) => ({ run, ...e }))];
+  return { ...k, omenLog: log.slice(-OMEN_LOG_CAP) };
 }
 
 export function noteLast(k: Knowledge, cards: { cardId: string; reversed: boolean }[], outcome: string, returned: boolean, when = Date.now()): Knowledge {

@@ -62,15 +62,23 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
   4: () => (
     <g>
       <rect x={0} y={0} width={80} height={112} fill={BLOOD} opacity={0.18} />
-      <Mountains y={60} opacity={0.4} fill={BLOOD} />
-      <Throne x={40} y={92} w={36} h={44} fill={INK} />
-      {[24, 56].map((x) => (
-        <path key={x} d={`M${x - 4} 52 q4 -8 8 0 q-4 -3 -8 0`} fill={GOLD} stroke={INK} strokeWidth={0.5} />
+      <Mountains y={56} opacity={0.45} fill={BLOOD} />
+      <Sun x={66} y={14} r={5} rays={8} />
+      <Throne x={40} y={94} w={38} h={48} fill={INK} />
+      {/* ram heads on the throne */}
+      {[22, 58].map((x) => (
+        <g key={x}>
+          <circle cx={x} cy={50} r={3.5} fill={GOLD} stroke={INK} strokeWidth={0.5} />
+          <path d={`M${x - 3} 48 q-4 -3 -2 -7 q3 1 3 5 M${x + 3} 48 q4 -3 2 -7 q-3 1 -3 5`} fill="none" stroke={GOLD_FLAT} strokeWidth={1} />
+        </g>
       ))}
-      <Figure x={40} y={92} h={46} arms="hold" fill={PALE} crown />
-      <path d="M22 78 l0 -10 M20 70 h4 M22 68 a2 2 0 1 0 0.01 0" stroke={GOLD_FLAT} strokeWidth={1.2} fill="none" />
-      <circle cx={58} cy={74} r={3} fill={GOLD} stroke={INK} strokeWidth={0.5} />
-      <Ground y={100} />
+      <Figure x={40} y={94} h={48} arms="hold" fill={PALE} crown />
+      {/* ankh and orb */}
+      <path d="M21 86 v-14 M17 78 h8" stroke={GOLD_FLAT} strokeWidth={1.4} />
+      <circle cx={21} cy={68} r={2.6} fill="none" stroke={GOLD_FLAT} strokeWidth={1.4} />
+      <circle cx={59} cy={80} r={3.2} fill={GOLD} stroke={INK} strokeWidth={0.5} />
+      <line x1={59} y1={76.8} x2={59} y2={74} stroke={GOLD_FLAT} strokeWidth={1} />
+      <Ground y={102} />
     </g>
   ),
   5: () => (
@@ -79,12 +87,22 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <Pillar x={68} y={4} h={94} />
       <rect x={20} y={84} width={40} height={12} fill={PALE} stroke={INK} strokeWidth={0.8} />
       <Figure x={40} y={84} h={50} arms="right-up" cloak />
-      <path d="M36 36 h8 M36 32 h8 M36 28 h8" stroke={GOLD_FLAT} strokeWidth={1.6} />
-      <circle cx={40} cy={26} r={3} fill={GOLD} stroke={INK} strokeWidth={0.5} />
-      <path d="M52 40 v-14 M50 26 h4" stroke={GOLD_FLAT} strokeWidth={1.2} />
+      {/* triple crown */}
+      <path d="M34 36 h12 l-1 -4 h-10 z M35 32 h10 l-1 -4 h-8 z M36 28 h8 l-1 -4 h-6 z" fill={GOLD} stroke={INK} strokeWidth={0.5} />
+      <circle cx={40} cy={22} r={1.6} fill={GOLD} stroke={INK} strokeWidth={0.4} />
+      {/* triple-cross staff */}
+      <path d="M52 44 v-18 M49 30 h6 M50 26 h4 M50.5 34 h3" stroke={GOLD_FLAT} strokeWidth={1.2} />
+      {/* two acolytes */}
       <Figure x={26} y={100} h={18} arms="up" />
       <Figure x={54} y={100} h={18} arms="up" />
-      <path d="M32 104 l4 -3 l4 3 M40 104 l4 -3 l4 3" stroke={GOLD_FLAT} strokeWidth={1} fill="none" />
+      <circle cx={26} cy={84.5} r={1.4} fill={PALE} />
+      <circle cx={54} cy={84.5} r={1.4} fill={PALE} />
+      {/* crossed keys */}
+      <g stroke={GOLD_FLAT} strokeWidth={1.2} fill="none">
+        <path d="M34 104 l12 -8 M46 104 l-12 -8" />
+        <circle cx={33} cy={104.6} r={1.6} />
+        <circle cx={47} cy={104.6} r={1.6} />
+      </g>
     </g>
   ),
   6: () => (

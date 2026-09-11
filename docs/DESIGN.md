@@ -310,6 +310,11 @@ the Codex grid and journal cheap on phones.
 **Seat seal**: when a card lands, its seat glyph stamps over it in gold and
 fades. The map's ground hue shifts by act.
 
+**The book** (`knowledge.omenLog`): every omen witnessed, in order,
+grouped by descent and scene, with the seat glyph and outcome tier. Capped
+at 240 lines. Tap a line to open the card. Reading the book back is where
+the meanings settle; it is the Codex's most on-pillar page.
+
 Queued:
 - A weekly leaderboard line in the share text (best depth this week).
 - Localization scaffolding for the card and scene text.
