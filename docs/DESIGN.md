@@ -605,6 +605,16 @@ upright becomes reversed, reversed becomes upright. Marked cards (charged
 or scarred) will not turn, and neither will a card dealt face down. It is
 the cheapest way to act on a suspicion about a card without knowing why.
 
+## Hold
+
+A fourth Clarity action. Lift a face-up candidate and hold it (◈1): it
+leaves this seat and joins the next seat's deal, wearing a violet
+"held" ribbon, with its orientation kept. One held card at a time, never
+at the Wake, never the last card of a deal. The Vessel is dealt before
+you can see the Threshold's affinities, so a hold is a bet that a card
+fits the seat after; the Codex's seat memory is where that bet is
+learned. Whispers already made stay on the cards they were made on.
+
 ## The Stranger's trade
 
 Once per run, at the first rest scene that goes at least neutrally, someone is

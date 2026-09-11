@@ -1887,3 +1887,9 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
   box-shadow: 0 2px 6px rgba(0,0,0,0.5); pointer-events: none; z-index: 2;
 }
 .card--dim .card__rev-mark { opacity: 0.5; }
+
+/* --- hold: a card kept back for the next seat ------------------------------- */
+.card__whisper--held { background: linear-gradient(160deg, #d9c6ec, #8f6fc0); color: #1c1030; letter-spacing: 0.1em; text-transform: uppercase; font-size: 0.62em; }
+.takeback--hold { color: #d9c6ec; border-color: rgba(190,160,230,0.5); }
+.held-note { margin: 2px 0 0; color: #d9c6ec; animation: fade-in 400ms ease both; }
+.held-note__glyph { margin-right: 4px; }

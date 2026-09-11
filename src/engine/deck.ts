@@ -11,6 +11,8 @@ export interface DrawnCard {
   echo?: boolean;
   /** The reader's keepsake, on the deal that first shows it. */
   yours?: boolean;
+  /** Held back from the seat before, for this one. */
+  held?: boolean;
 }
 
 export interface DeckState {

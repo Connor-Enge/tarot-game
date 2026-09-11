@@ -12,6 +12,7 @@ export const STARTING_CLARITY = 2;
 export const REDRAW_COST = 1;
 export const WHISPER_COST = 1;
 export const TURN_COST = 1;
+export const HOLD_COST = 1;
 
 /** Per-run consequences that follow a card around. */
 export type Mark = 'charged' | 'scarred';
@@ -121,6 +122,10 @@ export interface RunState {
   tradeTaken?: Trade['id'];
   /** A keepsake from Study, carried charged into this descent. */
   keepsake?: string;
+  /** A candidate held back for the next seat, if any. */
+  held?: DrawnCard | null;
+  /** Holds made this run. */
+  holds?: number;
   /** Set once the keepsake has been dealt and shown as yours. */
   keepsakeShown?: boolean;
   /** True once the Stranger has appeared this run. They come once. */
@@ -280,6 +285,8 @@ function dealSeat(run: RunState, rng: Rng, deck: DeckState, slot: SlotId): { dec
   }
   // The keepsake announces itself the first time it is dealt.
   if (run.keepsake && !run.keepsakeShown) cards = cards.map((c) => (c.cardId === run.keepsake && !c.hidden ? { ...c, yours: true } : c));
+  // A card held back from the seat before joins this deal.
+  if (run.held && run.pendingDeal === null) cards = [...cards, { ...run.held, hidden: false, held: true }];
   return { deck: outDeck, state: { slot, candidates: cards, chosen: null, whispered: [] } };
 }
 
@@ -411,7 +418,7 @@ export function chooseCandidate(run: RunState, index: number): RunState {
     const next = dealSeat(run, rng, deck, SLOT_IDS[nextIndex]);
     deck = next.deck;
     slots.push(next.state);
-    return withRng({ ...run, deck, slots, activeSlot: nextIndex, pendingDeal: null, keepsakeShown: keepsakeShown(run, next.state) }, rng);
+    return withRng({ ...run, deck, slots, activeSlot: nextIndex, pendingDeal: null, held: null, keepsakeShown: keepsakeShown(run, next.state) }, rng);
   }
   return resolve(withRng({ ...run, deck, slots, activeSlot: nextIndex }, rng));
 }
@@ -447,6 +454,27 @@ export function turnCandidate(run: RunState, index: number): RunState {
     i === run.activeSlot ? { ...s, candidates: s.candidates.map((c, j) => (j === index ? { ...c, reversed: !c.reversed } : c)) } : s,
   );
   return { ...run, slots, clarity: run.clarity - TURN_COST, sceneSpent: { ...run.sceneSpent, turns: (run.sceneSpent.turns ?? 0) + 1 } };
+}
+
+/** A hold keeps a face-up candidate back for the next seat: allowed once at a time, never at the Wake, and never the last card of a deal. */
+export function canHold(run: RunState, index: number): boolean {
+  if (run.phase.kind !== 'reading' || run.held || run.clarity < HOLD_COST) return false;
+  if (run.activeSlot >= SLOT_IDS.length - 1) return false;
+  const slot = run.slots[run.activeSlot];
+  const c = slot?.candidates[index];
+  if (!slot || slot.chosen !== null || !c || c.hidden || slot.candidates.length < 2) return false;
+  return true;
+}
+
+/** Spend Clarity to hold a candidate back: it leaves this seat and joins the next seat's deal. */
+export function holdCandidate(run: RunState, index: number): RunState {
+  if (!canHold(run, index)) return run;
+  const slot = run.slots[run.activeSlot];
+  const held = slot.candidates[index];
+  const candidates = slot.candidates.filter((_, j) => j !== index);
+  const whispered = slot.whispered.filter((w) => w !== index).map((w) => (w > index ? w - 1 : w));
+  const slots = run.slots.map((s, i) => (i === run.activeSlot ? { ...s, candidates, whispered } : s));
+  return { ...run, slots, held: { ...held, yours: undefined, echo: undefined }, clarity: run.clarity - HOLD_COST, holds: (run.holds ?? 0) + 1 };
 }
 
 /** Spend Clarity to hear one keyword of a candidate. The UI shows it; the Codex remembers it. */

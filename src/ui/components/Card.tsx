@@ -15,6 +15,8 @@ interface Props {
   whisper?: string;
   /** The reader's keepsake, on the deal that first shows it. */
   yours?: boolean;
+  /** Held back from the seat before. */
+  held?: boolean;
   /** Re-runs the enter animation when this changes. */
   animKey?: string | number;
   delay?: number;
@@ -31,7 +33,7 @@ interface Props {
 }
 
 /** Card faces show name and art only. Meaning lives in the Codex. */
-export function Card({ cardId, reversed = false, faceDown = false, size = 'md', lifted, dim, mark, whisper, yours, animKey, delay = 0, onClick, onLongPress, echo, hiddenSuit, onDragMove, onDragEnd }: Props) {
+export function Card({ cardId, reversed = false, faceDown = false, size = 'md', lifted, dim, mark, whisper, yours, held, animKey, delay = 0, onClick, onLongPress, echo, hiddenSuit, onDragMove, onDragEnd }: Props) {
   const mode = useGame((s) => s.mode);
   const variant: BackVariant = mode.kind === 'weekly' ? 'weekly' : mode.kind === 'free' && mode.descent !== 'standard' && mode.descent !== 'short' ? (mode.descent as BackVariant) : 'standard';
   const timer = useRef<number | null>(null);
@@ -126,7 +128,8 @@ export function Card({ cardId, reversed = false, faceDown = false, size = 'md', 
       {reversed && !faceDown && size === 'lg' && <span className="card__rev-mark" aria-hidden title="reversed">⥯</span>}
       {whisper && <div className="card__whisper">{whisper}</div>}
       {yours && !whisper && <div className="card__whisper card__whisper--yours">yours</div>}
-      {echo && !whisper && !yours && <div className="card__whisper card__whisper--echo">echo</div>}
+      {held && !whisper && !yours && <div className="card__whisper card__whisper--held">held</div>}
+      {echo && !whisper && !yours && !held && <div className="card__whisper card__whisper--echo">echo</div>}
     </button>
   );
 }

@@ -47,7 +47,7 @@ export function HowToPlay({ onClose }: { onClose: () => void }) {
               <CardBack className="howto__back" />
             </span>
             <span>
-              <strong>Spend Clarity ◈ to see more.</strong> Redraw a seat, whisper one word of a card, or turn it over. Pull a card down to redraw.
+              <strong>Spend Clarity ◈ to see more.</strong> Redraw a seat, whisper one word of a card, turn it over, or hold it back for the next seat. Pull a card down to redraw.
             </span>
           </li>
           <li>

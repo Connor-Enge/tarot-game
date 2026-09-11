@@ -12,6 +12,7 @@ import {
   cutDeck as cutDeckRun,
   takeVow as takeVowRun,
   turnCandidate as turnRun,
+  holdCandidate as holdRun,
   acceptTrade as acceptTradeRun,
   foretell as foretellRun,
   takeBack as takeBackRun,
@@ -134,6 +135,8 @@ interface GameStore {
   confirm: () => void;
   redraw: () => void;
   turnLifted: () => void;
+  /** Hold the lifted card back for the next seat. */
+  holdLifted: () => void;
   setSignature: (id: string | null) => void;
   /** Toggle a known card in the Chosen deck. */
   toggleChosen: (id: string) => void;
@@ -424,6 +427,14 @@ export const useGame = create<GameStore>((set, get) => ({
     saveKnowledge(next);
     sfx.vow();
     set({ knowledge: next });
+  },
+  holdLifted: () => {
+    const { run, lifted } = get();
+    if (!run || lifted === null) return;
+    const next = holdRun(run, lifted);
+    if (next === run) return;
+    sfx.lift();
+    set({ run: next, lifted: null });
   },
   turnLifted: () => {
     const { run, lifted } = get();

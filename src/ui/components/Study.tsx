@@ -136,7 +136,7 @@ export function Study() {
           const state = picked ? (id === cq.answer ? 'right' : id === picked ? 'wrong' : 'dim') : '';
           return (
             <div key={`${cq.omen}-${id}`} className={`study__choice study__choice--${state} deal`} style={{ animationDelay: `${i * 110}ms` }}>
-              <div className="study__cardwrap">
+              <div className={`study__cardwrap ${picked && id === cq.answer ? 'alive' : ''}`}>
                 <Card cardId={id} size="lg" reversed={picked !== null && id === cq.answer && cq.reversed} onClick={() => answerStudy(id)} />
                 {picked && id === cq.answer && <span className="study__stamp" aria-hidden>✦</span>}
                 {picked && id === picked && id !== cq.answer && <span className="study__stamp study__stamp--wrong" aria-hidden>✖</span>}

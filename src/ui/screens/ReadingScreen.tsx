@@ -9,7 +9,7 @@ import { Card } from '../components/Card';
 import { Held } from '../components/Held';
 import { DeckStack } from '../art/deck';
 import { CardBack } from '../art/CardArt';
-import { canTurn, getVow, TURN_COST } from '../../engine';
+import { canHold, canTurn, getVow, HOLD_COST, TURN_COST } from '../../engine';
 import { AbyssRings } from '../art/flourish';
 import { VowArt } from '../art/relics';
 import { SceneArt } from '../art/scenes';
@@ -36,6 +36,7 @@ function ReadingScreenInner() {
   const whisperLifted = useGame((s) => s.whisperLifted);
   const takeBack = useGame((s) => s.takeBack);
   const turnLifted = useGame((s) => s.turnLifted);
+  const holdLifted = useGame((s) => s.holdLifted);
   const hideSeatNames = useSettings((s) => s.hideSeatNames);
   const seatsNamed = useGame((s) => s.knowledge.seatsNamed) && !hideSeatNames;
   const codexOpen = useGame((s) => s.codexOpen);
@@ -69,6 +70,7 @@ function ReadingScreenInner() {
       } else if (key === 'r') st.redraw();
       else if (key === 'w') st.whisperLifted();
       else if (key === 't') st.turnLifted();
+      else if (key === 'h') st.holdLifted();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -153,6 +155,11 @@ function ReadingScreenInner() {
           );
         })}
       </section>
+      {run.held && (
+        <p className="held-note muted small center">
+          <span className="held-note__glyph" aria-hidden>⌖</span> {getCard(run.held.cardId).name} held for the next seat
+        </p>
+      )}
       </div>
 
       <div className="reading__right">
@@ -181,6 +188,7 @@ function ReadingScreenInner() {
                 mark={run.marks[c.cardId]}
                 whisper={whispered ? kw : undefined}
                 yours={c.yours}
+                held={c.held}
                 onClick={() => lift(lifted === i ? null : i)}
                 onLongPress={c.hidden ? undefined : () => setZoom({ cardId: c.cardId, reversed: c.reversed })}
                 onDragMove={(_dx, dy) => {
@@ -211,8 +219,13 @@ function ReadingScreenInner() {
           );
         })}
       </section>
-      {(canTakeBack(run) || (lifted !== null && canTurn(run, lifted))) && (
+      {(canTakeBack(run) || (lifted !== null && (canTurn(run, lifted) || canHold(run, lifted)))) && (
         <div className="takeback-row">
+          {lifted !== null && canHold(run, lifted) && (
+            <button type="button" className="takeback takeback--hold" onClick={holdLifted} title="Keep the lifted card back; it joins the next seat's deal">
+              Hold ◈{HOLD_COST}
+            </button>
+          )}
           {lifted !== null && canTurn(run, lifted) && (
             <button type="button" className="takeback takeback--turn" onClick={turnLifted} title="Turn the lifted card over, once per scene">
               ↻ turn ◈{TURN_COST}
