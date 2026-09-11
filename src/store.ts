@@ -142,7 +142,7 @@ function dealtIn(run: RunState): string[] {
   return slot ? slot.candidates.filter((c) => !c.hidden).map((c) => c.cardId) : [];
 }
 
-function buzz(ms: number | number[]) {
+export function buzz(ms: number | number[]) {
   if (!hapticsEnabled()) return;
   try {
     navigator.vibrate?.(ms);

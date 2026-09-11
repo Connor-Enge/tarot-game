@@ -1271,3 +1271,5 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .seat--target .seat__card .card { animation: none; transform: scale(1.08); }
 .seat--target .seat__card .card .card__inner { box-shadow: 0 0 0 2px var(--gold-2), 0 0 24px rgba(243,220,138,0.5); }
 .seat--target .seat__glyph { color: var(--gold-2); text-shadow: 0 0 18px rgba(243,220,138,0.9); }
+.btn--pull { border-color: var(--gold-2); color: var(--gold-2); box-shadow: 0 0 18px rgba(243,220,138,0.35); transform: translateY(2px); }
+.hand--pull .card:not(.card--dragging) { transform: translateY(10px) rotate(0deg); opacity: 0.6; }

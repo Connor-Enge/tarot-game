@@ -4,7 +4,7 @@ import { activeSlotState, canTakeBack, currentScene, getCard, hasRelic, redrawCo
 
 /** Dev only: show the oracle's score on each candidate when the page is opened with ?oracle. */
 const ORACLE = import.meta.env.DEV && typeof location !== 'undefined' && location.search.includes('oracle');
-import { useGame } from '../../store';
+import { buzz, useGame } from '../../store';
 import { Card } from '../components/Card';
 import { canTurn, getVow, TURN_COST } from '../../engine';
 import { AbyssRings } from '../art/flourish';
@@ -17,11 +17,14 @@ import { Stats } from '../components/Stat';
 
 /** How far up (px) a card must be dragged to land in the seat. */
 const DRAG_TO_SEAT = 90;
+/** How far down (px) a card must be pulled to sweep the hand into a redraw. */
+const DRAG_TO_REDRAW = 70;
 
 function ReadingScreenInner() {
   const run = useGame((s) => s.run)!;
   const lifted = useGame((s) => s.lifted);
   const [dragOver, setDragOver] = useState(false);
+  const [dragPull, setDragPull] = useState(false); // pulled down toward a redraw
   const lift = useGame((s) => s.lift);
   const confirm = useGame((s) => s.confirm);
   const redraw = useGame((s) => s.redraw);
@@ -132,7 +135,7 @@ function ReadingScreenInner() {
       </div>
 
       <div className="reading__right">
-      <section className={`hand ${active.candidates.length > 3 ? 'hand--four' : ''}`} aria-label={`candidates for ${seatsNamed ? SLOTS[active.slot].name : `seat ${run.activeSlot + 1}`}: choose one`} key={handKey}>
+      <section className={`hand ${active.candidates.length > 3 ? 'hand--four' : ''} ${dragPull ? 'hand--pull' : ''}`} aria-label={`candidates for ${seatsNamed ? SLOTS[active.slot].name : `seat ${run.activeSlot + 1}`}: choose one`} key={handKey}>
         {active.candidates.map((c, i) => {
           const card = getCard(c.cardId);
           const whispered = active.whispered.includes(i);
@@ -157,13 +160,24 @@ function ReadingScreenInner() {
                 onDragMove={(_dx, dy) => {
                   if (lifted !== i) lift(i);
                   const over = dy < -DRAG_TO_SEAT;
-                  if (over !== dragOver) setDragOver(over);
+                  if (over !== dragOver) {
+                    setDragOver(over);
+                    if (over) buzz(8);
+                  }
+                  const pull = canRedraw && dy > DRAG_TO_REDRAW;
+                  if (pull !== dragPull) {
+                    setDragPull(pull);
+                    if (pull) buzz([6, 40, 6]);
+                  }
                 }}
                 onDragEnd={(_dx, dy) => {
                   setDragOver(false);
+                  setDragPull(false);
                   if (dy < -DRAG_TO_SEAT) {
                     lift(i);
                     confirm();
+                  } else if (canRedraw && dy > DRAG_TO_REDRAW) {
+                    redraw();
                   }
                 }}
               />
@@ -202,7 +216,7 @@ function ReadingScreenInner() {
         >
           ☷
         </button>
-        <button className="btn" disabled={!canRedraw} onClick={redraw} title="Deal three new cards for this seat">
+        <button className={`btn ${dragPull ? 'btn--pull' : ''}`} disabled={!canRedraw} onClick={redraw} title="Deal three new cards for this seat">
           Redraw {rCost === 0 ? '· free' : `◈${rCost}`}
         </button>
         <button className="btn" disabled={!canWhisper} onClick={whisperLifted} title="Hear one word of the lifted card">
