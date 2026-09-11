@@ -54,3 +54,32 @@ describe('majorsFirst', () => {
     expect(new Set(seen).size).toBe(12);
   });
 });
+
+describe('depths', () => {
+  it('stack modifiers and are gated by returns', async () => {
+    const { DEPTHS, depthConfig, maxDepthUnlocked } = await import('../descents');
+    expect(DEPTHS.length).toBe(5);
+    expect(maxDepthUnlocked(0)).toBe(0);
+    expect(maxDepthUnlocked(3)).toBe(3);
+    expect(maxDepthUnlocked(99)).toBe(5);
+    const c3 = depthConfig(3);
+    expect(c3.startingVitality).toBe(8);
+    expect(c3.reversedChance).toBe(0.35);
+    expect(c3.extraNeutralCost).toBe(1);
+    expect(c3.noEcho).toBeUndefined();
+    const run = startRun(5, depthConfig(5));
+    expect(run.vitality).toBe(8);
+    expect(run.mods).toEqual({ extraNeutralCost: 1, noEcho: true, abyssStakes: 4 });
+  });
+
+  it('noEcho suppresses the echo and extraNeutralCost bites', async () => {
+    const { chooseCandidate } = await import('../run');
+    const { SLOT_IDS } = await import('../scenes');
+    let run = chooseNode({ ...startRun(8, { noEcho: true, extraNeutralCost: 2 }), vitality: 50 }, 0);
+    for (let i = 0; i < SLOT_IDS.length; i++) run = chooseCandidate(run, 0);
+    expect(run.echo).toBeNull();
+    if (run.phase.kind === 'resolved' && run.phase.resolution.tier === 'neutral') {
+      expect(run.phase.resolution.deltas.vitality).toBeLessThanOrEqual(-3);
+    }
+  });
+});

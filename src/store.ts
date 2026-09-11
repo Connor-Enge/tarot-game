@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { sfx, startDrone, stopDrone } from './audio';
+import { hapticsEnabled } from './settings';
 import {
   advance as advanceRun,
   chooseCandidate,
@@ -9,6 +10,7 @@ import {
   dailySeed,
   WEEKLY_CONFIG,
   weeklySeed,
+  depthConfig,
   getDescent,
   finalSpread,
   getCard,
@@ -33,7 +35,7 @@ import {
 } from './engine';
 
 export type Screen = 'title' | 'run' | 'codex' | 'settings';
-export type RunMode = { kind: 'free'; descent: string } | { kind: 'daily'; label: string } | { kind: 'weekly'; label: string };
+export type RunMode = { kind: 'free'; descent: string; depth?: number } | { kind: 'daily'; label: string } | { kind: 'weekly'; label: string };
 
 interface GameStore {
   screen: Screen;
@@ -46,6 +48,9 @@ interface GameStore {
   codexOpen: string | null;
   /** Chosen descent variant for free runs. */
   descent: string;
+  /** Depth (difficulty tier) for the standard descent. */
+  depth: number;
+  setDepth: (n: number) => void;
   /** Sigils earned by the run that just ended. */
   earned: string[];
   /** The player's very first run: show the three wordless nudges. */
@@ -73,6 +78,7 @@ interface GameStore {
 }
 
 function buzz(ms: number | number[]) {
+  if (!hapticsEnabled()) return;
   try {
     navigator.vibrate?.(ms);
   } catch {
@@ -98,7 +104,7 @@ function learn(k: Knowledge, run: RunState, mode: RunMode): { knowledge: Knowled
     const returned = run.phase.kind === 'ascended';
     if (returned) next = noteAscension(next, finalSpread(run));
     else next = noteDeath(next, finalSpread(run));
-    next = noteRecord(next, mode.kind === 'free' ? mode.descent : mode.kind, run.history.length, returned);
+    next = noteRecord(next, mode.kind === 'free' ? mode.descent : mode.kind, run.history.length, returned, mode.kind === 'free' ? (mode.depth ?? 0) : 0);
     earned = newSigils(run, next);
     next = noteSigils(next, earned);
   }
@@ -113,6 +119,8 @@ export const useGame = create<GameStore>((set, get) => ({
   lifted: null,
   codexOpen: null,
   descent: 'standard',
+  depth: 0,
+  setDepth: (n) => set({ depth: n }),
   earned: [],
   firstDescent: false,
   deckOpen: false,
@@ -128,8 +136,9 @@ export const useGame = create<GameStore>((set, get) => ({
     const knowledge = noteRunStarted(get().knowledge);
     saveKnowledge(knowledge);
     startDrone();
-    const config = first ? { ...d.config, majorsFirst: true } : d.config;
-    set({ run: startRun(seed, config), mode: { kind: 'free', descent: d.id }, knowledge, screen: 'run', lifted: null, earned: [], firstDescent: first });
+    const depth = d.id === 'standard' ? get().depth : 0;
+    const config = { ...d.config, ...(depth ? depthConfig(depth) : {}), ...(first ? { majorsFirst: true } : {}) };
+    set({ run: startRun(seed, config), mode: { kind: 'free', descent: d.id, depth }, knowledge, screen: 'run', lifted: null, earned: [], firstDescent: first });
   },
 
   newDaily: () => {
@@ -264,6 +273,6 @@ export function shareText(run: RunState, mode: RunMode): string {
       ? `Arcana Descent · Daily ${mode.label}`
       : mode.kind === 'weekly'
         ? `Arcana Descent · Weekly ${mode.label}`
-        : `Arcana Descent · ${getDescent(mode.descent).name} · seed ${run.seed.toString(36)}`;
+        : `Arcana Descent · ${getDescent(mode.descent).name}${mode.depth ? ` · Depth ${mode.depth}` : ''} · seed ${run.seed.toString(36)}`;
   return `${head}\n${end}\n${tiers}\n${spread}`;
 }

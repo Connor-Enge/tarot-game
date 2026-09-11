@@ -35,7 +35,7 @@ export interface Knowledge {
   /** Milestones earned. */
   sigils?: string[];
   /** Per-descent records. */
-  records?: Record<string, { runs: number; returns: number; bestDepth: number }>;
+  records?: Record<string, { runs: number; returns: number; bestDepth: number; deepestReturn?: number }>;
   runs: number;
   deaths: number;
   ascensions: number;
@@ -112,13 +112,18 @@ export function noteSigils(k: Knowledge, ids: string[]): Knowledge {
 }
 
 /** A run ended on `descent`, reaching `depth` scenes; `returned` if it ascended. */
-export function noteRecord(k: Knowledge, descent: string, depth: number, returned: boolean): Knowledge {
-  const prev = k.records?.[descent] ?? { runs: 0, returns: 0, bestDepth: 0 };
+export function noteRecord(k: Knowledge, descent: string, depth: number, returned: boolean, difficulty = 0): Knowledge {
+  const prev = k.records?.[descent] ?? { runs: 0, returns: 0, bestDepth: 0, deepestReturn: 0 };
   return {
     ...k,
     records: {
       ...k.records,
-      [descent]: { runs: prev.runs + 1, returns: prev.returns + (returned ? 1 : 0), bestDepth: Math.max(prev.bestDepth, depth) },
+      [descent]: {
+        runs: prev.runs + 1,
+        returns: prev.returns + (returned ? 1 : 0),
+        bestDepth: Math.max(prev.bestDepth, depth),
+        deepestReturn: returned ? Math.max(prev.deepestReturn ?? 0, difficulty) : (prev.deepestReturn ?? 0),
+      },
     },
   };
 }

@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
-import { CARDS, dailySeed, DESCENTS, getCard, getDescent } from '../../engine';
+import { CARDS, dailySeed, DEPTHS, DESCENTS, getCard, getDescent, maxDepthUnlocked } from '../../engine';
+import { ReaderMark } from '../components/ReaderMark';
 import { useGame } from '../../store';
 import { Card } from '../components/Card';
 
@@ -13,6 +14,9 @@ export function TitleScreen() {
   const k = useGame((s) => s.knowledge);
   const descent = useGame((s) => s.descent);
   const setDescent = useGame((s) => s.setDescent);
+  const depth = useGame((s) => s.depth);
+  const setDepth = useGame((s) => s.setDepth);
+  const maxDepth = maxDepthUnlocked(k.records?.standard?.returns ?? 0);
   const [lockedNote, setLockedNote] = useState<string | null>(null);
   const known = Object.values(k.cards).filter((c) => c.tier > 0).length;
   const current = getDescent(descent);
@@ -67,6 +71,20 @@ export function TitleScreen() {
             })}
           </div>
           <p className="muted small">{lockedNote ? `Locked · ${lockedNote}` : `${current.name} · ${current.text}`}</p>
+          {!lockedNote && current.id === 'standard' && maxDepth > 0 && (
+            <div className="depth">
+              <button className="btn btn--icon" onClick={() => setDepth(Math.max(0, depth - 1))} disabled={depth === 0} aria-label="shallower">
+                −
+              </button>
+              <div className="depth__label">
+                <div>{depth === 0 ? 'No depth' : `Depth ${depth} · ${DEPTHS[depth - 1].name}`}</div>
+                <div className="muted small">{depth === 0 ? 'The usual dark.' : DEPTHS.slice(0, depth).map((d) => d.text).join(' ')}</div>
+              </div>
+              <button className="btn btn--icon" onClick={() => setDepth(Math.min(maxDepth, depth + 1))} disabled={depth >= maxDepth} aria-label="deeper">
+                +
+              </button>
+            </div>
+          )}
           {!lockedNote && k.records?.[current.id] && (
             <p className="muted small record">
               {k.records[current.id].runs} down · {k.records[current.id].returns} back · deepest {k.records[current.id].bestDepth}
@@ -98,6 +116,7 @@ export function TitleScreen() {
       <p className="muted small">
         {k.runs === 0 ? 'The deck is unread.' : `${k.runs} descents · ${k.deaths} deaths · ${k.ascensions} returns`}
       </p>
+      <ReaderMark knowledge={k} />
       <div className="today" aria-label="card of the day">
         <Card cardId={today} size="xs" />
         <span className="muted small">Today's card · {getCard(today).name}</span>

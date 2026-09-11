@@ -39,6 +39,6 @@ describe('sigils', () => {
   it('keeps per-descent records', () => {
     let k = noteRecord(emptyKnowledge(), 'standard', 4, false);
     k = noteRecord(k, 'standard', 9, true);
-    expect(k.records?.standard).toEqual({ runs: 2, returns: 1, bestDepth: 9 });
+    expect(k.records?.standard).toEqual({ runs: 2, returns: 1, bestDepth: 9, deepestReturn: 0 });
   });
 });

@@ -18,16 +18,17 @@ import { TitleScreen } from './ui/screens/TitleScreen';
 function useSceneHue() {
   const run = useGame((s) => s.run);
   const screen = useGame((s) => s.screen);
+  const fixedTint = useSettings((s) => s.fixedTint);
   useEffect(() => {
     let hue = 260;
-    if (screen === 'run' && run) {
+    if (!fixedTint && screen === 'run' && run) {
       const node = currentNode(run);
       if (node) hue = SCENES[node.sceneId].hue;
       if (run.phase.kind === 'dead') hue = 0;
       if (run.phase.kind === 'ascended') hue = 45;
     }
     document.documentElement.style.setProperty('--scene-hue', String(hue));
-  }, [run, screen]);
+  }, [run, screen, fixedTint]);
 }
 
 export function App() {

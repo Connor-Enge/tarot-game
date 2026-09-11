@@ -18,6 +18,41 @@ export interface RunConfig {
   majorsFirst?: boolean;
   /** Layers per act. Default [4, 4]. */
   actLayers?: readonly number[];
+  /** Extra vitality cost on neutral readings. */
+  extraNeutralCost?: number;
+  /** The Wake does not follow you. */
+  noEcho?: boolean;
+  /** Stakes override for the terminal scene. */
+  abyssStakes?: number;
+}
+
+/**
+ * Depths: stacked difficulty for the standard descent, unlocked one per
+ * return. Depth N applies every modifier up to N. All stated.
+ */
+export interface Depth {
+  n: number;
+  name: string;
+  text: string;
+  config: RunConfig;
+}
+
+export const DEPTHS: Depth[] = [
+  { n: 1, name: 'Thinner Blood', text: 'Begin with 8 vitality.', config: { startingVitality: 8 } },
+  { n: 2, name: 'Wrong More Often', text: 'Cards land reversed more often.', config: { reversedChance: 0.35 } },
+  { n: 3, name: 'The Dark Presses', text: 'Neutral readings cost one more.', config: { extraNeutralCost: 1 } },
+  { n: 4, name: 'Short Memory', text: 'The Wake does not follow you.', config: { noEcho: true } },
+  { n: 5, name: 'The Last Word', text: 'The Abyss reads at stakes 4.', config: { abyssStakes: 4 } },
+];
+
+export function depthConfig(depth: number): RunConfig {
+  let out: RunConfig = {};
+  for (const d of DEPTHS) if (d.n <= depth) out = { ...out, ...d.config };
+  return out;
+}
+
+export function maxDepthUnlocked(returns: number): number {
+  return Math.min(DEPTHS.length, Math.max(0, returns));
 }
 
 /** The weekly descent: a longer road, a little more blood. */

@@ -61,6 +61,8 @@ export interface RunState {
   actLayers: readonly number[];
   /** The last scene's Wake card, waiting to be dealt into the next Vessel. */
   echo: DrawnCard | null;
+  /** Depth modifiers carried by the run. */
+  mods: { extraNeutralCost: number; noEcho: boolean; abyssStakes?: number };
   slots: SlotState[];
   activeSlot: number;
   phase: Phase;
@@ -140,6 +142,7 @@ export function startRun(seed: number, config: RunConfig = {}): RunState {
     whispers: 0,
     actLayers,
     echo: null,
+    mods: { extraNeutralCost: config.extraNeutralCost ?? 0, noEcho: !!config.noEcho, abyssStakes: config.abyssStakes },
     slots: [],
     activeSlot: 0,
     phase: { kind: 'map' },
@@ -276,10 +279,11 @@ export function readingOf(run: RunState): Reading | null {
 function resolve(run: RunState): RunState {
   const reading = readingOf(run);
   if (!reading) return run;
-  const scene = currentScene(run);
+  const baseScene = currentScene(run);
+  const scene = baseScene.terminal && run.mods.abyssStakes ? { ...baseScene, stakes: run.mods.abyssStakes } : baseScene;
   const resolution = resolveReading(scene, reading, run.marks, {
     chargedBonus: hasRelic(run, 'ring') ? 2 : undefined,
-    extraNeutralCost: hasRelic(run, 'weight') ? 1 : undefined,
+    extraNeutralCost: (hasRelic(run, 'weight') ? 1 : 0) + run.mods.extraNeutralCost || undefined,
     mendBonus: hasRelic(run, 'bread') ? 2 : undefined,
   });
   const vitality = run.vitality + resolution.deltas.vitality;
@@ -316,7 +320,7 @@ function resolve(run: RunState): RunState {
     }
   }
 
-  const echo: DrawnCard = { cardId: revealed.wake.cardId, reversed: revealed.wake.reversed };
+  const echo: DrawnCard | null = run.mods.noEcho ? null : { cardId: revealed.wake.cardId, reversed: revealed.wake.reversed };
   const base = withRng({ ...run, deck, history, vitality, clarity, marks, relics, echo }, rng);
   if (vitality <= 0) return { ...base, vitality: 0, phase: { kind: 'dead', resolution } };
   if (scene.terminal) return { ...base, phase: { kind: 'ascended', resolution } };

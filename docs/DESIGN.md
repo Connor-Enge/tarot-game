@@ -256,9 +256,21 @@ is literal. Balance: majors-only rose from ~78% to ~83%; random unchanged.
 **Weekly descent**: one seed per ISO week, a longer map (five layers per
 act), twelve vitality. Its own card back, as does every descent.
 
+**Depths** (`DEPTHS` in `descents.ts`): five stacked modifiers for the
+standard descent, one unlocked per return: Thinner Blood (8 vitality),
+Wrong More Often (35% reversed), The Dark Presses (neutral costs one more),
+Short Memory (no echo), The Last Word (the Abyss at stakes 4). Depth N
+applies everything up to N. Records track the deepest return.
+
+**The reader's mark**: a ring on the title screen with one tick per run,
+gold for returns, red for deaths, and a fill that grows with the share of
+the deck known. Titles from Novice to Oracle by that share.
+
+**Settings**: haptics toggle and "one color, no scene tint".
+
 Queued:
-- A "the reader" avatar that gathers marks over many runs.
-- Difficulty ascension tiers after returning.
+- Scene art: a small illustration per scene above the prompt.
+- Sound design pass: per-suit placement tones.
 
 ## Content debt
 
