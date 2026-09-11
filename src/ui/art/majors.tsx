@@ -156,31 +156,43 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
   ),
   8: () => (
     <g>
-      <Infinity x={30} y={14} s={5} />
-      <Mountains y={72} opacity={0.25} />
-      <Figure x={30} y={80} h={44} arms="down" fill={PALE} />
-      <ellipse cx={68} cy={96} rx={14} ry={7} fill="#c98a3c" stroke={INK} strokeWidth={0.8} />
-      <path d="M78 92 q6 -8 2 -14" fill="none" stroke="#c98a3c" strokeWidth={2} strokeLinecap="round" />
-      {Array.from({ length: 14 }, (_, i) => {
-        const a = (i / 14) * Math.PI * 2;
-        return <path key={i} d={`M${56 + Math.cos(a) * 9} ${82 + Math.sin(a) * 9} l${Math.cos(a) * 5} ${Math.sin(a) * 5}`} stroke="#8a5a22" strokeWidth={2.4} strokeLinecap="round" />;
+      <Infinity x={26} y={14} s={5} />
+      <Mountains y={74} opacity={0.22} />
+      <Ground y={100} fill="#d9b06a" opacity={0.6} />
+      {/* she stands behind the lion, one hand resting on the mane, unhurried */}
+      <Figure x={18} y={94} h={40} arms="right-up" fill={PALE} />
+      <path d="M10 52 q8 -7 16 0" fill="none" stroke="#7aa35a" strokeWidth={1.6} strokeLinecap="round" />
+      {[12, 18, 24].map((x) => <circle key={x} cx={x} cy={50.5} r={1.2} fill="#c94a4a" />)}
+      {/* the lion: body, mane, face, a tail curling up */}
+      <ellipse cx={54} cy={92} rx={20} ry={9} fill="#c98a3c" stroke={INK} strokeWidth={0.8} />
+      <path d="M72 90 q10 -6 4 -18" fill="none" stroke="#c98a3c" strokeWidth={2.4} strokeLinecap="round" />
+      <circle cx={70} cy={70} r={2} fill="#8a5a22" />
+      {Array.from({ length: 16 }, (_, i) => {
+        const a = (i / 16) * Math.PI * 2;
+        return <path key={i} d={`M${40 + Math.cos(a) * 11} ${78 + Math.sin(a) * 11} l${Math.cos(a) * 6} ${Math.sin(a) * 6}`} stroke="#8a5a22" strokeWidth={3} strokeLinecap="round" />;
       })}
-      <circle cx={56} cy={82} r={9.5} fill="#e0a85a" stroke={INK} strokeWidth={0.8} />
-      <circle cx={53} cy={80} r={1} fill={INK} />
-      <circle cx={59} cy={80} r={1} fill={INK} />
-      <path d="M54 85 q2 2 4 0" fill="none" stroke={INK} strokeWidth={0.7} />
-      <path d="M36 72 q12 4 16 8" stroke={PALE} strokeWidth={2} fill="none" strokeLinecap="round" />
-      <Ground y={102} fill={GOLD_FLAT} opacity={0.5} />
+      <circle cx={40} cy={78} r={11.5} fill="#e0a85a" stroke={INK} strokeWidth={0.8} />
+      <circle cx={36} cy={76} r={1.2} fill={INK} />
+      <circle cx={44} cy={76} r={1.2} fill={INK} />
+      <path d="M37 83 q3 3 6 0" fill="none" stroke={INK} strokeWidth={0.8} />
+      <path d="M40 80 l-1.5 2 h3 z" fill={INK} />
     </g>
   ),
   9: () => (
     <g>
-      <rect x={0} y={0} width={80} height={112} fill={INK} opacity={0.55} />
-      <Mountains y={84} opacity={0.6} fill={PALE} />
-      <Figure x={40} y={88} h={56} arms="left-up" fill={INK} cloak />
-      <line x1={58} y1={90} x2={58} y2={36} stroke={GOLD_FLAT} strokeWidth={1.4} />
-      <Lantern x={22} y={46} />
-      <circle cx={22} cy={46} r={12} fill={GOLD_FLAT} opacity={0.15} />
+      <rect x={0} y={0} width={80} height={112} fill="#0e0c1c" opacity={0.8} />
+      <Star x={16} y={18} r={2} points={5} />
+      <Star x={66} y={12} r={1.6} points={5} />
+      <Mountains y={90} opacity={0.9} fill="#1c1830" />
+      <path d="M0 112 L20 96 L40 104 L60 92 L80 100 V112 Z" fill="#26213d" />
+      {/* the lantern's light, then the lantern, then the one who carries it */}
+      <circle cx={60} cy={40} r={22} fill={GOLD_FLAT} opacity={0.12} />
+      <circle cx={60} cy={40} r={11} fill={GOLD_FLAT} opacity={0.18} />
+      <Figure x={40} y={98} h={46} arms="right-up" fill={PALE} cloak />
+      <line x1={28} y1={98} x2={28} y2={50} stroke={GOLD_FLAT} strokeWidth={1.6} />
+      <circle cx={28} cy={49} r={2} fill={GOLD_FLAT} />
+      <Lantern x={60} y={40} />
+      <path d="M52 52 q4 -6 7 -9" fill="none" stroke={PALE} strokeWidth={2} strokeLinecap="round" />
     </g>
   ),
   10: () => (
