@@ -66,6 +66,17 @@ describe('sigils', () => {
     expect(sig.when({ ...yes, phase: { kind: 'dead', resolution: {} as never } }, emptyKnowledge())).toBe(false);
   });
 
+  it('a suit read through, once every card of it has been read', async () => {
+    const { noteResolved } = await import('../knowledge');
+    const { newKnowledgeSigils } = await import('../sigils');
+    let k = emptyKnowledge();
+    for (let i = 1; i <= 13; i++) k = noteResolved(k, `cups-${i}`, 'hand', false);
+    expect(newKnowledgeSigils(k)).not.toContain('cups-read');
+    k = noteResolved(k, 'cups-14', 'wake', true);
+    expect(newKnowledgeSigils(k)).toContain('cups-read');
+    expect(newKnowledgeSigils(k)).not.toContain('wands-read');
+  });
+
   it('does nothing mid-run', () => {
     expect(newSigils(startRun(1), emptyKnowledge())).toEqual([]);
   });

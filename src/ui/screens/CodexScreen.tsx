@@ -230,6 +230,7 @@ export function CodexScreen() {
                   <span className="codex__group-glyph" aria-hidden>{g.glyph}</span>
                   <span>{g.name}</span>
                   <span className="codex__group-count">{read} / {cards.length}</span>
+                  {read === cards.length && <span className="codex__group-seal" title="read through">✦ read through</span>}
                 </div>
                 {cards.map(cell)}
               </Fragment>

@@ -44,6 +44,16 @@ export const SIGILS: Sigil[] = [
   { id: 'seven-days', glyph: '▦', name: 'Seven Days', text: 'Return from seven different daily descents.', when: (_r, k) => Object.values(k.almanac ?? {}).filter((a) => a.returned).length >= 7 },
   { id: 'three-vows', glyph: '⚭', name: 'Oathbound', text: 'Keep three different vows.', when: (_r, k) => Object.values(k.vows ?? {}).filter((v) => v.kept >= 1).length >= 3 },
   { id: 'well-worn', glyph: '❂', name: 'Well Worn', text: 'Read one card twenty-five times.', when: (_r, k) => Object.values(k.cards).some((c) => c.resolved >= 25) },
+  ...(['wands', 'cups', 'swords', 'pentacles'] as const).map((suit) => {
+    const NAMES: Record<string, [string, string]> = { wands: ['Fire Read Through', '⚚'], cups: ['Water Read Through', '♆'], swords: ['Air Read Through', '⚔'], pentacles: ['Earth Read Through', '⛤'] };
+    return {
+      id: `${suit}-read`,
+      glyph: NAMES[suit][1],
+      name: NAMES[suit][0],
+      text: `Read every card of ${suit[0].toUpperCase()}${suit.slice(1)} at least once.`,
+      when: (_r: RunState, k: Knowledge) => Array.from({ length: 14 }, (_, i) => `${suit}-${i + 1}`).every((id) => (k.cards[id]?.resolved ?? 0) >= 1),
+    };
+  }),
   {
     id: 'held-before',
     glyph: '↻',
@@ -73,7 +83,7 @@ export function newSigils(run: RunState, k: Knowledge): string[] {
 }
 
 /** Sigils that depend only on the Codex, checked outside a run (e.g. after Study). */
-const KNOWLEDGE_ONLY = new Set(['remembered', 'bound', 'majors-glimpsed', 'ten-mastered', 'named-five', 'ten-deaths', 'seven-days', 'three-vows', 'well-worn']);
+const KNOWLEDGE_ONLY = new Set(['remembered', 'bound', 'majors-glimpsed', 'ten-mastered', 'named-five', 'ten-deaths', 'seven-days', 'three-vows', 'well-worn', 'wands-read', 'cups-read', 'swords-read', 'pentacles-read']);
 export function newKnowledgeSigils(k: Knowledge): string[] {
   const held = new Set(k.sigils ?? []);
   const dummy = { phase: { kind: 'dead' } } as unknown as RunState;

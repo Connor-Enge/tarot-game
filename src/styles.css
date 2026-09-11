@@ -1687,3 +1687,4 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .codex__group--cups .codex__group-glyph { color: #8fc3e0; }
 .codex__group--swords .codex__group-glyph { color: #d8d9e8; }
 .codex__group--pentacles .codex__group-glyph { color: #a9c98a; }
+.codex__group-seal { font-size: 0.62rem; letter-spacing: 0.1em; color: var(--gold-2); padding: 2px 8px; border-radius: 999px; border: 1px solid rgba(243,220,138,0.5); background: rgba(214,178,94,0.1); text-shadow: 0 0 8px rgba(243,220,138,0.5); }
