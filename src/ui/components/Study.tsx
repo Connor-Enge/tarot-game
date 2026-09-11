@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { getCard, SLOT_IDS, SLOTS } from '../../engine';
+import { getCard, SCENES, SLOT_IDS, SLOTS } from '../../engine';
+import { SceneArt } from '../art/scenes';
 import { useGame } from '../../store';
 import { StreakFlames } from '../art/flames';
 import { Card } from './Card';
@@ -40,6 +41,54 @@ export function Study() {
   }
   const { q, picked, streak } = study;
   const stats = k.study;
+  if ('kind' in q && q.kind === 'place') {
+    const right = picked !== null && q.scenes.includes(picked);
+    return (
+      <section className="study">
+        {filterRow}
+        <div className="study__meta muted small">
+          <StreakFlames n={streak} className="study__flames" /> streak {streak}
+          {stats && ` · ${stats.correct} / ${stats.asked} · best ${stats.bestStreak}`}
+        </div>
+        <div className="study__cardwrap study__seatcard">
+          <Card cardId={q.cardId} reversed={q.reversed} size="lg" />
+        </div>
+        <blockquote className="study__omen" key={q.omen}>
+          <span className="study__flourish" aria-hidden>❧</span>
+          {q.omen}
+          <span className="study__flourish study__flourish--end" aria-hidden>❧</span>
+        </blockquote>
+        <p className="muted small center">Where did it do this?</p>
+        <div className="study__places">
+          {q.choices.map((id, i) => {
+            const state = picked ? (q.scenes.includes(id) ? 'right' : id === picked ? 'wrong' : 'dim') : '';
+            const sc = SCENES[id];
+            return (
+              <button
+                key={`${q.omen}-${id}`}
+                type="button"
+                className={`study__place study__place--${state} deal`}
+                style={{ animationDelay: `${i * 110}ms`, '--book-hue': sc?.hue ?? 260 } as React.CSSProperties}
+                onClick={() => answerStudy(id)}
+                disabled={picked !== null}
+                aria-label={sc?.place ?? id}
+              >
+                <SceneArt id={id} className="study__place-art" />
+                <span className="study__place-name">{sc?.place ?? id}</span>
+                {picked && q.scenes.includes(id) && <span className="study__stamp" aria-hidden>✦</span>}
+                {picked && id === picked && !q.scenes.includes(id) && <span className="study__stamp study__stamp--wrong" aria-hidden>✖</span>}
+              </button>
+            );
+          })}
+        </div>
+        {picked && (
+          <button className="btn btn--primary" onClick={askStudy}>
+            {right ? 'Again' : 'Another'}
+          </button>
+        )}
+      </section>
+    );
+  }
   if ('kind' in q) {
     const right = picked !== null && q.seats.includes(picked as never);
     return (

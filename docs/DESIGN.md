@@ -310,7 +310,11 @@ the meanings settle; it is the Codex's most on-pillar page.
 **Study** (`studyQuestion` in `knowledge.ts`): a Codex tab that shows one
 omen you have witnessed and three witnessed cards; which card did this?
 Never a meaning, only recall of consequence. A right answer counts toward
-glimpsing the card, like a whisper. Tracks streak and totals.
+glimpsing the card, like a whisper. Tracks streak and totals. Two other
+questions rotate in: which seat was it read in (`seatQuestion`), and,
+once the omen log spans three places, where was it read (`placeQuestion`,
+three scene tiles from places you have actually stood). Both only ever ask
+you to remember what happened; neither leaks a meaning.
 
 **Journal**: each scene shows Clarity spent (redraws, whispers).
 

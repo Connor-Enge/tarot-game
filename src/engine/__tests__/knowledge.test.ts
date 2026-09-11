@@ -107,6 +107,30 @@ describe('omen log', () => {
 });
 
 describe('study', () => {
+  it('asks where a card was read once the log spans three places', async () => {
+    const { placeQuestion, noteOmens } = await import('../knowledge');
+    const { createRng } = await import('../rng');
+    let k = emptyKnowledge();
+    expect(placeQuestion(k, createRng(1), () => 'x')).toBeNull();
+    k = noteOmens(k, [
+      { scene: 'bridge', seat: 'hand', cardId: 'major-0', reversed: false, tier: 'boon' },
+      { scene: 'well', seat: 'hand', cardId: 'major-1', reversed: false, tier: 'harm' },
+    ]);
+    expect(placeQuestion(k, createRng(1), () => 'x')).toBeNull();
+    k = noteOmens(k, [{ scene: 'fire', seat: 'wake', cardId: 'major-2', reversed: true, tier: 'neutral' }]);
+    const q = placeQuestion(k, createRng(5), (id, r) => `${id}:${r}`)!;
+    expect(q).not.toBeNull();
+    expect(q.kind).toBe('place');
+    expect(q.choices.length).toBe(3);
+    expect(new Set(q.choices).size).toBe(3);
+    expect(q.scenes.length).toBe(1);
+    expect(q.choices).toContain(q.scenes[0]);
+    expect(q.omen).toBe(`${q.cardId}:${q.reversed}`);
+    // The filter narrows the card asked about, never the places offered.
+    const cups = placeQuestion(k, createRng(5), () => 'x', (id) => id === 'major-2');
+    expect(cups?.cardId).toBe('major-2');
+    expect(placeQuestion(k, createRng(5), () => 'x', (id) => id.startsWith('cups-'))).toBeNull();
+  });
   it('builds a question only from witnessed cards and counts results', async () => {
     const { studyQuestion, noteStudyResult } = await import('../knowledge');
     const { createRng } = await import('../rng');

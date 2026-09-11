@@ -1391,3 +1391,18 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .about summary { color: var(--gold); letter-spacing: 0.08em; cursor: pointer; }
 .deck-pill { display: inline-flex; align-items: center; gap: 4px; border-color: rgba(214,178,94,0.25); }
 .deck-pill__stack { width: 22px; height: 18px; }
+
+/* Study: where was it read? Three places, one of them true. */
+.study__places { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; max-width: 380px; }
+.study__place {
+  position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 6px 4px 8px; border-radius: 10px; border: 1px solid rgba(214,178,94,0.22);
+  background: linear-gradient(180deg, hsl(var(--book-hue, 260) 28% 13%), rgba(0,0,0,0.25));
+  color: var(--ink); font: inherit; cursor: pointer; transition: transform 200ms, opacity 200ms, box-shadow 200ms;
+}
+.study__place-art { width: 100%; height: auto; border-radius: 6px; }
+.study__place-name { font-size: 0.68rem; line-height: 1.25; text-align: center; opacity: 0.85; min-height: 2.5em; }
+.study__place--right { transform: translateY(-6px); border-color: var(--gold-2); box-shadow: 0 0 0 1px var(--gold-2), 0 0 22px rgba(243,220,138,0.4); }
+.study__place--wrong { border-color: var(--vit); filter: saturate(0.4); }
+.study__place--dim { opacity: 0.35; }
+.study__place .study__stamp { inset: auto 6px auto auto; top: 4px; font-size: 1.6rem; }

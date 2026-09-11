@@ -227,6 +227,31 @@ export function seatQuestion(
   return { kind: 'seat', omen: cardOmen(e.cardId, e.reversed), cardId: e.cardId, reversed: e.reversed, seats };
 }
 
+/**
+ * A place question: one omen you witnessed, the card that did it, and three
+ * places you have read in. Where was it read? Any scene where that card, in
+ * that orientation, has been witnessed counts. Null until the log spans
+ * three places.
+ */
+export function placeQuestion(
+  k: Knowledge,
+  rng: { int(max: number): number; shuffle<T>(arr: readonly T[]): T[] },
+  cardOmen: (cardId: string, reversed: boolean) => string,
+  filter: (cardId: string) => boolean = () => true,
+): { kind: 'place'; omen: string; cardId: string; reversed: boolean; scenes: string[]; choices: string[] } | null {
+  const all = k.omenLog ?? [];
+  const places = Array.from(new Set(all.map((e) => e.scene)));
+  if (places.length < 3) return null;
+  const log = all.filter((e) => filter(e.cardId));
+  if (log.length === 0) return null;
+  const e = log[rng.int(log.length)];
+  const scenes = Array.from(new Set(all.filter((x) => x.cardId === e.cardId && x.reversed === e.reversed).map((x) => x.scene)));
+  const others = rng.shuffle(places.filter((p) => !scenes.includes(p))).slice(0, 2);
+  if (others.length < 2) return null;
+  const choices = rng.shuffle([e.scene, ...others]);
+  return { kind: 'place', omen: cardOmen(e.cardId, e.reversed), cardId: e.cardId, reversed: e.reversed, scenes, choices };
+}
+
 export function studyQuestion(
   k: Knowledge,
   rng: { int(max: number): number; shuffle<T>(arr: readonly T[]): T[] },
