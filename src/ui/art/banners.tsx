@@ -4,12 +4,29 @@ const DARK = 'rgba(10,8,18,0.9)';
 
 /**
  * A banner for the moment a new act opens under you. Drawn wide and low,
- * like a lintel you pass beneath. Act two is stone; act three is the rings.
+ * like a lintel you pass beneath. Act one is reeds and still water; act two
+ * is stone; act three is the rings.
  */
 export function ActBanner({ act, name }: { act: number; name: string }) {
   return (
     <svg viewBox="0 0 300 90" className="act-banner__art" aria-hidden preserveAspectRatio="xMidYMid meet">
-      {act === 2 ? (
+      {act === 1 ? (
+        <g>
+          <rect x={0} y={0} width={300} height={90} fill="#060410" opacity={0.55} />
+          <path d="M0 90 L0 64 Q75 58 150 64 T300 64 L300 90 Z" fill="#0a0c1a" opacity={0.9} />
+          {[0, 1, 2, 3].map((i) => (
+            <path key={i} d={`M0 ${68 + i * 6} q10 -3 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0`} fill="none" stroke={PALE} strokeWidth={0.5} opacity={0.22 - i * 0.04} />
+          ))}
+          {[18, 30, 44, 250, 262, 278, 290].map((x, i) => (
+            <g key={x}>
+              <path d={`M${x} 66 l${i % 2 ? 1.5 : -1.5} -${26 + (i % 3) * 6}`} fill="none" stroke={GOLD_FLAT} strokeWidth={1} opacity={0.55} />
+              <ellipse cx={x + (i % 2 ? 1.5 : -1.5)} cy={40 - (i % 3) * 6} rx={1.8} ry={5} fill={GOLD_FLAT} opacity={0.6} />
+            </g>
+          ))}
+          <Moon x={150} y={20} r={7} />
+          <ellipse cx={150} cy={70} rx={22} ry={3} fill={GOLD_FLAT} opacity={0.12} />
+        </g>
+      ) : act === 2 ? (
         <g>
           {[0, 30, 55, 90, 120, 160, 190, 225, 250, 280].map((x, i) => (
             <path key={x} d={`M${x} 0 L${x + 10 + (i % 3) * 4} 0 L${x + 5 + (i % 2) * 3} ${18 + (i % 4) * 9} Z`} fill={DARK} />
@@ -29,7 +46,7 @@ export function ActBanner({ act, name }: { act: number; name: string }) {
           <Moon x={150} y={26} r={6} />
         </g>
       )}
-      <text x={150} y={act === 2 ? 30 : 52} textAnchor="middle" fontSize={11} letterSpacing={4} fill={PALE} fontFamily="Georgia, serif" opacity={0.95}>
+      <text x={150} y={act === 2 ? 30 : act === 1 ? 50 : 52} textAnchor="middle" fontSize={11} letterSpacing={4} fill={PALE} fontFamily="Georgia, serif" opacity={0.95}>
         {name.toUpperCase()}
       </text>
     </svg>

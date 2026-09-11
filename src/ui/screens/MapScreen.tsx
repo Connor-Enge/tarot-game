@@ -51,7 +51,9 @@ function MapScreenInner() {
   // In the Well, also when a deeper map opens after an Abyss.
   const actStart = run.actLayers.slice(0, act - 1).reduce((a, b) => a + b, 0);
   const newWell = inWell && turn > 1 && cycleLayer === 0 && run.node === null;
-  const newAct = (act > 1 && cycleLayer === actStart && run.node === null) || newWell;
+  // Also when a run opens, once the player has seen a descent through.
+  const newRun = !firstDescent && run.layer === 0 && run.node === null && run.history.length === 0;
+  const newAct = (act > 1 && cycleLayer === actStart && run.node === null) || newWell || newRun;
   const bannerName = newWell ? `The Well · ${toRoman(turn)}` : ACT_NAMES[act] ?? `Act ${act}`;
   const [banner, setBanner] = useState<number | null>(newAct ? act : null);
   // Keys: 1-3 choose a door (or foretell it while foretelling), arrows move between doors.
