@@ -12,6 +12,7 @@ import { RelicArt } from '../art/relics';
 import { Card } from '../components/Card';
 import { CodexDetail } from '../components/CodexDetail';
 import { Stats } from '../components/Stat';
+import { Road } from '../components/Road';
 
 function ResolutionScreenInner() {
   const run = useGame((s) => s.run)!;
@@ -175,6 +176,7 @@ function ResolutionScreenInner() {
           {resolution.deltas.vitality !== 0 && <span className="stat--vit">♥ {fmt(resolution.deltas.vitality)}</span>}
           {resolution.deltas.clarity !== 0 && <span className="stat--cla">◈ {fmt(resolution.deltas.clarity)}</span>}
         </p>
+        <Road scene={scene} entry={lastEntry} marks={run.marks} delay={500 + resolution.narration.length * step} />
         <div className={`verdict-wrap verdict-wrap--${resolution.tier}`} style={{ animationDelay: revealAll ? '0ms' : `${700 + resolution.narration.length * step}ms` }} aria-hidden>
           <VerdictSeal tier={resolution.tier} />
         </div>

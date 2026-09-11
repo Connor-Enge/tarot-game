@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { reckon, reckoningText, SCENES, SLOT_IDS, SLOT_POSITION, SLOTS, tallyText, type RunState } from '../../engine';
 import { SceneArt } from '../art/scenes';
 import { Card } from './Card';
+import { Road } from './Road';
 import { sfx } from '../../audio';
 
 const TIER_MARK = { calamity: '✖', harm: '▽', neutral: '◇', boon: '△', triumph: '★' } as const;
@@ -101,6 +102,7 @@ export function MemorySheet({
             </ol>
           );
         })()}
+        <Road scene={scene} entry={h} marks={run.marks} />
         <p className={`narration__outcome tier--${tier} memory__outcome`}>
           {TIER_MARK[tier]} {h.resolution.narration.at(-1)}
         </p>

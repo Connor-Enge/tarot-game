@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { CARDS, getCard, layTable, nextEmptySeat, reckoningText, SLOT_IDS, SLOT_POSITION, SLOTS, tableCards, tableScenes, THRESHOLDS, type SlotId, type TableLay } from '../../engine';
+import { useEffect, useMemo, useState } from 'react';
+import { CARDS, getCard, layTable, SCENES, nextEmptySeat, reckoningText, SLOT_IDS, SLOT_POSITION, SLOTS, tableCards, tableScenes, THRESHOLDS, type SlotId, type TableLay } from '../../engine';
 import { useGame } from '../../store';
 import { SceneArt } from '../art/scenes';
 import { VerdictSeal } from '../art/verdict';
@@ -20,11 +20,14 @@ export function Table() {
   const openCodex = useGame((s) => s.openCodex);
   const scenes = useMemo(() => tableScenes(k), [k]);
   const pool = useMemo(() => new Set(tableCards(k)), [k]);
-  const [sceneId, setSceneId] = useState<string | null>(null);
-  const [lay, setLay] = useState<TableLay>({});
-  const [picking, setPicking] = useState<SlotId | null>('vessel');
+  const seed = useGame((s) => s.tableSeed);
+  const clearTableSeed = useGame((s) => s.clearTableSeed);
+  const [sceneId, setSceneId] = useState<string | null>(seed?.sceneId ?? null);
+  const [lay, setLay] = useState<TableLay>(seed?.lay ?? {});
+  const [picking, setPicking] = useState<SlotId | null>(seed ? nextEmptySeat(seed.lay) : 'vessel');
+  useEffect(() => { if (seed) clearTableSeed(); }, [seed, clearTableSeed]);
   const [suit, setSuit] = useState<Suit>('all');
-  const scene = (sceneId && scenes.find((s) => s.id === sceneId)) || scenes[0] || null;
+  const scene = (sceneId && (scenes.find((s) => s.id === sceneId) ?? SCENES[sceneId])) || scenes[0] || null;
 
   if (!scene) {
     return (
@@ -33,7 +36,7 @@ export function Table() {
       </section>
     );
   }
-  if (pool.size === 0) {
+  if (pool.size === 0 && Object.keys(lay).length === 0) {
     return (
       <section className="table">
         <p className="muted small center">Nothing to lay yet. Glimpse a card in a reading and it will come to the table.</p>

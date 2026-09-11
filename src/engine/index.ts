@@ -14,3 +14,4 @@ export * from './sky';
 export * from './vows';
 export * from './weather';
 export * from './table';
+export * from './road';

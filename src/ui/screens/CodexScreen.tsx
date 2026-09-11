@@ -30,7 +30,7 @@ export function CodexScreen() {
   const sigils = new Set(k.sigils ?? []);
   const [suit, setSuit] = useState<SuitFilter>('all');
   const [tf, setTf] = useState<TierFilter>('all');
-  const [view, setView] = useState<'cards' | 'sky' | 'book' | 'study' | 'table'>('cards');
+  const [view, setView] = useState<'cards' | 'sky' | 'book' | 'study' | 'table'>(useGame.getState().tableSeed ? 'table' : 'cards');
   const [q, setQ] = useState('');
   const [building, setBuilding] = useState(false);
   const toggleChosen = useGame((s) => s.toggleChosen);

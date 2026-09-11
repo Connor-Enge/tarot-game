@@ -639,6 +639,21 @@ Situation card, turn the Guidance, see what moves.
 Engine: `engine/table.ts` (`tableScenes`, `tableCards`, `layTable`,
 `nextEmptySeat`), built on `readingSoFar` and `resolveReading`.
 
+## The road not taken
+
+Every remembered scene keeps the cards passed over in each seat, as they
+would have been read (the Mirror flips them too). At resolution, and on
+every page of the memory, one folded line says how the hand was played:
+"Every seat took the best card the hand held", or "Two seats held a better
+card: +6 left in the hand." Opened, it lays each seat out: the played card
+with its score, then the ones left in the hand with the score each would
+have made, the best of them lit. Consequence only: these are faces the
+player already saw in the hand. From there, "Lay it on the Table" hands the
+scene and the played cards to the Table in the Codex, so the rest of the
+hand can be tried without cost.
+
+Engine: `HistoryEntry.passed`, `engine/road.ts` (`roadNotTaken`, `roadText`).
+
 ## The Long Night
 
 A descent unlocked by five deaths and one return: every scene is read

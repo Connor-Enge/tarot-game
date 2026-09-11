@@ -67,6 +67,8 @@ export interface HistoryEntry {
   resolution: Resolution;
   /** Clarity spent in this scene. */
   spent?: { redraws: number; whispers: number };
+  /** The cards passed over in each seat, as they would have been read. */
+  passed?: Partial<Record<SlotId, DrawnCard[]>>;
 }
 
 export interface RunState {
@@ -559,7 +561,13 @@ function resolve(run: RunState): RunState {
   for (const s of SLOT_IDS) revealed[s] = { ...reading[s], hidden: false };
   const played = SLOT_IDS.map((s) => revealed[s]);
   const deck = discard(run.deck, played);
-  const entry: HistoryEntry = { sceneId: scene.id, reading: revealed, resolution, spent: { ...run.sceneSpent } };
+  const passed = {} as Partial<Record<SlotId, DrawnCard[]>>;
+  for (const s of run.slots) {
+    passed[s.slot] = s.candidates
+      .filter((_, j) => j !== s.chosen)
+      .map((c) => ({ ...c, hidden: false, reversed: baseScene.rite === 'mirror' ? !c.reversed : c.reversed }));
+  }
+  const entry: HistoryEntry = { sceneId: scene.id, reading: revealed, resolution, spent: { ...run.sceneSpent }, passed };
   const history = [...run.history, entry];
   const vow = run.vow && !run.vow.broken && !getVow(run.vow.id).keeps(entry, baseScene) ? { ...run.vow, broken: true } : run.vow;
 

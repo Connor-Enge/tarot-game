@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { CARDS, setKnownCards, scoreSlot, currentScene, hasRelic } from './engine';
+import { CARDS, setKnownCards, scoreSlot, currentScene, hasRelic, type TableLay } from './engine';
 setKnownCards(CARDS.map((c) => c.id));
 import { sfx, startDrone, stopDrone } from './audio';
 import { clearRun, loadRun, saveRun } from './persist';
@@ -88,6 +88,10 @@ interface GameStore {
   lifted: number | null;
   /** Card opened in the Codex detail view. */
   codexOpen: string | null;
+  /** A scene and lay handed to the Table in the Codex. */
+  tableSeed: { sceneId: string; lay: TableLay } | null;
+  openTable: (sceneId: string, lay: TableLay) => void;
+  clearTableSeed: () => void;
   /** Chosen descent variant for free runs. */
   descent: string;
   /** Depth (difficulty tier) for the standard descent. */
@@ -208,6 +212,9 @@ export const useGame = create<GameStore>((set, get) => ({
   knowledge: loadKnowledge(),
   lifted: null,
   codexOpen: null,
+  tableSeed: null,
+  openTable: (sceneId, lay) => { sfx.page(); set({ tableSeed: { sceneId, lay }, screen: 'codex', codexOpen: null }); },
+  clearTableSeed: () => set({ tableSeed: null }),
   descent: 'standard',
   depth: 0,
   setDepth: (n) => set({ depth: n }),
