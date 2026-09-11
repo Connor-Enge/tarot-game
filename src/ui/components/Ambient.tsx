@@ -39,6 +39,12 @@ export function Ambient() {
       last = t;
       const rootStyle = getComputedStyle(document.documentElement);
       const hue = rootStyle.getPropertyValue('--mote-hue').trim() || rootStyle.getPropertyValue('--scene-hue') || '260';
+      // The scene's kind changes what drifts: embers, leaves, sparks, or the usual dust.
+      const kind = rootStyle.getPropertyValue('--mote-kind').trim().replace(/"/g, '');
+      const ember = kind === 'threat';
+      const leaf = kind === 'rest';
+      const spark = kind === 'mystery';
+      const deep = kind === 'abyss';
       ctx.clearRect(0, 0, w, h);
       for (const m of motes) {
         if (!reduce) {
@@ -55,17 +61,35 @@ export function Ambient() {
               m.y += (dy / len) * f * dt * (w / h);
             }
           }
-          m.x += m.vx * dt;
-          m.y += m.vy * dt;
-          m.p += dt * 0.002;
+          const sway = leaf ? Math.sin(m.p * 0.7) * 0.00012 : 0;
+          m.x += (m.vx + sway) * dt;
+          m.y += m.vy * (ember ? 2.2 : leaf ? -0.9 : deep ? 0.4 : 1) * dt;
+          m.p += dt * (spark ? 0.005 : 0.002);
           if (m.y < -0.02) { m.y = 1.02; m.x = Math.random(); }
+          if (m.y > 1.02) { m.y = -0.02; m.x = Math.random(); }
           if (m.x < -0.02) m.x = 1.02;
           if (m.x > 1.02) m.x = -0.02;
         }
         const a = 0.25 + 0.2 * Math.sin(m.p);
         ctx.beginPath();
-        ctx.fillStyle = `hsla(${hue.trim()}, 60%, 80%, ${a})`;
-        ctx.arc(m.x * w, m.y * h, m.r, 0, Math.PI * 2);
+        if (ember) {
+          const flick = 0.5 + 0.5 * Math.sin(m.p * 3 + m.r);
+          ctx.fillStyle = `hsla(${22 + m.r * 8}, 95%, ${55 + flick * 15}%, ${0.35 + 0.4 * flick})`;
+          ctx.arc(m.x * w, m.y * h, m.r * 0.9, 0, Math.PI * 2);
+        } else if (leaf) {
+          ctx.fillStyle = `hsla(${88 + m.r * 10}, 45%, 62%, ${0.3 + 0.25 * Math.sin(m.p)})`;
+          ctx.ellipse(m.x * w, m.y * h, m.r * 2.2, m.r * 1.1, m.p, 0, Math.PI * 2);
+        } else if (spark) {
+          const tw = Math.max(0, Math.sin(m.p));
+          ctx.fillStyle = `hsla(268, 80%, 82%, ${0.15 + 0.7 * tw})`;
+          ctx.arc(m.x * w, m.y * h, m.r * (0.7 + tw), 0, Math.PI * 2);
+        } else if (deep) {
+          ctx.fillStyle = `hsla(45, 70%, 75%, ${a * 0.9})`;
+          ctx.arc(m.x * w, m.y * h, m.r * 1.2, 0, Math.PI * 2);
+        } else {
+          ctx.fillStyle = `hsla(${hue.trim()}, 60%, 80%, ${a})`;
+          ctx.arc(m.x * w, m.y * h, m.r, 0, Math.PI * 2);
+        }
         ctx.fill();
       }
       raf = requestAnimationFrame(frame);

@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect } from 'react';
-import { currentAct, currentNode, getCard, SCENES } from './engine';
+import { currentAct, currentNode, getCard, SCENES, currentScene } from './engine';
 import { setHeartbeat } from './audio';
 import { useSettings } from './settings';
 import { useGame } from './store';
@@ -38,6 +38,8 @@ function useSceneHue() {
       if (run.phase.kind === 'ascended') hue = 45;
     }
     document.documentElement.style.setProperty('--scene-hue', String(hue));
+    const inScene = screen === 'run' && run && run.node !== null && (run.phase.kind === 'reading' || run.phase.kind === 'resolved' || run.phase.kind === 'relic');
+    document.documentElement.style.setProperty('--mote-kind', inScene ? currentScene(run).kind : '');
   }, [run, screen, fixedTint]);
 }
 
