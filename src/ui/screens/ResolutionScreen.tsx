@@ -1,4 +1,4 @@
-import { currentScene, getCard, getRelic, isPeddlerTrade, SLOT_IDS, SLOTS, tradeText } from '../../engine';
+import { currentScene, getCard, getRelic, isPeddlerTrade, SLOT_IDS, SLOTS, tradeText, type Trade } from '../../engine';
 import { PeddlerArt, StrangerArt } from '../art/stranger';
 
 const TIER_GLYPH = { calamity: '✖', harm: '▽', neutral: '◇', boon: '△', triumph: '★' } as const;
@@ -115,10 +115,15 @@ function ResolutionScreenInner() {
           </p>
         )}
         {trade && (
-          <div className="trade rise" style={{ animationDelay: `${500 + resolution.narration.length * step}ms` }}>
-            {isPeddlerTrade(trade) ? <PeddlerArt className="trade__art" /> : <StrangerArt className="trade__art" />}
+          <div className={`trade rise ${isPeddlerTrade(trade) ? 'trade--peddler' : 'trade--stranger'}`} style={{ animationDelay: `${500 + resolution.narration.length * step}ms` }}>
+            <span className="trade__socket">{isPeddlerTrade(trade) ? <PeddlerArt className="trade__art" /> : <StrangerArt className="trade__art" />}</span>
             <div className="trade__body">
               <p className="trade__lead">{isPeddlerTrade(trade) ? 'A peddler has laid a cloth on the nearest stall. They have a price.' : 'Someone is already sitting by the fire. They have a trade.'}</p>
+              <div className="trade__ledger" aria-hidden>
+                <span className="trade__chip trade__chip--give">{tradeChips(trade)[0]}</span>
+                <span className="trade__arrow">⟶</span>
+                <span className="trade__chip trade__chip--get">{tradeChips(trade)[1]}</span>
+              </div>
               <p className="trade__text">
                 {tradeText(trade)}
                 {trade.id === 'swap-boon' && <span className="muted"> {getRelic(trade.give).name} for {getRelic(trade.get).name}: {getRelic(trade.get).text}</span>}
@@ -160,6 +165,18 @@ function ResolutionScreenInner() {
 }
 
 const fmt = (n: number) => (n > 0 ? `+${n}` : `${n}`);
+
+/** What goes and what comes, as two short chips. */
+function tradeChips(t: Trade): [string, string] {
+  switch (t.id) {
+    case 'clarity-for-vitality': return [`◈ ${t.give}`, `♥ ${t.get}`];
+    case 'swap-boon': return [getRelic(t.give).name, getRelic(t.get).name];
+    case 'lift-curse': return [`♥ ${t.give}`, `rid of ${getRelic(t.curse).name}`];
+    case 'bless-hand': return [`◈ ${t.give}`, `${getCard(t.cardId).name}, blessed`];
+    case 'vitality-for-clarity': return [`♥ ${t.give}`, `◈ ${t.get}`];
+    case 'scar-for-boon': return [`${getCard(t.cardId).name}, scarred`, getRelic(t.get).name];
+  }
+}
 
 /** Screens can linger for a crossfade after the run ends; render nothing without a run. */
 export function ResolutionScreen() {

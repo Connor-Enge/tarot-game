@@ -1531,3 +1531,28 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 
 /* --- title: a small vignette for the day's weather -------------------------- */
 .weather__art { display: block; width: 150px; height: auto; margin: 6px auto -2px; opacity: 0.9; }
+
+/* --- the trade card: a socket for the trader, a ledger of what goes and comes --- */
+.trade { position: relative; padding: 14px; gap: 14px; border-radius: 16px; overflow: hidden; }
+.trade--stranger { background: radial-gradient(70% 80% at 0% 100%, rgba(243,220,138,0.14), transparent 60%), rgba(214,178,94,0.05); }
+.trade--peddler {
+  background:
+    repeating-linear-gradient(90deg, transparent 0 14px, rgba(214,178,94,0.05) 14px 15px),
+    linear-gradient(180deg, rgba(214,178,94,0.09), rgba(214,178,94,0.03));
+  border-color: rgba(214,178,94,0.45);
+}
+.trade--peddler::before { content: ''; position: absolute; inset: 5px; border-radius: 12px; border: 1px dashed rgba(214,178,94,0.25); pointer-events: none; }
+.trade__socket {
+  flex: 0 0 64px; width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center;
+  background: radial-gradient(circle at 50% 40%, rgba(214,178,94,0.16), rgba(0,0,0,0.35) 70%);
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(214,178,94,0.35), 0 0 16px rgba(214,178,94,0.12);
+}
+.trade--stranger .trade__socket { animation: lantern-flicker 3.2s ease-in-out infinite; }
+.trade__socket .trade__art { width: 54px; height: 54px; }
+.trade__lead { font-variant: small-caps; letter-spacing: 0.04em; color: var(--gold); font-size: 0.9rem; }
+.trade__ledger { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 2px 0; }
+.trade__chip { font-size: 0.8rem; padding: 3px 9px; border-radius: 999px; border: 1px solid rgba(233,228,242,0.18); background: rgba(0,0,0,0.25); color: var(--ink); }
+.trade__chip--give { border-color: rgba(214,96,94,0.45); color: #f0a09e; }
+.trade__chip--get { border-color: rgba(214,178,94,0.55); color: var(--gold-2); }
+.trade__arrow { color: var(--gold); opacity: 0.7; }
+.trade .btn--small { align-self: flex-start; }
