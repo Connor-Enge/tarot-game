@@ -435,11 +435,14 @@ function resolve(run: RunState): RunState {
   const baseScene = currentScene(run);
   const baseStakes = baseScene.terminal && run.mods.abyssStakes ? run.mods.abyssStakes : baseScene.stakes;
   const scene = { ...baseScene, stakes: baseStakes + (run.well ?? 0) };
-  const resolution = resolveReading(scene, reading, run.marks, {
+  const read = resolveReading(scene, reading, run.marks, {
     chargedBonus: hasRelic(run, 'ring') ? 2 : undefined,
     extraNeutralCost: (hasRelic(run, 'weight') ? 1 : 0) + run.mods.extraNeutralCost || undefined,
     mendBonus: (hasRelic(run, 'bread') ? 2 : 0) - (hasRelic(run, 'ash') ? 1 : 0) || undefined,
   });
+  // The Well's toll: every reading below the first Abyss costs one vitality per Abyss passed, however it went.
+  const toll = run.well ?? 0;
+  const resolution = toll ? { ...read, deltas: { ...read.deltas, vitality: read.deltas.vitality - toll } } : read;
   const vitality = run.vitality + resolution.deltas.vitality;
   const clarity = clampClarity(run, run.clarity + resolution.deltas.clarity);
   // Reveal anything chosen blind.

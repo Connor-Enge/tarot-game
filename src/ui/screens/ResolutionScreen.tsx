@@ -131,7 +131,7 @@ function ResolutionScreenInner() {
         {traded && <p className="trade__done muted small rise">You shake on it. They do not look up.</p>}
         {scene.terminal && run.well !== undefined && (
           <p className="under rise" style={{ animationDelay: `${300 + resolution.narration.length * step}ms` }}>
-            <span className="under__mark" aria-hidden>⨀</span> There is no surface here. The dark opens again beneath you, and you take one breath before it. <span className="stat--vit">♥ +2</span>
+            <span className="under__mark" aria-hidden>⨀</span> There is no surface here. The dark opens again beneath you, and you take one breath before it. <span className="stat--vit">♥ +2</span> From here every reading costs <span className="stat--vit">♥ {(run.well ?? 0) + 1}</span> more, however it goes.
           </p>
         )}
         <p className="deltas rise" style={{ animationDelay: `${400 + resolution.narration.length * step}ms` }}>

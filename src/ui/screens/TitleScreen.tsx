@@ -140,10 +140,14 @@ export function TitleScreen() {
           {!lockedNote && k.records?.[current.id] && (
             <div className="record" aria-label="your record on this road">
               <span className="record__cell"><b>{k.records[current.id].runs}</b><span className="muted small">down</span></span>
-              <span className="record__cell"><b>{k.records[current.id].returns}</b><span className="muted small">back</span></span>
+              {current.config.endless ? (
+                <span className="record__cell"><b>{(k.records[current.id].best?.road?.match(/◉/g) ?? []).length}</b><span className="muted small">abysses</span></span>
+              ) : (
+                <span className="record__cell"><b>{k.records[current.id].returns}</b><span className="muted small">back</span></span>
+              )}
               <span className="record__cell"><b>{k.records[current.id].bestDepth}</b><span className="muted small">deepest</span></span>
-              <span className="record__rate" title="returns over descents">
-                <span className="record__rate-bar" style={{ width: `${Math.round((100 * k.records[current.id].returns) / Math.max(1, k.records[current.id].runs))}%` }} />
+              <span className="record__rate" title={current.config.endless ? 'the well has no way back' : 'returns over descents'}>
+                <span className="record__rate-bar" style={{ width: `${current.config.endless ? 0 : Math.round((100 * k.records[current.id].returns) / Math.max(1, k.records[current.id].runs))}%` }} />
               </span>
             </div>
           )}

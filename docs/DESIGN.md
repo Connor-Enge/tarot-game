@@ -482,8 +482,13 @@ two extra hearts.
 An endless descent, unlocked by three returns. The map is the usual two
 acts and an Abyss, but surviving the Abyss does not bring you up: a
 deeper map is appended under it, you take one breath (+2 vitality), and
-every scene from then on reads at stakes one higher than it would. The
-second Abyss adds another. There is no return and no ascension record;
+every scene from then on reads at stakes one higher than it would and
+costs a toll of one vitality per Abyss passed, however the reading went.
+The second Abyss adds another of each. Without the toll a strong reader
+banked vitality forever (the oracle policy never died); with it the curve
+from `scripts/sim-well.ts` at 300 runs is: random passes one Abyss 33% of
+the time and never two; majors-only reaches two 26%, five 3%; the oracle
+reaches six 85% and seven 23%. There is no return and no ascension record;
 the score is depth, kept in the Well's own record. Node ids and layers
 continue past the first map so the memory sheet, road strip, and journal
 work unchanged. The act banner names each turn of the Well. A sigil marks

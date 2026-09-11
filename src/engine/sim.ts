@@ -67,6 +67,12 @@ export interface SimResult {
   meanScenes: number;
   meanFinalVitality: number;
   tiers: Record<OutcomeTier, number>;
+  /** Longest road among the runs. */
+  maxScenes: number;
+  /** Mean Abysses passed (the Well only; 0 elsewhere). */
+  meanWell: number;
+  /** How many runs passed at least N Abysses, by N. */
+  wellDepths: number[];
 }
 
 export interface SimOptions {
@@ -85,11 +91,14 @@ export function simulate(n: number, pick: Policy, node: NodePolicy = randomNode,
   let vit = 0;
   const tiers = Object.fromEntries(TIERS.map((t) => [t, 0])) as Record<OutcomeTier, number>;
   let vowsKept = 0;
+  let maxScenes = 0;
+  let wellSum = 0;
+  const wellDepths: number[] = [];
   for (let i = 0; i < n; i++) {
     let run = startRun(rng.int(0xffffffff), { ...config, signature: opts.signature ?? config.signature });
     if (opts.vow) run = takeVow(run, vowOffer(run.seed)[0]);
     let guard = 0;
-    while (!isOver(run) && guard++ < 60) {
+    while (!isOver(run) && guard++ < (config.endless ? 400 : 60)) {
       if (run.phase.kind === 'map') run = chooseNode(run, node(run, rng));
       while (run.phase.kind === 'reading') run = chooseCandidate(run, pick(run, rng));
       if (run.phase.kind === 'resolved' && opts.trade && run.phase.trade) run = acceptTrade(run);
@@ -101,8 +110,12 @@ export function simulate(n: number, pick: Policy, node: NodePolicy = randomNode,
     if (run.vow?.kept) vowsKept++;
     scenes += run.history.length;
     vit += run.vitality;
+    maxScenes = Math.max(maxScenes, run.history.length);
+    const w = run.well ?? 0;
+    wellSum += w;
+    for (let d = 0; d <= w; d++) wellDepths[d] = (wellDepths[d] ?? 0) + 1;
   }
-  return { runs: n, survived, meanScenes: scenes / n, meanFinalVitality: vit / n, tiers, vowsKept };
+  return { runs: n, survived, meanScenes: scenes / n, meanFinalVitality: vit / n, tiers, vowsKept, maxScenes, meanWell: wellSum / n, wellDepths };
 }
 
 export function sceneSpread(): Record<string, { min: number; max: number }> {
