@@ -839,3 +839,20 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .node__tier--boon { color: var(--gold); }
 .node__tier--harm { color: #e0a39a; }
 .node__tier--calamity { color: var(--vit); border-color: rgba(214,96,94,0.6); }
+
+/* --- title sky: the real moon, the hour's light ---------------------------- */
+.screen--title { position: relative; }
+.sky { position: absolute; left: 0; right: 0; top: 0; height: 150px; width: 100%; pointer-events: none; z-index: 0; opacity: 0; animation: fade-in 1500ms ease 200ms both; }
+.screen--title > .fan, .screen--title > .title { position: relative; z-index: 1; }
+.sky__star { animation: star-twinkle 4s ease-in-out infinite; }
+@keyframes star-twinkle { 0%, 100% { opacity: 0.25; } 50% { opacity: 0.85; } }
+.reduce-motion .sky__star { animation: none; }
+.screen--dawn::before, .screen--dusk::before, .screen--day::before {
+  content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+}
+.screen--dawn::before { background: radial-gradient(90% 50% at 20% 0%, rgba(214,150,120,0.18), transparent 60%); }
+.screen--dusk::before { background: radial-gradient(90% 50% at 80% 0%, rgba(214,120,94,0.16), transparent 60%); }
+.screen--day::before { background: radial-gradient(90% 50% at 50% 0%, rgba(214,178,94,0.1), transparent 60%); }
+.bond__strength { display: flex; gap: 2px; align-items: center; height: 8px; }
+.bond__strength i { width: 4px; height: 4px; border-radius: 50%; background: var(--gold); opacity: 0.8; }
+.bond--strong .card__inner { box-shadow: 0 0 0 1.5px var(--gold-2), 0 6px 18px rgba(0,0,0,0.5); }

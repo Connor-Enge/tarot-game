@@ -67,10 +67,13 @@ export function CodexDetail({ cardId, onClose }: { cardId: string; onClose: () =
           <div className="bonds">
             <div className="muted small">Read beside</div>
             <div className="bonds__row">
-              {bonds.map((b) => (
-                <button key={b.other} type="button" className="bond" onClick={() => openCodex(b.other)} aria-label={getCard(b.other).name}>
+              {bonds.map((b, i) => (
+                <button key={b.other} type="button" className={`bond ${i === 0 && b.n > 1 ? 'bond--strong' : ''}`} onClick={() => openCodex(b.other)} aria-label={`${getCard(b.other).name}, read beside this ${b.n} time${b.n === 1 ? '' : 's'}`}>
                   <Card cardId={b.other} size="xs" faceDown={!k.cards[b.other] && !k.dealt?.[b.other]} />
-                  <span className="muted small">×{b.n}</span>
+                  <span className="bond__strength" aria-hidden>
+                    {Array.from({ length: Math.min(5, b.n) }, (_, j) => <i key={j} />)}
+                    {b.n > 5 && <span className="muted small">+</span>}
+                  </span>
                 </button>
               ))}
             </div>

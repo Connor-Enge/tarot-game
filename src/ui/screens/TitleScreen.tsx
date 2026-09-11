@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { CARDS, dailySeed, dailyStreakAlive, DEPTHS, DESCENTS, getCard, getDescent, maxDepthUnlocked } from '../../engine';
+import { CARDS, dailySeed, dailyStreakAlive, daylight, DEPTHS, DESCENTS, getCard, getDescent, maxDepthUnlocked } from '../../engine';
+import { TitleSky } from '../art/sky';
 import { ReaderMark } from '../components/ReaderMark';
 import { useGame } from '../../store';
 import { Card } from '../components/Card';
@@ -40,6 +41,7 @@ export function TitleScreen() {
     };
   }, []);
   const known = Object.values(k.cards).filter((c) => c.tier > 0).length;
+  const light = daylight();
   const current = getDescent(descent);
   const anyUnlocked = DESCENTS.some((d, i) => i > 0 && d.unlocked(k));
   const { today, todayLabel } = useMemo(() => {
@@ -56,7 +58,8 @@ export function TitleScreen() {
   }, [k.runs]);
 
   return (
-    <main className="screen screen--title">
+    <main className={`screen screen--title screen--${light}`}>
+      <TitleSky light={light} />
       <div className={`fan ${today === 'major-0' ? 'fan--fool' : ''}`} aria-hidden onClick={() => setFanDown((d) => !d)}>
         {fan.map((id, i) => (
           <div key={id} className={`fan__card ${fanDown ? 'fan__card--down' : ''}`} style={{ '--i': i } as React.CSSProperties}>
