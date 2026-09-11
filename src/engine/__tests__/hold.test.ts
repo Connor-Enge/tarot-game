@@ -21,7 +21,7 @@ describe('hold', () => {
     expect(it.reversed).toBe(held.reversed);
     expect(run.held).toBeNull();
   });
-  it('is never allowed at the Wake, nor on the last card, nor without Clarity', () => {
+  it('is never allowed at the last seat, nor on the last card, nor without Clarity', () => {
     let run = start(2);
     for (let i = 0; i < 3; i++) run = chooseCandidate(run, 0);
     expect(run.activeSlot).toBe(3);

@@ -384,8 +384,8 @@ const list = (tags: readonly string[]) => (tags.length === 0 ? '' : tags.length 
 const OPENER: Record<SlotId, (want: string, fear: string) => string> = {
   vessel: (want, fear) => `The situation called for ${want}${fear ? `, and could not bear ${fear}` : ''}.`,
   threshold: (want, fear) => `What stood in the way answered to ${want}${fear ? `, and turned worse with ${fear}` : ''}.`,
-  hand: (want, fear) => `What you might have missed here was ${want}${fear ? `; ${fear} would have blinded you` : ''}.`,
-  wake: (want, fear) => `The best course was ${want}${fear ? `, and the worst ${fear}` : ''}.`,
+  wake: (want, fear) => `What you might have missed here was ${want}${fear ? `; ${fear} would have blinded you` : ''}.`,
+  hand: (want, fear) => `The best course was ${want}${fear ? `, and the worst ${fear}` : ''}.`,
 };
 
 /** Two plain sentences per seat, in the position's own terms: what it asked for, and what the card brought. */

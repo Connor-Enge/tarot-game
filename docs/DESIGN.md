@@ -48,7 +48,11 @@ Title ─► Scene prompt ─► Seat 1: 3 dealt, pick 1 ─► Seat 2 ─► Se
 **Laid as a mini cross** (owner's request, matching their guide book):
 seat 1, the Situation, sits in the centre; seat 2, the Challenge, above
 it; seat 3, the Hidden Insight, to the left; seat 4, the Guidance, to
-the right. They are dealt in that order. The positions are shown
+the right. They are dealt in that order. The Wake (what follows,
+unseen) takes the Hidden Insight, and the Hand (what you do) takes the
+Guidance, because the scenes' affinities were already written that way:
+the Hand asks for courses of action, the Wake for what comes after. So
+`SLOT_IDS` deals vessel, threshold, wake, hand. The positions are shown
 always (number and role); the seats' own names still wait for
 `seatsNamed`.
 

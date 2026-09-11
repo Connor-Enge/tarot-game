@@ -36,7 +36,7 @@ describe('the reckoning', () => {
   it('numbers the seats as a mini cross', () => {
     expect(SLOT_POSITION.vessel.n).toBe(1);
     expect(SLOT_POSITION.threshold.n).toBe(2);
-    expect(SLOT_POSITION.hand.n).toBe(3);
-    expect(SLOT_POSITION.wake.n).toBe(4);
+    expect(SLOT_POSITION.wake.n).toBe(3);
+    expect(SLOT_POSITION.hand.n).toBe(4);
   });
 });

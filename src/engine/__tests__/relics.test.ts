@@ -19,10 +19,10 @@ describe('relics', () => {
     expect(run.slots[0].candidates.filter((c) => c.hidden).length).toBe(1);
     run = chooseCandidate(run, 0); // -> threshold
     expect(run.slots[1].candidates.length).toBe(4);
-    run = chooseCandidate(run, 0); // -> hand
-    expect(run.slots[2].candidates.every((c) => !c.reversed)).toBe(true);
-    run = chooseCandidate(run, 0); // -> wake
-    expect(run.slots[3].candidates.length).toBe(4);
+    run = chooseCandidate(run, 0); // -> wake (seat 3)
+    expect(run.slots[2].candidates.length).toBe(4);
+    run = chooseCandidate(run, 0); // -> hand (seat 4)
+    expect(run.slots[3].candidates.every((c) => !c.reversed)).toBe(true);
   });
 
   it('lodestone deals four to the Vessel; feather halves reversals; still water drops the echo; tallow taxes walking on', () => {

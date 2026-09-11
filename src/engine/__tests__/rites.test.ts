@@ -29,8 +29,10 @@ describe('rites', () => {
   it('Moonlit deals one more to the Wake only', () => {
     let run = enter(3, 'hollow');
     expect(run.slots[0].candidates.length).toBe(3);
-    for (let i = 0; i < 3; i++) run = chooseCandidate(run, 0);
-    expect(run.slots[3].candidates.length).toBe(4);
+    for (let i = 0; i < 2; i++) run = chooseCandidate(run, 0);
+    expect(run.slots[2].candidates.length).toBe(4);
+    run = chooseCandidate(run, 0);
+    expect(run.slots[3].candidates.length).toBe(3);
   });
   it('the Hush allows no whisper', () => {
     const run = enter(4, 'library');

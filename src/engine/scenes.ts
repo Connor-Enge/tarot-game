@@ -10,7 +10,8 @@ import type { Tag } from './cards';
  *  Wake      - what follows
  */
 export type SlotId = 'vessel' | 'threshold' | 'hand' | 'wake';
-export const SLOT_IDS: readonly SlotId[] = ['vessel', 'threshold', 'hand', 'wake'];
+/** Dealt in this order: 1 the Situation, 2 the Challenge, 3 the Hidden Insight (the Wake), 4 the Guidance (the Hand). */
+export const SLOT_IDS: readonly SlotId[] = ['vessel', 'threshold', 'wake', 'hand'];
 
 export interface SlotDef {
   id: SlotId;
@@ -29,14 +30,15 @@ export const SLOTS: Record<SlotId, SlotDef> = {
 /**
  * The seats as positions in a Mini Cross spread, numbered in the order
  * they are dealt: 1 the Situation (centre), 2 the Challenge (above it),
- * 3 the Hidden Insight (left), 4 the Guidance (right). Positions are
- * layout, not meaning, so they are always shown.
+ * 3 the Hidden Insight (left), 4 the Guidance (right). The Wake, what
+ * follows unseen, is the Hidden Insight; the Hand, what you do, is the
+ * Guidance. Positions are layout, not meaning, so they are always shown.
  */
 export const SLOT_POSITION: Record<SlotId, { n: number; role: string; gloss: string }> = {
   vessel: { n: 1, role: 'Situation', gloss: 'the main theme' },
   threshold: { n: 2, role: 'Challenge', gloss: 'what blocks or influences you' },
-  hand: { n: 3, role: 'Hidden insight', gloss: 'what you may not notice' },
-  wake: { n: 4, role: 'Guidance', gloss: 'the best advice or direction' },
+  wake: { n: 3, role: 'Hidden insight', gloss: 'what you may not notice: what follows in your wake' },
+  hand: { n: 4, role: 'Guidance', gloss: 'the best advice or direction: what you do' },
 };
 
 /** How strongly a scene rewards (or punishes) a tag in a given seat. */
