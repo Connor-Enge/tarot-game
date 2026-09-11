@@ -8,16 +8,17 @@ const MARK: Record<OutcomeTier, string> = { calamity: '✖', harm: '▽', neutra
  * Rings, notches, the tier's mark, and its word around the rim. Colour
  * follows the tier; the words are the same the map and the book use.
  */
-export function VerdictSeal({ tier, className = '' }: { tier: OutcomeTier; className?: string }) {
+export function VerdictSeal({ tier, word, className = '' }: { tier: OutcomeTier; word?: string; className?: string }) {
+  const rim = word ?? WORD[tier];
   const notches = Array.from({ length: 24 }, (_, i) => {
     const a = (i / 24) * Math.PI * 2;
     const r1 = i % 6 === 0 ? 50 : 53;
     return <line key={i} x1={60 + Math.cos(a) * r1} y1={60 + Math.sin(a) * r1} x2={60 + Math.cos(a) * 57} y2={60 + Math.sin(a) * 57} stroke="currentColor" strokeWidth={i % 6 === 0 ? 1.4 : 0.8} strokeLinecap="round" />;
   });
-  const arc = `verdict-arc-${tier}`;
-  const arcLow = `verdict-arc-low-${tier}`;
+  const arc = `verdict-arc-${tier}-${rim}`;
+  const arcLow = `verdict-arc-low-${tier}-${rim}`;
   return (
-    <svg viewBox="0 0 120 120" className={`verdict ${className}`} aria-label={`the reading went: ${WORD[tier]}`} role="img">
+    <svg viewBox="0 0 120 120" className={`verdict ${className}`} aria-label={`the reading went: ${rim}`} role="img">
       <defs>
         <path id={arc} d="M22 60 a38 38 0 0 1 76 0" />
         <path id={arcLow} d="M22 60 a38 38 0 0 0 76 0" />
@@ -29,10 +30,10 @@ export function VerdictSeal({ tier, className = '' }: { tier: OutcomeTier; class
       {notches}
       <text fontSize={8.5} letterSpacing={3.2} fill="currentColor" fontFamily="Georgia, serif" fontVariant="small-caps">
         <textPath href={`#${arc}`} startOffset="50%" textAnchor="middle">
-          {WORD[tier]}
+          {rim}
         </textPath>
         <textPath href={`#${arcLow}`} startOffset="50%" textAnchor="middle">
-          {WORD[tier]}
+          {rim}
         </textPath>
       </text>
       <text x={60} y={60} fontSize={26} textAnchor="middle" dominantBaseline="central" fill="currentColor" fontFamily="Georgia, serif">

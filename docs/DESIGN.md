@@ -299,7 +299,9 @@ Codex detail for its card. Still only what you have earned.
 **The verdict seal**: once a reading is read, a wax seal presses onto
 the resolution screen under the deltas: rings, notches, the tier's mark,
 its word around the rim, coloured by tier (gold for triumph, blood for
-calamity). The same marks and words the map and the book use.
+calamity). The same marks and words the map and the book use. The end
+screen presses a smaller one under the outcome, its rim reading
+"fallen" or "returned".
 
 **Larger cards** setting for the hand.
 

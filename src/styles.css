@@ -1838,3 +1838,6 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .verdict-wrap--calamity .verdict { color: var(--vit); filter: drop-shadow(0 0 14px rgba(214,96,94,0.45)); }
 @keyframes seal-press { 0% { opacity: 0; transform: scale(2.2) rotate(8deg); } 55% { opacity: 1; } 100% { opacity: 0.92; transform: scale(1) rotate(0); } }
 .reduce-motion .verdict-wrap { animation: none; opacity: 0.92; }
+
+.end__seal { padding: 0 0 4px; }
+.end__seal .verdict { width: 84px; height: 84px; }

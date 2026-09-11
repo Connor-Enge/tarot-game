@@ -6,6 +6,7 @@ import { RelicArt } from '../art/relics';
 import { SigilToken } from '../art/sigil';
 import { RoadStrip } from '../art/road';
 import { EndArt } from '../art/scenes';
+import { VerdictSeal } from '../art/verdict';
 import { renderSpreadImage } from '../art/render';
 import { MemorySheet } from '../components/Memory';
 import { useSettings } from '../../settings';
@@ -118,6 +119,9 @@ function RunEndScreenInner() {
           <span className="narration__death"> It cost only a little. It was the last little you had.</span>
         )}
       </p>
+      <div className={`verdict-wrap verdict-wrap--${run.phase.resolution.tier} end__seal`} style={{ animationDelay: '900ms' }} aria-hidden>
+        <VerdictSeal tier={run.phase.resolution.tier} word={dead ? 'fallen' : 'returned'} />
+      </div>
       {(() => {
         const wake = last.reading.wake;
         const wakeCard = getCard(wake.cardId);
