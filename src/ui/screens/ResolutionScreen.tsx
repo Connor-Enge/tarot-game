@@ -2,7 +2,7 @@ import { currentScene, getCard, getRelic, isPeddlerTrade, SLOT_IDS, SLOTS, trade
 import { PeddlerArt, StrangerArt } from '../art/stranger';
 
 const TIER_GLYPH = { calamity: '✖', harm: '▽', neutral: '◇', boon: '△', triumph: '★' } as const;
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { sfx } from '../../audio';
 import { useSettings } from '../../settings';
 import { useGame } from '../../store';
@@ -29,6 +29,20 @@ function ResolutionScreenInner() {
     const t = window.setTimeout(() => sfx.stranger(), 500 + narrationLen * 400);
     return () => window.clearTimeout(t);
   }, [hasTrade, narrationLen]);
+  // The seal's thud lands when the seal does; tapping to reveal all brings it forward.
+  const sealTier = run.phase.kind === 'resolved' ? run.phase.resolution.tier : null;
+  const sealTerminal = run.phase.kind === 'resolved' && run.node !== null ? currentScene(run).terminal : false;
+  const sealPlayed = useRef(false);
+  useEffect(() => {
+    if (!sealTier || sealPlayed.current) return;
+    const paceNow = readingSpeed === 'slow' ? 1.5 : readingSpeed === 'fast' ? 0.45 : 1;
+    const delay = revealAll ? 150 : 700 + narrationLen * Math.round((sealTerminal ? 900 : 550) * paceNow);
+    const t = window.setTimeout(() => {
+      sealPlayed.current = true;
+      sfx.seal(sealTier);
+    }, delay);
+    return () => window.clearTimeout(t);
+  }, [sealTier, sealTerminal, narrationLen, revealAll, readingSpeed]);
   if (run.phase.kind !== 'resolved') return null;
   const { resolution, cursed, offer, found, trade, traded } = run.phase;
   const curse = cursed ? getRelic(cursed) : null;

@@ -204,6 +204,15 @@ export const sfx = {
     noise(0.1, 0.05, 0, 400);
     tone(196, 0.4, 'triangle', 0.05);
   },
+  /** The verdict seal pressed: a soft wax thud, and a note that follows the tier. */
+  seal: (tier: 'calamity' | 'harm' | 'neutral' | 'boon' | 'triumph' = 'neutral') => {
+    noise(0.14, 0.07, 0, 420);
+    tone(82, 0.5, 'sine', 0.06);
+    if (tier === 'triumph') [1046.5, 1568].forEach((f, i) => tone(f, 0.7, 'sine', 0.035, 0.12 + i * 0.1));
+    else if (tier === 'boon') tone(784, 0.6, 'sine', 0.03, 0.12);
+    else if (tier === 'harm') tone(196, 0.6, 'triangle', 0.04, 0.1, -8);
+    else if (tier === 'calamity') { tone(110, 0.9, 'triangle', 0.05, 0.08, -14); noise(0.3, 0.04, 0.1, 240); }
+  },
   /** A new act opens: a deep gong. */
   banner: () => {
     tone(55, 3.2, 'sine', 0.08);

@@ -158,7 +158,9 @@ produced. There are 17. The Codex shows only the ones you have caused.
 orientation you have watched resolve, even at tier 0. Omens are the
 sanctioned leak, so they are the first thing you get to keep.
 
-**Sound** (`audio.ts`): all synthesized. A low drone runs during a run;
+**Sound** (the verdict seal lands with a wax thud and a note that
+follows the tier: a bright pair for triumph, a low cracked knock for
+calamity) (`audio.ts`): all synthesized. A low drone runs during a run;
 short stings for lift, place, whisper, node, redraw, and one per outcome
 tier. Off switch in Settings, persisted.
 
@@ -492,7 +494,8 @@ Every surface that can show text about a card, and what gates it:
 The title shows the day's weather as a small sky: a gradient tinted by
 the weather, a few stars, tonight's moon drawn at its true phase, and the
 weather's vignette on the ground line. The three forecast lines sit
-under it.
+under it. The stars in it twinkle. In the Codex grid, known cards glow
+by tier: a gold rim at two, a halo at three.
 
 The daily seed also picks the card of the day, shown on the title, and
 that card is charged in the Daily: upright when dealt, and a little
