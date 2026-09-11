@@ -73,7 +73,12 @@ export function CodexScreen() {
         </button>
       </div>
       {view === 'study' && <Study />}
-      {view === 'sky' && <Constellation knowledge={k} />}
+      {view === 'sky' && (
+        <Constellation
+          knowledge={k}
+          live={run ? Array.from(new Set(run.history.flatMap((h) => SLOT_IDS.map((sl) => h.reading[sl].cardId)))) : []}
+        />
+      )}
       {view === 'book' && <OmenBook onOpen={openCodex} />}
       {view === 'cards' && (<>
       <div className="suits" aria-label="known cards by suit">

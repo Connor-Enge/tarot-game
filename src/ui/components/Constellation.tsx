@@ -10,7 +10,8 @@ const SUIT_TINT = { wands: '#e0a068', cups: '#8fc3e0', swords: '#d8d9e8', pentac
  * spiral. Stars light as cards are seen and brighten as they are known.
  * Lines join cards that have sat in the same reading. Your readings, as a sky.
  */
-export function Constellation({ knowledge: k }: { knowledge: Knowledge }) {
+export function Constellation({ knowledge: k, live = [] }: { knowledge: Knowledge; live?: string[] }) {
+  const liveSet = new Set(live);
   const [focus, setFocus] = useState<string | null>(null);
   const pos = useMemo(() => {
     const out: Record<string, { x: number; y: number }> = {};
@@ -71,6 +72,7 @@ export function Constellation({ knowledge: k }: { knowledge: Knowledge }) {
               {seen && tier >= 2 && <circle cx={p.x} cy={p.y} r={r * 2.4} fill={suitTint} opacity={0.14} />}
               <circle cx={p.x} cy={p.y} r={r} fill={fill} className={tier >= 3 ? 'sky__star--mastered' : undefined} />
               {focus === c.id && <circle cx={p.x} cy={p.y} r={r + 3} fill="none" stroke="#f3dc8a" strokeWidth={0.8} />}
+              {liveSet.has(c.id) && <circle cx={p.x} cy={p.y} r={r + 4.5} fill="none" stroke="#8fc3e0" strokeWidth={0.9} className="sky__live" />}
             </g>
           );
         })}
@@ -81,7 +83,7 @@ export function Constellation({ knowledge: k }: { knowledge: Knowledge }) {
           ? `${getCard(focus).name} · read alongside ${focusSet.size - 1} other card${focusSet.size === 2 ? '' : 's'}`
           : links.length === 0
             ? 'Every reading you make joins its four cards here.'
-            : `${Object.values(k.cards).filter((c) => c.tier > 0).length} lit · ${links.length} bonds · tap a star`}
+            : `${Object.values(k.cards).filter((c) => c.tier > 0).length} lit · ${links.length} bonds${live.length ? ` · ${live.length} on the last road` : ''} · tap a star`}
       </p>
     </div>
   );

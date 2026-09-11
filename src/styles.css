@@ -1186,3 +1186,8 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 /* --- act banner: the road so far ------------------------------------------- */
 .act-banner__road { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px 14px 10px; border-top: 1px solid rgba(214,178,94,0.2); }
 .act-banner__road .road { max-width: 300px; }
+
+/* --- sky: the road being written ------------------------------------------ */
+.sky__live { animation: live-ring 2.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+@keyframes live-ring { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+.reduce-motion .sky__live { animation: none; opacity: 0.8; }
