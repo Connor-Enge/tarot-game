@@ -204,6 +204,18 @@ export const sfx = {
     noise(0.1, 0.05, 0, 400);
     tone(196, 0.4, 'triangle', 0.05);
   },
+  /** A card lands and the seat answers: a rising pair when it served, a dull knock when it cost, a soft tick otherwise. */
+  seat: (verdict: 'helped' | 'hurt' | 'neither') => {
+    if (verdict === 'helped') {
+      tone(659, 0.28, 'sine', 0.045);
+      tone(988, 0.42, 'sine', 0.035, 0.1);
+    } else if (verdict === 'hurt') {
+      noise(0.1, 0.05, 0, 380);
+      tone(147, 0.5, 'triangle', 0.055, 0.02, -10);
+    } else {
+      tone(440, 0.12, 'sine', 0.025);
+    }
+  },
   /** The verdict seal pressed: a soft wax thud, and a note that follows the tier. */
   seal: (tier: 'calamity' | 'harm' | 'neutral' | 'boon' | 'triumph' = 'neutral') => {
     noise(0.14, 0.07, 0, 420);

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { CARDS, setKnownCards } from './engine';
+import { CARDS, setKnownCards, scoreSlot, currentScene, hasRelic } from './engine';
 setKnownCards(CARDS.map((c) => c.id));
 import { sfx, startDrone, stopDrone } from './audio';
 import { clearRun, loadRun, saveRun } from './persist';
@@ -368,9 +368,17 @@ export const useGame = create<GameStore>((set, get) => ({
     const placedCard = placed ? getCard(placed.cardId) : null;
     const suit = placedCard ? (placedCard.arcana === 'major' ? 'major' : placedCard.suit) : undefined;
     const next = chooseCandidate(run, lifted);
+    // The seat answers at once: a sound and a buzz that say whether the card served or cost.
+    const verdict = placed
+      ? (() => {
+          const score = scoreSlot(currentScene(run), run.slots[run.activeSlot].slot, placed, run.marks, hasRelic(run, 'ring') ? 2 : undefined).score;
+          return score >= 1 ? 'helped' : score <= -1 ? 'hurt' : 'neither';
+        })()
+      : 'neither';
     if (next.phase.kind === 'reading') {
-      buzz(10);
+      buzz(verdict === 'hurt' ? [20, 30, 40] : verdict === 'helped' ? [10, 20, 10] : 10);
       sfx.place(suit);
+      window.setTimeout(() => sfx.seat(verdict), 140);
       const k2 = noteDealt(knowledge, dealtIn(next));
       if (k2 !== knowledge) saveKnowledge(k2);
       set({ run: next, lifted: null, knowledge: k2 });

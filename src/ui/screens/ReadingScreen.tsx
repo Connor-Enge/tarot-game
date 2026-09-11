@@ -147,7 +147,7 @@ function ReadingScreenInner() {
           return (
             <div
               key={id}
-              className={`seat seat--${id} ${isActive ? 'seat--active' : ''} ${chosen ? 'seat--filled' : ''} ${isActive && dragOver ? 'seat--target' : ''} ${suitClass}`}
+              className={`seat seat--${id} ${isActive ? 'seat--active' : ''} ${chosen ? 'seat--filled' : ''} ${isActive && dragOver ? 'seat--target' : ''} ${suitClass} ${soFarBySlot[id] ? `seat--${soFarBySlot[id].reckoning.verdict}` : ''}`}
               style={{ '--seat': i } as React.CSSProperties}
               role="group"
               aria-label={`${seatsNamed ? SLOTS[id].name : `seat ${i + 1}`}${isActive ? ', choosing' : chosen ? ', placed' : ', empty'}`}
