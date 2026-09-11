@@ -470,8 +470,8 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .screen--abyss::after {
   content: ''; position: fixed; inset: 0; pointer-events: none; z-index: -1;
   background:
-    radial-gradient(90% 55% at 50% 108%, rgba(96,44,140,0.55), rgba(40,10,60,0.25) 45%, transparent 70%),
-    radial-gradient(40% 18% at 50% 100%, rgba(214,178,94,0.22), transparent 70%),
+    radial-gradient(90% 55% at 50% 108%, rgba(150,90,210,0.6), rgba(90,40,140,0.35) 40%, transparent 70%),
+    radial-gradient(40% 16% at 50% 100%, rgba(243,220,138,0.35), transparent 70%),
     linear-gradient(180deg, rgba(0,0,0,0.35), transparent 30%);
   animation: abyss-breathe 7s ease-in-out infinite;
 }
