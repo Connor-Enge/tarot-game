@@ -34,6 +34,8 @@ export interface Knowledge {
   combos?: string[];
   /** A mastered card the reader has made their own. */
   signature?: string;
+  /** The Chosen: a deck of known cards picked in the Codex for the descent of that name. */
+  chosen?: string[];
   /** Vows sworn: how often each was kept to the Abyss and how often broken. */
   vows?: Record<string, { kept: number; broken: number }>;
   /** Milestones earned. */
@@ -305,6 +307,22 @@ export function noteCombos(k: Knowledge, ids: string[]): Knowledge {
   return { ...k, combos: Array.from(new Set([...(k.combos ?? []), ...ids])) };
 }
 
+/** The Chosen needs at least this many cards. */
+export const CHOSEN_MIN = 30;
+
+/** Toggle a card in the Chosen deck. Only a known card (tier 1 or more) may be chosen. */
+export function toggleChosen(k: Knowledge, id: string): Knowledge {
+  const have = k.chosen ?? [];
+  if (have.includes(id)) return { ...k, chosen: have.filter((x) => x !== id) };
+  if ((k.cards[id]?.tier ?? 0) < 1) return k;
+  return { ...k, chosen: [...have, id] };
+}
+
+/** The Chosen deck as it stands: only cards still known. */
+export function chosenDeck(k: Knowledge): string[] {
+  return (k.chosen ?? []).filter((id) => (k.cards[id]?.tier ?? 0) >= 1);
+}
+
 /** Choose a signature card. Only a mastered card may be chosen; null releases it. */
 export function setSignature(k: Knowledge, id: string | null): Knowledge {
   if (id === null) {
@@ -400,7 +418,8 @@ export function pruneUnknown(k: Knowledge, known: Set<string> | null): Knowledge
         Object.entries(k.records).map(([d, r]) => [d, r.best && !r.best.cards.every((c) => known.has(c.cardId)) ? { ...r, best: undefined } : r]),
       )
     : undefined;
-  return { ...k, cards, dealt, links, omenLog, last, signature, records };
+  const chosen = k.chosen?.filter((id) => known.has(id));
+  return { ...k, cards, dealt, links, omenLog, last, signature, records, chosen };
 }
 
 let knownIds: Set<string> | null = null;

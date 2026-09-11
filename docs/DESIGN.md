@@ -541,6 +541,16 @@ attention knows what the Abyss can offer. If fewer than twelve cards have
 been read, the Abyss deals as any scene does. The reading screen says so
 in one line.
 
+## The Chosen
+
+A descent with your own deck. Once you have returned once and know
+forty cards, the Codex offers "Choose your deck": tap known cards in and
+out (`toggleChosen`, tier 1 or more only, and forgetting a card drops
+it from the deck). Thirty or more and The Chosen opens on the title,
+with the deck's size on the button. Cards land wrong more often there
+(0.35). It is the one place the game lets the reader stack the deck,
+and it is gated behind knowing enough of it to stack it well.
+
 ## The Long Night
 
 A descent unlocked by five deaths and one return: every scene is read

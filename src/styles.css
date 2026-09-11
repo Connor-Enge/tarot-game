@@ -1857,3 +1857,24 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .alcove__item { transition: transform 260ms ease, filter 260ms ease; filter: drop-shadow(0 0 3px rgba(243,220,138,0.25)); }
 .alcove__item--lit { filter: drop-shadow(0 0 8px rgba(243,220,138,0.7)) brightness(1.25); }
 .relic--lit { border-color: var(--gold-2); box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 18px rgba(243,220,138,0.25); }
+
+/* embers rise from the Stranger's fire */
+.trade--stranger::after {
+  content: ''; position: absolute; left: 44px; bottom: 18px; width: 40px; height: 60px; pointer-events: none;
+  background:
+    radial-gradient(circle, rgba(243,220,138,0.9) 0 1px, transparent 1.6px) 6px 50px / 40px 60px no-repeat,
+    radial-gradient(circle, rgba(243,200,120,0.8) 0 1px, transparent 1.6px) 18px 40px / 40px 60px no-repeat,
+    radial-gradient(circle, rgba(243,220,138,0.7) 0 0.8px, transparent 1.4px) 28px 56px / 40px 60px no-repeat;
+  animation: embers 4.5s linear infinite; opacity: 0.8;
+}
+@keyframes embers { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 0.9; } 100% { transform: translateY(-46px) translateX(6px); opacity: 0; } }
+.reduce-motion .trade--stranger::after { animation: none; opacity: 0; }
+
+/* --- the Chosen: pick a deck in the Codex ----------------------------------- */
+.chosen { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 8px 10px; border-radius: 12px; border: 1px dashed rgba(214,178,94,0.3); }
+.chosen--on { border-style: solid; background: rgba(214,178,94,0.06); }
+.codex__cell--pickable .card__inner { box-shadow: 0 0 0 1px rgba(214,178,94,0.35), 0 4px 10px rgba(0,0,0,0.5); }
+.codex__cell--chosen .card__inner { box-shadow: 0 0 0 2px var(--gold-2), 0 0 12px rgba(243,220,138,0.5); }
+.codex__cell--unpickable { opacity: 0.3; }
+.codex__pick { position: absolute; top: -5px; right: -5px; width: 18px; height: 18px; border-radius: 50%; background: var(--gold-2); color: #1a1408; font-size: 0.7rem; display: grid; place-items: center; box-shadow: 0 2px 6px rgba(0,0,0,0.5); }
+.chosen__hint { margin: 0 0 6px; }

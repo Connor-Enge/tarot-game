@@ -1,5 +1,5 @@
 import { Fragment, useState } from 'react';
-import { CARDS, COMBO_IDS, comboNote, getCard, getVow, KIND_GLYPH, SCENES, SIGILS, SLOT_IDS, SLOTS, type Tier } from '../../engine';
+import { CARDS, CHOSEN_MIN, chosenDeck, COMBO_IDS, comboNote, getDescent, getCard, getVow, KIND_GLYPH, SCENES, SIGILS, SLOT_IDS, SLOTS, type Tier } from '../../engine';
 import { SceneArt } from '../art/scenes';
 import { SigilToken } from '../art/sigil';
 
@@ -31,6 +31,9 @@ export function CodexScreen() {
   const [tf, setTf] = useState<TierFilter>('all');
   const [view, setView] = useState<'cards' | 'sky' | 'book' | 'study'>('cards');
   const [q, setQ] = useState('');
+  const [building, setBuilding] = useState(false);
+  const toggleChosen = useGame((s) => s.toggleChosen);
+  const chosenSet = new Set(chosenDeck(k));
   const [sort, setSort] = useState<'deck' | 'read' | 'seen'>('deck');
   const lastSeen = new Map<string, number>();
   (k.omenLog ?? []).forEach((e, i) => lastSeen.set(e.cardId, i));
@@ -174,6 +177,16 @@ export function CodexScreen() {
         </section>
       )}
 
+      {getDescent('chosen').unlocked(k) && (
+        <div className={`chosen ${building ? 'chosen--on' : ''}`}>
+          <button type="button" className={`chip ${building ? 'chip--on' : ''}`} onClick={() => setBuilding((b) => !b)}>
+            ✎ {building ? 'Done choosing' : 'Choose your deck'}
+          </button>
+          <span className="muted small">
+            {chosenDeck(k).length} chosen · {chosenDeck(k).length >= CHOSEN_MIN ? 'ready for The Chosen' : `${CHOSEN_MIN - chosenDeck(k).length} more to descend`}
+          </span>
+        </div>
+      )}
       <div className="filters">
         <input className="input input--search" placeholder="Find a card" value={q} onChange={(e) => setQ(e.target.value)} aria-label="find a card" />
         <div className="filters__row">
@@ -206,10 +219,20 @@ export function CodexScreen() {
             const e = k.cards[c.id];
             const tier: Tier = e?.tier ?? 0;
             const seen = !!e || !!k.dealt?.[c.id];
+            const inDeck = chosenSet.has(c.id);
+            const pickable = building && tier >= 1;
             return (
-              <button key={c.id} type="button" className={`codex__cell codex__cell--t${tier} ${!e && seen ? 'codex__cell--dealt' : ''}`} onClick={() => seen && openCodex(c.id)} disabled={!seen} aria-label={seen ? c.name : 'unread card'}>
+              <button
+                key={c.id}
+                type="button"
+                className={`codex__cell codex__cell--t${tier} ${!e && seen ? 'codex__cell--dealt' : ''} ${building ? (inDeck ? 'codex__cell--chosen' : pickable ? 'codex__cell--pickable' : 'codex__cell--unpickable') : ''}`}
+                onClick={() => (pickable ? toggleChosen(c.id) : seen && !building && openCodex(c.id))}
+                disabled={building ? !pickable : !seen}
+                aria-label={building ? `${c.name}${inDeck ? ', in your deck' : ''}` : seen ? c.name : 'unread card'}
+              >
                 <Card cardId={c.id} size="xs" faceDown={!seen} />
-                {tier > 0 && <span className={`codex__dot codex__dot--t${tier}`} />}
+                {tier > 0 && !building && <span className={`codex__dot codex__dot--t${tier}`} />}
+                {building && inDeck && <span className="codex__pick" aria-hidden>✓</span>}
               </button>
             );
           };

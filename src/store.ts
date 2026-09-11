@@ -58,6 +58,9 @@ import {
   noteSigils,
   noteVow,
   setSignature as setSignatureK,
+  toggleChosen as toggleChosenK,
+  chosenDeck,
+  CHOSEN_MIN,
   noteResolved,
   noteRunStarted,
   noteWhisper,
@@ -132,6 +135,8 @@ interface GameStore {
   redraw: () => void;
   turnLifted: () => void;
   setSignature: (id: string | null) => void;
+  /** Toggle a known card in the Chosen deck. */
+  toggleChosen: (id: string) => void;
   whisperLifted: () => void;
   advance: () => void;
   acceptTrade: () => void;
@@ -304,7 +309,10 @@ export const useGame = create<GameStore>((set, get) => ({
     // A keepsake from Study rides charged into this descent, and is spent by it.
     const taken = takeKeepsake(knowledge);
     if (taken.keepsake) saveKnowledge(taken.knowledge);
-    const config = { ...d.config, ...(depth ? depthConfig(depth) : {}), ...(first ? { majorsFirst: true } : {}), signature: knowledge.signature, keepsake: taken.keepsake };
+    // The Chosen descends with the deck picked in the Codex; it needs at least CHOSEN_MIN known cards.
+    const chosen = d.id === 'chosen' ? chosenDeck(knowledge) : null;
+    if (chosen && chosen.length < CHOSEN_MIN) return;
+    const config = { ...d.config, ...(chosen ? { deck: chosen } : {}), ...(depth ? depthConfig(depth) : {}), ...(first ? { majorsFirst: true } : {}), signature: knowledge.signature, keepsake: taken.keepsake };
     set({ run: startRun(seed, config), mode: { kind: 'free', descent: d.id, depth }, knowledge: taken.knowledge, screen: 'run', lifted: null, earned: [], firstDescent: first });
   },
 
@@ -404,6 +412,12 @@ export const useGame = create<GameStore>((set, get) => ({
     set({ run: next, lifted: null, knowledge });
   },
 
+  toggleChosen: (id) => {
+    const next = toggleChosenK(get().knowledge, id);
+    if (next === get().knowledge) return;
+    saveKnowledge(next);
+    set({ knowledge: next });
+  },
   setSignature: (id) => {
     const next = setSignatureK(get().knowledge, id);
     if (next === get().knowledge) return;

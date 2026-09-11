@@ -107,3 +107,28 @@ describe('the Long Night', () => {
     expect(run.clarity).toBe(4);
   });
 });
+
+describe('the Chosen', () => {
+  it('unlocks with a return and forty known cards, and takes only known cards', async () => {
+    const { getDescent } = await import('../descents');
+    const { emptyKnowledge, toggleChosen, chosenDeck, CHOSEN_MIN } = await import('../knowledge');
+    const { startRun } = await import('../run');
+    const d = getDescent('chosen');
+    let k = { ...emptyKnowledge(), ascensions: 1 };
+    expect(d.unlocked(k)).toBe(false);
+    const cards: Record<string, { tier: 1; resolved: number; seats: Record<string, never> }> = {};
+    for (let i = 0; i < 22; i++) cards[`major-${i}`] = { tier: 1, resolved: 2, seats: {} };
+    for (let i = 1; i <= 14; i++) cards[`cups-${i}`] = { tier: 1, resolved: 2, seats: {} };
+    for (let i = 1; i <= 8; i++) cards[`wands-${i}`] = { tier: 1, resolved: 2, seats: {} };
+    k = { ...k, cards };
+    expect(d.unlocked(k)).toBe(true);
+    expect(toggleChosen(k, 'swords-3').chosen).toBeUndefined();
+    for (const id of Object.keys(cards).slice(0, CHOSEN_MIN)) k = toggleChosen(k, id);
+    expect(chosenDeck(k).length).toBe(CHOSEN_MIN);
+    k = toggleChosen(k, 'major-0');
+    expect(chosenDeck(k).length).toBe(CHOSEN_MIN - 1);
+    const run = startRun(3, { ...d.config, deck: chosenDeck(k) });
+    expect(run.deck.draw.length).toBe(CHOSEN_MIN - 1);
+    expect(run.reversedChance).toBe(0.35);
+  });
+});

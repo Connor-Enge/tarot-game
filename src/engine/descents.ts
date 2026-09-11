@@ -141,6 +141,15 @@ export const DESCENTS: Descent[] = [
     unlockText: 'Die five times, and return once.',
   },
   {
+    id: 'chosen',
+    name: 'The Chosen',
+    glyph: '✎',
+    text: 'Your own deck: at least thirty cards you know, picked in the Codex. They land wrong more often.',
+    config: { reversedChance: 0.35 },
+    unlocked: (k) => k.ascensions >= 1 && Object.values(k.cards).filter((c) => c.tier >= 1).length >= 40,
+    unlockText: 'Return once, and know forty cards.',
+  },
+  {
     id: 'thin',
     name: 'Thin Blood',
     glyph: '♥',

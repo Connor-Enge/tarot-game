@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { canOfferInstall, useInstall } from '../../install';
 import { HowToPlay } from '../components/HowToPlay';
-import { CARDS, dailySeed, dailyStreakAlive, dailyWeather, dayCard, daylight, STREAK_FOR_WEEK_CARD, moonName, moonPhase, weeklySeed, weeklyWeather, DEPTHS, DESCENTS, getCard, getDescent, maxDepthUnlocked } from '../../engine';
+import { CARDS, CHOSEN_MIN, chosenDeck, dailySeed, dailyStreakAlive, dailyWeather, dayCard, daylight, STREAK_FOR_WEEK_CARD, moonName, moonPhase, weeklySeed, weeklyWeather, DEPTHS, DESCENTS, getCard, getDescent, maxDepthUnlocked } from '../../engine';
 import { CardBack, type BackVariant } from '../art/CardArt';
 import { WeatherArt } from '../art/weather';
 import { StreakFlames } from '../art/flames';
@@ -122,12 +122,12 @@ export function TitleScreen() {
                 >
                   {open ? (
                     <>
-                      <CardBack variant={d.id === 'short' || d.id === 'standard' ? 'standard' : (d.id as BackVariant)} className="descent-chip__back" />
+                      <CardBack variant={d.id === 'short' || d.id === 'standard' || d.id === 'chosen' ? 'standard' : (d.id as BackVariant)} className="descent-chip__back" />
                       <span className="descent-chip__glyph">{d.glyph}</span>
                     </>
                   ) : (
                     <>
-                      <CardBack variant={d.id === 'short' || d.id === 'standard' ? 'standard' : (d.id as BackVariant)} className="descent-chip__back descent-chip__back--sealed" />
+                      <CardBack variant={d.id === 'short' || d.id === 'standard' || d.id === 'chosen' ? 'standard' : (d.id as BackVariant)} className="descent-chip__back descent-chip__back--sealed" />
                       <svg viewBox="0 0 16 20" className="descent-chip__lock" aria-hidden>
                         <path d="M4 9 V6.5 a4 4 0 0 1 8 0 V9" fill="none" stroke="#c9a24a" strokeWidth={1.4} strokeLinecap="round" />
                         <rect x={2.5} y={9} width={11} height={9} rx={2} fill="#c9a24a" />
@@ -207,8 +207,13 @@ export function TitleScreen() {
             <span className="keepsake__mark">✦</span> Keepsake · {getCard(k.keepsake).name} · charged in your next descent
           </p>
         )}
-        <button className="btn btn--primary" onClick={() => newRun()}>
-          {current.id === 'standard' ? 'Descend' : `Descend · ${current.name}`}
+        {current.id === 'chosen' && chosenDeck(k).length < CHOSEN_MIN && (
+          <p className="muted small center chosen__hint">
+            {chosenDeck(k).length} of {CHOSEN_MIN} cards chosen. Pick the rest in the Codex.
+          </p>
+        )}
+        <button className="btn btn--primary" onClick={() => newRun()} disabled={current.id === 'chosen' && chosenDeck(k).length < CHOSEN_MIN}>
+          {current.id === 'standard' ? 'Descend' : current.id === 'chosen' ? `Descend · your ${chosenDeck(k).length}` : `Descend · ${current.name}`}
         </button>
         <div className="row">
           <button className="btn" onClick={newDaily} title={`${weather.name}: ${weather.text}`}>

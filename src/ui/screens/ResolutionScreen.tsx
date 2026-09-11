@@ -130,7 +130,7 @@ function ResolutionScreenInner() {
           </p>
         )}
         {trade && (
-          <div className={`trade rise ${isPeddlerTrade(trade) ? 'trade--peddler' : 'trade--stranger'}`} style={{ animationDelay: `${500 + resolution.narration.length * step}ms` }}>
+          <div className={`trade rise alive ${isPeddlerTrade(trade) ? 'trade--peddler' : 'trade--stranger'}`} style={{ animationDelay: `${500 + resolution.narration.length * step}ms` }}>
             <span className="trade__socket">{isPeddlerTrade(trade) ? <PeddlerArt className="trade__art" /> : <StrangerArt className="trade__art" />}</span>
             <div className="trade__body">
               <p className="trade__lead">{isPeddlerTrade(trade) ? 'A peddler has laid a cloth on the nearest stall. They have a price.' : 'Someone is already sitting by the fire. They have a trade.'}</p>
