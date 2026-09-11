@@ -842,11 +842,11 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 
 /* --- title sky: the real moon, the hour's light ---------------------------- */
 .screen--title { position: relative; }
-.sky { position: absolute; left: 0; right: 0; top: 0; height: 150px; width: 100%; pointer-events: none; z-index: 0; opacity: 0; animation: fade-in 1500ms ease 200ms both; }
+.heavens { position: absolute; left: 0; right: 0; top: 0; height: 150px; width: 100%; pointer-events: none; z-index: 0; opacity: 0; animation: fade-in 1500ms ease 200ms both; }
 .screen--title > .fan, .screen--title > .title { position: relative; z-index: 1; }
-.sky__star { animation: star-twinkle 4s ease-in-out infinite; }
+.heavens__star { animation: star-twinkle 4s ease-in-out infinite; }
 @keyframes star-twinkle { 0%, 100% { opacity: 0.25; } 50% { opacity: 0.85; } }
-.reduce-motion .sky__star { animation: none; }
+.reduce-motion .heavens__star { animation: none; }
 .screen--dawn::before, .screen--dusk::before, .screen--day::before {
   content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
 }
@@ -885,3 +885,14 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .today__omen { font-style: italic; font-size: 0.85rem; color: var(--ink); opacity: 0.85; }
 
 .takeback-row { display: flex; justify-content: flex-end; margin-top: -4px; }
+
+/* --- constellation: suit arms; abyss rings ------------------------------- */
+.sky__arm { font-family: Georgia, serif; font-size: 6.5px; fill: rgba(141,134,163,0.75); letter-spacing: 0.14em; text-transform: uppercase; }
+.sky__star--mastered { animation: star-twinkle 5s ease-in-out infinite; }
+.reduce-motion .sky__star--mastered { animation: none; }
+.abyss-rings { position: absolute; left: 50%; top: 50%; width: 170%; max-width: 720px; height: 200%; transform: translate(-50%, -50%); z-index: 0; pointer-events: none; opacity: 0; animation: fade-in 2000ms ease 300ms both; }
+.abyss-rings__spin { transform-origin: 0 0; animation: flourish-spin 160s linear infinite; }
+.abyss-rings__spin--back { animation-direction: reverse; animation-duration: 240s; }
+.reduce-motion .abyss-rings__spin { animation: none; }
+.spread:has(.abyss-rings) { isolation: isolate; }
+.spread:has(.abyss-rings) .seat { position: relative; z-index: 1; }

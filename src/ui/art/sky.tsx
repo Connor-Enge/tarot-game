@@ -11,7 +11,7 @@ export function TitleSky({ date = new Date(), light }: { date?: Date; light: Day
   if (light === 'day' || light === 'dawn' || light === 'dusk') {
     const low = light !== 'day';
     return (
-      <svg className={`sky sky--${light}`} viewBox="0 0 200 70" aria-hidden preserveAspectRatio="xMidYMid slice">
+      <svg className={`heavens heavens--${light}`} viewBox="0 0 200 70" aria-hidden preserveAspectRatio="xMidYMid slice">
         <circle cx={light === 'dawn' ? 26 : light === 'dusk' ? 174 : 174} cy={low ? 40 : 16} r={low ? 10 : 8} fill={GOLD_FLAT} opacity={low ? 0.8 : 0.55} />
         <circle cx={light === 'dawn' ? 26 : light === 'dusk' ? 174 : 174} cy={low ? 40 : 16} r={low ? 22 : 16} fill={GOLD_FLAT} opacity={0.08} />
       </svg>
@@ -34,9 +34,9 @@ export function TitleSky({ date = new Date(), light }: { date?: Date; light: Day
     'Z',
   ].join(' ');
   return (
-    <svg className="sky sky--night" viewBox="0 0 200 70" aria-hidden preserveAspectRatio="xMidYMid slice">
+    <svg className="heavens heavens--night" viewBox="0 0 200 70" aria-hidden preserveAspectRatio="xMidYMid slice">
       {stars.map((s, i) => (
-        <circle key={i} cx={s.x} cy={s.y} r={s.r} fill={PALE} opacity={0.35 + (i % 4) * 0.12} className="sky__star" style={{ animationDelay: `${(i * 0.7) % 4}s` }} />
+        <circle key={i} cx={s.x} cy={s.y} r={s.r} fill={PALE} opacity={0.35 + (i % 4) * 0.12} className="heavens__star" style={{ animationDelay: `${(i * 0.7) % 4}s` }} />
       ))}
       <circle cx={cx} cy={cy} r={r + 6} fill={GOLD_FLAT} opacity={0.06} />
       <circle cx={cx} cy={cy} r={r} fill="rgba(233,228,242,0.12)" />

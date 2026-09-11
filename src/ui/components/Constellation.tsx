@@ -2,6 +2,9 @@ import { useMemo, useState } from 'react';
 import { CARDS, getCard, type Knowledge } from '../../engine';
 import { renderSkyImage } from '../art/render';
 
+const SUIT_GLYPH = { wands: 'Wands', cups: 'Cups', swords: 'Swords', pentacles: 'Pentacles' } as const;
+const SUIT_TINT = { wands: '#e0a068', cups: '#8fc3e0', swords: '#d8d9e8', pentacles: '#a9c98a' } as const;
+
 /**
  * Every card as a star. Majors in the inner ring, each suit an arm of the
  * spiral. Stars light as cards are seen and brighten as they are known.
@@ -37,6 +40,15 @@ export function Constellation({ knowledge: k }: { knowledge: Knowledge }) {
     <div className="sky">
       <svg viewBox="0 0 300 300" className="sky__svg" onClick={() => setFocus(null)}>
         <circle cx={150} cy={150} r={46} fill="none" stroke="rgba(214,178,94,0.15)" strokeWidth={0.6} />
+        {(['wands', 'cups', 'swords', 'pentacles'] as const).map((suit, arm) => {
+          const a = arm * (Math.PI / 2) + 1.35 + 0.35 + 0.16;
+          const r = 124;
+          return (
+            <text key={suit} x={150 + Math.cos(a) * r} y={150 + Math.sin(a) * r} textAnchor="middle" dominantBaseline="middle" className="sky__arm">
+              {SUIT_GLYPH[suit]}
+            </text>
+          );
+        })}
         {links.map(([key, n]) => {
           const [a, b] = key.split('|');
           const pa = pos[a];
@@ -51,12 +63,13 @@ export function Constellation({ knowledge: k }: { knowledge: Knowledge }) {
           const seen = !!e;
           const p = pos[c.id];
           const r = seen ? 2.2 + tier * 0.7 : 1.1;
-          const fill = !seen ? 'rgba(141,134,163,0.35)' : tier >= 2 ? '#f3dc8a' : tier >= 1 ? '#d6b25e' : '#bfb8d6';
+          const suitTint = c.arcana === 'major' ? '#f3dc8a' : SUIT_TINT[c.suit!];
+          const fill = !seen ? 'rgba(141,134,163,0.35)' : tier >= 2 ? suitTint : tier >= 1 ? '#d6b25e' : '#bfb8d6';
           const dim = focus && focus !== c.id && !focusSet.has(c.id);
           return (
             <g key={c.id} opacity={dim ? 0.25 : 1} onClick={(ev) => { ev.stopPropagation(); setFocus(focus === c.id ? null : c.id); }} style={{ cursor: seen ? 'pointer' : 'default' }}>
-              {seen && tier >= 2 && <circle cx={p.x} cy={p.y} r={r * 2.4} fill="#f3dc8a" opacity={0.12} />}
-              <circle cx={p.x} cy={p.y} r={r} fill={fill} />
+              {seen && tier >= 2 && <circle cx={p.x} cy={p.y} r={r * 2.4} fill={suitTint} opacity={0.14} />}
+              <circle cx={p.x} cy={p.y} r={r} fill={fill} className={tier >= 3 ? 'sky__star--mastered' : undefined} />
               {focus === c.id && <circle cx={p.x} cy={p.y} r={r + 3} fill="none" stroke="#f3dc8a" strokeWidth={0.8} />}
             </g>
           );

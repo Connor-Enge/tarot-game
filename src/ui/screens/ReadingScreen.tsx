@@ -6,6 +6,7 @@ import { activeSlotState, canTakeBack, currentScene, getCard, hasRelic, redrawCo
 const ORACLE = import.meta.env.DEV && typeof location !== 'undefined' && location.search.includes('oracle');
 import { useGame } from '../../store';
 import { Card } from '../components/Card';
+import { AbyssRings } from '../art/flourish';
 import { SceneArt } from '../art/scenes';
 import { CodexDetail } from '../components/CodexDetail';
 import { DeckSheet } from '../components/DeckSheet';
@@ -61,6 +62,7 @@ function ReadingScreenInner() {
       <RelicStrip relics={run.relics} />
 
       <section className="spread" aria-label="the spread">
+        {scene.terminal && <AbyssRings />}
         {SLOT_IDS.map((id, i) => {
           const slot = run.slots[i];
           const chosen = slot && slot.chosen !== null ? slot.candidates[slot.chosen] : undefined;

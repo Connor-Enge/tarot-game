@@ -62,3 +62,23 @@ export function TierFlourish({ tier }: { tier: OutcomeTier }) {
     </svg>
   );
 }
+
+/** Slow rings behind the spread at the bottom of the descent. Two turn against each other. */
+export function AbyssRings() {
+  return (
+    <svg className="abyss-rings" viewBox="-100 -60 200 120" aria-hidden preserveAspectRatio="xMidYMid meet">
+      <g className="abyss-rings__spin">
+        <circle r={58} fill="none" stroke={GOLD_FLAT} strokeWidth={0.5} opacity={0.35} strokeDasharray="3 7" />
+        {Array.from({ length: 12 }, (_, i) => {
+          const a = (i / 12) * Math.PI * 2;
+          return <circle key={i} cx={Math.cos(a) * 58} cy={Math.sin(a) * 58} r={i % 3 === 0 ? 1.6 : 0.9} fill={GOLD_FLAT} opacity={0.7} />;
+        })}
+      </g>
+      <g className="abyss-rings__spin abyss-rings__spin--back">
+        <circle r={82} fill="none" stroke="#b08cf0" strokeWidth={0.4} opacity={0.3} strokeDasharray="1 5" />
+        <ellipse rx={40} ry={16} fill="none" stroke="#b08cf0" strokeWidth={0.5} opacity={0.35} />
+      </g>
+      <circle r={20} fill="none" stroke={GOLD_FLAT} strokeWidth={0.6} opacity={0.5} />
+    </svg>
+  );
+}
