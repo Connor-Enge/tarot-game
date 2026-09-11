@@ -128,6 +128,10 @@ export function ArtDefs() {
           <stop offset="0" stopColor="#2f5a4a" />
           <stop offset="1" stopColor="#0a1a14" />
         </radialGradient>
+        <radialGradient id="backGlow-night" cx="0.5" cy="0.35" r="0.7">
+          <stop offset="0" stopColor="#2b3a6a" />
+          <stop offset="1" stopColor="#070a1a" />
+        </radialGradient>
         <radialGradient id="backGlow-well" cx="0.5" cy="0.5" r="0.6">
           <stop offset="0" stopColor="#1a1a2e" />
           <stop offset="1" stopColor="#020208" />
@@ -186,7 +190,7 @@ function CardArtInner({ cardId, className, texture = true }: { cardId: string; c
   );
 }
 
-export type BackVariant = 'standard' | 'arcana' | 'inverted' | 'fogbound' | 'thin' | 'weekly' | 'well';
+export type BackVariant = 'standard' | 'arcana' | 'inverted' | 'fogbound' | 'thin' | 'weekly' | 'well' | 'night';
 
 function CardBackInner({ className, variant = 'standard' }: { className?: string; variant?: BackVariant }) {
   const glow = variant === 'standard' ? 'url(#backGlow)' : `url(#backGlow-${variant})`;
@@ -209,6 +213,13 @@ function CardBackInner({ className, variant = 'standard' }: { className?: string
       {variant === 'fogbound' && <path d="M14 140 q8 -4 16 0 t16 0 t16 0 t16 0 t8 0" fill="none" stroke={GOLD_FLAT} strokeWidth={0.8} opacity={0.6} />}
       {variant === 'thin' && <path d="M50 22 q-3 4 0 8 q3 -4 0 -8" fill={GOLD_FLAT} opacity={0.8} />}
       {variant === 'weekly' && <path d="M40 22 h20 M50 18 v8" stroke={GOLD_FLAT} strokeWidth={0.8} opacity={0.7} />}
+      {variant === 'night' && (
+        <g opacity={0.9}>
+          <circle cx={50} cy={26} r={6} fill={GOLD_FLAT} opacity={0.9} />
+          <circle cx={53} cy={24.5} r={5.2} fill="url(#backGlow-night)" />
+          {[[22, 40], [78, 44], [30, 128], [70, 124]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r={0.9} fill={GOLD_FLAT} opacity={0.7} />)}
+        </g>
+      )}
       {variant === 'well' && (
         <g opacity={0.8}>
           <ellipse cx={50} cy={24} rx={10} ry={3.5} fill="none" stroke={GOLD_FLAT} strokeWidth={0.8} />

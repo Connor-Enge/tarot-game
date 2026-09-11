@@ -95,3 +95,15 @@ describe('short road', () => {
     expect(startRun(2, d.config).map.length).toBe(7);
   });
 });
+
+describe('the Long Night', () => {
+  it('unlocks after five deaths and a return, and reads under the Moon with the Wake dealing four', () => {
+    const k = emptyKnowledge();
+    const d = getDescent('night');
+    expect(d.unlocked({ ...k, deaths: 5 })).toBe(false);
+    expect(d.unlocked({ ...k, deaths: 5, ascensions: 1 })).toBe(true);
+    const run = startRun(4, d.config);
+    expect(run.relics).toEqual(['shard']);
+    expect(run.clarity).toBe(4);
+  });
+});

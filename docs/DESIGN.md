@@ -497,6 +497,14 @@ attention knows what the Abyss can offer. If fewer than twelve cards have
 been read, the Abyss deals as any scene does. The reading screen says so
 in one line.
 
+## The Long Night
+
+A descent unlocked by five deaths and one return: every scene is read
+under the Moon's dusk, the Wake deals four (you carry the Mirror Shard),
+more cards land reversed, and you begin with four Clarity to see by. A
+violet veil with a moon's glow hangs over the whole run, and its card
+back carries a crescent.
+
 ## The Well
 
 An endless descent, unlocked by three returns. The map is the usual two

@@ -21,6 +21,7 @@ function useSceneHue() {
   const run = useGame((s) => s.run);
   const screen = useGame((s) => s.screen);
   const fixedTint = useSettings((s) => s.fixedTint);
+  const descent = useGame((s) => (s.mode.kind === 'free' ? s.mode.descent : ''));
   useEffect(() => {
     let hue = 260;
     if (!fixedTint && screen === 'run' && run) {
@@ -38,10 +39,12 @@ function useSceneHue() {
       if (run.phase.kind === 'dead') hue = 0;
       if (run.phase.kind === 'ascended') hue = 45;
     }
+    // The Long Night: every scene under the Moon's dusk.
+    if (screen === 'run' && descent === 'night' && run && run.phase.kind !== 'dead' && run.phase.kind !== 'ascended') hue = 258;
     document.documentElement.style.setProperty('--scene-hue', String(hue));
     const inScene = screen === 'run' && run && run.node !== null && (run.phase.kind === 'reading' || run.phase.kind === 'resolved' || run.phase.kind === 'relic');
     document.documentElement.style.setProperty('--mote-kind', inScene ? currentScene(run).kind : '');
-  }, [run, screen, fixedTint]);
+  }, [run, screen, fixedTint, descent]);
 }
 
 export function App() {
@@ -61,7 +64,7 @@ export function App() {
     document.documentElement.style.setProperty('--mote-hue', warm ? '45' : '');
     document.documentElement.classList.toggle('afterglow', warm);
   }, [afterglow, screen, run]);
-  const weather = screen === 'run' && (mode.kind === 'daily' || mode.kind === 'weekly') && mode.weather && mode.weather !== 'clear' ? mode.weather : null;
+  const weather = screen === 'run' && (mode.kind === 'daily' || mode.kind === 'weekly') && mode.weather && mode.weather !== 'clear' ? mode.weather : screen === 'run' && mode.kind === 'free' && mode.descent === 'night' ? 'long-night' : null;
   const low = screen === 'run' && !!run && run.vitality > 0 && run.vitality <= 2 && run.phase.kind !== 'dead' && run.phase.kind !== 'ascended';
   useEffect(() => {
     document.documentElement.classList.toggle('low-vitality', low);

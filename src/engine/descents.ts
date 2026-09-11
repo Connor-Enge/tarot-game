@@ -130,6 +130,15 @@ export const DESCENTS: Descent[] = [
     unlockText: 'Return from the Abyss three times.',
   },
   {
+    id: 'night',
+    name: 'The Long Night',
+    glyph: '☾',
+    text: 'Every scene under the Moon. The Wake deals four, more cards land wrong, and you carry four Clarity to see by.',
+    config: { startingRelics: ['shard'], reversedChance: 0.35, startingClarity: 4 },
+    unlocked: (k) => k.deaths >= 5 && k.ascensions >= 1,
+    unlockText: 'Die five times, and return once.',
+  },
+  {
     id: 'thin',
     name: 'Thin Blood',
     glyph: '♥',

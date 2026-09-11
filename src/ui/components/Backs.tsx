@@ -4,7 +4,7 @@ import { CardBack, type BackVariant } from '../art/CardArt';
 
 const BACKS: { variant: BackVariant; name: string; text: string; walked: (k: Knowledge) => boolean }[] = [
   { variant: 'standard', name: 'The Descent', text: 'The plain back. Every reader starts here.', walked: (k) => (k.records?.standard?.runs ?? 0) + (k.records?.short?.runs ?? 0) > 0 },
-  ...(['arcana', 'inverted', 'fogbound', 'thin', 'well'] as const).map((id) => {
+  ...(['arcana', 'inverted', 'fogbound', 'thin', 'night', 'well'] as const).map((id) => {
     const d = DESCENTS.find((x) => x.id === id)!;
     return { variant: id as BackVariant, name: d.name, text: d.text, walked: (k: Knowledge) => (k.records?.[id]?.runs ?? 0) > 0 };
   }),
