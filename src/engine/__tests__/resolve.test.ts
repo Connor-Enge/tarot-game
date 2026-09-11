@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { resolveReading, tierFor, type Reading } from '../resolve';
+import { comboScore, resolveReading, tierFor, type Reading } from '../resolve';
 import { SCENES } from '../scenes';
 
 const reading = (ids: [string, string, string, string], reversed = false): Reading => ({
@@ -86,5 +86,14 @@ describe('named readings of tone', () => {
     expect(suit.comboIds).not.toContain('four-upright');
     const mixed = resolveReading(SCENES.crossing, r(['cups-2', 'major-0', 'cups-4', 'cups-5'], [false, false, false, false]));
     expect(mixed.comboIds).not.toContain('one-suit');
+  });
+});
+
+describe('combo scores', () => {
+  it('are exposed by id, and unknown ids are worth nothing', () => {
+    expect(comboScore('four-upright')).toBe(0.5);
+    expect(comboScore('four-reversed')).toBe(2);
+    expect(comboScore('knights-quarrel')).toBeLessThan(0);
+    expect(comboScore('no-such-reading')).toBe(0);
   });
 });

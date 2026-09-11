@@ -280,6 +280,10 @@ export const COMBO_IDS = COMBOS.map((c) => c.id);
 export function comboNote(id: string): string | undefined {
   return COMBOS.find((c) => c.id === id)?.note;
 }
+/** What a named reading is worth: positive lifts the reading, negative drags it. */
+export function comboScore(id: string): number {
+  return COMBOS.find((c) => c.id === id)?.score ?? 0;
+}
 
 export type Marks = Record<string, 'charged' | 'scarred'>;
 export const CHARGED_BONUS = 1;

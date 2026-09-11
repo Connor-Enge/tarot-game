@@ -792,7 +792,7 @@ identity, not power, which is the point.
 - **Scenes**: 30 exist (29 plus the Abyss), which was the target; more are welcome. Latest: the mill, the drowned chapel, the hunt.
 - **Named readings**: 34. Each is a memorable line, never a definition.
 - **Relics**: 12 boons, 8 curses. **Vows**: 7. **Weathers**: 14. **Trades**: 6. **Sigils**: 30. **Rites**: 7.
-- **Combos**: 37 named readings exist (three of them readings of tone: four upright, four reversed, one suit). This is the richest vein for "the
+- **Combos**: 37 named readings exist (three of them readings of tone: four upright, four reversed, one suit). Their banners are coloured by what they are: pale gold for four upright, violet for four reversed, the suit's colour for one suit, and a dark red ribbon for any named reading that drags the total down. This is the richest vein for "the
   combined meaning" and should keep growing with named, memorable results.
 - **Art**: all 78 faces are procedural SVG (`src/ui/art/`). Majors are
   bespoke compositions; the numbered Minors are scenes after the

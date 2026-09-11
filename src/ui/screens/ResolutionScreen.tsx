@@ -1,4 +1,4 @@
-import { currentScene, getCard, getRelic, isPeddlerTrade, reckon, reckoningText, SLOT_IDS, SLOT_POSITION, SLOTS, tallyText, tradeText, type Trade } from '../../engine';
+import { comboScore, currentScene, getCard, getRelic, isPeddlerTrade, reckon, reckoningText, SLOT_IDS, SLOT_POSITION, SLOTS, tallyText, tradeText, type Trade } from '../../engine';
 import { PeddlerArt, StrangerArt } from '../art/stranger';
 
 const TIER_GLYPH = { calamity: '✖', harm: '▽', neutral: '◇', boon: '△', triumph: '★' } as const;
@@ -87,8 +87,12 @@ function ResolutionScreenInner() {
           const seat = i < SLOT_IDS.length ? SLOTS[SLOT_IDS[i]].glyph : null;
           const named = !last && !seat;
           if (named) {
+            const id = resolution.comboIds[i - SLOT_IDS.length];
+            const score = id ? comboScore(id) : 0;
+            const suit = id === 'one-suit' ? getCard(lastEntry.reading.vessel.cardId).suit : undefined;
+            const tone = id === 'four-upright' ? 'narration__named--upright' : id === 'four-reversed' ? 'narration__named--reversed' : suit ? `narration__named--${suit}` : score < 0 ? 'narration__named--ill' : '';
             return (
-              <p key={i} className="narration__named rise" style={{ animationDelay: `${400 + i * step}ms` }}>
+              <p key={i} className={`narration__named rise ${tone}`} style={{ animationDelay: `${400 + i * step}ms` }}>
                 <span className="narration__named-mark" aria-hidden>♪</span>
                 <span className="narration__named-text">{line}</span>
                 <span className="narration__named-mark" aria-hidden>♪</span>

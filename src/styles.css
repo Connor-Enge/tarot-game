@@ -1940,3 +1940,13 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 /* the position's question under the hand, and its label in Study */
 .hint__pos { color: var(--gold); letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.72rem; margin-right: 6px; }
 .study__seatpos { display: block; font-size: 0.58rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gold); margin-top: 2px; }
+
+/* --- named-reading banners coloured by what they are -------------------------- */
+.narration__named--ill { background: linear-gradient(90deg, #7a2a2a 0%, #b0453f 50%, #7a2a2a 100%); color: #f6e6e0; }
+.narration__named--ill .narration__named-mark { opacity: 0.8; }
+.narration__named--upright { background: linear-gradient(90deg, var(--gold) 0%, #fff1c0 50%, var(--gold) 100%); }
+.narration__named--reversed { background: linear-gradient(90deg, #4a2f6e 0%, #8f6fc0 50%, #4a2f6e 100%); color: #f1e8ff; }
+.narration__named--wands { background: linear-gradient(90deg, #8a3a22 0%, #e0a068 50%, #8a3a22 100%); color: #fff4e6; }
+.narration__named--cups { background: linear-gradient(90deg, #244a6a 0%, #8fc3e0 50%, #244a6a 100%); color: #0b1a22; }
+.narration__named--swords { background: linear-gradient(90deg, #4a4c60 0%, #d8d9e8 50%, #4a4c60 100%); color: #12131c; }
+.narration__named--pentacles { background: linear-gradient(90deg, #2f4a22 0%, #a9c98a 50%, #2f4a22 100%); color: #10200a; }
