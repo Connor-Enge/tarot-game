@@ -33,6 +33,7 @@ Open `?gallery` on the dev server to see all 78 card faces at once.
 - **The Codex.** Meanings unlock by play and by death. Seat memory, witnessed
   omens, the Book of Omens, a constellation of every reading, Study mode,
   sigils, a Ledger, and search. Export it to another device.
+- **Turn.** Once a scene, one clarity turns the lifted card over.
 - **The Stranger.** At a good rest, a cloaked figure offers one trade: clarity for
   blood, a boon for a boon, or a curse lifted for a price.
 - **Vows.** Swear something before the first scene (never redraw, never rest,

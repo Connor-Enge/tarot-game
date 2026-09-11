@@ -895,7 +895,8 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .today__text { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left; max-width: 240px; }
 .today__omen { font-style: italic; font-size: 0.85rem; color: var(--ink); opacity: 0.85; }
 
-.takeback-row { display: flex; justify-content: flex-end; margin-top: -4px; }
+.takeback-row { display: flex; justify-content: flex-end; gap: 8px; margin-top: -4px; }
+.takeback--turn { color: var(--gold); border-color: rgba(214,178,94,0.35); }
 
 /* --- constellation: suit arms; abyss rings ------------------------------- */
 .sky__arm { font-family: Georgia, serif; font-size: 6.5px; fill: rgba(141,134,163,0.75); letter-spacing: 0.14em; text-transform: uppercase; }

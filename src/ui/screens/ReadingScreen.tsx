@@ -6,7 +6,7 @@ import { activeSlotState, canTakeBack, currentScene, getCard, hasRelic, redrawCo
 const ORACLE = import.meta.env.DEV && typeof location !== 'undefined' && location.search.includes('oracle');
 import { useGame } from '../../store';
 import { Card } from '../components/Card';
-import { getVow } from '../../engine';
+import { canTurn, getVow, TURN_COST } from '../../engine';
 import { AbyssRings } from '../art/flourish';
 import { VowArt } from '../art/relics';
 import { SceneArt } from '../art/scenes';
@@ -23,6 +23,7 @@ function ReadingScreenInner() {
   const redraw = useGame((s) => s.redraw);
   const whisperLifted = useGame((s) => s.whisperLifted);
   const takeBack = useGame((s) => s.takeBack);
+  const turnLifted = useGame((s) => s.turnLifted);
   const hideSeatNames = useSettings((s) => s.hideSeatNames);
   const seatsNamed = useGame((s) => s.knowledge.seatsNamed) && !hideSeatNames;
   const codexOpen = useGame((s) => s.codexOpen);
@@ -126,11 +127,18 @@ function ReadingScreenInner() {
           );
         })}
       </section>
-      {canTakeBack(run) && (
+      {(canTakeBack(run) || (lifted !== null && canTurn(run, lifted))) && (
         <div className="takeback-row">
-          <button type="button" className="takeback" onClick={takeBack} title="Take back the last card, once per descent">
-            ↶ take back
-          </button>
+          {lifted !== null && canTurn(run, lifted) && (
+            <button type="button" className="takeback takeback--turn" onClick={turnLifted} title="Turn the lifted card over, once per scene">
+              ↻ turn ◈{TURN_COST}
+            </button>
+          )}
+          {canTakeBack(run) && (
+            <button type="button" className="takeback" onClick={takeBack} title="Take back the last card, once per descent">
+              ↶ take back
+            </button>
+          )}
         </div>
       )}
 

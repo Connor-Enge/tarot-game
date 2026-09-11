@@ -468,6 +468,13 @@ Winds, Thin Air, Lantern Light, Salted Road, Fog, Heavy Air, Still Water,
 The Long Road). Everyone walking today's road walks in the same weather.
 The title names it before you commit; share text carries it.
 
+## Turn
+
+Once per scene, for one clarity, the lifted card can be turned over:
+upright becomes reversed, reversed becomes upright. Marked cards (charged
+or scarred) will not turn, and neither will a card dealt face down. It is
+the cheapest way to act on a suspicion about a card without knowing why.
+
 ## The Stranger's trade
 
 Once per run, at the first rest scene that goes at least neutrally, someone is

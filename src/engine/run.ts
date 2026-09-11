@@ -11,6 +11,7 @@ export const STARTING_VITALITY = 10;
 export const STARTING_CLARITY = 2;
 export const REDRAW_COST = 1;
 export const WHISPER_COST = 1;
+export const TURN_COST = 1;
 
 /** Per-run consequences that follow a card around. */
 export type Mark = 'charged' | 'scarred';
@@ -88,7 +89,7 @@ export interface RunState {
   /** Candidates put aside by a take-back, to be dealt again unchanged. */
   pendingDeal: DrawnCard[] | null;
   /** Counters for the scene in progress. */
-  sceneSpent: { redraws: number; whispers: number };
+  sceneSpent: { redraws: number; whispers: number; turns?: number };
   /** Depth modifiers carried by the run. */
   mods: { extraNeutralCost: number; noEcho: boolean; abyssStakes?: number };
   slots: SlotState[];
@@ -355,6 +356,25 @@ export function redrawActive(run: RunState): RunState {
   const next = dealSeat(run, rng, deck, slot.slot);
   const slots = run.slots.map((s, i) => (i === run.activeSlot ? next.state : s));
   return withRng({ ...run, deck: next.deck, slots, clarity: run.clarity - cost, freeRedrawUsed: run.freeRedrawUsed || cost === 0, redraws: run.redraws + 1, sceneSpent: { ...run.sceneSpent, redraws: run.sceneSpent.redraws + 1 } }, rng);
+}
+
+/** A turn is allowed once per scene, on an unmarked, face-up candidate, with clarity to spend. */
+export function canTurn(run: RunState, index: number): boolean {
+  if (run.phase.kind !== 'reading') return false;
+  if ((run.sceneSpent.turns ?? 0) >= 1 || run.clarity < TURN_COST) return false;
+  const slot = run.slots[run.activeSlot];
+  const c = slot?.candidates[index];
+  if (!slot || slot.chosen !== null || !c || c.hidden) return false;
+  return !run.marks[c.cardId];
+}
+
+/** Spend Clarity to turn a candidate over: upright becomes reversed, reversed becomes upright. Once per scene. */
+export function turnCandidate(run: RunState, index: number): RunState {
+  if (!canTurn(run, index)) return run;
+  const slots = run.slots.map((s, i) =>
+    i === run.activeSlot ? { ...s, candidates: s.candidates.map((c, j) => (j === index ? { ...c, reversed: !c.reversed } : c)) } : s,
+  );
+  return { ...run, slots, clarity: run.clarity - TURN_COST, sceneSpent: { ...run.sceneSpent, turns: (run.sceneSpent.turns ?? 0) + 1 } };
 }
 
 /** Spend Clarity to hear one keyword of a candidate. The UI shows it; the Codex remembers it. */

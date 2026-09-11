@@ -11,6 +11,7 @@ import {
   chooseRelic as chooseRelicRun,
   cutDeck as cutDeckRun,
   takeVow as takeVowRun,
+  turnCandidate as turnRun,
   acceptTrade as acceptTradeRun,
   foretell as foretellRun,
   takeBack as takeBackRun,
@@ -121,6 +122,7 @@ interface GameStore {
   lift: (index: number | null) => void;
   confirm: () => void;
   redraw: () => void;
+  turnLifted: () => void;
   whisperLifted: () => void;
   advance: () => void;
   acceptTrade: () => void;
@@ -370,6 +372,16 @@ export const useGame = create<GameStore>((set, get) => ({
     const knowledge = noteDealt(get().knowledge, dealtIn(next));
     if (knowledge !== get().knowledge) saveKnowledge(knowledge);
     set({ run: next, lifted: null, knowledge });
+  },
+
+  turnLifted: () => {
+    const { run, lifted } = get();
+    if (!run || lifted === null) return;
+    const next = turnRun(run, lifted);
+    if (next === run) return;
+    buzz([8, 20, 8]);
+    sfx.flip();
+    set({ run: next });
   },
 
   whisperLifted: () => {
