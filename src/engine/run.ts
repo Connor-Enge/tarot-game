@@ -63,6 +63,8 @@ export interface RunState {
   actLayers: readonly number[];
   /** The last scene's Wake card, waiting to be dealt into the next Vessel. */
   echo: DrawnCard | null;
+  /** Node ids whose place has been foretold. */
+  foretold: string[];
   /** Counters for the scene in progress. */
   sceneSpent: { redraws: number; whispers: number };
   /** Depth modifiers carried by the run. */
@@ -148,6 +150,7 @@ export function startRun(seed: number, config: RunConfig = {}): RunState {
     echo: null,
     mods: { extraNeutralCost: config.extraNeutralCost ?? 0, noEcho: !!config.noEcho, abyssStakes: config.abyssStakes },
     sceneSpent: { redraws: 0, whispers: 0 },
+    foretold: [],
     slots: [],
     activeSlot: 0,
     phase: { kind: 'map' },
@@ -206,6 +209,17 @@ export function cutDeck(run: RunState, at: number): RunState {
   const top = run.deck.draw.slice(-n); // top of deck = end of array
   const rest = run.deck.draw.slice(0, -n);
   return { ...run, deck: { ...run.deck, draw: [...top, ...rest] }, cut: n };
+}
+
+export const FORETELL_COST = 1;
+
+/** Spend Clarity to learn a node's place line before choosing it. */
+export function foretell(run: RunState, index: number): RunState {
+  if (run.phase.kind !== 'map') return run;
+  const node = run.map[run.layer]?.[index];
+  if (!node || run.foretold.includes(node.id)) return run;
+  if (run.clarity < FORETELL_COST) return run;
+  return { ...run, clarity: run.clarity - FORETELL_COST, foretold: [...run.foretold, node.id] };
 }
 
 /** Pick a node in the current layer and sit down to read. */

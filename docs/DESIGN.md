@@ -327,6 +327,10 @@ base64 blob and bring one over on another device. Import replaces.
 
 **Share the sky**: the constellation renders to a square PNG.
 
+**Foretell**: on the map, spend 1 Clarity to read one node's place line
+("A rope bridge over a black gorge") before choosing. It reveals a place,
+never a meaning, and gives Clarity a use between readings.
+
 Queued:
 - A weekly leaderboard line in the share text (best depth this week).
 - Localization scaffolding for the card and scene text.

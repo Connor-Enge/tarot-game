@@ -609,3 +609,17 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .fan--fool .fan__card:nth-child(3) { animation: fool-hop 1.4s ease-out 800ms 1; }
 
 .input--area { font-size: 0.85rem; resize: vertical; min-height: 56px; word-break: break-all; }
+
+/* --- foretell / legend ---------------------------------------------------- */
+.map__prompt { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.btn--small { min-height: 36px; padding: 6px 14px; font-size: 0.85rem; }
+.btn--on { border-color: var(--gold); color: var(--gold-2); background: rgba(214,178,94,0.12); }
+.node { overflow: visible; }
+.node__place {
+  position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 4px;
+  width: 110px; font-size: 0.62rem; line-height: 1.2; color: var(--gold-2); text-align: center; pointer-events: none;
+  animation: rise 300ms ease both;
+}
+.legend { display: flex; gap: 14px; justify-content: center; font-size: 0.75rem; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 5px; }
+.legend i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }

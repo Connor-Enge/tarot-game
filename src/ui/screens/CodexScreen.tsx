@@ -67,6 +67,11 @@ export function CodexScreen() {
       <div className="progress" aria-hidden>
         <div className="progress__bar" style={{ width: `${(100 * knownCount) / CARDS.length}%` }} />
       </div>
+      <div className="legend" aria-label="tiers">
+        <span><i className="codex__dot--t1" /> glimpsed</span>
+        <span><i className="codex__dot--t2" /> known</span>
+        <span><i className="codex__dot--t3" /> mastered</span>
+      </div>
 
       {k.seatsNamed && (
         <section className="codex__seats">

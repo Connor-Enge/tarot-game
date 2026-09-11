@@ -209,12 +209,21 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
     <g>
       <Pillar x={10} y={4} h={94} />
       <Pillar x={70} y={4} h={94} />
-      <rect x={16} y={4} width={48} height={90} fill={BLOOD} opacity={0.18} />
+      <rect x={16} y={4} width={48} height={90} fill="#5a2d7a" opacity={0.28} />
       <Throne x={40} y={92} w={30} h={30} fill={PALE} />
       <Figure x={40} y={92} h={48} arms="right-up" cloak crown />
-      <Sword x={56} y={40} s={10} />
-      <path d="M22 66 h-10 M12 66 l-3 8 h6 z M22 66 l-3 8 h6 z" fill={GOLD} stroke={INK} strokeWidth={0.6} />
-      <line x1={17} y1={66} x2={17} y2={60} stroke={INK} strokeWidth={0.8} />
+      <Sword x={56} y={40} s={11} />
+      {/* balance scales */}
+      <g stroke={GOLD_FLAT} strokeWidth={1} fill="none">
+        <line x1={20} y1={62} x2={20} y2={54} />
+        <line x1={12} y1={54} x2={28} y2={54} />
+        <line x1={12} y1={54} x2={9} y2={64} />
+        <line x1={12} y1={54} x2={15} y2={64} />
+        <line x1={28} y1={54} x2={25} y2={64} />
+        <line x1={28} y1={54} x2={31} y2={64} />
+      </g>
+      <path d="M8 64 h8 q-1 3 -4 3 q-3 0 -4 -3 z M24 64 h8 q-1 3 -4 3 q-3 0 -4 -3 z" fill={GOLD} stroke={INK} strokeWidth={0.5} />
+      <rect x={38} y={56} width={4} height={4} fill={PALE} stroke={INK} strokeWidth={0.4} />
     </g>
   ),
   12: () => (
@@ -252,15 +261,25 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
   ),
   14: () => (
     <g>
-      <Sun x={64} y={14} r={6} rays={8} />
-      <path d="M60 22 l4 -6 l4 6 z" fill={GOLD} stroke={INK} strokeWidth={0.4} />
-      <path d="M56 30 q10 20 0 40 q-8 10 4 24" fill="none" stroke={GOLD_FLAT} strokeWidth={2} opacity={0.6} />
+      <Sun x={66} y={12} r={6} rays={8} />
+      <path d="M62 20 l4 -6 l4 6 z" fill={GOLD} stroke={INK} strokeWidth={0.4} />
+      <path d="M52 30 q12 18 4 36 q-6 12 10 30" fill="none" stroke={GOLD_FLAT} strokeWidth={2.2} opacity={0.5} />
       <Wings x={36} y={46} span={40} />
       <Figure x={36} y={92} h={52} arms="out" fill={PALE} halo />
-      <Cup x={16} y={62} s={5} />
-      <Cup x={56} y={72} s={5} />
-      <path d="M18 60 q20 -6 38 8" fill="none" stroke="#6ab7d6" strokeWidth={1.6} />
+      <path d="M32 60 l4 -6 l4 6 z" fill="none" stroke={GOLD_FLAT} strokeWidth={0.9} />
+      <Cup x={14} y={64} s={5} />
+      <Cup x={58} y={72} s={5} />
+      {/* the stream, poured at an impossible angle */}
+      <path d="M17 60 q18 -10 40 8" fill="none" stroke="#6ab7d6" strokeWidth={2.2} strokeLinecap="round" />
+      <path d="M17 60 q18 -10 40 8" fill="none" stroke={PALE} strokeWidth={0.6} strokeLinecap="round" opacity={0.7} />
       <Water y={96} rows={3} />
+      {/* irises */}
+      {[6, 12].map((x, i) => (
+        <g key={i}>
+          <line x1={x} y1={100} x2={x} y2={88} stroke="#5a7a3a" strokeWidth={1} />
+          <path d={`M${x} 88 l-3 -4 l3 1 l3 -1 z`} fill="#7a3fa0" stroke={INK} strokeWidth={0.3} />
+        </g>
+      ))}
     </g>
   ),
   15: () => (
@@ -364,17 +383,25 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
   ),
   20: () => (
     <g>
-      <Cloud x={6} y={24} w={30} />
-      <Cloud x={44} y={20} w={32} />
-      <Wings x={40} y={22} span={36} />
-      <Figure x={40} y={40} h={26} arms="left-up" fill={PALE} halo />
-      <path d="M28 20 l-10 -6 v10 z" fill={GOLD} stroke={INK} strokeWidth={0.5} />
-      <Mountains y={70} opacity={0.3} />
+      {Array.from({ length: 9 }, (_, i) => {
+        const a = (i / 9) * Math.PI - Math.PI;
+        return <line key={i} x1={40} y1={26} x2={40 + Math.cos(a) * 60} y2={26 + Math.sin(a) * 60} stroke={GOLD_FLAT} strokeWidth={0.6} opacity={0.35} />;
+      })}
+      <Cloud x={2} y={26} w={30} />
+      <Cloud x={48} y={22} w={32} />
+      <Wings x={40} y={24} span={38} />
+      <Figure x={40} y={42} h={28} arms="left-up" fill={PALE} halo />
+      {/* trumpet with banner */}
+      <path d="M30 24 l-12 -6 v10 z" fill={GOLD} stroke={INK} strokeWidth={0.5} />
+      <line x1={30} y1={24} x2={36} y2={26} stroke={GOLD_FLAT} strokeWidth={1.4} />
+      <rect x={17} y={28} width={10} height={9} fill={PALE} stroke={INK} strokeWidth={0.5} />
+      <path d="M22 29 v7 M18.5 32.5 h7" stroke={BLOOD} strokeWidth={1.2} />
+      <Mountains y={72} opacity={0.3} />
       <Water y={104} rows={2} />
       {[14, 40, 66].map((x, i) => (
         <g key={i}>
-          <rect x={x - 9} y={90} width={18} height={12} fill={INK} />
-          <Figure x={x} y={92} h={26} arms="raised" fill={i === 1 ? INK : PALE} />
+          <path d={`M${x - 10} 104 v-14 h20 v14`} fill={INK} stroke={PALE} strokeWidth={0.5} />
+          <Figure x={x} y={93} h={26} arms="raised" fill={i === 1 ? INK : PALE} />
         </g>
       ))}
     </g>

@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, useState } from 'react';
-import { actOfLayer, canCut, currentAct, KIND_GLYPH, SCENES, SLOT_IDS, visitedNodes } from '../../engine';
+import { actOfLayer, canCut, currentAct, FORETELL_COST, KIND_GLYPH, SCENES, SLOT_IDS, visitedNodes } from '../../engine';
 import { SceneArt } from '../art/scenes';
 import { Card } from '../components/Card';
 
@@ -20,6 +20,9 @@ function MapScreenInner() {
   const cutDeck = useGame((s) => s.cutDeck);
   const [cutAt, setCutAt] = useState<number | null>(null);
   const [peek, setPeek] = useState<number | null>(null); // history index
+  const foretell = useGame((s) => s.foretell);
+  const [foretelling, setForetelling] = useState(false);
+  const canForetell = run.clarity >= FORETELL_COST;
   const cuttable = canCut(run);
   const visited = visitedNodes(run);
   const visitedIds = new Set(visited.map((n) => n.id));
@@ -105,7 +108,12 @@ function MapScreenInner() {
           <p className="muted small center">or choose where the descent begins</p>
         </section>
       ) : (
-        <p className="scene__prompt center">{run.layer === 0 ? 'Choose where the descent begins.' : 'Choose the way down.'}</p>
+        <div className="map__prompt">
+          <p className="scene__prompt center">{foretelling ? 'Which door?' : run.layer === 0 ? 'Choose where the descent begins.' : 'Choose the way down.'}</p>
+          <button className={`btn btn--small ${foretelling ? 'btn--on' : ''}`} disabled={!canForetell && !foretelling} onClick={() => setForetelling((f) => !f)} title="Learn what waits behind one door">
+            {foretelling ? 'Never mind' : `Foretell ◈${FORETELL_COST}`}
+          </button>
+        </div>
       )}
 
       <section className="map" aria-label="the descent" ref={mapRef}>
@@ -131,10 +139,17 @@ function MapScreenInner() {
                     data-node={node.id}
                     className={`node node--${node.kind} ${wasHere ? 'node--visited' : ''} ${isCurrent ? 'node--choosable' : ''}`}
                     disabled={!isCurrent && !wasHere}
-                    onClick={() => (isCurrent ? chooseNode(ni) : setPeek(historyIndex))}
+                    onClick={() => {
+                      if (isCurrent && foretelling) {
+                        foretell(ni);
+                        setForetelling(false);
+                      } else if (isCurrent) chooseNode(ni);
+                      else setPeek(historyIndex);
+                    }}
                     aria-label={wasHere ? `remember scene ${historyIndex + 1}` : `${node.kind} node`}
                   >
                     <span className="node__glyph">{KIND_GLYPH[node.kind]}</span>
+                    {run.foretold.includes(node.id) && <span className="node__place">{SCENES[node.sceneId].place}</span>}
                   </button>
                 );
               })}

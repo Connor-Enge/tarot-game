@@ -170,3 +170,18 @@ describe('clarity spent per scene', () => {
     expect(run.history[0].spent).toEqual({ redraws: 1, whispers: 1 });
   });
 });
+
+describe('foretell', () => {
+  it('costs clarity once per node and only on the map', async () => {
+    const { foretell, FORETELL_COST } = await import('../run');
+    let run = startRun(13);
+    run = foretell(run, 0);
+    expect(run.clarity).toBe(2 - FORETELL_COST);
+    expect(run.foretold).toEqual([run.map[0][0].id]);
+    expect(foretell(run, 0)).toBe(run);
+    run = foretell(run, 1);
+    expect(run.clarity).toBe(0);
+    expect(foretell(run, 2 % run.map[0].length)).toBe(run);
+    expect(foretell(chooseNode(startRun(13), 0), 0).foretold).toEqual([]);
+  });
+});

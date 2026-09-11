@@ -8,6 +8,7 @@ import {
   chooseNode as chooseNodeRun,
   chooseRelic as chooseRelicRun,
   cutDeck as cutDeckRun,
+  foretell as foretellRun,
   dailySeed,
   WEEKLY_CONFIG,
   weeklySeed,
@@ -84,6 +85,7 @@ interface GameStore {
   chooseNode: (index: number) => void;
   chooseRelic: (index: number) => void;
   cutDeck: (at: number) => void;
+  foretell: (index: number) => void;
   lift: (index: number | null) => void;
   confirm: () => void;
   redraw: () => void;
@@ -295,6 +297,16 @@ export const useGame = create<GameStore>((set, get) => ({
     if (!run) return;
     sfx.flip();
     set({ run: advanceRun(run), lifted: null });
+  },
+
+  foretell: (index) => {
+    const { run } = get();
+    if (!run) return;
+    const next = foretellRun(run, index);
+    if (next === run) return;
+    buzz([5, 40, 5]);
+    sfx.whisper();
+    set({ run: next });
   },
 
   cutDeck: (at) => {
