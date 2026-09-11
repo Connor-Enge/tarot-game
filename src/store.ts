@@ -27,9 +27,11 @@ import {
   noteOmens,
   noteStudy,
   noteStudyResult,
+  readerTitle,
   studyQuestion,
   createRng,
   newSigils,
+  newKnowledgeSigils,
   noteRecord,
   noteSigils,
   noteResolved,
@@ -175,6 +177,7 @@ export const useGame = create<GameStore>((set, get) => ({
     let next = noteStudyResult(knowledge, correct, streak);
     if (correct) {
       next = noteStudy(next, cardId);
+      next = noteSigils(next, newKnowledgeSigils(next));
       sfx.whisper();
       buzz([5, 30, 5]);
     } else {
@@ -386,8 +389,9 @@ export function shareText(run: RunState, mode: RunMode, knowledge?: Knowledge): 
       : mode.kind === 'weekly'
         ? `Arcana Descent · Weekly ${mode.label}`
         : `Arcana Descent · ${getDescent(mode.descent).name}${mode.depth ? ` · Depth ${mode.depth}` : ''} · seed ${run.seed.toString(36)}`;
+  const who = knowledge ? `\n— ${readerTitle(knowledge)}, ${Object.values(knowledge.cards).filter((c) => c.tier > 0).length} of 78 known` : '';
   const weekly = mode.kind === 'weekly' && knowledge?.records?.weekly ? `\nDeepest this week: ${Math.max(knowledge.records.weekly.bestDepth, run.history.length)} of ${run.map.length}` : '';
-  return `${head}\n${end}\n${tiers}\n${spread}${weekly}`;
+  return `${head}\n${end}\n${tiers}\n${spread}${weekly}${who}`;
 }
 
 // Persist the run after every change so a closed tab can resume.

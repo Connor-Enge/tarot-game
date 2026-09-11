@@ -1,6 +1,4 @@
-import { CARDS, type Knowledge } from '../../engine';
-
-const TITLES = ['Unread', 'Novice', 'Reader', 'Adept', 'Seer', 'Oracle'];
+import { CARDS, readerTitle, type Knowledge } from '../../engine';
 
 /**
  * A ring that grows with every descent: one tick per run, gold for returns,
@@ -11,7 +9,7 @@ export function ReaderMark({ knowledge: k }: { knowledge: Knowledge }) {
   if (runs === 0) return null;
   const known = Object.values(k.cards).filter((c) => c.tier > 0).length;
   const frac = known / CARDS.length;
-  const title = TITLES[Math.min(TITLES.length - 1, Math.floor(frac * 5) + (known > 0 ? 1 : 0))];
+  const title = readerTitle(k);
   const ticks = Math.min(runs, 72);
   const r = 26;
   // Reconstruct a tick sequence: we only know totals, so lay returns first then deaths then unfinished.

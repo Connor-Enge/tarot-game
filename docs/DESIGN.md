@@ -401,6 +401,13 @@ back. The deck sheet shows the run seed and where it was cut.
 **Bonds**: the Codex detail names the four cards this one has most often
 been read beside, with counts. Tap one to follow the thread.
 
+**Sigils for the Codex itself**: Remembered (ten correct Study answers)
+and Bound (a hundred pairs in the sky) are checked after Study, not only at
+a run's end. Share text ends with the reader's title and cards known.
+
+Hover titles were reviewed: every `title` attribute is a card name, a seat
+role gated by the seats-named flag, a sigil rule, or a UI hint.
+
 ### Pillar sweep: where text reaches the screen
 
 Every surface that can show text about a card, and what gates it:

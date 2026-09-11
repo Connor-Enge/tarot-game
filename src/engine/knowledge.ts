@@ -326,3 +326,12 @@ export function parseShare(text: string, descentNames: { id: string; name: strin
   if (dm) out.depth = Number(dm[1]);
   return out;
 }
+
+export const READER_TITLES = ['Unread', 'Novice', 'Reader', 'Adept', 'Seer', 'Oracle'] as const;
+
+/** A title by share of the deck known: Novice at the first card, Oracle at the last fifth. */
+export function readerTitle(k: Knowledge, deckSize = 78): string {
+  const known = Object.values(k.cards).filter((c) => c.tier > 0).length;
+  if (known === 0) return READER_TITLES[0];
+  return READER_TITLES[Math.min(READER_TITLES.length - 1, Math.floor((known / deckSize) * 5) + 1)];
+}

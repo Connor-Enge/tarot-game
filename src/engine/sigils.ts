@@ -32,6 +32,8 @@ export const SIGILS: Sigil[] = [
   { id: 'ten-mastered', glyph: '◈', name: 'Fluent', text: 'Master ten cards.', when: (_r, k) => Object.values(k.cards).filter((c) => c.tier >= 3).length >= 10 },
   { id: 'named-five', glyph: '♪', name: 'Named', text: 'Produce five named readings.', when: (_r, k) => (k.combos?.length ?? 0) >= 5 },
   { id: 'ten-deaths', glyph: '⚰', name: 'Regular', text: 'Die ten times.', when: (_r, k) => k.deaths >= 10 },
+  { id: 'remembered', glyph: '☷', name: 'Remembered', text: 'Answer ten Study questions correctly.', when: (_r, k) => (k.study?.correct ?? 0) >= 10 },
+  { id: 'bound', glyph: '✶', name: 'Bound', text: 'Join a hundred pairs of cards in the sky.', when: (_r, k) => Object.keys(k.links ?? {}).length >= 100 },
   { id: 'all-descents', glyph: '◉', name: 'Every Way Down', text: 'Return by every descent.', when: (_r, k) => ['standard', 'arcana', 'inverted', 'fogbound', 'thin'].every((d) => (k.records?.[d]?.returns ?? 0) >= 1) },
 ];
 
@@ -47,4 +49,12 @@ export function newSigils(run: RunState, k: Knowledge): string[] {
   if (!ended(run)) return [];
   const held = new Set(k.sigils ?? []);
   return SIGILS.filter((s) => !held.has(s.id) && s.when(run, k)).map((s) => s.id);
+}
+
+/** Sigils that depend only on the Codex, checked outside a run (e.g. after Study). */
+const KNOWLEDGE_ONLY = new Set(['remembered', 'bound', 'majors-glimpsed', 'ten-mastered', 'named-five', 'ten-deaths']);
+export function newKnowledgeSigils(k: Knowledge): string[] {
+  const held = new Set(k.sigils ?? []);
+  const dummy = { phase: { kind: 'dead' } } as unknown as RunState;
+  return SIGILS.filter((s) => KNOWLEDGE_ONLY.has(s.id) && !held.has(s.id) && s.when(dummy, k)).map((s) => s.id);
 }

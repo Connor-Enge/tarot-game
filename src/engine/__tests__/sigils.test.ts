@@ -60,3 +60,30 @@ describe('best spread', () => {
     expect(k.records?.standard.best?.returned).toBe(true);
   });
 });
+
+describe('knowledge-only sigils', () => {
+  it('awards Remembered from Study and Bound from links', async () => {
+    const { newKnowledgeSigils } = await import('../sigils');
+    const { noteStudyResult, noteLinks } = await import('../knowledge');
+    let k = emptyKnowledge();
+    for (let i = 0; i < 10; i++) k = noteStudyResult(k, true, i + 1);
+    expect(newKnowledgeSigils(k)).toContain('remembered');
+    const ids = Array.from({ length: 15 }, (_, i) => `c${i}`);
+    k = noteLinks(k, ids); // 105 pairs
+    expect(newKnowledgeSigils(k)).toContain('bound');
+    k = noteSigils(k, newKnowledgeSigils(k));
+    expect(newKnowledgeSigils(k)).toEqual([]);
+  });
+});
+
+describe('reader title', () => {
+  it('scales with the deck known', async () => {
+    const { readerTitle } = await import('../knowledge');
+    let k = emptyKnowledge();
+    expect(readerTitle(k)).toBe('Unread');
+    k = { ...k, cards: { a: { tier: 1 as const, resolved: 1, seats: {} } } };
+    expect(readerTitle(k)).toBe('Novice');
+    const many = Object.fromEntries(Array.from({ length: 70 }, (_, i) => [`x${i}`, { tier: 2 as const, resolved: 1, seats: {} }]));
+    expect(readerTitle({ ...k, cards: many })).toBe('Oracle');
+  });
+});
