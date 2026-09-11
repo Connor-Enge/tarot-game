@@ -1,0 +1,133 @@
+import { cardTags, getCard, type Card, type Tag } from './cards';
+import type { DrawnCard } from './deck';
+import { SLOT_IDS, TIERS, type OutcomeTier, type Scene, type SlotId } from './scenes';
+
+export type Reading = Record<SlotId, DrawnCard>;
+
+export interface SlotResolution {
+  slot: SlotId;
+  card: Card;
+  reversed: boolean;
+  score: number;
+  /** Which tags actually mattered here, for the (hidden) post-mortem. */
+  hits: { tag: Tag; weight: number }[];
+}
+
+export interface Resolution {
+  slots: SlotResolution[];
+  comboNotes: string[];
+  total: number;
+  tier: OutcomeTier;
+  deltas: { vitality: number; clarity: number };
+  narration: string[];
+}
+
+/**
+ * Cross-card combos. This is the extension point for "the combined meaning":
+ * pairs/sets of cards that override or amplify the sum-of-tags read.
+ * Keep these evocative and rare; they're the moments players tell stories about.
+ */
+interface Combo {
+  id: string;
+  when: (r: Reading) => boolean;
+  score: number;
+  note: string;
+}
+
+const has = (r: Reading, cardId: string, slot?: SlotId) =>
+  slot ? r[slot].cardId === cardId : SLOT_IDS.some((s) => r[s].cardId === cardId);
+
+const COMBOS: Combo[] = [
+  {
+    id: 'tower-then-star',
+    when: (r) => has(r, 'major-16', 'threshold') && has(r, 'major-17', 'wake'),
+    score: 3,
+    note: 'After the fall, a light.',
+  },
+  {
+    id: 'death-in-the-wake',
+    when: (r) => has(r, 'major-13', 'wake') && !r.wake.reversed,
+    score: 1,
+    note: 'Something ends, and that was always the point.',
+  },
+  {
+    id: 'devil-vessel-lovers-hand',
+    when: (r) => has(r, 'major-15', 'vessel') && has(r, 'major-6', 'hand'),
+    score: -3,
+    note: 'You chose with the chain still on.',
+  },
+  {
+    id: 'all-reversed',
+    when: (r) => SLOT_IDS.every((s) => r[s].reversed),
+    score: -2,
+    note: 'Every card lay wrong. The reading curdled.',
+  },
+  {
+    id: 'all-major',
+    when: (r) => SLOT_IDS.every((s) => getCard(r[s].cardId).arcana === 'major'),
+    score: 2,
+    note: 'Four great arcana. The room went quiet.',
+  },
+];
+
+export function scoreSlot(scene: Scene, slot: SlotId, drawn: DrawnCard): SlotResolution {
+  const card = getCard(drawn.cardId);
+  const tags = cardTags(card, drawn.reversed);
+  const affinity = scene.affinity[slot];
+  const hits: { tag: Tag; weight: number }[] = [];
+  let score = 0;
+  for (const tag of tags) {
+    const w = affinity[tag];
+    if (w) {
+      hits.push({ tag, weight: w });
+      score += w;
+    }
+  }
+  // Reversed cards are slightly unstable regardless of fit.
+  if (drawn.reversed) score -= 0.5;
+  return { slot, card, reversed: drawn.reversed, score, hits };
+}
+
+export function tierFor(total: number): OutcomeTier {
+  if (total >= 6) return 'triumph';
+  if (total >= 3) return 'boon';
+  if (total > -2) return 'neutral';
+  if (total > -5) return 'harm';
+  return 'calamity';
+}
+
+const BASE_DELTAS: Record<OutcomeTier, { vitality: number; clarity: number }> = {
+  calamity: { vitality: -4, clarity: 0 },
+  harm: { vitality: -2, clarity: 0 },
+  neutral: { vitality: 0, clarity: 1 },
+  boon: { vitality: 1, clarity: 1 },
+  triumph: { vitality: 2, clarity: 2 },
+};
+
+export function resolveReading(scene: Scene, reading: Reading): Resolution {
+  const slots = SLOT_IDS.map((s) => scoreSlot(scene, s, reading[s]));
+  const comboNotes: string[] = [];
+  let total = slots.reduce((a, s) => a + s.score, 0);
+  for (const c of COMBOS) {
+    if (c.when(reading)) {
+      total += c.score;
+      comboNotes.push(c.note);
+    }
+  }
+  const tier = tierFor(total);
+  const base = BASE_DELTAS[tier];
+  const deltas = {
+    vitality: base.vitality < 0 ? base.vitality * scene.stakes : base.vitality,
+    clarity: base.clarity,
+  };
+  const narration = [
+    ...slots.map((s) => (s.reversed ? s.card.omen.reversed : s.card.omen.upright)),
+    ...comboNotes,
+    scene.outcomes[tier],
+  ];
+  return { slots, comboNotes, total, tier, deltas, narration };
+}
+
+export function tierIndex(t: OutcomeTier): number {
+  return TIERS.indexOf(t);
+}
