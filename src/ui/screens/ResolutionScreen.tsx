@@ -1,5 +1,5 @@
-import { currentScene, getCard, getRelic, SLOT_IDS, SLOTS, tradeText } from '../../engine';
-import { StrangerArt } from '../art/stranger';
+import { currentScene, getCard, getRelic, isPeddlerTrade, SLOT_IDS, SLOTS, tradeText } from '../../engine';
+import { PeddlerArt, StrangerArt } from '../art/stranger';
 
 const TIER_GLYPH = { calamity: '✖', harm: '▽', neutral: '◇', boon: '△', triumph: '★' } as const;
 import { useEffect, useState } from 'react';
@@ -116,20 +116,21 @@ function ResolutionScreenInner() {
         )}
         {trade && (
           <div className="trade rise" style={{ animationDelay: `${500 + resolution.narration.length * step}ms` }}>
-            <StrangerArt className="trade__art" />
+            {isPeddlerTrade(trade) ? <PeddlerArt className="trade__art" /> : <StrangerArt className="trade__art" />}
             <div className="trade__body">
-              <p className="trade__lead">Someone is already sitting by the fire. They have a trade.</p>
+              <p className="trade__lead">{isPeddlerTrade(trade) ? 'A peddler has laid a cloth on the nearest stall. They have a price.' : 'Someone is already sitting by the fire. They have a trade.'}</p>
               <p className="trade__text">
                 {tradeText(trade)}
                 {trade.id === 'swap-boon' && <span className="muted"> {getRelic(trade.give).name} for {getRelic(trade.get).name}: {getRelic(trade.get).text}</span>}
                 {trade.id === 'lift-curse' && <span className="muted"> {getRelic(trade.curse).name} would leave you.</span>}
                 {trade.id === 'bless-hand' && <span className="muted"> {getCard(trade.cardId).name} would land upright from now on, and read a little stronger.</span>}
+                {trade.id === 'scar-for-boon' && <span className="muted"> {getCard(trade.cardId).name} would land reversed from now on. You would take {getRelic(trade.get).name}: {getRelic(trade.get).text}</span>}
               </p>
               <button type="button" className="btn btn--small" onClick={acceptTrade}>Take it</button>
             </div>
           </div>
         )}
-        {traded && <p className="trade__done muted small rise">You shake on it. They do not look up.</p>}
+        {traded && <p className="trade__done muted small rise">{scene.id === 'market' ? 'You pay. The cloth is rolled before you have turned away.' : 'You shake on it. They do not look up.'}</p>}
         {scene.terminal && run.well !== undefined && (
           <p className="under rise" style={{ animationDelay: `${300 + resolution.narration.length * step}ms` }}>
             <span className="under__mark" aria-hidden>⨀</span> There is no surface here. The dark opens again beneath you, and you take one breath before it. <span className="stat--vit">♥ +2</span> From here every reading costs <span className="stat--vit">♥ {(run.well ?? 0) + 1}</span> more, however it goes.

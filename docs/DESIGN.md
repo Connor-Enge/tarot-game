@@ -532,7 +532,12 @@ Once per run, at the first rest scene that goes at least neutrally, someone is
 already sitting by the fire with one trade, drawn from what applies: four
 clarity for two vitality; a boon you hold for a boon you do not; three vitality to be rid
 of a curse; two clarity to bless the card that sat in the Hand tonight (it
-is charged: upright from then on, and a little stronger). Take it or walk on. Taking one earns the Dealt With sigil. The
+is charged: upright from then on, and a little stronger). Take it or walk on.
+
+At the market, once per run, a peddler sets out a cloth instead, with
+prices of their own: two vitality for three clarity, or a scar on the card
+that sat in the Wake tonight (reversed from then on) in exchange for a boon
+you do not hold. The peddler and the Stranger are met separately. Taking one earns the Dealt With sigil. The
 trade never kills you and is never offered twice in a scene.
 
 ## Vows
@@ -637,7 +642,7 @@ identity, not power, which is the point.
   omen is distinct.
 - **Scenes**: 30 exist (29 plus the Abyss), which was the target; more are welcome. Latest: the mill, the drowned chapel, the hunt.
 - **Named readings**: 34. Each is a memorable line, never a definition.
-- **Relics**: 12 boons, 8 curses. **Vows**: 7. **Weathers**: 14. **Trades**: 4. **Sigils**: 24.
+- **Relics**: 12 boons, 8 curses. **Vows**: 7. **Weathers**: 14. **Trades**: 6. **Sigils**: 24.
 - **Combos**: 34 named readings exist. This is the richest vein for "the
   combined meaning" and should keep growing with named, memorable results.
 - **Art**: all 78 faces are procedural SVG (`src/ui/art/`). Majors are

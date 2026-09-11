@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { acceptTrade, startRun, type RunState } from '../run';
+import { acceptTrade, isPeddlerTrade, startRun, type RunState } from '../run';
 
 const resolved = (run: RunState, extra: Partial<Extract<RunState['phase'], { kind: 'resolved' }>>): RunState => ({
   ...run,
@@ -27,6 +27,21 @@ describe("the Stranger's trade", () => {
     // Refuses to kill you.
     const r3 = resolved({ ...startRun(1), relics: ['fog'], vitality: 3 }, { trade: { id: 'lift-curse', give: 3, curse: 'fog' } });
     expect(acceptTrade(r3)).toBe(r3);
+  });
+  it("the peddler's prices: blood for clarity, a scar for a boon", () => {
+    let run = resolved({ ...startRun(1), vitality: 6, clarity: 1 }, { trade: { id: 'vitality-for-clarity', give: 2, get: 3 } });
+    expect(isPeddlerTrade(run.phase.kind === 'resolved' ? run.phase.trade! : (null as never))).toBe(true);
+    run = acceptTrade(run);
+    expect(run.vitality).toBe(4);
+    expect(run.clarity).toBe(4);
+    expect(run.tradeTaken).toBe('vitality-for-clarity');
+    const thin = resolved({ ...startRun(1), vitality: 2 }, { trade: { id: 'vitality-for-clarity', give: 2, get: 3 } });
+    expect(acceptTrade(thin)).toBe(thin);
+    let scar = resolved({ ...startRun(1), relics: [] }, { trade: { id: 'scar-for-boon', cardId: 'cups-4', get: 'coin' } });
+    scar = acceptTrade(scar);
+    expect(scar.relics).toEqual(['coin']);
+    expect(scar.marks['cups-4']).toBe('scarred');
+    expect(isPeddlerTrade({ id: 'lift-curse', give: 3, curse: 'fog' })).toBe(false);
   });
   it('blesses the card you acted with, for clarity', () => {
     let run = resolved({ ...startRun(1), clarity: 3, marks: {} }, { trade: { id: 'bless-hand', give: 2, cardId: 'major-1' } });

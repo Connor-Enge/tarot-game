@@ -40,7 +40,14 @@ export type Trade =
   | { id: 'clarity-for-vitality'; give: number; get: number }
   | { id: 'swap-boon'; give: string; get: string }
   | { id: 'lift-curse'; give: number; curse: string }
-  | { id: 'bless-hand'; give: number; cardId: string };
+  | { id: 'bless-hand'; give: number; cardId: string }
+  | { id: 'vitality-for-clarity'; give: number; get: number }
+  | { id: 'scar-for-boon'; cardId: string; get: string };
+
+/** The peddler at the market makes the last two; the Stranger by the fire makes the rest. */
+export function isPeddlerTrade(t: Trade): boolean {
+  return t.id === 'vitality-for-clarity' || t.id === 'scar-for-boon';
+}
 
 export function tradeText(t: Trade): string {
   switch (t.id) {
@@ -48,6 +55,8 @@ export function tradeText(t: Trade): string {
     case 'swap-boon': return `Give up what you carry for something else of theirs.`;
     case 'lift-curse': return `Give ♥${t.give} and be rid of what follows you.`;
     case 'bless-hand': return `Give ◈${t.give} and they will bless the card you acted with tonight.`;
+    case 'vitality-for-clarity': return `Give ♥${t.give} for ◈${t.get}.`;
+    case 'scar-for-boon': return `Let them scar the card that followed you tonight, and take something from the cloth.`;
   }
 }
 
@@ -104,6 +113,8 @@ export interface RunState {
   well?: number;
   /** True once the Stranger's trade has been taken this run. */
   traded?: boolean;
+  /** True once the peddler at the market has made an offer this run. */
+  peddlerMet?: boolean;
   /** Which trade it was. */
   tradeTaken?: Trade['id'];
   /** True once the Stranger has appeared this run. They come once. */
@@ -500,7 +511,19 @@ function resolve(run: RunState): RunState {
     if (clarity >= 2 && marks[revealed.hand.cardId] !== 'charged') options.push({ id: 'bless-hand', give: 2, cardId: revealed.hand.cardId });
     if (options.length) trade = rng.pick(options);
   }
-  const base = withRng({ ...gained, deck, history, vitality, clarity, marks, relics, echo, vow, strangerMet: run.strangerMet || !!trade }, rng);
+  // At the market, once, a peddler sets out a cloth. Their prices are stranger.
+  let peddler = false;
+  if (scene.id === 'market' && !run.peddlerMet && resolution.tier !== 'calamity' && resolution.tier !== 'harm') {
+    const options: Trade[] = [];
+    if (vitality > 3) options.push({ id: 'vitality-for-clarity', give: 2, get: 3 });
+    const unheld = BOON_IDS.filter((id) => !relics.includes(id));
+    if (unheld.length && marks[revealed.wake.cardId] !== 'scarred') options.push({ id: 'scar-for-boon', cardId: revealed.wake.cardId, get: rng.pick(unheld) });
+    if (options.length) {
+      trade = rng.pick(options);
+      peddler = true;
+    }
+  }
+  const base = withRng({ ...gained, deck, history, vitality, clarity, marks, relics, echo, vow, strangerMet: run.strangerMet || (!!trade && !peddler), peddlerMet: run.peddlerMet || peddler }, rng);
   if (vitality <= 0) return { ...base, vitality: 0, phase: { kind: 'dead', resolution } };
   if (scene.terminal && run.well !== undefined) {
     // The Well: no surface. A deeper map opens under the Abyss, and a breath comes with it.
@@ -530,6 +553,12 @@ export function acceptTrade(run: RunState): RunState {
     case 'bless-hand':
       if (run.clarity < t.give) return run;
       return { ...run, clarity: run.clarity - t.give, marks: { ...run.marks, [t.cardId]: 'charged' }, phase, traded: true, tradeTaken: t.id };
+    case 'vitality-for-clarity':
+      if (run.vitality <= t.give) return run;
+      return { ...run, vitality: run.vitality - t.give, clarity: clampClarity(run, run.clarity + t.get), phase, traded: true, tradeTaken: t.id };
+    case 'scar-for-boon':
+      if (run.relics.includes(t.get)) return run;
+      return { ...onGain(run, t.get), relics: [...run.relics, t.get], marks: { ...run.marks, [t.cardId]: 'scarred' }, phase, traded: true, tradeTaken: t.id };
   }
 }
 
