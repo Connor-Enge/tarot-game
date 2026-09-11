@@ -43,14 +43,34 @@ export interface Scene {
   outcomes: Record<OutcomeTier, string>;
   /** Scenes tagged `terminal` end the run on success. */
   terminal?: boolean;
+  kind: SceneKind;
+  /** Hue (0-360) that tints the screen while you are here. */
+  hue: number;
+  /** Earliest act this scene may appear in (1-based). */
+  minAct: number;
+  /** Multiplier on positive vitality. Rest scenes mend more. */
+  mend?: number;
 }
 
 export type OutcomeTier = 'calamity' | 'harm' | 'neutral' | 'boon' | 'triumph';
 export const TIERS: readonly OutcomeTier[] = ['calamity', 'harm', 'neutral', 'boon', 'triumph'];
 
+/** What the map shows before you arrive. The scene itself stays hidden. */
+export type SceneKind = 'threat' | 'passage' | 'mystery' | 'rest' | 'abyss';
+export const KIND_GLYPH: Record<SceneKind, string> = {
+  threat: '⚔',
+  passage: '⛩',
+  mystery: '✧',
+  rest: '♨',
+  abyss: '◉',
+};
+
 export const SCENES: Record<string, Scene> = {
   crossing: {
     id: 'crossing',
+    kind: 'passage',
+    hue: 210,
+    minAct: 1,
     place: 'A rope bridge over a black gorge.',
     prompt: 'A crossing. Something below is breathing.',
     stakes: 1,
@@ -70,6 +90,9 @@ export const SCENES: Record<string, Scene> = {
   },
   stranger: {
     id: 'stranger',
+    kind: 'mystery',
+    hue: 30,
+    minAct: 1,
     place: 'A fire in a ring of stones, and someone already sitting at it.',
     prompt: 'A stranger offers you a seat.',
     stakes: 1,
@@ -89,6 +112,9 @@ export const SCENES: Record<string, Scene> = {
   },
   door: {
     id: 'door',
+    kind: 'passage',
+    hue: 270,
+    minAct: 1,
     place: 'A door standing alone in a field, no wall around it.',
     prompt: 'A door. It is locked from your side.',
     stakes: 1,
@@ -108,6 +134,9 @@ export const SCENES: Record<string, Scene> = {
   },
   beast: {
     id: 'beast',
+    kind: 'threat',
+    hue: 0,
+    minAct: 1,
     place: 'A clearing. The grass is flattened in a wide circle.',
     prompt: 'Something large is watching you from the trees.',
     stakes: 2,
@@ -127,6 +156,9 @@ export const SCENES: Record<string, Scene> = {
   },
   well: {
     id: 'well',
+    kind: 'mystery',
+    hue: 190,
+    minAct: 1,
     place: 'A stone well, its rope frayed, its bucket missing.',
     prompt: 'The well is dark, and something in it is singing.',
     stakes: 1,
@@ -146,6 +178,9 @@ export const SCENES: Record<string, Scene> = {
   },
   ruin: {
     id: 'ruin',
+    kind: 'threat',
+    hue: 40,
+    minAct: 1,
     place: 'A tower, broken off at the third floor. Stairs go up into nothing.',
     prompt: 'A ruin. Someone built this to last.',
     stakes: 2,
@@ -165,6 +200,10 @@ export const SCENES: Record<string, Scene> = {
   },
   rest: {
     id: 'rest',
+    kind: 'rest',
+    hue: 120,
+    minAct: 1,
+    mend: 3,
     place: 'A hollow under a hill. Dry. Quiet.',
     prompt: 'A place to rest. If you dare to.',
     stakes: 1,
@@ -182,8 +221,188 @@ export const SCENES: Record<string, Scene> = {
       triumph: 'You sleep, and you dream the next stretch of road, and in the morning it is exactly so.',
     },
   },
+  market: {
+    id: 'market',
+    kind: 'mystery',
+    hue: 45,
+    minAct: 1,
+    place: 'Stalls in a dead town. Every one of them is open, and no one is behind them.',
+    prompt: 'A market. The prices are written in a hand you almost recognize.',
+    stakes: 1,
+    affinity: {
+      vessel: { wealth: 1, wisdom: 1, illusion: -1 },
+      threshold: { illusion: 2, wealth: 1, binding: 1 },
+      hand: { truth: 1, patience: 1, sacrifice: 1, power: -1, chaos: -1 },
+      wake: { wealth: 2, freedom: 1, binding: -2 },
+    },
+    outcomes: {
+      calamity: 'You buy something. The price was not written in coin.',
+      harm: 'You leave with less than you came with and cannot say what you bought.',
+      neutral: 'You touch nothing, and nothing touches you.',
+      boon: 'One stall has exactly what you needed, and takes only what you can spare.',
+      triumph: 'You leave a thing you did not need and take a thing you did, and the town lets you.',
+    },
+  },
+  mirror: {
+    id: 'mirror',
+    kind: 'mystery',
+    hue: 300,
+    minAct: 1,
+    place: 'A standing pool so still it has an edge.',
+    prompt: 'Your reflection is a moment behind you.',
+    stakes: 1,
+    affinity: {
+      vessel: { truth: 2, illusion: 1, fear: -2 },
+      threshold: { illusion: 2, water: 1, wisdom: 1 },
+      hand: { patience: 2, wisdom: 1, action: -2 },
+      wake: { truth: 2, renewal: 1, illusion: -2 },
+    },
+    outcomes: {
+      calamity: 'You look too long. When you turn away, it does not.',
+      harm: 'You see something in your face you did not want confirmed.',
+      neutral: 'It catches up with you, and you move on together.',
+      boon: 'It shows you a card you have not drawn yet.',
+      triumph: 'You look, and it looks back, and for once you both agree.',
+    },
+  },
+  gallows: {
+    id: 'gallows',
+    kind: 'threat',
+    hue: 20,
+    minAct: 1,
+    place: 'A crossroads with a post. Rope, but no one in it.',
+    prompt: 'A place where something was decided.',
+    stakes: 2,
+    affinity: {
+      vessel: { truth: 1, order: 1, fear: -1 },
+      threshold: { death: 1, ending: 1, truth: 1, order: 1 },
+      hand: { sacrifice: 2, truth: 1, illusion: -2, binding: -1 },
+      wake: { freedom: 2, renewal: 1, binding: -2, death: -1 },
+    },
+    outcomes: {
+      calamity: 'The rope was for someone. It turns out to be you.',
+      harm: 'You pass beneath it, and it brushes your neck as if remembering.',
+      neutral: 'You take the road that leads away from it.',
+      boon: 'Cut into the post: a name, and beneath it, a direction.',
+      triumph: 'You cut the rope down, and the crossroads becomes a road.',
+    },
+  },
+  procession: {
+    id: 'procession',
+    kind: 'passage',
+    hue: 330,
+    minAct: 1,
+    place: 'A line of hooded figures on the road ahead, walking your way.',
+    prompt: 'A procession. There is room for one more.',
+    stakes: 1,
+    affinity: {
+      vessel: { patience: 1, order: 1, freedom: 1, chaos: -1 },
+      threshold: { binding: 1, order: 2, death: 1 },
+      hand: { patience: 2, order: 1, conflict: -2, action: -1 },
+      wake: { freedom: 2, wisdom: 1, binding: -2 },
+    },
+    outcomes: {
+      calamity: 'You join. The hood is comfortable. You do not remember why you were walking the other way.',
+      harm: 'They pass, and one of them takes your hand on the way by, and keeps it a while.',
+      neutral: 'You stand aside and let them pass.',
+      boon: 'One of them presses something into your palm without breaking step.',
+      triumph: 'They part around you like water, and when they are gone, the road is shorter.',
+    },
+  },
+  storm: {
+    id: 'storm',
+    kind: 'threat',
+    hue: 220,
+    minAct: 2,
+    place: 'Open moor. The sky is the wrong color and getting closer.',
+    prompt: 'A storm. Nothing to shelter under for miles.',
+    stakes: 2,
+    affinity: {
+      vessel: { patience: 1, power: 1, hope: 1, fear: -1 },
+      threshold: { chaos: 2, air: 1, fire: 1, order: -1 },
+      hand: { patience: 2, sacrifice: 1, action: -1, chaos: -2 },
+      wake: { renewal: 2, truth: 1, loss: -1 },
+    },
+    outcomes: {
+      calamity: 'Lightning finds you. It was looking.',
+      harm: 'You are struck sideways by wind and wake in a ditch, wet and lighter.',
+      neutral: 'It passes over. You are soaked and alive.',
+      boon: 'The storm scours the moor and uncovers a road beneath the heather.',
+      triumph: 'You stand in it, and it bends around you, and the sky remembers your shape.',
+    },
+  },
+  library: {
+    id: 'library',
+    kind: 'mystery',
+    hue: 60,
+    minAct: 2,
+    place: 'Shelves in a cave, dry as bone. Books that were never printed.',
+    prompt: 'A library. One book is open, and the page is turning by itself.',
+    stakes: 1,
+    affinity: {
+      vessel: { wisdom: 2, patience: 1, action: -1 },
+      threshold: { wisdom: 1, truth: 1, illusion: 1, order: 1 },
+      hand: { patience: 2, wisdom: 2, fire: -2, chaos: -1 },
+      wake: { wisdom: 2, truth: 1, freedom: 1, binding: -1 },
+    },
+    outcomes: {
+      calamity: 'You read. The book reads you back, and it is a faster reader.',
+      harm: 'You lose a day in the pages and come out knowing something you would rather not.',
+      neutral: 'You close the book. The page stops turning.',
+      boon: 'The open page is about you, and it ends well.',
+      triumph: 'You find the book that describes this room, and in it, the way out.',
+    },
+  },
+  siege: {
+    id: 'siege',
+    kind: 'threat',
+    hue: 10,
+    minAct: 2,
+    place: 'A wall with a gate. Something is trying to come through from the other side.',
+    prompt: 'A gate holding. Barely.',
+    stakes: 3,
+    affinity: {
+      vessel: { power: 1, order: 1, hope: 1, fear: -2 },
+      threshold: { conflict: 2, fire: 1, chaos: 1 },
+      hand: { power: 2, order: 1, action: 1, patience: -1, illusion: -2 },
+      wake: { order: 1, renewal: 1, freedom: 1, loss: -2, ending: -1 },
+    },
+    outcomes: {
+      calamity: 'The gate gives, and so do you.',
+      harm: 'You hold the gate until dawn. It costs you, and the wall does not thank you.',
+      neutral: 'Whatever it was stops trying, eventually.',
+      boon: 'You brace the gate, and something on the far side goes quiet and does not return.',
+      triumph: 'You open the gate. Whatever was pushing falls through, and it is smaller than it sounded.',
+    },
+  },
+  shrine: {
+    id: 'shrine',
+    kind: 'rest',
+    hue: 160,
+    minAct: 2,
+    mend: 2,
+    place: 'A small shrine, candles lit, no one to have lit them.',
+    prompt: 'An altar. It wants something, or it wants nothing. Hard to say.',
+    stakes: 1,
+    affinity: {
+      vessel: { hope: 1, wisdom: 1, patience: 1, power: -1 },
+      threshold: { order: 1, illusion: 1, love: 1 },
+      hand: { sacrifice: 2, patience: 1, love: 1, action: -2, wealth: -1 },
+      wake: { renewal: 2, hope: 2, loss: -1 },
+    },
+    outcomes: {
+      calamity: 'You take a candle for the road. The shrine takes something for the road too.',
+      harm: 'You leave nothing and the candles go out as you walk away, one by one, behind you.',
+      neutral: 'You sit a while in the candlelight, and then go.',
+      boon: 'You leave a small thing, and the ache you have carried for miles lifts.',
+      triumph: 'You leave something that mattered, and the candles burn brighter, and so do you.',
+    },
+  },
   abyss: {
     id: 'abyss',
+    kind: 'abyss',
+    hue: 260,
+    minAct: 3,
     place: 'The bottom. The dark here has weight.',
     prompt: 'This is where the cards were leading. Read the last of it.',
     stakes: 3,
@@ -204,17 +423,60 @@ export const SCENES: Record<string, Scene> = {
   },
 };
 
-/** A fixed-shape run: 6 ordinary scenes then the abyss. Replace with a map later. */
-export function buildRunPath(pick: <T>(arr: readonly T[]) => T): string[] {
-  const pool = Object.values(SCENES).filter((s) => !s.terminal).map((s) => s.id);
-  const path: string[] = [];
-  let last = '';
-  while (path.length < 6) {
-    const id = pick(pool);
-    if (id === last) continue;
-    path.push(id);
-    last = id;
+// --- the map ---------------------------------------------------------------
+
+export interface MapNode {
+  id: string;
+  sceneId: string;
+  kind: SceneKind;
+  act: number;
+  layer: number;
+}
+
+/** Layers per act. The last act is the Abyss alone. */
+export const ACT_LAYERS = [4, 4];
+export const TOTAL_LAYERS = ACT_LAYERS.reduce((a, b) => a + b, 0) + 1;
+
+/**
+ * A layered map: every node in layer N connects to every node in layer N+1.
+ * Cheap to render on a phone, still gives a real choice each step.
+ */
+export function buildMap(rng: { pick<T>(arr: readonly T[]): T; int(max: number): number }): MapNode[][] {
+  const layers: MapNode[][] = [];
+  const used = new Set<string>();
+  let layerIndex = 0;
+  ACT_LAYERS.forEach((count, actIdx) => {
+    const act = actIdx + 1;
+    const pool = Object.values(SCENES).filter((s) => !s.terminal && s.minAct <= act);
+    for (let l = 0; l < count; l++) {
+      const width = 2 + rng.int(2); // 2-3 nodes
+      const layer: MapNode[] = [];
+      const kindsHere = new Set<SceneKind>();
+      for (let n = 0; n < width; n++) {
+        // Prefer unused scenes and kinds not already in this layer.
+        let candidates = pool.filter((s) => !used.has(s.id) && !kindsHere.has(s.kind));
+        if (candidates.length === 0) candidates = pool.filter((s) => !used.has(s.id));
+        if (candidates.length === 0) candidates = pool;
+        // Rest scenes only from the second layer of an act onward.
+        if (l === 0) candidates = candidates.filter((s) => s.kind !== 'rest').length ? candidates.filter((s) => s.kind !== 'rest') : candidates;
+        const scene = rng.pick(candidates);
+        used.add(scene.id);
+        kindsHere.add(scene.kind);
+        layer.push({ id: `${layerIndex}-${n}`, sceneId: scene.id, kind: scene.kind, act, layer: layerIndex });
+      }
+      layers.push(layer);
+      layerIndex++;
+    }
+  });
+  layers.push([{ id: `${layerIndex}-0`, sceneId: 'abyss', kind: 'abyss', act: ACT_LAYERS.length + 1, layer: layerIndex }]);
+  return layers;
+}
+
+export function actOfLayer(layer: number): number {
+  let acc = 0;
+  for (let i = 0; i < ACT_LAYERS.length; i++) {
+    acc += ACT_LAYERS[i];
+    if (layer < acc) return i + 1;
   }
-  path.push('abyss');
-  return path;
+  return ACT_LAYERS.length + 1;
 }

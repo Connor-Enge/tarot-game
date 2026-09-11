@@ -1,25 +1,72 @@
+import { useEffect } from 'react';
+import { currentNode, SCENES } from './engine';
 import { useGame } from './store';
+import { ArtDefs } from './ui/art/CardArt';
+import { Ambient } from './ui/components/Ambient';
 import { CodexScreen } from './ui/screens/CodexScreen';
+import { GalleryScreen } from './ui/screens/GalleryScreen';
+import { MapScreen } from './ui/screens/MapScreen';
 import { ReadingScreen } from './ui/screens/ReadingScreen';
 import { ResolutionScreen } from './ui/screens/ResolutionScreen';
 import { RunEndScreen } from './ui/screens/RunEndScreen';
 import { TitleScreen } from './ui/screens/TitleScreen';
 
+function useSceneHue() {
+  const run = useGame((s) => s.run);
+  const screen = useGame((s) => s.screen);
+  useEffect(() => {
+    let hue = 260;
+    if (screen === 'run' && run) {
+      const node = currentNode(run);
+      if (node) hue = SCENES[node.sceneId].hue;
+      if (run.phase.kind === 'dead') hue = 0;
+      if (run.phase.kind === 'ascended') hue = 45;
+    }
+    document.documentElement.style.setProperty('--scene-hue', String(hue));
+  }, [run, screen]);
+}
+
 export function App() {
   const screen = useGame((s) => s.screen);
   const run = useGame((s) => s.run);
+  useSceneHue();
 
-  if (screen === 'codex') return <CodexScreen />;
-  if (screen === 'run' && run) {
+  let view = <TitleScreen />;
+  let key = 'title';
+  if (import.meta.env.DEV && location.search.includes('gallery')) {
+    view = <GalleryScreen />;
+    key = 'gallery';
+  } else if (screen === 'codex') {
+    view = <CodexScreen />;
+    key = 'codex';
+  } else if (screen === 'run' && run) {
     switch (run.phase.kind) {
+      case 'map':
+        view = <MapScreen />;
+        key = `map-${run.layer}`;
+        break;
       case 'reading':
-        return <ReadingScreen />;
+        view = <ReadingScreen />;
+        key = `reading-${run.layer}`;
+        break;
       case 'resolved':
-        return <ResolutionScreen />;
+        view = <ResolutionScreen />;
+        key = `resolved-${run.layer}`;
+        break;
       case 'dead':
       case 'ascended':
-        return <RunEndScreen />;
+        view = <RunEndScreen />;
+        key = 'end';
+        break;
     }
   }
-  return <TitleScreen />;
+  return (
+    <>
+      <ArtDefs />
+      <Ambient />
+      <div className="view" key={key}>
+        {view}
+      </div>
+    </>
+  );
 }

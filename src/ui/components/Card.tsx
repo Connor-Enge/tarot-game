@@ -1,4 +1,5 @@
-import { getCard, type Card as CardData } from '../../engine';
+import { getCard } from '../../engine';
+import { CardArt, CardBack } from '../art/CardArt';
 
 interface Props {
   cardId?: string;
@@ -7,40 +8,43 @@ interface Props {
   size?: 'sm' | 'md' | 'lg';
   lifted?: boolean;
   dim?: boolean;
+  mark?: 'charged' | 'scarred';
+  /** A whispered keyword, shown as a ribbon. Never the full meaning. */
+  whisper?: string;
+  /** Re-runs the enter animation when this changes. */
+  animKey?: string | number;
+  delay?: number;
   onClick?: () => void;
 }
 
-/**
- * Placeholder card art: a glyph + roman numeral for majors, suit sigil + rank for minors.
- * Deliberately no meaning text anywhere on the card face.
- */
-export function Card({ cardId, reversed = false, faceDown = false, size = 'md', lifted, dim, onClick }: Props) {
+/** Card faces show name and art only. Meaning lives in the Codex. */
+export function Card({ cardId, reversed = false, faceDown = false, size = 'md', lifted, dim, mark, whisper, animKey, delay = 0, onClick }: Props) {
   const card = cardId ? getCard(cardId) : undefined;
-  const cls = ['card', `card--${size}`, faceDown && 'card--down', reversed && 'card--rev', lifted && 'card--lifted', dim && 'card--dim']
+  const cls = [
+    'card',
+    `card--${size}`,
+    faceDown && 'card--down',
+    reversed && 'card--rev',
+    lifted && 'card--lifted',
+    dim && 'card--dim',
+    mark && `card--${mark}`,
+  ]
     .filter(Boolean)
     .join(' ');
   return (
-    <button type="button" className={cls} onClick={onClick} aria-label={card ? `${card.name}${reversed ? ', reversed' : ''}` : 'face-down card'}>
-      {faceDown || !card ? <div className="card__back" /> : <CardFace card={card} />}
+    <button
+      type="button"
+      className={cls}
+      onClick={onClick}
+      style={{ animationDelay: `${delay}ms` }}
+      key={animKey}
+      aria-label={card ? `${card.name}${reversed ? ', reversed' : ''}` : 'face-down card'}
+    >
+      <div className="card__inner">
+        {faceDown || !card ? <CardBack className="card__svg" /> : <CardArt cardId={card.id} className="card__svg" />}
+        {mark === 'scarred' && <div className="card__scar" aria-hidden />}
+      </div>
+      {whisper && <div className="card__whisper">{whisper}</div>}
     </button>
   );
 }
-
-const SUIT_SIGIL: Record<string, string> = { wands: '⚚', cups: '♆', swords: '⚔', pentacles: '⛤' };
-const ROMAN = ['0', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX', 'XXI'];
-const RANK = ['', 'A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'P', 'Kn', 'Q', 'K'];
-
-function CardFace({ card }: { card: CardData }) {
-  const major = card.arcana === 'major';
-  return (
-    <div className={`card__face ${major ? 'card__face--major' : `card__face--${card.suit}`}`}>
-      <div className="card__corner">{major ? ROMAN[card.number] : RANK[card.number]}</div>
-      <div className="card__art" aria-hidden>
-        {major ? MAJOR_GLYPH[card.number] : SUIT_SIGIL[card.suit!]}
-      </div>
-      <div className="card__name">{card.name}</div>
-    </div>
-  );
-}
-
-const MAJOR_GLYPH = ['✦', '∴', '☽', '❀', '♜', '⚶', '☍', '⛨', '∞', '🜍', '⟳', '⚖', '⥯', '⚰', '⚗', '⛧', '⚡', '✧', '☾', '☉', '♪', '◎'];

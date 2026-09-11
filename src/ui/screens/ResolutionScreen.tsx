@@ -19,26 +19,28 @@ export function ResolutionScreen() {
       </header>
 
       <section className="spread spread--final">
-        {SLOT_IDS.map((id) => (
-          <Card key={id} cardId={last.reading[id].cardId} reversed={last.reading[id].reversed} size="sm" />
+        {SLOT_IDS.map((id, i) => (
+          <div className="deal" style={{ animationDelay: `${i * 80}ms` }} key={id}>
+            <Card cardId={last.reading[id].cardId} reversed={last.reading[id].reversed} size="sm" mark={run.marks[last.reading[id].cardId]} />
+          </div>
         ))}
       </section>
 
       <section className="narration">
         {resolution.narration.map((line, i) => (
-          <p key={i} className={i === resolution.narration.length - 1 ? 'narration__outcome' : 'narration__omen'}>
+          <p key={i} className={`rise ${i === resolution.narration.length - 1 ? 'narration__outcome' : 'narration__omen'}`} style={{ animationDelay: `${400 + i * 550}ms` }}>
             {line}
           </p>
         ))}
-        <p className="deltas">
+        <p className="deltas rise" style={{ animationDelay: `${400 + resolution.narration.length * 550}ms` }}>
           {resolution.deltas.vitality !== 0 && <span className="stat--vit">♥ {fmt(resolution.deltas.vitality)}</span>}
           {resolution.deltas.clarity !== 0 && <span className="stat--cla">◈ {fmt(resolution.deltas.clarity)}</span>}
         </p>
       </section>
 
       <footer className="actions">
-        <button className="btn btn--primary" onClick={advance}>
-          Walk on
+        <button className="btn btn--primary rise" style={{ animationDelay: `${600 + resolution.narration.length * 550}ms` }} onClick={advance}>
+          {resolution.tier === 'triumph' ? 'Walk on, lighter' : resolution.tier === 'calamity' ? 'Crawl on' : 'Walk on'}
         </button>
       </footer>
     </main>

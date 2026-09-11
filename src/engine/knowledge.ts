@@ -52,6 +52,15 @@ export function noteResolved(k: Knowledge, cardId: string, seat: SlotId): Knowle
   return { ...k, cards: { ...k.cards, [cardId]: next } };
 }
 
+/** A whispered keyword counts toward glimpsing the card. */
+export function noteWhisper(k: Knowledge, cardId: string): Knowledge {
+  const e = entry(k, cardId);
+  const resolved = e.resolved + 1;
+  let next: CardKnowledge = { ...e, resolved };
+  if (resolved >= RESOLVES_TO_GLIMPSE) next = raise(next, 1);
+  return { ...k, cards: { ...k.cards, [cardId]: next } };
+}
+
 /**
  * The player died with these four cards on the table.
  * The cards that killed you are the cards you finally understand.

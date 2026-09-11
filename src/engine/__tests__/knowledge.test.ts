@@ -37,3 +37,12 @@ describe('knowledge', () => {
     expect(loadKnowledge({ getItem: () => 'garbage' })).toEqual(emptyKnowledge());
   });
 });
+
+describe('whisper', () => {
+  it('counts toward glimpsing', async () => {
+    const { noteWhisper } = await import('../knowledge');
+    let k = emptyKnowledge();
+    for (let i = 0; i < RESOLVES_TO_GLIMPSE; i++) k = noteWhisper(k, 'swords-3');
+    expect(tierOf(k, 'swords-3')).toBe(1);
+  });
+});

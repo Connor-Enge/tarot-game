@@ -1,0 +1,152 @@
+import { getCard, type Card } from '../../engine';
+import { MAJOR_ART } from './majors';
+import { minorArt } from './minors';
+import { GOLD_FLAT, INK, PALE } from './primitives';
+
+/**
+ * Shared gradients, patterns and filters. Rendered ONCE at the app root;
+ * every card references them by id, so 12 cards on screen share one defs block.
+ */
+export function ArtDefs() {
+  return (
+    <svg width={0} height={0} style={{ position: 'absolute' }} aria-hidden>
+      <defs>
+        <linearGradient id="goldFoil" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#f3dc8a" />
+          <stop offset="0.45" stopColor="#c9a24a" />
+          <stop offset="0.7" stopColor="#f0d67a" />
+          <stop offset="1" stopColor="#a67c2e" />
+        </linearGradient>
+        <linearGradient id="skyDeep" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#1d1a3f" />
+          <stop offset="1" stopColor="#4b3a6b" />
+        </linearGradient>
+        <linearGradient id="paperMajor" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#f1e5c8" />
+          <stop offset="1" stopColor="#d9c08a" />
+        </linearGradient>
+        <linearGradient id="paperWands" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#f5e2cc" />
+          <stop offset="1" stopColor="#dda87a" />
+        </linearGradient>
+        <linearGradient id="paperCups" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#e2ecf2" />
+          <stop offset="1" stopColor="#9fbfd6" />
+        </linearGradient>
+        <linearGradient id="paperSwords" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#ecebf0" />
+          <stop offset="1" stopColor="#b6b8c8" />
+        </linearGradient>
+        <linearGradient id="paperPentacles" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#e8ecd8" />
+          <stop offset="1" stopColor="#b3be94" />
+        </linearGradient>
+        <linearGradient id="artSkyMajor" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#8d7fb5" />
+          <stop offset="1" stopColor="#e9d9b6" />
+        </linearGradient>
+        <linearGradient id="artSkyWands" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#e0a068" />
+          <stop offset="1" stopColor="#f6e3c8" />
+        </linearGradient>
+        <linearGradient id="artSkyCups" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#6f9dbb" />
+          <stop offset="1" stopColor="#dbe9ef" />
+        </linearGradient>
+        <linearGradient id="artSkySwords" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#7d80a0" />
+          <stop offset="1" stopColor="#e6e6ec" />
+        </linearGradient>
+        <linearGradient id="artSkyPentacles" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#8fa072" />
+          <stop offset="1" stopColor="#e8ecd8" />
+        </linearGradient>
+        <pattern id="veil" width="6" height="6" patternUnits="userSpaceOnUse">
+          <circle cx="3" cy="3" r="1.2" fill="#c9a24a" opacity="0.5" />
+        </pattern>
+        <pattern id="backLattice" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <rect width="12" height="12" fill="none" />
+          <path d="M0 6 H12 M6 0 V12" stroke="#c9a24a" strokeWidth="0.5" opacity="0.5" />
+          <circle cx="6" cy="6" r="1" fill="#c9a24a" opacity="0.6" />
+        </pattern>
+        <radialGradient id="backGlow" cx="0.5" cy="0.5" r="0.6">
+          <stop offset="0" stopColor="#4a3f7c" />
+          <stop offset="1" stopColor="#151230" />
+        </radialGradient>
+        <filter id="paper" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="3" result="n" />
+          <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.35  0 0 0 0 0.28  0 0 0 0 0.18  0 0 0 0.08 0" />
+        </filter>
+      </defs>
+    </svg>
+  );
+}
+
+const PAPER: Record<string, string> = { major: 'url(#paperMajor)', wands: 'url(#paperWands)', cups: 'url(#paperCups)', swords: 'url(#paperSwords)', pentacles: 'url(#paperPentacles)' };
+const SKY: Record<string, string> = { major: 'url(#artSkyMajor)', wands: 'url(#artSkyWands)', cups: 'url(#artSkyCups)', swords: 'url(#artSkySwords)', pentacles: 'url(#artSkyPentacles)' };
+const ROMAN = ['0', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX', 'XXI'];
+const RANK = ['', 'A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'P', 'Kn', 'Q', 'K'];
+
+function label(card: Card): string {
+  return card.arcana === 'major' ? ROMAN[card.number] : RANK[card.number];
+}
+
+/** The full card face: frame, paper, art window, plates. viewBox 100 x 160. */
+export function CardArt({ cardId, className }: { cardId: string; className?: string }) {
+  const card = getCard(cardId);
+  const kind = card.arcana === 'major' ? 'major' : card.suit!;
+  const art = card.arcana === 'major' ? MAJOR_ART[card.number]() : minorArt(card.suit!, card.number);
+  const titleSize = card.name.length > 16 ? 6.2 : 7;
+  return (
+    <svg viewBox="0 0 100 160" className={className} xmlns="http://www.w3.org/2000/svg">
+      <rect x={0} y={0} width={100} height={160} rx={6} fill={PAPER[kind]} />
+      <rect x={0} y={0} width={100} height={160} rx={6} filter="url(#paper)" />
+      {/* frame */}
+      <rect x={3} y={3} width={94} height={154} rx={4} fill="none" stroke={GOLD_FLAT} strokeWidth={1.2} />
+      <rect x={6} y={6} width={88} height={148} rx={3} fill="none" stroke={INK} strokeWidth={0.5} opacity={0.6} />
+      {[[9, 9], [91, 9], [9, 151], [91, 151]].map(([x, y], i) => (
+        <path key={i} d={`M${x} ${y} m-3 0 a3 3 0 1 0 6 0 a3 3 0 1 0 -6 0`} fill="none" stroke={GOLD_FLAT} strokeWidth={0.6} />
+      ))}
+      {/* art window */}
+      <clipPath id={`clip-${card.id}`}>
+        <rect x={10} y={18} width={80} height={112} rx={2} />
+      </clipPath>
+      <rect x={10} y={18} width={80} height={112} rx={2} fill={SKY[kind]} />
+      <g clipPath={`url(#clip-${card.id})`}>
+        <g transform="translate(10 18)">{art}</g>
+      </g>
+      <rect x={10} y={18} width={80} height={112} rx={2} fill="none" stroke={INK} strokeWidth={0.8} />
+      {/* plates */}
+      <text x={50} y={13.5} fontSize={7} textAnchor="middle" fill={INK} fontFamily="Georgia, serif" letterSpacing={0.5}>
+        {label(card)}
+      </text>
+      <rect x={12} y={135} width={76} height={16} rx={2} fill={PALE} stroke={INK} strokeWidth={0.5} opacity={0.9} />
+      <text x={50} y={146} fontSize={titleSize} textAnchor="middle" fill={INK} fontFamily="Georgia, serif" fontVariant="small-caps" letterSpacing={0.4}>
+        {card.name}
+      </text>
+    </svg>
+  );
+}
+
+export function CardBack({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 100 160" className={className} xmlns="http://www.w3.org/2000/svg">
+      <rect x={0} y={0} width={100} height={160} rx={6} fill="url(#backGlow)" />
+      <rect x={4} y={4} width={92} height={152} rx={4} fill="url(#backLattice)" />
+      <rect x={4} y={4} width={92} height={152} rx={4} fill="none" stroke={GOLD_FLAT} strokeWidth={1.2} />
+      <rect x={8} y={8} width={84} height={144} rx={3} fill="none" stroke={GOLD_FLAT} strokeWidth={0.4} opacity={0.6} />
+      <circle cx={50} cy={80} r={26} fill="#151230" stroke={GOLD_FLAT} strokeWidth={0.8} />
+      <circle cx={50} cy={80} r={22} fill="none" stroke={GOLD_FLAT} strokeWidth={0.4} strokeDasharray="1 2" />
+      {Array.from({ length: 8 }, (_, i) => {
+        const a = (i / 8) * Math.PI * 2;
+        return <line key={i} x1={50 + Math.cos(a) * 8} y1={80 + Math.sin(a) * 8} x2={50 + Math.cos(a) * 20} y2={80 + Math.sin(a) * 20} stroke={GOLD_FLAT} strokeWidth={i % 2 ? 0.5 : 1} />;
+      })}
+      <circle cx={50} cy={80} r={7} fill="none" stroke={GOLD_FLAT} strokeWidth={0.8} />
+      <circle cx={53} cy={79} r={5.5} fill="#151230" />
+      <circle cx={50} cy={80} r={1.5} fill={GOLD_FLAT} />
+      {[[50, 24], [50, 136], [18, 80], [82, 80]].map(([x, y], i) => (
+        <path key={i} d={`M${x} ${y - 4} l3 4 l-3 4 l-3 -4 z`} fill={GOLD_FLAT} opacity={0.8} />
+      ))}
+    </svg>
+  );
+}

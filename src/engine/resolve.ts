@@ -70,7 +70,10 @@ const COMBOS: Combo[] = [
   },
 ];
 
-export function scoreSlot(scene: Scene, slot: SlotId, drawn: DrawnCard): SlotResolution {
+export type Marks = Record<string, 'charged' | 'scarred'>;
+export const CHARGED_BONUS = 1;
+
+export function scoreSlot(scene: Scene, slot: SlotId, drawn: DrawnCard, marks: Marks = {}): SlotResolution {
   const card = getCard(drawn.cardId);
   const tags = cardTags(card, drawn.reversed);
   const affinity = scene.affinity[slot];
@@ -85,6 +88,8 @@ export function scoreSlot(scene: Scene, slot: SlotId, drawn: DrawnCard): SlotRes
   }
   // Reversed cards are slightly unstable regardless of fit.
   if (drawn.reversed) score -= 0.5;
+  // A card that carried you to triumph remembers it.
+  if (marks[drawn.cardId] === 'charged') score += CHARGED_BONUS;
   return { slot, card, reversed: drawn.reversed, score, hits };
 }
 
@@ -104,8 +109,8 @@ const BASE_DELTAS: Record<OutcomeTier, { vitality: number; clarity: number }> = 
   triumph: { vitality: 2, clarity: 2 },
 };
 
-export function resolveReading(scene: Scene, reading: Reading): Resolution {
-  const slots = SLOT_IDS.map((s) => scoreSlot(scene, s, reading[s]));
+export function resolveReading(scene: Scene, reading: Reading, marks: Marks = {}): Resolution {
+  const slots = SLOT_IDS.map((s) => scoreSlot(scene, s, reading[s], marks));
   const comboNotes: string[] = [];
   let total = slots.reduce((a, s) => a + s.score, 0);
   for (const c of COMBOS) {
@@ -117,7 +122,7 @@ export function resolveReading(scene: Scene, reading: Reading): Resolution {
   const tier = tierFor(total);
   const base = BASE_DELTAS[tier];
   const deltas = {
-    vitality: base.vitality < 0 ? base.vitality * scene.stakes : base.vitality,
+    vitality: base.vitality < 0 ? base.vitality * scene.stakes : base.vitality * (scene.mend ?? 1),
     clarity: base.clarity,
   };
   const narration = [

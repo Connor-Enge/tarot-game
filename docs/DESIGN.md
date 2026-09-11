@@ -115,17 +115,26 @@ Ideas queued:
 
 ## Roguelike structure
 
-Current: a fixed path of 6 scenes drawn from a pool of 7, then the Abyss
-(terminal, high stakes). Seeded, so runs are reproducible and shareable.
+**The map** (`buildMap` in `scenes.ts`): two acts of four layers each, then
+the Abyss. Every layer holds 2-3 nodes and every node connects to every node
+in the next layer. Nodes show only a *kind* glyph (threat ⚔, passage ⛩,
+mystery ✧, rest ♨, abyss ◉), never the scene. Scenes have a `minAct` so the
+second act draws from a harder pool. Rest never appears in the first layer.
 
-Next steps:
-- Branching map (pick 1 of 2-3 next scenes, visible as glyph-only nodes).
-- Acts with escalating stakes and their own scene pools.
-- Deck shaping: cards played in a triumph get "charged" (return to deck
-  upright-locked); cards in a calamity get "scarred" (reversed-locked). Deck
-  state carries within a run only.
+**Marks** (`run.marks`): a triumph *charges* the four cards you played; a
+calamity *scars* them. Charged cards always land upright and score +1.
+Scarred cards always land reversed. Marks last the run. The deck remembers
+what you did with it.
+
+**Whisper**: spend 1 Clarity to hear one keyword of the lifted candidate
+(orientation-aware). Shown as a ribbon on the card. Counts toward glimpsing
+that card in the Codex. This is the only mid-run knowledge purchase.
+
+Queued:
 - Boons/curses as persistent seat modifiers for the run ("the Wake always
   deals 4"; "the Threshold is always reversed").
+- Daily seed with a shared result string.
+- A run journal on the end screen (every reading, in order).
 
 ## Content debt
 
@@ -135,8 +144,10 @@ Next steps:
 - **Scenes**: 8 exist. Aim for 30+ across three acts.
 - **Combos**: 5 exist. This is the richest vein for "the combined meaning"
   and should be grown deliberately with named, memorable results.
-- **Art**: placeholders are glyphs. Even a consistent set of simple
-  silhouettes would carry the vibe.
+- **Art**: all 78 faces are procedural SVG (`src/ui/art/`). Majors are
+  bespoke compositions; Minors use traditional pip layouts and court
+  silhouettes. Open `?gallery` in dev to see every face at once. Shared
+  gradients/filters live in one `<ArtDefs />` block at the app root.
 
 ## Open questions
 

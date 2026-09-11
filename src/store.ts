@@ -2,16 +2,20 @@ import { create } from 'zustand';
 import {
   advance as advanceRun,
   chooseCandidate,
+  chooseNode as chooseNodeRun,
   finalSpread,
+  getCard,
   loadKnowledge,
   noteAscension,
   noteDeath,
   noteResolved,
   noteRunStarted,
+  noteWhisper,
   randomSeed,
   redrawActive,
   saveKnowledge,
   startRun,
+  whisper as whisperRun,
   type Knowledge,
   type RunState,
 } from './engine';
@@ -27,11 +31,21 @@ interface GameStore {
 
   goto: (screen: Screen) => void;
   newRun: (seed?: number) => void;
+  chooseNode: (index: number) => void;
   lift: (index: number | null) => void;
   confirm: () => void;
   redraw: () => void;
+  whisperLifted: () => void;
   advance: () => void;
   endRun: () => void;
+}
+
+function buzz(ms: number | number[]) {
+  try {
+    navigator.vibrate?.(ms);
+  } catch {
+    /* unsupported */
+  }
 }
 
 function learn(k: Knowledge, run: RunState): Knowledge {
@@ -60,16 +74,29 @@ export const useGame = create<GameStore>((set, get) => ({
     set({ run: startRun(seed), knowledge, screen: 'run', lifted: null });
   },
 
-  lift: (index) => set({ lifted: index }),
+  chooseNode: (index) => {
+    const { run } = get();
+    if (!run) return;
+    buzz(6);
+    set({ run: chooseNodeRun(run, index), lifted: null });
+  },
+
+  lift: (index) => {
+    if (index !== null) buzz(4);
+    set({ lifted: index });
+  },
 
   confirm: () => {
     const { run, lifted, knowledge } = get();
     if (!run || lifted === null) return;
     const next = chooseCandidate(run, lifted);
     if (next.phase.kind === 'reading') {
+      buzz(10);
       set({ run: next, lifted: null });
       return;
     }
+    const tier = next.phase.kind === 'map' ? null : next.phase.resolution.tier;
+    buzz(tier === 'calamity' ? [40, 30, 80] : tier === 'triumph' ? [15, 20, 15, 20, 30] : 20);
     const learned = learn(knowledge, next);
     saveKnowledge(learned);
     set({ run: next, knowledge: learned, lifted: null });
@@ -79,6 +106,20 @@ export const useGame = create<GameStore>((set, get) => ({
     const { run } = get();
     if (!run) return;
     set({ run: redrawActive(run), lifted: null });
+  },
+
+  whisperLifted: () => {
+    const { run, lifted, knowledge } = get();
+    if (!run || lifted === null) return;
+    const next = whisperRun(run, lifted);
+    if (next === run) return;
+    const slot = next.slots[next.activeSlot];
+    const cardId = slot.candidates[lifted].cardId;
+    getCard(cardId); // assert
+    const learned = noteWhisper(knowledge, cardId);
+    saveKnowledge(learned);
+    buzz([5, 40, 5]);
+    set({ run: next, knowledge: learned });
   },
 
   advance: () => {

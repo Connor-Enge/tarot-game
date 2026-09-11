@@ -22,13 +22,13 @@ export function RunEndScreen() {
       <p className="muted small">{dead ? 'What killed you, you now understand.' : 'What carried you, you now understand.'}</p>
 
       <section className="reveal">
-        {SLOT_IDS.map((id) => {
+        {SLOT_IDS.map((id, i) => {
           const d = last.reading[id];
           const card = getCard(d.cardId);
           const tier = knowledge.cards[d.cardId]?.tier ?? 0;
           return (
-            <article key={id} className="reveal__row">
-              <Card cardId={d.cardId} reversed={d.reversed} size="sm" />
+            <article key={id} className="reveal__row rise" style={{ animationDelay: `${300 + i * 350}ms` }}>
+              <Card cardId={d.cardId} reversed={d.reversed} size="sm" mark={run.marks[d.cardId]} />
               <div className="reveal__text">
                 <div className="reveal__seat">
                   {SLOTS[id].glyph} {SLOTS[id].name}
