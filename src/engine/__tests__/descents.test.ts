@@ -39,3 +39,18 @@ describe('descents', () => {
     expect(rev / total).toBeGreaterThan(0.45);
   });
 });
+
+describe('majorsFirst', () => {
+  it('deals only Major Arcana for the whole first scene', async () => {
+    const { chooseCandidate } = await import('../run');
+    let run = chooseNode(startRun(77, { majorsFirst: true }), 0);
+    const seen: string[] = [];
+    for (let i = 0; i < 4; i++) {
+      seen.push(...run.slots[i].candidates.map((c) => c.cardId));
+      run = chooseCandidate(run, 0);
+    }
+    expect(seen.length).toBe(12);
+    expect(seen.every((id) => id.startsWith('major-'))).toBe(true);
+    expect(new Set(seen).size).toBe(12);
+  });
+});

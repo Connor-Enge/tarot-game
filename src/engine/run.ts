@@ -110,7 +110,12 @@ export function totalScenes(run: RunState): number {
 export function startRun(seed: number, config: RunConfig = {}): RunState {
   const rng = createRng(seed);
   const map = buildMap(rng);
-  const deck = createDeck(rng, config.deck);
+  let deck = createDeck(rng, config.deck);
+  if (config.majorsFirst) {
+    const majors = rng.shuffle(deck.draw.filter((id) => id.startsWith('major-'))).slice(0, 12);
+    const rest = deck.draw.filter((id) => !majors.includes(id));
+    deck = { draw: [...rest, ...majors], discard: [] }; // top of deck = end of array
+  }
   return {
     seed,
     reversedChance: config.reversedChance ?? REVERSED_CHANCE,

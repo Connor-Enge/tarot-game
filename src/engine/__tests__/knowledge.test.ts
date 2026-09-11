@@ -61,3 +61,14 @@ describe('witness + combos + reset', () => {
     expect(removed.length).toBe(1);
   });
 });
+
+describe('seat outcomes', () => {
+  it('tallies good and bad per seat', () => {
+    let k = emptyKnowledge();
+    k = noteResolved(k, 'cups-2', 'hand', false, 'good');
+    k = noteResolved(k, 'cups-2', 'hand', false, 'bad');
+    k = noteResolved(k, 'cups-2', 'wake', false, 'even');
+    expect(k.cards['cups-2'].seatOutcomes?.hand).toEqual({ good: 1, bad: 1 });
+    expect(k.cards['cups-2'].seatOutcomes?.wake).toEqual({ good: 0, bad: 0 });
+  });
+});

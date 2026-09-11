@@ -200,11 +200,20 @@ the Codex. They change nothing about play.
 **Records**: per-descent runs, returns, and deepest scene, shown under the
 descent picker on the title screen.
 
+**First descent**: the player's very first run puts twelve shuffled Major
+Arcana on top of the deck (`majorsFirst`), so the first scene is read with
+the iconic cards, and shows three wordless nudges ("Lift one." / "Place it
+in the ◯." / "Read."). Nothing about meaning is said.
+
+**Seat memory**: the Codex detail sheet shows, per seat, how many times the
+card was read there and a good/even/bad bar. This is consequence, not
+meaning, and it is the most direct learning tool in the game.
+
+**Deck tracker**: a pill in the reading header shows cards left to draw;
+tapping it opens the discard so far. Roguelike deck-tracking, faces only.
+
 Queued:
 - Scene-specific relic flavor (the satchel on the bridge is a real relic).
-- A "first descent" onboarding that teaches by doing, not by telling: the
-  first scene deals only Major Arcana and the first death is guaranteed to
-  reveal the four cards' meanings (it already does).
 
 ## Content debt
 

@@ -2,6 +2,7 @@ import { activeSlotState, currentScene, getCard, hasRelic, redrawCost, sceneNumb
 import { useGame } from '../../store';
 import { Card } from '../components/Card';
 import { CodexDetail } from '../components/CodexDetail';
+import { DeckSheet } from '../components/DeckSheet';
 import { RelicStrip } from '../components/RelicStrip';
 import { Stats } from '../components/Stat';
 
@@ -15,6 +16,9 @@ export function ReadingScreen() {
   const seatsNamed = useGame((s) => s.knowledge.seatsNamed);
   const codexOpen = useGame((s) => s.codexOpen);
   const openCodex = useGame((s) => s.openCodex);
+  const firstDescent = useGame((s) => s.firstDescent);
+  const deckOpen = useGame((s) => s.deckOpen);
+  const openDeck = useGame((s) => s.openDeck);
 
   const scene = currentScene(run);
   const active = activeSlotState(run);
@@ -32,6 +36,9 @@ export function ReadingScreen() {
       <header className="topbar">
         <span className="muted small">
           {sceneNumber(run)} / {totalScenes(run)}
+          <button type="button" className="deck-pill" onClick={() => openDeck(true)} aria-label="deck and discard" title="What has gone by">
+            ▤ {run.deck.draw.length}
+          </button>
         </span>
         <Stats vitality={run.vitality} clarity={run.clarity} />
       </header>
@@ -85,6 +92,12 @@ export function ReadingScreen() {
         })}
       </section>
 
+      {firstDescent && run.layer === 0 && (
+        <p className="nudge muted small center" key={`${run.activeSlot}-${lifted === null}`}>
+          {lifted === null ? 'Lift one.' : run.activeSlot === SLOT_IDS.length - 1 ? 'Read.' : `Place it in the ${SLOTS[SLOT_IDS[run.activeSlot]].glyph}.`}
+        </p>
+      )}
+
       <footer className="actions">
         <button
           className="btn btn--icon"
@@ -106,6 +119,7 @@ export function ReadingScreen() {
         </button>
       </footer>
       {codexOpen && <CodexDetail cardId={codexOpen} onClose={() => openCodex(null)} />}
+      {deckOpen && <DeckSheet run={run} onClose={() => openDeck(false)} />}
     </main>
   );
 }

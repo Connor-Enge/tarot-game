@@ -14,6 +14,8 @@ export interface RunConfig {
   startingRelics?: string[];
   startingVitality?: number;
   startingClarity?: number;
+  /** Put twelve shuffled Major Arcana on top of the deck. Used for a player's first descent. */
+  majorsFirst?: boolean;
 }
 
 export interface Descent {

@@ -19,6 +19,8 @@ export interface CardKnowledge {
   seats: Partial<Record<SlotId, number>>;
   /** Orientations the player has watched resolve. Unlocks the omen line in the Codex. */
   witnessed?: { upright?: boolean; reversed?: boolean };
+  /** How readings went when this card sat in each seat. Consequence, not meaning. */
+  seatOutcomes?: Partial<Record<SlotId, { good: number; bad: number }>>;
 }
 
 export interface Knowledge {
@@ -52,11 +54,16 @@ function raise(k: CardKnowledge, tier: Tier): CardKnowledge {
 }
 
 /** A card was chosen into a seat and the reading resolved. */
-export function noteResolved(k: Knowledge, cardId: string, seat: SlotId, reversed = false): Knowledge {
+export function noteResolved(k: Knowledge, cardId: string, seat: SlotId, reversed = false, outcome: 'good' | 'bad' | 'even' = 'even'): Knowledge {
   const e = entry(k, cardId);
   const resolved = e.resolved + 1;
   const witnessed = { ...e.witnessed, [reversed ? 'reversed' : 'upright']: true };
-  let next: CardKnowledge = { ...e, resolved, witnessed, seats: { ...e.seats, [seat]: (e.seats[seat] ?? 0) + 1 } };
+  const so = e.seatOutcomes?.[seat] ?? { good: 0, bad: 0 };
+  const seatOutcomes = {
+    ...e.seatOutcomes,
+    [seat]: { good: so.good + (outcome === 'good' ? 1 : 0), bad: so.bad + (outcome === 'bad' ? 1 : 0) },
+  };
+  let next: CardKnowledge = { ...e, resolved, witnessed, seatOutcomes, seats: { ...e.seats, [seat]: (e.seats[seat] ?? 0) + 1 } };
   if (resolved >= RESOLVES_TO_GLIMPSE) next = raise(next, 1);
   return { ...k, cards: { ...k.cards, [cardId]: next } };
 }

@@ -37,8 +37,28 @@ export function CodexDetail({ cardId, onClose }: { cardId: string; onClose: () =
           </div>
         )}
         {seatsSeen.length > 0 && (
-          <div className="muted small">
-            Read {e.resolved} time{e.resolved === 1 ? '' : 's'} · in {seatsSeen.map((s) => `${SLOTS[s].glyph}×${e.seats[s]}`).join(' ')}
+          <div className="seatmap">
+            <div className="muted small">Read {e.resolved} time{e.resolved === 1 ? '' : 's'}. How it went, by seat:</div>
+            <div className="seatmap__row">
+              {SLOT_IDS.map((s) => {
+                const n = e.seats[s] ?? 0;
+                const o = e.seatOutcomes?.[s] ?? { good: 0, bad: 0 };
+                const even = Math.max(0, n - o.good - o.bad);
+                return (
+                  <div key={s} className={`seatmap__cell ${n === 0 ? 'seatmap__cell--empty' : ''}`} title={k.seatsNamed ? SLOTS[s].name : undefined}>
+                    <span className="seat__glyph">{SLOTS[s].glyph}</span>
+                    <span className="seatmap__n">{n || '·'}</span>
+                    {n > 0 && (
+                      <span className="seatmap__bar" aria-hidden>
+                        <span className="seatmap__good" style={{ flex: o.good }} />
+                        <span className="seatmap__even" style={{ flex: even }} />
+                        <span className="seatmap__bad" style={{ flex: o.bad }} />
+                      </span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         )}
         <button className="btn" onClick={onClose}>

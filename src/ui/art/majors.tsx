@@ -106,22 +106,34 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
   ),
   7: () => (
     <g>
-      <rect x={0} y={20} width={80} height={14} fill={PALE} opacity={0.6} />
-      {[8, 24, 40, 56, 72].map((x) => (
-        <rect key={x} x={x - 4} y={24} width={8} height={10} fill={INK} opacity={0.5} />
+      <rect x={0} y={22} width={80} height={12} fill={PALE} opacity={0.55} />
+      {[6, 20, 34, 48, 62, 76].map((x) => (
+        <rect key={x} x={x - 3} y={16} width={6} height={7} fill={PALE} opacity={0.55} />
       ))}
-      <rect x={18} y={38} width={44} height={30} fill="url(#skyDeep)" stroke={INK} strokeWidth={0.8} />
-      {[24, 34, 44, 54].map((x, i) => (
-        <Star key={i} x={x} y={44 + (i % 2) * 6} r={2} points={5} />
+      <Mountains y={70} opacity={0.2} />
+      {/* canopy on four poles */}
+      <rect x={16} y={30} width={48} height={8} fill="url(#skyDeep)" stroke={INK} strokeWidth={0.8} />
+      {[18, 30, 42, 54].map((x, i) => (
+        <Star key={i} x={x + 4} y={34} r={2} points={5} />
       ))}
-      <rect x={22} y={66} width={36} height={22} fill={PALE} stroke={INK} strokeWidth={0.8} />
-      <Figure x={40} y={68} h={36} arms="hold" fill={INK} crown />
-      <ellipse cx={20} cy={98} rx={12} ry={7} fill={INK} />
-      <circle cx={10} cy={92} r={4} fill={INK} />
-      <ellipse cx={60} cy={98} rx={12} ry={7} fill={PALE} stroke={INK} strokeWidth={0.8} />
-      <circle cx={70} cy={92} r={4} fill={PALE} stroke={INK} strokeWidth={0.8} />
-      <circle cx={30} cy={98} r={5} fill={GOLD} stroke={INK} strokeWidth={0.8} />
-      <circle cx={50} cy={98} r={5} fill={GOLD} stroke={INK} strokeWidth={0.8} />
+      {[18, 62].map((x) => (
+        <line key={x} x1={x} y1={38} x2={x} y2={70} stroke={INK} strokeWidth={1.2} />
+      ))}
+      {/* chariot box */}
+      <path d="M20 70 h40 v18 q0 3 -3 3 h-34 q-3 0 -3 -3 z" fill={PALE} stroke={INK} strokeWidth={0.9} />
+      <Star x={40} y={80} r={4} points={8} />
+      <Figure x={40} y={72} h={36} arms="hold" fill={INK} crown />
+      <line x1={26} y1={62} x2={26} y2={46} stroke={GOLD_FLAT} strokeWidth={1.4} />
+      {/* wheels */}
+      <circle cx={24} cy={94} r={6} fill={GOLD} stroke={INK} strokeWidth={0.8} />
+      <circle cx={56} cy={94} r={6} fill={GOLD} stroke={INK} strokeWidth={0.8} />
+      <path d="M24 88 v12 M18 94 h12 M56 88 v12 M50 94 h12" stroke={INK} strokeWidth={0.6} />
+      {/* two sphinxes, seated */}
+      <path d="M4 104 q0 -10 8 -12 q4 -1 6 3 v9 z" fill={INK} />
+      <circle cx={13} cy={92} r={3.2} fill={INK} />
+      <path d="M76 104 q0 -10 -8 -12 q-4 -1 -6 3 v9 z" fill={PALE} stroke={INK} strokeWidth={0.7} />
+      <circle cx={67} cy={92} r={3.2} fill={PALE} stroke={INK} strokeWidth={0.7} />
+      <Ground y={104} fill={GOLD_FLAT} opacity={0.5} />
     </g>
   ),
   8: () => (
@@ -351,20 +363,33 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
   ),
   21: () => (
     <g>
-      <ellipse cx={40} cy={56} rx={26} ry={40} fill="none" stroke={INK} strokeWidth={6} strokeDasharray="3 2" />
-      <ellipse cx={40} cy={56} rx={26} ry={40} fill="none" stroke={GOLD_FLAT} strokeWidth={1.2} />
-      <Figure x={40} y={80} h={44} arms="up" fill={PALE} />
-      <line x1={22} y1={40} x2={20} y2={30} stroke={GOLD_FLAT} strokeWidth={1.4} />
-      <line x1={58} y1={40} x2={60} y2={30} stroke={GOLD_FLAT} strokeWidth={1.4} />
-      <path d="M32 56 q8 4 16 -2" stroke={BLOOD} strokeWidth={3} fill="none" />
-      <Cloud x={0} y={12} w={16} />
-      <Cloud x={62} y={12} w={16} />
-      <Cloud x={0} y={104} w={16} />
-      <Cloud x={62} y={104} w={16} />
-      <circle cx={8} cy={8} r={2} fill={INK} />
-      <path d="M68 4 l3 -3 l3 3 l-3 4 z" fill={INK} />
-      <circle cx={8} cy={100} r={2.4} fill={GOLD} stroke={INK} strokeWidth={0.5} />
-      <path d="M68 96 q3 -4 6 0 q-3 4 -6 0" fill={INK} />
+      <rect x={0} y={0} width={80} height={112} fill="url(#skyDeep)" opacity={0.25} />
+      {/* laurel wreath */}
+      <ellipse cx={40} cy={56} rx={27} ry={41} fill="none" stroke={INK} strokeWidth={7} />
+      <ellipse cx={40} cy={56} rx={27} ry={41} fill="none" stroke="#5a7a3a" strokeWidth={5} />
+      {Array.from({ length: 22 }, (_, i) => {
+        const a = (i / 22) * Math.PI * 2;
+        const x = 40 + Math.cos(a) * 27;
+        const y = 56 + Math.sin(a) * 41;
+        return <ellipse key={i} cx={x} cy={y} rx={3.2} ry={1.6} fill="#8fb35a" stroke={INK} strokeWidth={0.4} transform={`rotate(${(a * 180) / Math.PI + 90} ${x} ${y})`} />;
+      })}
+      {[[40, 15], [40, 97]].map(([x, y], i) => (
+        <path key={i} d={`M${x - 5} ${y} q5 -4 10 0 q-5 4 -10 0`} fill={BLOOD} stroke={INK} strokeWidth={0.5} />
+      ))}
+      {/* dancer with two wands and a sash */}
+      <Figure x={40} y={82} h={44} arms="up" fill={PALE} />
+      <line x1={22} y1={42} x2={19} y2={30} stroke={GOLD_FLAT} strokeWidth={1.6} />
+      <line x1={58} y1={42} x2={61} y2={30} stroke={GOLD_FLAT} strokeWidth={1.6} />
+      <path d="M30 52 q10 10 20 -4 q-6 14 -20 4" fill="#7a3fa0" stroke={INK} strokeWidth={0.4} />
+      {/* four corners: angel, eagle, lion, bull */}
+      <Cloud x={-2} y={14} w={18} />
+      <circle cx={7} cy={9} r={2.6} fill={PALE} stroke={INK} strokeWidth={0.5} />
+      <Cloud x={62} y={14} w={18} />
+      <path d="M67 5 l4 -3 l4 3 l-1 5 l-3 -2 l-3 2 z" fill={INK} />
+      <Cloud x={-2} y={106} w={18} />
+      <circle cx={7} cy={101} r={3} fill={GOLD} stroke={INK} strokeWidth={0.5} />
+      <Cloud x={62} y={106} w={18} />
+      <path d="M67 103 q4 -6 8 0 M68 99 l-2 -3 M74 99 l2 -3" fill="none" stroke={INK} strokeWidth={1} />
     </g>
   ),
 };

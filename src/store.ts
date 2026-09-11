@@ -45,6 +45,11 @@ interface GameStore {
   descent: string;
   /** Sigils earned by the run that just ended. */
   earned: string[];
+  /** The player's very first run: show the three wordless nudges. */
+  firstDescent: boolean;
+  /** Discard viewer open. */
+  deckOpen: boolean;
+  openDeck: (open: boolean) => void;
 
   goto: (screen: Screen) => void;
   setDescent: (id: string) => void;
@@ -74,10 +79,12 @@ function learn(k: Knowledge, run: RunState, mode: RunMode): { knowledge: Knowled
   const last = run.history[run.history.length - 1];
   if (!last) return { knowledge: k, earned: [] };
   let next = k;
+  const tier = last.resolution.tier;
+  const outcome = tier === 'boon' || tier === 'triumph' ? 'good' : tier === 'harm' || tier === 'calamity' ? 'bad' : 'even';
   for (const s of run.slots) {
     if (s.chosen !== null) {
       const c = s.candidates[s.chosen];
-      next = noteResolved(next, c.cardId, s.slot, c.reversed);
+      next = noteResolved(next, c.cardId, s.slot, c.reversed, outcome);
     }
   }
   next = noteCombos(next, last.resolution.comboIds);
@@ -102,6 +109,9 @@ export const useGame = create<GameStore>((set, get) => ({
   codexOpen: null,
   descent: 'standard',
   earned: [],
+  firstDescent: false,
+  deckOpen: false,
+  openDeck: (open) => set({ deckOpen: open }),
 
   goto: (screen) => set({ screen, codexOpen: null }),
   setDescent: (id) => set({ descent: id }),
@@ -109,10 +119,12 @@ export const useGame = create<GameStore>((set, get) => ({
   newRun: (seed = randomSeed()) => {
     const { descent } = get();
     const d = getDescent(descent);
+    const first = get().knowledge.runs === 0;
     const knowledge = noteRunStarted(get().knowledge);
     saveKnowledge(knowledge);
     startDrone();
-    set({ run: startRun(seed, d.config), mode: { kind: 'free', descent: d.id }, knowledge, screen: 'run', lifted: null, earned: [] });
+    const config = first ? { ...d.config, majorsFirst: true } : d.config;
+    set({ run: startRun(seed, config), mode: { kind: 'free', descent: d.id }, knowledge, screen: 'run', lifted: null, earned: [], firstDescent: first });
   },
 
   newDaily: () => {
@@ -120,7 +132,7 @@ export const useGame = create<GameStore>((set, get) => ({
     const knowledge = noteRunStarted(get().knowledge);
     saveKnowledge(knowledge);
     startDrone();
-    set({ run: startRun(seed), mode: { kind: 'daily', label }, knowledge, screen: 'run', lifted: null, earned: [] });
+    set({ run: startRun(seed), mode: { kind: 'daily', label }, knowledge, screen: 'run', lifted: null, earned: [], firstDescent: false });
   },
 
   chooseNode: (index) => {
