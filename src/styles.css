@@ -928,3 +928,7 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .vow-line { color: var(--gold); letter-spacing: 0.03em; margin: -4px 0 0; }
 .vow-line--broken { color: var(--muted); text-decoration: line-through; }
 .vow-line--kept { color: var(--gold-2); text-shadow: 0 0 10px rgba(243,220,138,0.5); }
+.vow__art { width: 28px; height: 28px; display: block; }
+.vow-line { display: inline-flex; align-items: center; justify-content: center; gap: 4px; width: 100%; }
+.vow-line__art { width: 18px; height: 18px; }
+.vow__record { margin-top: 1px; }

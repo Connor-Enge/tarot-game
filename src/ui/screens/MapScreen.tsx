@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 import { actOfLayer, canCut, canTakeVow, currentAct, FORETELL_COST, getVow, KIND_GLYPH, SCENES, SLOT_IDS, visitedNodes, vowOffer } from '../../engine';
+import { VowArt } from '../art/relics';
 import { SceneArt } from '../art/scenes';
 import { Card } from '../components/Card';
 
@@ -19,6 +20,7 @@ function MapScreenInner() {
   const chooseNode = useGame((s) => s.chooseNode);
   const cutDeck = useGame((s) => s.cutDeck);
   const takeVow = useGame((s) => s.takeVow);
+  const vowRecord = useGame((s) => s.knowledge.vows);
   const [cutAt, setCutAt] = useState<number | null>(null);
   const [peek, setPeek] = useState<number | null>(null); // history index
   const foretell = useGame((s) => s.foretell);
@@ -125,8 +127,11 @@ function MapScreenInner() {
               const v = getVow(id);
               return (
                 <button key={id} type="button" className="vow" onClick={() => takeVow(id)}>
-                  <span className="vow__glyph">{v.glyph}</span>
+                  <span className="vow__glyph"><VowArt id={id} className="vow__art" /></span>
                   <span className="vow__name">{v.name}</span>
+                  {vowRecord?.[id] && (vowRecord[id].kept > 0 || vowRecord[id].broken > 0) && (
+                    <span className="vow__record muted small">kept {vowRecord[id].kept} · broken {vowRecord[id].broken}</span>
+                  )}
                   <span className="vow__text">{v.text}</span>
                   <span className="vow__reward">{[v.reward.vitality && `♥ +${v.reward.vitality}`, v.reward.clarity && `◈ +${v.reward.clarity}`].filter(Boolean).join(' · ')} at the Abyss</span>
                 </button>
@@ -137,7 +142,7 @@ function MapScreenInner() {
       )}
       {run.vow && (
         <p className={`vow-line center small ${run.vow.broken ? 'vow-line--broken' : run.vow.kept ? 'vow-line--kept' : ''}`}>
-          {getVow(run.vow.id).glyph} {getVow(run.vow.id).name} · {run.vow.kept ? 'kept' : run.vow.broken ? 'broken' : getVow(run.vow.id).text}
+          <VowArt id={run.vow.id} className="vow-line__art" /> {getVow(run.vow.id).name} · {run.vow.kept ? 'kept' : run.vow.broken ? 'broken' : getVow(run.vow.id).text}
         </p>
       )}
 

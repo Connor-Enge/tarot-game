@@ -113,3 +113,57 @@ export function RelicArt({ id, className }: { id: string; className?: string }) 
     </svg>
   );
 }
+
+/** Vow tokens: the same hand, drawn in pale ink rather than gold. Sworn things, not found things. */
+const VOW_ART: Record<string, () => ReactElement> = {
+  'steady-hand': () => (
+    <g>
+      <rect x={12} y={12} width={16} height={16} rx={2} fill="none" stroke={PALE} strokeWidth={1.3} />
+      <path d="M12 28 L8 32 M28 28 L32 32" stroke={PALE} strokeWidth={1} strokeLinecap="round" opacity={0.6} />
+      <path d="M16 20 H24" stroke={GOLD_FLAT} strokeWidth={1.2} strokeLinecap="round" />
+    </g>
+  ),
+  silence: () => (
+    <g>
+      <path d="M12 20 q4 -6 8 0 t8 0" fill="none" stroke={PALE} strokeWidth={1.2} strokeLinecap="round" opacity={0.5} />
+      <path d="M12 26 q4 -6 8 0 t8 0" fill="none" stroke={PALE} strokeWidth={1.2} strokeLinecap="round" opacity={0.3} />
+      <path d="M10 30 L30 10" stroke={GOLD_FLAT} strokeWidth={1.4} strokeLinecap="round" />
+    </g>
+  ),
+  'first-instinct': () => (
+    <g>
+      <path d="M20 8 L20 26" stroke={PALE} strokeWidth={1.3} strokeLinecap="round" />
+      <path d="M14 14 L20 8 L26 14" fill="none" stroke={PALE} strokeWidth={1.3} strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx={20} cy={31} r={2} fill={GOLD_FLAT} />
+    </g>
+  ),
+  'small-wake': () => (
+    <g>
+      <path d="M24 8 A12 12 0 1 0 24 32 A9 9 0 1 1 24 8 Z" fill={PALE} opacity={0.85} />
+      <circle cx={28} cy={20} r={1.6} fill={GOLD_FLAT} />
+    </g>
+  ),
+  'long-way': () => (
+    <g>
+      <path d="M8 32 C14 28 12 20 18 18 C24 16 22 10 32 8" fill="none" stroke={PALE} strokeWidth={1.3} strokeLinecap="round" strokeDasharray="3 3" />
+      <circle cx={8} cy={32} r={1.8} fill={GOLD_FLAT} />
+      <circle cx={32} cy={8} r={1.8} fill={GOLD_FLAT} />
+    </g>
+  ),
+  'high-threshold': () => (
+    <g>
+      <path d="M20 8 L31 30 H9 Z" fill="none" stroke={PALE} strokeWidth={1.3} strokeLinejoin="round" />
+      <path d="M20 14 L26 26 H14 Z" fill={GOLD_FLAT} opacity={0.5} />
+    </g>
+  ),
+};
+
+export function VowArt({ id, className }: { id: string; className?: string }) {
+  const Art = VOW_ART[id];
+  if (!Art) return null;
+  return (
+    <svg viewBox="0 0 40 40" className={className} aria-hidden>
+      <Art />
+    </svg>
+  );
+}

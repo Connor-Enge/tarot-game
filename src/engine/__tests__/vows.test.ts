@@ -72,3 +72,17 @@ describe('vows', () => {
     expect(run.vitality).toBe(5);
   });
 });
+
+describe('noteVow', () => {
+  it('counts kept and broken vows and ignores open ones', async () => {
+    const { noteVow, resetRecords } = await import('../knowledge');
+    const { emptyKnowledge } = await import('../knowledge');
+    let k = emptyKnowledge();
+    k = noteVow(k, 'silence', 'kept');
+    k = noteVow(k, 'silence', 'broken');
+    k = noteVow(k, 'silence', 'kept');
+    k = noteVow(k, 'long-way', 'open');
+    expect(k.vows).toEqual({ silence: { kept: 2, broken: 1 } });
+    expect(resetRecords(k).vows).toBeUndefined();
+  });
+});

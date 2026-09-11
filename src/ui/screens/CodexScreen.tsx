@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CARDS, COMBO_IDS, comboNote, getCard, SCENES, SIGILS, SLOT_IDS, SLOTS, type Tier } from '../../engine';
+import { CARDS, COMBO_IDS, comboNote, getCard, getVow, SCENES, SIGILS, SLOT_IDS, SLOTS, type Tier } from '../../engine';
 
 type SuitFilter = 'all' | 'major' | 'wands' | 'cups' | 'swords' | 'pentacles';
 type TierFilter = 'all' | 'seen' | 'known' | 'unseen';
@@ -222,6 +222,13 @@ function buildLedger(k: ReturnType<typeof useGame.getState>['knowledge']): [stri
   const seatTotals = SLOT_IDS.map((s) => [s, entries.reduce((a, [, e]) => a + (e.seats[s] ?? 0), 0)] as const);
   const busiest = seatTotals.slice().sort((a, b) => b[1] - a[1])[0];
   if (busiest && busiest[1] > 0 && k.seatsNamed) rows.push(['Busiest seat', `${SLOTS[busiest[0]].glyph} ${SLOTS[busiest[0]].name}`]);
+  const vows = Object.entries(k.vows ?? {});
+  if (vows.length) {
+    const kept = vows.reduce((a, [, v]) => a + v.kept, 0);
+    const broken = vows.reduce((a, [, v]) => a + v.broken, 0);
+    const truest = vows.filter(([, v]) => v.kept > 0).sort((a, b) => b[1].kept - a[1].kept)[0];
+    rows.push(['Vows', `${kept} kept · ${broken} broken${truest ? ` · truest ${getVow(truest[0]).name}` : ''}`]);
+  }
   return rows.length ? rows : null;
 }
 

@@ -32,6 +32,8 @@ export interface Knowledge {
   seatsNamed: boolean;
   /** Named readings the player has produced at least once. */
   combos?: string[];
+  /** Vows sworn: how often each was kept to the Abyss and how often broken. */
+  vows?: Record<string, { kept: number; broken: number }>;
   /** Milestones earned. */
   sigils?: string[];
   /** Cards that have sat in the same reading: "a|b" (sorted) -> count. */
@@ -218,6 +220,13 @@ export function noteCombos(k: Knowledge, ids: string[]): Knowledge {
   return { ...k, combos: Array.from(new Set([...(k.combos ?? []), ...ids])) };
 }
 
+/** Remember how a sworn vow ended. Unresolved vows (died before the Abyss, unbroken) count as neither. */
+export function noteVow(k: Knowledge, id: string, outcome: 'kept' | 'broken' | 'open'): Knowledge {
+  if (outcome === 'open') return k;
+  const prev = k.vows?.[id] ?? { kept: 0, broken: 0 };
+  return { ...k, vows: { ...k.vows, [id]: { ...prev, [outcome]: prev[outcome] + 1 } } };
+}
+
 export function noteSigils(k: Knowledge, ids: string[]): Knowledge {
   if (ids.length === 0) return k;
   return { ...k, sigils: Array.from(new Set([...(k.sigils ?? []), ...ids])) };
@@ -373,8 +382,8 @@ export function parseShare(text: string, descentNames: { id: string; name: strin
 
 /** Forget the road, keep the cards: counters, records, sigils and study go; card knowledge, links and the book stay. */
 export function resetRecords(k: Knowledge): Knowledge {
-  const { records: _r, last: _l, sigils: _s, study: _st, ...rest } = k;
-  void _r; void _l; void _s; void _st;
+  const { records: _r, last: _l, sigils: _s, study: _st, vows: _v, ...rest } = k;
+  void _r; void _l; void _s; void _st; void _v;
   return { ...rest, runs: 0, deaths: 0, ascensions: 0 };
 }
 

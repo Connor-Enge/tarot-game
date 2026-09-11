@@ -8,6 +8,7 @@ import { useGame } from '../../store';
 import { Card } from '../components/Card';
 import { getVow } from '../../engine';
 import { AbyssRings } from '../art/flourish';
+import { VowArt } from '../art/relics';
 import { SceneArt } from '../art/scenes';
 import { CodexDetail } from '../components/CodexDetail';
 import { DeckSheet } from '../components/DeckSheet';
@@ -63,7 +64,7 @@ function ReadingScreenInner() {
       <RelicStrip relics={run.relics} />
       {run.vow && (
         <p className={`vow-line center small ${run.vow.broken ? 'vow-line--broken' : run.vow.kept ? 'vow-line--kept' : ''}`} title={getVow(run.vow.id).text}>
-          {getVow(run.vow.id).glyph} {getVow(run.vow.id).name}{run.vow.kept ? ' · kept' : run.vow.broken ? ' · broken' : ''}
+          <VowArt id={run.vow.id} className="vow-line__art" /> {getVow(run.vow.id).name}{run.vow.kept ? ' · kept' : run.vow.broken ? ' · broken' : ''}
         </p>
       )}
 

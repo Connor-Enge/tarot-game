@@ -45,6 +45,7 @@ import {
   getVow,
   SCENES,
   noteSigils,
+  noteVow,
   noteResolved,
   noteRunStarted,
   noteWhisper,
@@ -169,6 +170,7 @@ function learn(k: Knowledge, run: RunState, mode: RunMode): { knowledge: Knowled
       road: run.history.map((h) => KIND_GLYPH[SCENES[h.sceneId].kind]).join(''),
     });
     next = noteLast(next, finalSpread(run), last.resolution.narration.at(-1) ?? '', returned);
+    if (run.vow) next = noteVow(next, run.vow.id, run.vow.kept ? 'kept' : run.vow.broken ? 'broken' : 'open');
     earned = newSigils(run, next);
     next = noteSigils(next, earned);
   }
