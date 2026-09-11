@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getCard, getDescent, getRelic, getVow, getWeather, KIND_GLYPH, SCENES, SIGILS, SLOT_IDS, SLOTS } from '../../engine';
+import { getCard, getDescent, getRelic, getVow, getWeather, KIND_GLYPH, SCENES, SIGILS, SLOT_IDS, SLOTS, type RunState } from '../../engine';
 import { shareText, useGame } from '../../store';
 import { Card } from '../components/Card';
 import { RelicArt } from '../art/relics';
@@ -77,7 +77,7 @@ function RunEndScreenInner() {
       const cards = SLOT_IDS.map((s) => last.reading[s]);
       const blob = await renderSpreadImage({
         cards,
-        title: run.well !== undefined ? 'The Well kept you.' : dead ? 'The reading ended you.' : 'You read it true.',
+        title: endTitle(run, dead),
         subtitle: run.phase.kind === 'dead' ? `Scene ${run.history.length} · ${SCENES[last.sceneId].prompt}` : SCENES[last.sceneId].prompt,
         footer: mode.kind === 'daily' ? `Daily ${mode.label}` : mode.kind === 'weekly' ? `Weekly ${mode.label}` : `${getDescent(mode.descent).name} · seed ${run.seed.toString(36)}`,
         seatsNamed: knowledge.seatsNamed,
@@ -111,7 +111,7 @@ function RunEndScreenInner() {
   return (
     <main className={`screen screen--end ${dead ? 'screen--dead' : 'screen--ascended'}`}>
       <EndArt kind={dead ? 'dead' : 'ascended'} className="scene__art end__art" />
-      <h2>{run.well !== undefined ? 'The Well kept you.' : dead ? 'The reading ended you.' : 'You read it true.'}</h2>
+      <h2>{endTitle(run, dead)}</h2>
       <p className="narration__outcome">
         {run.phase.resolution.narration.at(-1)}
         {dead && !['harm', 'calamity'].includes(run.phase.resolution.tier) && (
@@ -284,4 +284,18 @@ function RunEndScreenInner() {
 export function RunEndScreen() {
   const run = useGame((s) => s.run);
   return run ? <RunEndScreenInner /> : null;
+}
+
+/** The headline follows how the last reading went, not only whether you rose. */
+function endTitle(run: RunState, dead: boolean): string {
+  if (run.well !== undefined) return 'The Well kept you.';
+  if (dead) return 'The reading ended you.';
+  const tier = run.phase.kind === 'ascended' ? run.phase.resolution.tier : 'neutral';
+  switch (tier) {
+    case 'triumph': return 'You read it true.';
+    case 'boon': return 'You read it well.';
+    case 'neutral': return 'You read it, and it held.';
+    case 'harm': return 'You read it badly, and rose anyway.';
+    default: return 'You read it wrong, and rose anyway.';
+  }
 }

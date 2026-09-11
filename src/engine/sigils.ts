@@ -44,6 +44,18 @@ export const SIGILS: Sigil[] = [
   { id: 'seven-days', glyph: '▦', name: 'Seven Days', text: 'Return from seven different daily descents.', when: (_r, k) => Object.values(k.almanac ?? {}).filter((a) => a.returned).length >= 7 },
   { id: 'three-vows', glyph: '⚭', name: 'Oathbound', text: 'Keep three different vows.', when: (_r, k) => Object.values(k.vows ?? {}).filter((v) => v.kept >= 1).length >= 3 },
   { id: 'well-worn', glyph: '❂', name: 'Well Worn', text: 'Read one card twenty-five times.', when: (_r, k) => Object.values(k.cards).some((c) => c.resolved >= 25) },
+  {
+    id: 'held-before',
+    glyph: '↻',
+    name: 'Held Before',
+    text: 'Return with an Abyss reading that held a card you had already placed this descent.',
+    when: (r) => {
+      if (!ascended(r) || r.history.length < 2) return false;
+      const last = r.history[r.history.length - 1];
+      const earlier = new Set(r.history.slice(0, -1).flatMap((h) => SLOT_IDS.map((s) => h.reading[s].cardId)));
+      return SLOT_IDS.some((s) => earlier.has(last.reading[s].cardId));
+    },
+  },
 ];
 
 function countDealt(r: RunState): number {

@@ -54,6 +54,18 @@ describe('sigils', () => {
     expect(got).toContain('well-worn');
   });
 
+  it('Held Before needs an Abyss card that was placed earlier in the descent', () => {
+    const sig = SIGILS.find((s) => s.id === 'held-before')!;
+    const d = (cardId: string) => ({ cardId, reversed: false });
+    const entry = (ids: string[]) => ({ sceneId: 'crossing', reading: { vessel: d(ids[0]), threshold: d(ids[1]), hand: d(ids[2]), wake: d(ids[3]) }, resolution: {} as never });
+    const base = { ...startRun(2), phase: { kind: 'ascended', resolution: {} as never } } as RunState;
+    const yes = { ...base, history: [entry(['major-0', 'major-1', 'major-2', 'major-3']), entry(['cups-2', 'cups-3', 'major-1', 'cups-5'])] };
+    const no = { ...base, history: [entry(['major-0', 'major-1', 'major-2', 'major-3']), entry(['cups-2', 'cups-3', 'cups-4', 'cups-5'])] };
+    expect(sig.when(yes, emptyKnowledge())).toBe(true);
+    expect(sig.when(no, emptyKnowledge())).toBe(false);
+    expect(sig.when({ ...yes, phase: { kind: 'dead', resolution: {} as never } }, emptyKnowledge())).toBe(false);
+  });
+
   it('does nothing mid-run', () => {
     expect(newSigils(startRun(1), emptyKnowledge())).toEqual([]);
   });
