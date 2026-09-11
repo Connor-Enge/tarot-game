@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { getCard } from '../../engine';
 import { useGame } from '../../store';
+import { StreakFlames } from '../art/flames';
 import { Card } from './Card';
 
 /**
@@ -43,17 +44,25 @@ export function Study() {
     <section className="study">
       {filterRow}
       <div className="study__meta muted small">
-        streak {streak}
+        <StreakFlames n={streak} className="study__flames" /> streak {streak}
         {stats && ` · ${stats.correct} / ${stats.asked} · best ${stats.bestStreak}`}
       </div>
-      <p className="study__omen">“{q.omen}”</p>
+      <blockquote className="study__omen" key={q.omen}>
+        <span className="study__flourish" aria-hidden>❧</span>
+        {q.omen}
+        <span className="study__flourish study__flourish--end" aria-hidden>❧</span>
+      </blockquote>
       <p className="muted small center">Which card did this{q.reversed ? ', reversed' : ''}?</p>
       <div className="study__choices">
-        {q.choices.map((id) => {
+        {q.choices.map((id, i) => {
           const state = picked ? (id === q.answer ? 'right' : id === picked ? 'wrong' : 'dim') : '';
           return (
-            <div key={id} className={`study__choice study__choice--${state}`}>
-              <Card cardId={id} size="lg" reversed={picked !== null && id === q.answer && q.reversed} onClick={() => answerStudy(id)} />
+            <div key={`${q.omen}-${id}`} className={`study__choice study__choice--${state} deal`} style={{ animationDelay: `${i * 110}ms` }}>
+              <div className="study__cardwrap">
+                <Card cardId={id} size="lg" reversed={picked !== null && id === q.answer && q.reversed} onClick={() => answerStudy(id)} />
+                {picked && id === q.answer && <span className="study__stamp" aria-hidden>✦</span>}
+                {picked && id === picked && id !== q.answer && <span className="study__stamp study__stamp--wrong" aria-hidden>✖</span>}
+              </div>
               {picked && id === q.answer && <div className="study__label">{getCard(id).name}</div>}
             </div>
           );

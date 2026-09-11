@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { CARDS, dailySeed, dailyStreakAlive, dailyWeather, daylight, DEPTHS, DESCENTS, getCard, getDescent, maxDepthUnlocked } from '../../engine';
 import { CardBack, type BackVariant } from '../art/CardArt';
+import { StreakFlames } from '../art/flames';
 import { TitleSky } from '../art/sky';
 import { ReaderMark } from '../components/ReaderMark';
 import { useGame } from '../../store';
@@ -164,7 +165,7 @@ export function TitleScreen() {
         </button>
         <div className="row">
           <button className="btn" onClick={newDaily} title={`${weather.name}: ${weather.text}`}>
-            Daily{streak > 1 ? ` · ${streak}` : ''} <span className="weather__glyph">{weather.glyph}</span>
+            Daily{streak > 1 ? ` · ${streak}` : ''} {streak > 1 && <StreakFlames n={streak} className="btn__flames" />}<span className="weather__glyph">{weather.glyph}</span>
           </button>
           <button className="btn" onClick={newWeekly} title="A longer road, shared by everyone this week">
             Weekly
