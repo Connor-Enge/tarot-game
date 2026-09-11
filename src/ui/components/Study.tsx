@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { getCard, SCENES, SLOT_IDS, SLOTS } from '../../engine';
+import { getCard, SCENES, SLOT_IDS, SLOTS, STUDY_KEEPSAKE_STREAK } from '../../engine';
 import { SceneArt } from '../art/scenes';
 import { useGame } from '../../store';
 import { StreakFlames } from '../art/flames';
@@ -46,10 +46,7 @@ export function Study() {
     return (
       <section className="study">
         {filterRow}
-        <div className="study__meta muted small">
-          <StreakFlames n={streak} className="study__flames" /> streak {streak}
-          {stats && ` · ${stats.correct} / ${stats.asked} · best ${stats.bestStreak}`}
-        </div>
+        <StudyMeta streak={streak} stats={stats} />
         <div className="study__cardwrap study__seatcard">
           <Card cardId={q.cardId} reversed={q.reversed} size="lg" />
         </div>
@@ -94,10 +91,7 @@ export function Study() {
     return (
       <section className="study">
         {filterRow}
-        <div className="study__meta muted small">
-          <StreakFlames n={streak} className="study__flames" /> streak {streak}
-          {stats && ` · ${stats.correct} / ${stats.asked} · best ${stats.bestStreak}`}
-        </div>
+        <StudyMeta streak={streak} stats={stats} />
         <div className="study__cardwrap study__seatcard">
           <Card cardId={q.cardId} reversed={q.reversed} size="lg" />
         </div>
@@ -130,10 +124,7 @@ export function Study() {
   return (
     <section className="study">
       {filterRow}
-      <div className="study__meta muted small">
-        <StreakFlames n={streak} className="study__flames" /> streak {streak}
-        {stats && ` · ${stats.correct} / ${stats.asked} · best ${stats.bestStreak}`}
-      </div>
+      <StudyMeta streak={streak} stats={stats} />
       <blockquote className="study__omen" key={cq.omen}>
         <span className="study__flourish" aria-hidden>❧</span>
         {cq.omen}
@@ -161,5 +152,28 @@ export function Study() {
         </button>
       )}
     </section>
+  );
+}
+
+/** The streak line, with a ten-notch ring that fills toward the keepsake. */
+function StudyMeta({ streak, stats }: { streak: number; stats?: { correct: number; asked: number; bestStreak: number } }) {
+  const lit = Math.min(STUDY_KEEPSAKE_STREAK, streak % STUDY_KEEPSAKE_STREAK === 0 && streak > 0 ? STUDY_KEEPSAKE_STREAK : streak % STUDY_KEEPSAKE_STREAK);
+  const toGo = STUDY_KEEPSAKE_STREAK - lit;
+  return (
+    <div className="study__meta muted small">
+      <svg viewBox="0 0 24 24" className="study__ring" aria-label={`${lit} of ${STUDY_KEEPSAKE_STREAK} toward a keepsake`}>
+        {Array.from({ length: STUDY_KEEPSAKE_STREAK }, (_, i) => {
+          const a = (i / STUDY_KEEPSAKE_STREAK) * Math.PI * 2 - Math.PI / 2;
+          const on = i < lit;
+          return <line key={i} x1={12 + Math.cos(a) * 7.5} y1={12 + Math.sin(a) * 7.5} x2={12 + Math.cos(a) * 10.5} y2={12 + Math.sin(a) * 10.5} stroke={on ? '#f3dc8a' : 'rgba(214,178,94,0.28)'} strokeWidth={on ? 2 : 1.2} strokeLinecap="round" />;
+        })}
+        <text x={12} y={13.2} textAnchor="middle" dominantBaseline="middle" fontSize={7} fill={lit === STUDY_KEEPSAKE_STREAK ? '#f3dc8a' : 'rgba(141,134,163,0.9)'} fontFamily="Georgia, serif">
+          {lit === STUDY_KEEPSAKE_STREAK ? '✦' : lit}
+        </text>
+      </svg>
+      <StreakFlames n={streak} className="study__flames" /> streak {streak}
+      {stats && ` · ${stats.correct} / ${stats.asked} · best ${stats.bestStreak}`}
+      {streak > 0 && lit < STUDY_KEEPSAKE_STREAK && <span className="study__togo"> · {toGo} to a keepsake</span>}
+    </div>
   );
 }

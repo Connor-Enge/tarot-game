@@ -1708,3 +1708,5 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .study__choices { padding: 10px 6px 8px; }
 .keepsake { margin: -2px 0 0; color: var(--gold); }
 .keepsake__mark { text-shadow: 0 0 8px rgba(243,220,138,0.6); }
+.study__ring { width: 22px; height: 22px; vertical-align: -6px; margin-right: 4px; filter: drop-shadow(0 0 4px rgba(243,220,138,0.25)); }
+.study__togo { color: var(--gold); opacity: 0.85; }
