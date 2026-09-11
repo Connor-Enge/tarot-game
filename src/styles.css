@@ -1089,3 +1089,17 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .narration__named-text { flex: 0 1 auto; }
 .codex__combo { display: flex; align-items: center; gap: 10px; }
 .codex__combo-token { width: 30px; height: 30px; flex: 0 0 30px; }
+
+/* --- title: last reading laid, reader's mark turning ------------------------ */
+.last { position: relative; overflow: hidden; }
+.last::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: var(--last-glow, none); }
+.last--returned { --last-glow: radial-gradient(70% 60% at 50% 0%, rgba(243,220,138,0.16), transparent 70%); border: 1px solid rgba(214,178,94,0.25); }
+.last--died { --last-glow: radial-gradient(70% 60% at 50% 0%, rgba(214,96,94,0.14), transparent 70%); border: 1px solid rgba(214,96,94,0.22); }
+.last__lead { display: flex; align-items: center; gap: 6px; }
+.last__mark { font-size: 0.9rem; }
+.last--returned .last__mark { color: var(--gold-2); }
+.last--died .last__mark { color: var(--vit); }
+.last__cards--laid { gap: 4px; padding: 4px 0 2px; }
+.last__slot { transform: rotate(calc((var(--i) - 1.5) * 4deg)) translateY(calc((var(--i) - 1.5) * (var(--i) - 1.5) * 1.2px)); }
+.reader__spin { transform-origin: 32px 32px; animation: flourish-spin 90s linear infinite; }
+.reduce-motion .reader__spin { animation: none; }

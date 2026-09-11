@@ -194,11 +194,16 @@ export function TitleScreen() {
         <p className="muted small">{CARDS.length - Object.keys(k.dealt ?? {}).length} cards have never been dealt to you.</p>
       )}
       {k.last && (
-        <div className="last" aria-label="your last reading">
-          <div className="muted small">{k.last.returned ? 'Last time, you came back.' : 'Last time, this ended you.'}</div>
-          <div className="last__cards">
+        <div className={`last ${k.last.returned ? 'last--returned' : 'last--died'}`} aria-label="your last reading">
+          <div className="muted small last__lead">
+            <span className="last__mark" aria-hidden>{k.last.returned ? '☉' : '✖'}</span>
+            {k.last.returned ? 'Last time, you came back.' : 'Last time, this ended you.'}
+          </div>
+          <div className="last__cards last__cards--laid">
             {k.last.cards.map((c, i) => (
-              <Card key={`${c.cardId}-${i}`} cardId={c.cardId} reversed={c.reversed} size="xs" />
+              <div key={`${c.cardId}-${i}`} className="last__slot" style={{ '--i': i } as React.CSSProperties}>
+                <Card cardId={c.cardId} reversed={c.reversed} size="xs" />
+              </div>
             ))}
           </div>
           <div className="muted small last__outcome">{k.last.outcome}</div>

@@ -17,7 +17,16 @@ export function ReaderMark({ knowledge: k }: { knowledge: Knowledge }) {
   for (let i = 0; i < ticks; i++) kinds.push(i < k.ascensions ? 'return' : i < k.ascensions + k.deaths ? 'death' : 'other');
   return (
     <div className="reader" aria-label={`${title}, ${runs} descents`}>
-      <svg viewBox="0 0 64 64" width={64} height={64} aria-hidden>
+      <svg viewBox="0 0 64 64" width={64} height={64} aria-hidden className={`reader__mark reader__mark--${title.toLowerCase()}`}>
+        <defs>
+          <radialGradient id="readerDisc" cx="50%" cy="40%" r="60%">
+            <stop offset="0%" stopColor="#f3dc8a" stopOpacity={0.45} />
+            <stop offset="100%" stopColor="#d6b25e" stopOpacity={0.08} />
+          </radialGradient>
+        </defs>
+        <g className="reader__spin">
+          <circle cx={32} cy={32} r={31} fill="none" stroke="rgba(214,178,94,0.35)" strokeWidth={0.6} strokeDasharray="1.5 4" />
+        </g>
         <circle cx={32} cy={32} r={r} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth={1} />
         {kinds.map((kind, i) => {
           const a = (i / Math.max(ticks, 12)) * Math.PI * 2 - Math.PI / 2;
@@ -26,7 +35,8 @@ export function ReaderMark({ knowledge: k }: { knowledge: Knowledge }) {
           const color = kind === 'return' ? '#f3dc8a' : kind === 'death' ? '#d6605e' : '#8d86a3';
           return <line key={i} x1={32 + Math.cos(a) * inner} y1={32 + Math.sin(a) * inner} x2={32 + Math.cos(a) * outer} y2={32 + Math.sin(a) * outer} stroke={color} strokeWidth={1.4} strokeLinecap="round" />;
         })}
-        <circle cx={32} cy={32} r={r * frac} fill="rgba(214,178,94,0.18)" />
+        <circle cx={32} cy={32} r={r * frac} fill="url(#readerDisc)" />
+        {title === 'Oracle' && <text x={32} y={9} fontSize={7} textAnchor="middle" fill="#f3dc8a" fontFamily="Georgia, serif">✦</text>}
         <text x={32} y={36} fontSize={11} textAnchor="middle" fill="#e9e4f2" fontFamily="Georgia, serif">
           {runs}
         </text>
