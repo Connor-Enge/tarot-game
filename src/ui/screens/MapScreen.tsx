@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { actOfLayer, canCut, canTakeVow, currentAct, cycleLength, foretellCost, getVow, KIND_GLYPH, RITES, ritesWalked, SCENES, visitedNodes, vowOffer, wellTurn } from '../../engine';
+import { actOfLayer, canCut, canTakeVow, currentAct, cycleLength, foretellCost, getVow, KIND_GLYPH, RITES, ritesWalked, SCENES, tallyText, visitedNodes, vowOffer, wellTurn } from '../../engine';
 import { ActBanner, ActMark } from '../art/banners';
 import { RoadStrip } from '../art/road';
 import { VowArt } from '../art/relics';
@@ -236,6 +236,16 @@ function MapScreenInner() {
         </p>
       )}
 
+      {run.history.length > 0 && (() => {
+        const lastEntry = run.history[run.history.length - 1];
+        const tier = lastEntry.resolution.tier;
+        return (
+          <p className={`story-line center small story-line--${tier}`}>
+            <span className="story-line__mark" aria-hidden>{TIER_MARK[tier]}</span>
+            <span className="story-line__place">{SCENES[lastEntry.sceneId].place}</span> {tallyText(lastEntry.resolution)}
+          </p>
+        );
+      })()}
       <section className="map" aria-label="the descent" ref={mapRef}>
         <svg className="map__lines" width={size.w} height={size.h} aria-hidden>
           {lines.map((l, i) => {

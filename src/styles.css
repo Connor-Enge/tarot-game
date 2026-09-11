@@ -1950,3 +1950,16 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .narration__named--cups { background: linear-gradient(90deg, #244a6a 0%, #8fc3e0 50%, #244a6a 100%); color: #0b1a22; }
 .narration__named--swords { background: linear-gradient(90deg, #4a4c60 0%, #d8d9e8 50%, #4a4c60 100%); color: #12131c; }
 .narration__named--pentacles { background: linear-gradient(90deg, #2f4a22 0%, #a9c98a 50%, #2f4a22 100%); color: #10200a; }
+
+/* --- the story so far: the last scene's tally above the map ------------------- */
+.story-line { margin: 0 0 4px; padding: 6px 12px; border-radius: 10px; color: var(--muted); background: rgba(255,255,255,0.03); border: 1px solid rgba(214,178,94,0.16); line-height: 1.4; }
+.story-line__mark { margin-right: 6px; color: var(--gold); }
+.story-line__place { color: var(--ink); font-style: italic; }
+.story-line--triumph .story-line__mark { color: var(--gold-2); }
+.story-line--calamity .story-line__mark, .story-line--harm .story-line__mark { color: var(--vit); }
+.story-line--calamity { border-color: rgba(214,96,94,0.3); }
+
+/* named readings in the Codex: score chips, red for the ill ones */
+.codex__combo-score { margin-left: auto; font-size: 0.75rem; padding: 1px 7px; border-radius: 999px; border: 1px solid rgba(214,178,94,0.5); color: var(--gold-2); font-variant-numeric: tabular-nums; }
+.codex__combo-score--ill { border-color: rgba(214,96,94,0.55); color: #f0a09e; }
+.codex__combo--ill em { color: #e0a39a; }

@@ -1,5 +1,5 @@
 import { Fragment, useState } from 'react';
-import { CARDS, CHOSEN_MIN, chosenDeck, COMBO_IDS, comboNote, getDescent, getCard, getVow, KIND_GLYPH, SCENES, SIGILS, SLOT_IDS, SLOTS, type Tier } from '../../engine';
+import { CARDS, CHOSEN_MIN, chosenDeck, COMBO_IDS, comboNote, comboScore, getDescent, getCard, getVow, KIND_GLYPH, SCENES, SIGILS, SLOT_IDS, SLOTS, type Tier } from '../../engine';
 import { SceneArt } from '../art/scenes';
 import { SigilToken } from '../art/sigil';
 
@@ -137,10 +137,11 @@ export function CodexScreen() {
             {COMBO_IDS.map((id) => <i key={id} className={combos.includes(id) ? 'codex__pip codex__pip--on' : 'codex__pip'} />)}
           </div>
           {combos.map((id, i) => (
-            <div key={id} className="codex__combo" style={{ '--i': i } as React.CSSProperties}>
+            <div key={id} className={`codex__combo ${comboScore(id) < 0 ? 'codex__combo--ill' : ''}`} style={{ '--i': i } as React.CSSProperties}>
               <SigilToken id={`combo-${id}`} glyph="♪" earned className="codex__combo-token" />
               <span className="codex__combo-n muted small">{i + 1}</span>
               <em>{comboNote(id)}</em>
+              <span className={`codex__combo-score ${comboScore(id) < 0 ? 'codex__combo-score--ill' : ''}`}>{comboScore(id) > 0 ? '+' : comboScore(id) < 0 ? '−' : ''}{Math.abs(comboScore(id)) % 1 === 0 ? Math.abs(comboScore(id)) : Math.abs(comboScore(id)).toFixed(1)}</span>
             </div>
           ))}
         </section>

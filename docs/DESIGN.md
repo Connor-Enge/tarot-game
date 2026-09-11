@@ -168,7 +168,7 @@ Ideas queued:
 Each entry names the file that owns it. Together with *Core loop* and
 *Knowledge* above, this is the whole game.
 
-**The map** (art pass: choosable doors are tinted by kind, red for
+**The map** (above it, once a scene has been read, a story line recalls the last scene's place and its tally, so the road remembers how the last reading went) (art pass: choosable doors are tinted by kind, red for
 threat, green for rest, violet for mystery, gold for passage; layers
 more than one ahead fade and desaturate, and the deepest blur a touch,
 so the road falls away into fog; the Abyss wears a slow-turning vortex
