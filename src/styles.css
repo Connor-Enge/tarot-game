@@ -662,6 +662,10 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .deck-groups .deck-grid { max-height: none; overflow: visible; }
 .deck-grid--dim { opacity: 0.6; }
 
+/* reading wrappers: the right column grows so the action bar stays at the bottom */
+.reading__left, .reading__right { display: flex; flex-direction: column; gap: 16px; }
+.reading__right { flex: 1; }
+
 /* --- tablet / landscape ------------------------------------------------------ */
 @media (min-width: 700px) and (min-height: 480px) and (min-aspect-ratio: 1/1) {
   .screen { max-width: 980px; }
