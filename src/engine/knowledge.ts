@@ -329,7 +329,13 @@ export function pruneUnknown(k: Knowledge, known: Set<string> | null): Knowledge
   const links = k.links ? Object.fromEntries(Object.entries(k.links).filter(([key]) => key.split('|').every((id) => known.has(id)))) : undefined;
   const omenLog = k.omenLog?.filter((e) => known.has(e.cardId));
   const last = k.last && k.last.cards.every((c) => known.has(c.cardId)) ? k.last : undefined;
-  return { ...k, cards, dealt, links, omenLog, last };
+  const signature = k.signature && known.has(k.signature) && (cards[k.signature]?.tier ?? 0) >= 3 ? k.signature : undefined;
+  const records = k.records
+    ? Object.fromEntries(
+        Object.entries(k.records).map(([d, r]) => [d, r.best && !r.best.cards.every((c) => known.has(c.cardId)) ? { ...r, best: undefined } : r]),
+      )
+    : undefined;
+  return { ...k, cards, dealt, links, omenLog, last, signature, records };
 }
 
 let knownIds: Set<string> | null = null;
@@ -389,7 +395,7 @@ export function importKnowledge(text: string): Knowledge | null {
     const bytes = Uint8Array.from(bin, (c) => c.charCodeAt(0));
     const parsed = JSON.parse(new TextDecoder().decode(bytes)) as Knowledge;
     if (parsed.version !== 1 || typeof parsed.cards !== 'object' || typeof parsed.runs !== 'number') return null;
-    return parsed;
+    return pruneUnknown(parsed, knownIds);
   } catch {
     return null;
   }
