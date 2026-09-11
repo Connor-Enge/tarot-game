@@ -317,7 +317,8 @@ three scene tiles from places you have actually stood). Both only ever ask
 you to remember what happened; neither leaks a meaning. A streak of ten
 in one sitting earns a keepsake: the card that made the tenth answer is
 charged in the next free descent, then spent. The title names it until
-it is taken.
+it is taken, and the first deal that shows it in that descent wears a
+gold "yours" ribbon, so the reward is seen arriving.
 
 **Journal**: each scene shows Clarity spent (redraws, whispers).
 

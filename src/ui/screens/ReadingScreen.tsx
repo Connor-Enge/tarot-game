@@ -172,6 +172,7 @@ function ReadingScreenInner() {
                 dim={lifted !== null && lifted !== i}
                 mark={run.marks[c.cardId]}
                 whisper={whispered ? kw : undefined}
+                yours={c.yours}
                 onClick={() => lift(lifted === i ? null : i)}
                 onLongPress={c.hidden ? undefined : () => setZoom({ cardId: c.cardId, reversed: c.reversed })}
                 onDragMove={(_dx, dy) => {

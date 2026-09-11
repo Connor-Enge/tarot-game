@@ -14,6 +14,8 @@ export interface RunConfig {
   startingRelics?: string[];
   /** Cards charged from the start: upright when dealt, and a little stronger. The Daily charges the card of the day. */
   charged?: readonly string[];
+  /** A keepsake earned in Study: charged like the rest, and marked "yours" the first time it is dealt. */
+  keepsake?: string;
   /** A mastered card the reader has made their own: dealt, upright, into the first Vessel. */
   signature?: string;
   startingVitality?: number;

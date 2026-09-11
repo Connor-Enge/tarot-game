@@ -304,7 +304,7 @@ export const useGame = create<GameStore>((set, get) => ({
     // A keepsake from Study rides charged into this descent, and is spent by it.
     const taken = takeKeepsake(knowledge);
     if (taken.keepsake) saveKnowledge(taken.knowledge);
-    const config = { ...d.config, ...(depth ? depthConfig(depth) : {}), ...(first ? { majorsFirst: true } : {}), signature: knowledge.signature, charged: taken.keepsake ? [...(d.config.charged ?? []), taken.keepsake] : d.config.charged };
+    const config = { ...d.config, ...(depth ? depthConfig(depth) : {}), ...(first ? { majorsFirst: true } : {}), signature: knowledge.signature, keepsake: taken.keepsake };
     set({ run: startRun(seed, config), mode: { kind: 'free', descent: d.id, depth }, knowledge: taken.knowledge, screen: 'run', lifted: null, earned: [], firstDescent: first });
   },
 

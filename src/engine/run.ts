@@ -119,6 +119,10 @@ export interface RunState {
   abyssRemade?: boolean;
   /** Which trade it was. */
   tradeTaken?: Trade['id'];
+  /** A keepsake from Study, carried charged into this descent. */
+  keepsake?: string;
+  /** Set once the keepsake has been dealt and shown as yours. */
+  keepsakeShown?: boolean;
   /** True once the Stranger has appeared this run. They come once. */
   strangerMet?: boolean;
   /** The reader's signature card, if any. */
@@ -195,7 +199,8 @@ export function startRun(seed: number, config: RunConfig = {}): RunState {
     node: null,
     vitality: config.startingVitality ?? STARTING_VITALITY,
     clarity: config.startingClarity ?? STARTING_CLARITY,
-    marks: Object.fromEntries((config.charged ?? []).map((id) => [id, 'charged' as const])),
+    marks: Object.fromEntries([...(config.charged ?? []), ...(config.keepsake ? [config.keepsake] : [])].map((id) => [id, 'charged' as const])),
+    keepsake: config.keepsake && deck.draw.includes(config.keepsake) ? config.keepsake : undefined,
     relics: [...(config.startingRelics ?? [])],
     freeRedrawUsed: false,
     redraws: 0,
@@ -235,6 +240,11 @@ function applyMarks(run: RunState, cards: DrawnCard[]): DrawnCard[] {
   });
 }
 
+/** True once a deal has shown the keepsake as yours; it announces itself only once. */
+function keepsakeShown(run: RunState, state: SlotState): boolean | undefined {
+  return run.keepsakeShown || state.candidates.some((c) => c.yours) || undefined;
+}
+
 function dealSeat(run: RunState, rng: Rng, deck: DeckState, slot: SlotId): { deck: DeckState; state: SlotState } {
   if (run.pendingDeal) {
     return { deck, state: { slot, candidates: run.pendingDeal, chosen: null, whispered: [] } };
@@ -265,6 +275,8 @@ function dealSeat(run: RunState, rng: Rng, deck: DeckState, slot: SlotId): { dec
     const i = rng.int(cards.length);
     cards = cards.map((c, j) => (j === i ? { ...c, hidden: true } : c));
   }
+  // The keepsake announces itself the first time it is dealt.
+  if (run.keepsake && !run.keepsakeShown) cards = cards.map((c) => (c.cardId === run.keepsake && !c.hidden ? { ...c, yours: true } : c));
   return { deck: outDeck, state: { slot, candidates: cards, chosen: null, whispered: [] } };
 }
 
@@ -363,7 +375,7 @@ export function chooseNode(run: RunState, index: number): RunState {
   const remade = terminal && run.deck.discard.length >= 12;
   const deckIn: DeckState = remade ? { draw: [...run.deck.draw, ...rng.shuffle(run.deck.discard)], discard: [] } : run.deck;
   const first = dealSeat({ ...run, deck: deckIn }, rng, deckIn, SLOT_IDS[0]);
-  let next: RunState = { ...run, node: index, deck: first.deck, slots: [first.state], activeSlot: 0, freeRedrawUsed: false, echo: null, sceneSpent: { redraws: 0, whispers: 0 }, phase: { kind: 'reading' }, abyssRemade: remade || undefined };
+  let next: RunState = { ...run, node: index, deck: first.deck, slots: [first.state], activeSlot: 0, freeRedrawUsed: false, echo: null, sceneSpent: { redraws: 0, whispers: 0 }, phase: { kind: 'reading' }, abyssRemade: remade || undefined, keepsakeShown: keepsakeShown(run, first.state) };
   // A vow kept all the way down pays out as you step into the Abyss.
   if (SCENES[layer[index].sceneId].terminal && run.vow && !run.vow.broken && !run.vow.kept) {
     const reward = getVow(run.vow.id).reward;
@@ -393,7 +405,7 @@ export function chooseCandidate(run: RunState, index: number): RunState {
     const next = dealSeat(run, rng, deck, SLOT_IDS[nextIndex]);
     deck = next.deck;
     slots.push(next.state);
-    return withRng({ ...run, deck, slots, activeSlot: nextIndex, pendingDeal: null }, rng);
+    return withRng({ ...run, deck, slots, activeSlot: nextIndex, pendingDeal: null, keepsakeShown: keepsakeShown(run, next.state) }, rng);
   }
   return resolve(withRng({ ...run, deck, slots, activeSlot: nextIndex }, rng));
 }
@@ -409,7 +421,7 @@ export function redrawActive(run: RunState): RunState {
   const deck = discard(run.deck, slot.candidates);
   const next = dealSeat(run, rng, deck, slot.slot);
   const slots = run.slots.map((s, i) => (i === run.activeSlot ? next.state : s));
-  return withRng({ ...run, deck: next.deck, slots, clarity: run.clarity - cost, freeRedrawUsed: run.freeRedrawUsed || cost === 0, redraws: run.redraws + 1, sceneSpent: { ...run.sceneSpent, redraws: run.sceneSpent.redraws + 1 } }, rng);
+  return withRng({ ...run, deck: next.deck, slots, clarity: run.clarity - cost, freeRedrawUsed: run.freeRedrawUsed || cost === 0, redraws: run.redraws + 1, sceneSpent: { ...run.sceneSpent, redraws: run.sceneSpent.redraws + 1 }, keepsakeShown: keepsakeShown(run, next.state) }, rng);
 }
 
 /** A turn is allowed once per scene, on an unmarked, face-up candidate, with clarity to spend. */

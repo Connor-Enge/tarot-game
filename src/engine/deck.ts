@@ -9,6 +9,8 @@ export interface DrawnCard {
   hidden?: boolean;
   /** The previous scene's Wake, following you into this Vessel. */
   echo?: boolean;
+  /** The reader's keepsake, on the deal that first shows it. */
+  yours?: boolean;
 }
 
 export interface DeckState {
