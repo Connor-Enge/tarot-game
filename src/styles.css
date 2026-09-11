@@ -1620,3 +1620,8 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 }
 .today__card .card--charged .card__inner { box-shadow: 0 0 0 1px var(--gold-2), 0 0 18px rgba(243,220,138,0.5); }
 .reduce-motion .today__flare { animation: none; }
+
+/* --- this week as a road ------------------------------------------------------ */
+.week { display: flex; flex-direction: column; gap: 2px; padding: 8px 10px 4px; border-radius: 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(214,178,94,0.18); }
+.week__road { display: block; width: 100%; max-width: 360px; margin: 0 auto; height: auto; }
+.week__cap { margin: 0; }

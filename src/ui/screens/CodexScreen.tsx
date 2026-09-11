@@ -11,6 +11,7 @@ import { Card } from '../components/Card';
 import { CodexDetail } from '../components/CodexDetail';
 import { Constellation } from '../components/Constellation';
 import { Almanac } from '../components/Almanac';
+import { WeekRoad } from '../components/WeekRoad';
 import { Backs } from '../components/Backs';
 import { ColourKey } from '../components/ColourKey';
 import { Study } from '../components/Study';
@@ -83,6 +84,7 @@ export function CodexScreen() {
         />
       )}
       {view === 'book' && (<>
+        <WeekRoad knowledge={k} />
         <Almanac knowledge={k} />
         <OmenBook onOpen={openCodex} />
       </>)}
