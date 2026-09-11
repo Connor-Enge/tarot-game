@@ -113,6 +113,18 @@ export function TitleScreen() {
               {k.records[current.id].runs} down · {k.records[current.id].returns} back · deepest {k.records[current.id].bestDepth}
             </p>
           )}
+          {!lockedNote && k.records?.[current.id]?.best && (
+            <div className="best" aria-label="best descent">
+              <div className="last__cards">
+                {k.records[current.id].best!.cards.map((c, i) => (
+                  <Card key={`${c.cardId}-${i}`} cardId={c.cardId} reversed={c.reversed} size="xs" />
+                ))}
+              </div>
+              <span className="muted small">
+                Finest · {k.records[current.id].best!.returned ? 'returned' : `scene ${k.records[current.id].best!.depth}`} · {k.records[current.id].best!.good} good
+              </span>
+            </div>
+          )}
         </div>
       )}
       {saved && (

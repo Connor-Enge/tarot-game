@@ -42,3 +42,21 @@ describe('sigils', () => {
     expect(k.records?.standard).toEqual({ runs: 2, returns: 1, bestDepth: 9, deepestReturn: 0 });
   });
 });
+
+describe('best spread', () => {
+  it('prefers a return, then depth, then good readings', () => {
+    const a = [{ cardId: 'major-0', reversed: false }];
+    let k = noteRecord(emptyKnowledge(), 'standard', 4, false, 0, { cards: a, good: 1 });
+    expect(k.records?.standard.best?.depth).toBe(4);
+    k = noteRecord(k, 'standard', 6, false, 0, { cards: a, good: 0 });
+    expect(k.records?.standard.best?.depth).toBe(6);
+    k = noteRecord(k, 'standard', 3, false, 0, { cards: a, good: 3 });
+    expect(k.records?.standard.best?.depth).toBe(6);
+    k = noteRecord(k, 'standard', 9, true, 0, { cards: a, good: 2 });
+    expect(k.records?.standard.best?.returned).toBe(true);
+    k = noteRecord(k, 'standard', 9, true, 0, { cards: a, good: 5 });
+    expect(k.records?.standard.best?.good).toBe(5);
+    k = noteRecord(k, 'standard', 9, false, 0, { cards: a, good: 8 });
+    expect(k.records?.standard.best?.returned).toBe(true);
+  });
+});

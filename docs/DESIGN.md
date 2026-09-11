@@ -365,6 +365,13 @@ for short sessions. Its own record.
 **End vignettes**: death shows the four seat glyphs sinking into the dark
 with one candle; return shows a lit doorway with a figure stepping up.
 
+**Low vitality**: at 2 or less the heart pulses, a red edge glows, and a
+slow double thump runs under the drone. It stops the moment you mend.
+
+**Finest descent**: each descent remembers its best run (a return beats a
+death, then depth, then good readings) and shows that final spread on the
+title screen.
+
 ### Pillar sweep: where text reaches the screen
 
 Every surface that can show text about a card, and what gates it:

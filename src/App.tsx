@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect } from 'react';
 import { currentAct, currentNode, SCENES } from './engine';
+import { setHeartbeat } from './audio';
 import { useSettings } from './settings';
 import { useGame } from './store';
 import { ArtDefs } from './ui/art/CardArt';
@@ -42,6 +43,12 @@ export function App() {
     document.documentElement.classList.toggle('reduce-motion', reduceMotion);
     document.documentElement.classList.toggle('big-cards', bigCards);
   }, [reduceMotion, bigCards]);
+  const low = screen === 'run' && !!run && run.vitality > 0 && run.vitality <= 2 && run.phase.kind !== 'dead' && run.phase.kind !== 'ascended';
+  useEffect(() => {
+    document.documentElement.classList.toggle('low-vitality', low);
+    setHeartbeat(low);
+    return () => setHeartbeat(false);
+  }, [low]);
 
   let view = <TitleScreen />;
   let key = 'title';

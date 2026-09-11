@@ -131,7 +131,8 @@ function learn(k: Knowledge, run: RunState, mode: RunMode): { knowledge: Knowled
     const returned = run.phase.kind === 'ascended';
     if (returned) next = noteAscension(next, finalSpread(run));
     else next = noteDeath(next, finalSpread(run));
-    next = noteRecord(next, mode.kind === 'free' ? mode.descent : mode.kind, run.history.length, returned, mode.kind === 'free' ? (mode.depth ?? 0) : 0);
+    const good = run.history.filter((h) => h.resolution.tier === 'boon' || h.resolution.tier === 'triumph').length;
+    next = noteRecord(next, mode.kind === 'free' ? mode.descent : mode.kind, run.history.length, returned, mode.kind === 'free' ? (mode.depth ?? 0) : 0, { cards: finalSpread(run), good });
     next = noteLast(next, finalSpread(run), last.resolution.narration.at(-1) ?? '', returned);
     earned = newSigils(run, next);
     next = noteSigils(next, earned);

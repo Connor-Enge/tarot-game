@@ -717,3 +717,16 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .screen--end h2 { margin-top: 4px; }
 
 .narration__death { color: var(--vit); }
+
+/* --- low vitality / best -------------------------------------------------- */
+@keyframes heart-pulse { 0%, 100% { transform: scale(1); } 20% { transform: scale(1.18); } 40% { transform: scale(1); } 55% { transform: scale(1.12); } }
+.low-vitality .stat--vit { animation: heart-pulse 1.9s ease-in-out infinite; display: inline-block; }
+.low-vitality .view::after {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 5;
+  box-shadow: inset 0 0 60px 10px rgba(214,96,94,0.35);
+  animation: heart-glow 1.9s ease-in-out infinite;
+}
+@keyframes heart-glow { 0%, 100% { opacity: 0.6; } 20% { opacity: 1; } }
+.reduce-motion.low-vitality .stat--vit, .reduce-motion.low-vitality .view::after { animation: none; }
+.best { display: flex; flex-direction: column; align-items: center; gap: 4px; padding-top: 4px; }
+.best .card { cursor: default; }

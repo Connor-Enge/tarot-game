@@ -201,3 +201,20 @@ export function stopDrone() {
   drone?.stop();
   drone = null;
 }
+
+let heartbeat: number | null = null;
+
+/** A slow double thump under the drone while vitality is low. */
+export function setHeartbeat(on: boolean) {
+  if (on && heartbeat === null) {
+    const beat = () => {
+      tone(48, 0.18, 'sine', 0.16);
+      tone(44, 0.22, 'sine', 0.12, 0.22);
+    };
+    beat();
+    heartbeat = window.setInterval(beat, 1900);
+  } else if (!on && heartbeat !== null) {
+    window.clearInterval(heartbeat);
+    heartbeat = null;
+  }
+}

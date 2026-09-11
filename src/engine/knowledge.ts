@@ -43,7 +43,17 @@ export interface Knowledge {
   /** The final spread of the most recent run, for the title screen. */
   last?: { cards: { cardId: string; reversed: boolean }[]; outcome: string; returned: boolean; when: number };
   /** Per-descent records. */
-  records?: Record<string, { runs: number; returns: number; bestDepth: number; deepestReturn?: number }>;
+  records?: Record<
+    string,
+    {
+      runs: number;
+      returns: number;
+      bestDepth: number;
+      deepestReturn?: number;
+      /** The finest run so far: returned beats died, then deeper, then more good readings. */
+      best?: { cards: { cardId: string; reversed: boolean }[]; depth: number; returned: boolean; good: number };
+    }
+  >;
   runs: number;
   deaths: number;
   ascensions: number;
@@ -177,8 +187,21 @@ export function noteSigils(k: Knowledge, ids: string[]): Knowledge {
 }
 
 /** A run ended on `descent`, reaching `depth` scenes; `returned` if it ascended. */
-export function noteRecord(k: Knowledge, descent: string, depth: number, returned: boolean, difficulty = 0): Knowledge {
+export function noteRecord(
+  k: Knowledge,
+  descent: string,
+  depth: number,
+  returned: boolean,
+  difficulty = 0,
+  spread?: { cards: { cardId: string; reversed: boolean }[]; good: number },
+): Knowledge {
   const prev = k.records?.[descent] ?? { runs: 0, returns: 0, bestDepth: 0, deepestReturn: 0 };
+  let best = prev.best;
+  if (spread) {
+    const candidate = { cards: spread.cards.map((c) => ({ cardId: c.cardId, reversed: c.reversed })), depth, returned, good: spread.good };
+    const beats = !best || (candidate.returned && !best.returned) || (candidate.returned === best.returned && (candidate.depth > best.depth || (candidate.depth === best.depth && candidate.good > best.good)));
+    if (beats) best = candidate;
+  }
   return {
     ...k,
     records: {
@@ -188,6 +211,7 @@ export function noteRecord(k: Knowledge, descent: string, depth: number, returne
         returns: prev.returns + (returned ? 1 : 0),
         bestDepth: Math.max(prev.bestDepth, depth),
         deepestReturn: returned ? Math.max(prev.deepestReturn ?? 0, difficulty) : (prev.deepestReturn ?? 0),
+        best,
       },
     },
   };
