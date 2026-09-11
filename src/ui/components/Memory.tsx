@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { SCENES, SLOT_IDS, SLOTS, type RunState } from '../../engine';
 import { SceneArt } from '../art/scenes';
 import { Card } from './Card';
@@ -27,6 +27,19 @@ export function MemorySheet({
   const h = run.history[index];
   const n = run.history.length;
   const step = onStep ? (i: number) => { sfx.page(); onStep(i); } : undefined;
+  // A horizontal swipe on the sheet pages along the road.
+  const swipe = useRef<{ x: number; y: number } | null>(null);
+  const onPointerDown = (ev: React.PointerEvent) => { swipe.current = { x: ev.clientX, y: ev.clientY }; };
+  const onPointerUp = (ev: React.PointerEvent) => {
+    const s0 = swipe.current;
+    swipe.current = null;
+    if (!s0 || !step) return;
+    const dx = ev.clientX - s0.x;
+    const dy = ev.clientY - s0.y;
+    if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    if (dx < 0 && index < n - 1) step(index + 1);
+    if (dx > 0 && index > 0) step(index - 1);
+  };
   useEffect(() => {
     const onKey = (ev: KeyboardEvent) => {
       if (ev.key === 'Escape') onClose();
@@ -42,7 +55,13 @@ export function MemorySheet({
   const tier = h.resolution.tier;
   return (
     <div className="sheet" role="dialog" aria-label="a scene remembered" onClick={onClose}>
-      <div className={`sheet__body sheet__body--${tier} ${telling ? 'sheet__body--telling' : ''}`} onClick={(ev) => ev.stopPropagation()} key={index}>
+      <div
+        className={`sheet__body sheet__body--${tier} ${telling ? 'sheet__body--telling' : ''}`}
+        onClick={(ev) => ev.stopPropagation()}
+        onPointerDown={onPointerDown}
+        onPointerUp={onPointerUp}
+        key={index}
+      >
         <div className="memory__art" style={{ '--book-hue': scene.hue } as React.CSSProperties}>
           <SceneArt id={h.sceneId} className="scene__art" />
           <span className="memory__where muted small">{scene.place}</span>

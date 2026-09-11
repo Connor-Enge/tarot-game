@@ -1249,13 +1249,13 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 /* --- keep it: add to home screen ------------------------------------------ */
 .keep { display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; border-radius: 14px; border: 1px dashed rgba(214,178,94,0.35); background: rgba(214,178,94,0.05); text-align: center; }
 .keep__lead { font-size: 0.85rem; color: var(--muted); }
-.keep__hint { font-size: 0.85rem; color: var(--text); }
+.keep__hint { font-size: 0.85rem; color: var(--ink); }
 .keep__key { color: var(--gold-2); border: 1px solid rgba(214,178,94,0.4); border-radius: 6px; padding: 0 6px; }
 .keep__row { justify-content: center; }
 .keep .btn--ghost { color: var(--muted); }
 
 /* --- the well: going under ------------------------------------------------- */
-.under { text-align: center; color: var(--text); font-style: italic; padding: 8px 12px; border-top: 1px solid rgba(214,178,94,0.25); border-bottom: 1px solid rgba(214,178,94,0.25); }
+.under { text-align: center; color: var(--ink); font-style: italic; padding: 8px 12px; border-top: 1px solid rgba(214,178,94,0.25); border-bottom: 1px solid rgba(214,178,94,0.25); }
 .under__mark { color: var(--gold-2); font-style: normal; }
 
 /* --- the well closing in ----------------------------------------------------- */
@@ -1273,3 +1273,20 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .seat--target .seat__glyph { color: var(--gold-2); text-shadow: 0 0 18px rgba(243,220,138,0.9); }
 .btn--pull { border-color: var(--gold-2); color: var(--gold-2); box-shadow: 0 0 18px rgba(243,220,138,0.35); transform: translateY(2px); }
 .hand--pull .card:not(.card--dragging) { transform: translateY(10px) rotate(0deg); opacity: 0.6; }
+
+/* --- how it goes ------------------------------------------------------------- */
+.howto { text-align: left; }
+.howto .sheet__title { text-align: center; }
+.howto__chip { align-self: center; margin-top: 4px; }
+.howto__steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.howto__step { display: grid; grid-template-columns: 64px 1fr; gap: 12px; align-items: center; font-size: 0.92rem; line-height: 1.4; color: var(--muted); }
+.howto__step strong { color: var(--ink); font-weight: 500; }
+.howto__art { display: flex; align-items: center; justify-content: center; gap: 4px; height: 56px; border-radius: 10px; background: rgba(255,255,255,0.04); border: 1px solid rgba(214,178,94,0.2); color: var(--gold); font-family: Georgia, serif; font-size: 1.1rem; }
+.howto__art--seats { font-size: 0.95rem; gap: 6px; }
+.howto__art--cards { gap: 0; }
+.howto__back { width: 20px; height: 32px; border-radius: 3px; margin: 0 -3px; box-shadow: 0 2px 6px rgba(0,0,0,0.5); }
+.howto__back:nth-child(2) { transform: translateY(-4px); }
+.howto__art--tiers { gap: 8px; font-size: 1rem; }
+.howto__art--tiers .tier--calamity { color: #d6605e; }
+.howto__art--tiers .tier--triumph { color: var(--gold-2); }
+.howto__art--abyss { font-size: 1.5rem; text-shadow: 0 0 14px rgba(243,220,138,0.6); }

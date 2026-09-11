@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { canOfferInstall, useInstall } from '../../install';
+import { HowToPlay } from '../components/HowToPlay';
 import { CARDS, dailySeed, dailyStreakAlive, dailyWeather, daylight, weeklySeed, weeklyWeather, DEPTHS, DESCENTS, getCard, getDescent, maxDepthUnlocked } from '../../engine';
 import { CardBack, type BackVariant } from '../art/CardArt';
 import { StreakFlames } from '../art/flames';
@@ -55,6 +56,7 @@ export function TitleScreen() {
   const streak = dailyStreakAlive(k, todayLabel);
   const inst = useInstall();
   const [iosHint, setIosHint] = useState(false);
+  const [howTo, setHowTo] = useState(false);
   const offerInstall = k.runs >= 1 && canOfferInstall(inst);
   // A different fan every visit, seeded off the run count so it feels alive but not random-noise.
   // The fan is your deck once you have one: signature in the middle, your most-read cards around it.
@@ -91,7 +93,11 @@ export function TitleScreen() {
         <div className="title__glyph">◯ △ ☐ ☾</div>
         <h1>Arcana Descent</h1>
         <p className="muted">Four seats. Three cards each. No one will tell you what they mean.</p>
+        <button type="button" className={`chip chip--inline howto__chip ${k.runs === 0 ? 'chip--on' : ''}`} onClick={() => setHowTo(true)}>
+          how it goes
+        </button>
       </div>
+      {howTo && <HowToPlay onClose={() => setHowTo(false)} />}
       {anyUnlocked && (
         <div className="descents">
           <div className="descents__row">
