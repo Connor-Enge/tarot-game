@@ -216,13 +216,13 @@ const COMBOS: Combo[] = [
   {
     id: 'sun-and-moon',
     when: (r) => has(r, 'major-19') && has(r, 'major-18'),
-    score: 1,
+    score: 0.5,
     note: 'Day and night sat at the same table.',
   },
   {
     id: 'world-wake',
     when: (r) => has(r, 'major-21', 'wake') && !r.wake.reversed,
-    score: 1.5,
+    score: 1,
     note: 'It closed, whole.',
   },
   {
@@ -249,7 +249,7 @@ const COMBOS: Combo[] = [
       const nums = SLOT_IDS.map((s) => getCard(r[s].cardId)).filter((c) => c.arcana === 'minor').map((c) => c.number);
       return nums.some((n) => nums.filter((m) => m === n).length >= 3);
     },
-    score: 1,
+    score: 0.5,
     note: 'Three of a kind, and the table noticed.',
   },
 ];
