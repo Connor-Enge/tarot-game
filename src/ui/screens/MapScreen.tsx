@@ -1,5 +1,6 @@
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { actOfLayer, canCut, canTakeVow, currentAct, FORETELL_COST, getVow, KIND_GLYPH, SCENES, SLOT_IDS, visitedNodes, vowOffer } from '../../engine';
+import { ActBanner } from '../art/banners';
 import { VowArt } from '../art/relics';
 import { SceneArt } from '../art/scenes';
 import { Card } from '../components/Card';
@@ -31,6 +32,16 @@ function MapScreenInner() {
   const visitedIds = new Set(visited.map((n) => n.id));
   const act = currentAct(run);
   const mapRef = useRef<HTMLElement>(null);
+  // A banner when a new act opens under you: the first map of act two or later, before choosing.
+  const actStart = run.actLayers.slice(0, act - 1).reduce((a, b) => a + b, 0);
+  const newAct = act > 1 && run.layer === actStart && run.node === null;
+  const [banner, setBanner] = useState<number | null>(newAct ? act : null);
+  useEffect(() => {
+    if (!newAct) return;
+    setBanner(act);
+    const t = window.setTimeout(() => setBanner(null), 2600);
+    return () => window.clearTimeout(t);
+  }, [newAct, act]);
   const [lines, setLines] = useState<{ x1: number; y1: number; x2: number; y2: number; kind: 'done' | 'open' }[]>([]);
   const [size, setSize] = useState({ w: 0, h: 0 });
 
@@ -69,6 +80,13 @@ function MapScreenInner() {
 
   return (
     <main className="screen screen--map">
+      {banner !== null && (
+        <div className="act-banner" role="status" onClick={() => setBanner(null)}>
+          <div className="act-banner__plate">
+            <ActBanner act={banner} name={ACT_NAMES[banner] ?? `Act ${banner}`} />
+          </div>
+        </div>
+      )}
       <header className="topbar">
         <span className="muted small">Act {toRoman(act)}</span>
         <Stats vitality={run.vitality} clarity={run.clarity} />
