@@ -663,7 +663,7 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .deck-grid--dim { opacity: 0.6; }
 
 /* --- tablet / landscape ------------------------------------------------------ */
-@media (min-width: 700px) and (min-height: 480px) {
+@media (min-width: 700px) and (min-height: 480px) and (min-aspect-ratio: 1/1) {
   .screen { max-width: 980px; }
   .screen--reading { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto 1fr; column-gap: 28px; align-items: start; }
   .screen--reading > .topbar { grid-column: 1 / -1; }
@@ -682,4 +682,14 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
   .screen--reading > .topbar, .screen--reading > .relic-strip, .screen--reading > .nudge { grid-column: 1 / -1; }
   .scene__art { display: none; }
   .card--lg { --w: 96px; }
+}
+
+/* portrait tablet: one column, bigger everything, comfortably centered */
+@media (min-width: 700px) and (max-aspect-ratio: 1/1) {
+  .screen { max-width: 640px; }
+  .card--lg { --w: 168px; }
+  .card--sm { --w: 92px; }
+  .hand { gap: 18px; }
+  .scene__prompt { font-size: 1.4rem; }
+  .scene__art { width: 420px; }
 }
