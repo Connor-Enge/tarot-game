@@ -115,6 +115,7 @@ export function CodexScreen() {
           <div className="muted small">Named readings · {combos.length} / {COMBO_IDS.length}</div>
           {combos.map((id) => (
             <div key={id} className="codex__combo">
+              <SigilToken id={`combo-${id}`} glyph="♪" earned className="codex__combo-token" />
               <em>{comboNote(id)}</em>
             </div>
           ))}

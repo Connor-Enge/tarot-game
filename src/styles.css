@@ -1077,3 +1077,15 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .place__mark { font-size: 0.75rem; color: var(--muted); }
 .place.tier--triumph .place__mark, .place.tier--boon .place__mark { color: var(--gold-2); }
 .place.tier--calamity .place__mark, .place.tier--harm .place__mark { color: #e0a39a; }
+
+/* --- named readings ---------------------------------------------------------- */
+.narration__named {
+  display: flex; align-items: center; gap: 10px; justify-content: center; margin: 4px 0;
+  padding: 8px 14px; border-radius: 999px; font-style: italic; font-size: 0.95rem;
+  color: #1a1408; background: linear-gradient(90deg, rgba(214,178,94,0.0), var(--gold) 18%, var(--gold-2) 50%, var(--gold) 82%, rgba(214,178,94,0.0));
+  text-align: center; box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+}
+.narration__named-mark { font-style: normal; opacity: 0.7; }
+.narration__named-text { flex: 0 1 auto; }
+.codex__combo { display: flex; align-items: center; gap: 10px; }
+.codex__combo-token { width: 30px; height: 30px; flex: 0 0 30px; }

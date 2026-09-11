@@ -68,6 +68,16 @@ function ResolutionScreenInner() {
         {resolution.narration.map((line, i) => {
           const last = i === resolution.narration.length - 1;
           const seat = i < SLOT_IDS.length ? SLOTS[SLOT_IDS[i]].glyph : null;
+          const named = !last && !seat;
+          if (named) {
+            return (
+              <p key={i} className="narration__named rise" style={{ animationDelay: `${400 + i * step}ms` }}>
+                <span className="narration__named-mark" aria-hidden>♪</span>
+                <span className="narration__named-text">{line}</span>
+                <span className="narration__named-mark" aria-hidden>♪</span>
+              </p>
+            );
+          }
           return (
             <p
               key={i}
