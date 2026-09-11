@@ -501,8 +501,8 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 }
 .chip--on { border-color: var(--gold); color: var(--gold-2); background: rgba(214,178,94,0.1); }
 .ledger { display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; border-radius: 12px; background: rgba(255,255,255,0.03); }
-.suits__row { display: flex; justify-content: space-between; gap: 12px; font-size: 0.9rem; }
-.suits__row span:last-child { text-align: right; }
+.ledger__row { display: flex; justify-content: space-between; gap: 12px; font-size: 0.9rem; }
+.ledger__row span:last-child { text-align: right; }
 
 /* --- cut the deck -------------------------------------------------------- */
 .cut { display: flex; flex-direction: column; gap: 12px; }
@@ -896,3 +896,8 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .reduce-motion .abyss-rings__spin { animation: none; }
 .spread:has(.abyss-rings) { isolation: isolate; }
 .spread:has(.abyss-rings) .seat { position: relative; z-index: 1; }
+
+/* --- run end: the road strip -------------------------------------------- */
+.road { display: block; width: 100%; max-width: 360px; margin: 0 auto; height: auto; }
+.summary__relics { display: inline-flex; gap: 2px; align-items: center; }
+.summary__relic { width: 22px; height: 22px; }

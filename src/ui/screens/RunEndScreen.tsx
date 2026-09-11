@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { getCard, getDescent, getRelic, KIND_GLYPH, SCENES, SIGILS, SLOT_IDS, SLOTS } from '../../engine';
+import { getCard, getDescent, KIND_GLYPH, SCENES, SIGILS, SLOT_IDS, SLOTS } from '../../engine';
 import { shareText, useGame } from '../../store';
 import { Card } from '../components/Card';
+import { RelicArt } from '../art/relics';
+import { RoadStrip } from '../art/road';
 import { EndArt } from '../art/scenes';
 import { renderSpreadImage } from '../art/render';
 
@@ -155,12 +157,13 @@ function RunEndScreenInner() {
         </section>
       ) : (
         <section className="journal">
+          <div className="rise"><RoadStrip run={run} /></div>
           <div className="summary rise">
             <div className="summary__cell"><span className="summary__n">{run.history.length}</span><span className="muted small">scenes</span></div>
             <div className="summary__cell"><span className="summary__n">{run.history.filter((h) => h.resolution.tier === 'triumph' || h.resolution.tier === 'boon').length}</span><span className="muted small">good</span></div>
             <div className="summary__cell"><span className="summary__n">{run.history.filter((h) => h.resolution.tier === 'harm' || h.resolution.tier === 'calamity').length}</span><span className="muted small">bad</span></div>
             <div className="summary__cell"><span className="summary__n">{Object.values(run.marks).filter((m) => m === 'charged').length}</span><span className="muted small">charged</span></div>
-            <div className="summary__cell"><span className="summary__n">{run.relics.length ? run.relics.map((r) => getRelic(r).glyph).join(' ') : '—'}</span><span className="muted small">relics</span></div>
+            <div className="summary__cell"><span className="summary__n summary__relics">{run.relics.length ? run.relics.map((r) => <RelicArt key={r} id={r} className="summary__relic" />) : '—'}</span><span className="muted small">relics</span></div>
           </div>
           <p className="muted small center">
             {mode.kind === 'daily' ? `Daily ${mode.label}` : mode.kind === 'weekly' ? `Weekly ${mode.label}` : getDescent(mode.descent).name} · seed {run.seed.toString(36)}
