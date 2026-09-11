@@ -124,9 +124,13 @@ export function CodexScreen() {
       {combos.length > 0 && (
         <section className="codex__combos">
           <div className="muted small">Named readings · {combos.length} / {COMBO_IDS.length}</div>
-          {combos.map((id) => (
-            <div key={id} className="codex__combo">
+          <div className="codex__pips" aria-hidden>
+            {COMBO_IDS.map((id) => <i key={id} className={combos.includes(id) ? 'codex__pip codex__pip--on' : 'codex__pip'} />)}
+          </div>
+          {combos.map((id, i) => (
+            <div key={id} className="codex__combo" style={{ '--i': i } as React.CSSProperties}>
               <SigilToken id={`combo-${id}`} glyph="♪" earned className="codex__combo-token" />
+              <span className="codex__combo-n muted small">{i + 1}</span>
               <em>{comboNote(id)}</em>
             </div>
           ))}

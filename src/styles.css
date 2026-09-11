@@ -1466,3 +1466,21 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .sigil--on .sigil__name { color: var(--gold-2); }
 @keyframes sigil-settle { 0% { opacity: 0; transform: translateY(4px); } 100% { opacity: 1; transform: none; } }
 .reduce-motion .sigil--on { animation: none; }
+
+/* --- named readings: the ribbon shimmers once; the Codex keeps a songbook --- */
+.narration__named { position: relative; overflow: hidden; box-shadow: 0 6px 18px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -1px 0 rgba(0,0,0,0.25); text-shadow: 0 1px 0 rgba(255,255,255,0.25); }
+.narration__named::after {
+  content: ''; position: absolute; top: -20%; bottom: -20%; left: -30%; width: 26%; pointer-events: none;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,0.55), transparent);
+  transform: skewX(-18deg); animation: named-shimmer 1400ms ease-out 700ms both;
+}
+@keyframes named-shimmer { 0% { left: -30%; opacity: 0; } 15% { opacity: 1; } 100% { left: 120%; opacity: 0; } }
+.reduce-motion .narration__named::after { display: none; }
+.codex__pips { display: flex; flex-wrap: wrap; gap: 3px; margin: 2px 0 6px; }
+.codex__pip { width: 6px; height: 6px; border-radius: 50%; border: 1px solid rgba(214,178,94,0.3); background: transparent; }
+.codex__pip--on { background: var(--gold-2); border-color: var(--gold-2); box-shadow: 0 0 6px rgba(243,220,138,0.6); }
+.codex__combo { position: relative; padding: 6px 2px 8px; animation: sigil-settle 500ms ease both; animation-delay: calc(var(--i, 0) * 40ms); }
+.codex__combo::after { content: ''; position: absolute; left: 40px; right: 0; bottom: 0; height: 1px; background: linear-gradient(90deg, rgba(214,178,94,0.35), transparent); }
+.codex__combo-n { flex: 0 0 auto; width: 16px; text-align: right; font-variant-numeric: tabular-nums; opacity: 0.7; }
+.codex__combo em { color: var(--gold-2); }
+.reduce-motion .codex__combo { animation: none; }
