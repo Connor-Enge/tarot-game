@@ -1921,7 +1921,8 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 
 /* the reckoning wraps under its omen line, indented past the seat number */
 .narration__omen { flex-wrap: wrap; }
-.narration__omen .reckon { flex: 1 0 100%; margin-left: 26px; }
+.narration__omen .reckon { flex: 0 0 100%; box-sizing: border-box; padding-left: 26px; min-width: 0; }
+.reckon__text { min-width: 0; }
 .narration__outcome { flex-wrap: wrap; }
 .narration__outcome .tally { flex: 1 0 100%; }
 .narration__line { flex: 1 1 0; min-width: 12ch; }
