@@ -8,8 +8,11 @@ describe('descents', () => {
     const k = emptyKnowledge();
     expect(getDescent('standard').unlocked(k)).toBe(true);
     for (const d of DESCENTS.slice(1)) {
+      if (d.unlockText === '') {
+        expect(d.unlocked(k)).toBe(true);
+        continue;
+      }
       expect(d.unlocked(k)).toBe(false);
-      expect(d.unlockText.length).toBeGreaterThan(0);
     }
     expect(getDescent('arcana').unlocked({ ...k, ascensions: 1 })).toBe(true);
   });
@@ -81,5 +84,14 @@ describe('depths', () => {
     if (run.phase.kind === 'resolved' && run.phase.resolution.tier === 'neutral') {
       expect(run.phase.resolution.deltas.vitality).toBeLessThanOrEqual(-3);
     }
+  });
+});
+
+describe('short road', () => {
+  it('is always unlocked and builds seven scenes', async () => {
+    const { getDescent } = await import('../descents');
+    const d = getDescent('short');
+    expect(d.unlocked(emptyKnowledge())).toBe(true);
+    expect(startRun(2, d.config).map.length).toBe(7);
   });
 });

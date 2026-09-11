@@ -79,6 +79,15 @@ export const DESCENTS: Descent[] = [
     unlockText: '',
   },
   {
+    id: 'short',
+    name: 'The Short Road',
+    glyph: '⌇',
+    text: 'Three layers an act. A descent for one cup of tea.',
+    config: { actLayers: [3, 3] },
+    unlocked: () => true,
+    unlockText: '',
+  },
+  {
     id: 'arcana',
     name: 'Arcana Only',
     glyph: '✦',

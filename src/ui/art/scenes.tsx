@@ -207,6 +207,37 @@ const ART: Record<string, () => ReactElement> = {
   ),
 };
 
+/** End-of-run vignettes: the dark closing, or the way back up. */
+export function EndArt({ kind, className }: { kind: 'dead' | 'ascended'; className?: string }) {
+  return (
+    <svg viewBox="0 0 200 90" className={className} aria-hidden preserveAspectRatio="xMidYMid meet">
+      {kind === 'dead' ? (
+        <g>
+          <rect x={0} y={0} width={200} height={90} fill="#060410" opacity={0.9} />
+          {['◯', '△', '☐', '☾'].map((g, i) => (
+            <text key={g} x={56 + i * 30} y={44 + (i % 2) * 6} fontSize={16} textAnchor="middle" fill={GOLD_FLAT} opacity={0.35 - i * 0.05} fontFamily="serif">{g}</text>
+          ))}
+          <path d="M0 62 q50 -8 100 0 t100 0 v28 h-200 z" fill="#020108" />
+          <rect x={98.5} y={52} width={3} height={12} fill={PALE} />
+          <Flame x={100} y={51} s={3} />
+          <circle cx={100} cy={52} r={18} fill={GOLD_FLAT} opacity={0.08} />
+        </g>
+      ) : (
+        <g>
+          {Array.from({ length: 11 }, (_, i) => {
+            const a = (i / 10) * Math.PI;
+            return <line key={i} x1={100} y1={90} x2={100 + Math.cos(a) * 140} y2={90 - Math.sin(a) * 140} stroke={GOLD_FLAT} strokeWidth={i % 2 ? 0.6 : 1.2} opacity={0.35} />;
+          })}
+          <path d="M70 90 v-46 a30 30 0 0 1 60 0 v46 z" fill={PALE} opacity={0.9} />
+          <path d="M76 90 v-44 a24 24 0 0 1 48 0 v44 z" fill="#f6efdd" />
+          <Figure x={100} y={90} h={40} arms="up" fill={DARK} />
+          <Sun x={100} y={18} r={7} rays={12} />
+        </g>
+      )}
+    </svg>
+  );
+}
+
 export function SceneArt({ id, className }: { id: string; className?: string }) {
   const Art = ART[id];
   if (!Art) return null;
@@ -218,6 +249,5 @@ export function SceneArt({ id, className }: { id: string; className?: string }) 
 }
 
 // Keep the import list honest for tree-shaking of unused primitives.
-void Sun;
 void Water;
 void Pillar;

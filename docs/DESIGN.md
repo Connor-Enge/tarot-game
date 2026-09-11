@@ -359,6 +359,30 @@ Seat glyphs take their card's suit color once filled.
 hand cards are promoted to their own layers. Measured in-page at 6x CPU
 throttling: lift 34 ms, place 112 ms, first paint under a second.
 
+**The Short Road**: a descent with three layers an act, always unlocked,
+for short sessions. Its own record.
+
+**End vignettes**: death shows the four seat glyphs sinking into the dark
+with one candle; return shows a lit doorway with a figure stepping up.
+
+### Pillar sweep: where text reaches the screen
+
+Every surface that can show text about a card, and what gates it:
+
+| Surface | Shows | Gate |
+|---------|-------|------|
+| Card face | name, art | none |
+| Resolution omens | omen line | none (the sanctioned leak) |
+| Whisper ribbon | one keyword (two with the Bell) | costs Clarity |
+| Run end reveal | upright meaning; reversed if reversed | death or return with the card on the table |
+| Codex keywords | keywords | tier 1 (three reads or whispers) |
+| Codex meaning | upright meaning | tier 2 |
+| Codex reversed | reversed meaning | tier 3 |
+| Witnessed omens, the book, dreams, Study | omen lines | only orientations watched resolve |
+| Seat memory, Ledger, best seat | counts and outcomes | consequence, not meaning |
+| Foretell | a scene's place line | costs Clarity; not a card |
+| Relics, sigils, descents, depths | rules | stated plainly, by design |
+
 ## Balance
 
 `scripts/sim.ts` runs whole descents under three policies. Run it with

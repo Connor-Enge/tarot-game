@@ -712,3 +712,6 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .seat--filled.seat--swords .seat__glyph { color: #c8c9d8; }
 .seat--filled.seat--pentacles .seat__glyph { color: #a9c98a; }
 .seat--filled.seat--major .seat__glyph { color: var(--gold-2); text-shadow: 0 0 10px rgba(243,220,138,0.5); }
+
+.end__art { margin-top: 8px; animation: fade-in 1200ms ease both; }
+.screen--end h2 { margin-top: 4px; }

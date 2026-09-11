@@ -26,7 +26,7 @@ interface Props {
 /** Card faces show name and art only. Meaning lives in the Codex. */
 export function Card({ cardId, reversed = false, faceDown = false, size = 'md', lifted, dim, mark, whisper, animKey, delay = 0, onClick, onLongPress, echo }: Props) {
   const mode = useGame((s) => s.mode);
-  const variant: BackVariant = mode.kind === 'weekly' ? 'weekly' : mode.kind === 'free' && mode.descent !== 'standard' ? (mode.descent as BackVariant) : 'standard';
+  const variant: BackVariant = mode.kind === 'weekly' ? 'weekly' : mode.kind === 'free' && mode.descent !== 'standard' && mode.descent !== 'short' ? (mode.descent as BackVariant) : 'standard';
   const timer = useRef<number | null>(null);
   const fired = useRef(false);
   const start = () => {

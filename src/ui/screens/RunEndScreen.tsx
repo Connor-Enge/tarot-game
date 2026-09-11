@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { getCard, getDescent, getRelic, SCENES, SIGILS, SLOT_IDS, SLOTS } from '../../engine';
 import { shareText, useGame } from '../../store';
 import { Card } from '../components/Card';
+import { EndArt } from '../art/scenes';
 import { renderSpreadImage } from '../art/render';
 
 const TIER_MARK = { calamity: '✖', harm: '▽', neutral: '◇', boon: '△', triumph: '★' } as const;
@@ -70,6 +71,7 @@ function RunEndScreenInner() {
 
   return (
     <main className={`screen screen--end ${dead ? 'screen--dead' : 'screen--ascended'}`}>
+      <EndArt kind={dead ? 'dead' : 'ascended'} className="scene__art end__art" />
       <h2>{dead ? 'The reading ended you.' : 'You read it true.'}</h2>
       <p className="narration__outcome">{run.phase.resolution.narration.at(-1)}</p>
       {mode.kind === 'daily' && <p className="muted small center">Daily descent · {mode.label}</p>}
