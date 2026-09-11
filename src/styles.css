@@ -1182,3 +1182,7 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .study__seat--wrong { border-color: var(--vit); color: #e0a39a; }
 .study__seat--dim { opacity: 0.4; }
 .study__seatcard .card { cursor: default; }
+
+/* --- act banner: the road so far ------------------------------------------- */
+.act-banner__road { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px 14px 10px; border-top: 1px solid rgba(214,178,94,0.2); }
+.act-banner__road .road { max-width: 300px; }

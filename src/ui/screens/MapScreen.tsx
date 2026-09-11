@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { actOfLayer, canCut, canTakeVow, currentAct, foretellCost, getVow, KIND_GLYPH, SCENES, SLOT_IDS, visitedNodes, vowOffer } from '../../engine';
 import { ActBanner } from '../art/banners';
+import { RoadStrip } from '../art/road';
 import { VowArt } from '../art/relics';
 import { SceneArt } from '../art/scenes';
 import { Card } from '../components/Card';
@@ -115,6 +116,12 @@ function MapScreenInner() {
         <div className="act-banner" role="status" onClick={() => setBanner(null)}>
           <div className="act-banner__plate">
             <ActBanner act={banner} name={ACT_NAMES[banner] ?? `Act ${banner}`} />
+            {run.history.length > 0 && (
+              <div className="act-banner__road">
+                <RoadStrip run={run} />
+                <span className="muted small">the road so far</span>
+              </div>
+            )}
           </div>
         </div>
       )}
