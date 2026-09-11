@@ -281,13 +281,30 @@ export function resetKnowledge(storage: Pick<Storage, 'removeItem'> | undefined 
 
 const KEY = 'arcana-descent.knowledge.v1';
 
+/** Drop references to cards that no longer exist (a deck change between builds). */
+export function pruneUnknown(k: Knowledge, known: Set<string> | null): Knowledge {
+  if (!known) return k;
+  const cards = Object.fromEntries(Object.entries(k.cards).filter(([id]) => known.has(id)));
+  const dealt = k.dealt ? Object.fromEntries(Object.entries(k.dealt).filter(([id]) => known.has(id))) : undefined;
+  const links = k.links ? Object.fromEntries(Object.entries(k.links).filter(([key]) => key.split('|').every((id) => known.has(id)))) : undefined;
+  const omenLog = k.omenLog?.filter((e) => known.has(e.cardId));
+  const last = k.last && k.last.cards.every((c) => known.has(c.cardId)) ? k.last : undefined;
+  return { ...k, cards, dealt, links, omenLog, last };
+}
+
+let knownIds: Set<string> | null = null;
+/** Called once by the app with the live deck so loads can prune. Tests may skip it. */
+export function setKnownCards(ids: Iterable<string>): void {
+  knownIds = new Set(ids);
+}
+
 export function loadKnowledge(storage: Pick<Storage, 'getItem'> | undefined = globalThis.localStorage): Knowledge {
   try {
     const raw = storage?.getItem(KEY);
     if (!raw) return emptyKnowledge();
     const parsed = JSON.parse(raw) as Knowledge;
-    if (parsed.version !== 1) return emptyKnowledge();
-    return parsed;
+    if (parsed.version !== 1 || typeof parsed.cards !== 'object') return emptyKnowledge();
+    return pruneUnknown(parsed, knownIds);
   } catch {
     return emptyKnowledge();
   }

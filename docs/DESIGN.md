@@ -436,6 +436,13 @@ Abyss largest). A wordless hint that some doors cost more.
 **Updates**: when the service worker installs a newer build behind a live
 page, a sticky toast offers a reload.
 
+**Hardening**: a saved run that names a card or scene that no longer
+exists is refused (no Resume offered) instead of crashing; the Codex prunes
+unknown ids on load. Both cover a deck or scene change between builds.
+
+**Finest**: the end screen says "Your finest descent yet." when a run sets
+a new best for its descent (after the first run).
+
 ### Pillar sweep: where text reaches the screen
 
 Every surface that can show text about a card, and what gates it:

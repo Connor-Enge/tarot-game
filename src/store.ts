@@ -1,4 +1,6 @@
 import { create } from 'zustand';
+import { CARDS, setKnownCards } from './engine';
+setKnownCards(CARDS.map((c) => c.id));
 import { sfx, startDrone, stopDrone } from './audio';
 import { clearRun, loadRun, saveRun } from './persist';
 import { hapticsEnabled } from './settings';
@@ -71,6 +73,8 @@ interface GameStore {
   setDepth: (n: number) => void;
   /** Sigils earned by the run that just ended. */
   earned: string[];
+  /** The run that just ended set a new best for its descent. */
+  finest: boolean;
   /** The player's very first run: show the three wordless nudges. */
   firstDescent: boolean;
   /** Study mode. */
@@ -172,6 +176,7 @@ export const useGame = create<GameStore>((set, get) => ({
   depth: 0,
   setDepth: (n) => set({ depth: n }),
   earned: [],
+  finest: false,
   firstDescent: false,
   afterglow: false,
   toast: null,
@@ -324,11 +329,15 @@ export const useGame = create<GameStore>((set, get) => ({
     }
     const { knowledge: learned, earned } = learn(knowledge, next, get().mode);
     saveKnowledge(learned);
+    const modeKey = get().mode.kind === 'free' ? (get().mode as { descent: string }).descent : get().mode.kind;
+    const bestBefore = knowledge.records?.[modeKey]?.best;
+    const bestAfter = learned.records?.[modeKey]?.best;
+    const finest = !!bestAfter && bestAfter !== bestBefore && (next.phase.kind === 'dead' || next.phase.kind === 'ascended') && (learned.records?.[modeKey]?.runs ?? 0) > 1;
     const before = new Set(knowledge.combos ?? []);
     const firstNamed = (learned.combos ?? []).find((id) => !before.has(id));
     if (firstNamed) get().showToast('♪', `A named reading: ${comboNote(firstNamed) ?? firstNamed}`);
     const afterglow = next.phase.kind === 'ascended' ? true : next.phase.kind === 'dead' ? false : get().afterglow;
-    set({ run: next, knowledge: learned, lifted: null, earned, afterglow });
+    set({ run: next, knowledge: learned, lifted: null, earned, afterglow, finest });
   },
 
   redraw: () => {

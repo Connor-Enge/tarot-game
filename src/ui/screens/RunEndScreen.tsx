@@ -18,6 +18,7 @@ function RunEndScreenInner() {
   const goto = useGame((s) => s.goto);
   const knowledge = useGame((s) => s.knowledge);
   const earned = useGame((s) => s.earned);
+  const finest = useGame((s) => s.finest);
   const [tab, setTab] = useState<'reveal' | 'journal'>('reveal');
   const [copied, setCopied] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -81,6 +82,7 @@ function RunEndScreenInner() {
           <span className="narration__death"> It cost only a little. It was the last little you had.</span>
         )}
       </p>
+      {finest && <p className="finest center">Your finest descent yet.</p>}
       {mode.kind === 'daily' && <p className="muted small center">Daily descent · {mode.label}</p>}
       {mode.kind === 'weekly' && <p className="muted small center">Weekly descent · {mode.label}</p>}
       {earned.length > 0 && (

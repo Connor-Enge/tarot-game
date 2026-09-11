@@ -777,3 +777,5 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .node--stakes-3 { width: 54px; height: 54px; font-size: 1.35rem; }
 .node--abyss { width: 60px; height: 60px; font-size: 1.5rem; }
 .toast--sticky { animation: rise 300ms ease both; cursor: pointer; border-color: var(--gold-2); }
+
+.finest { color: var(--gold-2); letter-spacing: 0.06em; }
