@@ -272,7 +272,8 @@ export function TitleScreen() {
       )}
       <button type="button" className={`today ${todayOpen ? 'today--open' : ''}`} aria-label="card of the day, tap to turn it" onClick={() => setTodayOpen((o) => !o)}>
         <span className="today__card">
-          <Card cardId={today} size="xs" faceDown={!todayOpen} />
+          <Card cardId={today} size="xs" faceDown={!todayOpen} mark={todayOpen ? 'charged' : undefined} />
+          {todayOpen && <span className="today__flare" aria-hidden />}
         </span>
         <span className="today__text">
           <span className="muted small">Today's card · {getCard(today).name} · <span className="today__charged">charged in the Daily</span></span>

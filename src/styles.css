@@ -1610,3 +1610,13 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .reveal__row:nth-child(2) { animation-delay: 80ms; } .reveal__row:nth-child(3) { animation-delay: 160ms; } .reveal__row:nth-child(4) { animation-delay: 240ms; } .reveal__row:nth-child(5) { animation-delay: 320ms; }
 .reduce-motion .reveal__row { animation: none; }
 .today__charged { color: var(--gold); }
+
+/* --- the card of the day, charged: a flare behind it once turned ------------ */
+.today__card { position: relative; display: inline-block; }
+.today__flare {
+  position: absolute; inset: -14px; border-radius: 50%; pointer-events: none; z-index: -1;
+  background: radial-gradient(circle, rgba(243,220,138,0.5), rgba(214,178,94,0.15) 45%, transparent 70%);
+  animation: fade-in 700ms ease both, lantern-flicker 3s ease-in-out 700ms infinite;
+}
+.today__card .card--charged .card__inner { box-shadow: 0 0 0 1px var(--gold-2), 0 0 18px rgba(243,220,138,0.5); }
+.reduce-motion .today__flare { animation: none; }
