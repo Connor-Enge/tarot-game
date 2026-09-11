@@ -350,7 +350,7 @@ two-note chord).
 **Memory of the road** (each remembered scene is now told in full: the four omens with their seat scores and reckoning sentences, the outcome, and the tally, so retelling the road reads as the story of the descent): visited map nodes stay tappable and open a sheet
 with that scene's vignette, prompt, the four cards, and the outcome line.
 
-**Last reading**: the title screen remembers the final spread of the most
+**Last reading** (laid on the title as the mini cross, with a small verdict seal pressed over it reading "returned" or "fallen" in the last reading's tier colour; the tier is kept with the last spread in knowledge): the title screen remembers the final spread of the most
 recent run and whether it ended you or brought you back.
 
 **Idle spread**: empty seats drift gently; the active seat glyph breathes.

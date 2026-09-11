@@ -4,6 +4,7 @@ import { HowToPlay } from '../components/HowToPlay';
 import { CARDS, CHOSEN_MIN, chosenDeck, dailySeed, dailyStreakAlive, dailyWeather, dayCard, daylight, STREAK_FOR_WEEK_CARD, moonName, moonPhase, weeklySeed, weeklyWeather, DEPTHS, DESCENTS, getCard, getDescent, maxDepthUnlocked } from '../../engine';
 import { CardBack, type BackVariant } from '../art/CardArt';
 import { WeatherArt } from '../art/weather';
+import { VerdictSeal } from '../art/verdict';
 import { StreakFlames } from '../art/flames';
 import { TitleSky } from '../art/sky';
 import { ReaderMark } from '../components/ReaderMark';
@@ -278,12 +279,17 @@ export function TitleScreen() {
             <span className="last__mark" aria-hidden>{k.last.returned ? '☉' : '✖'}</span>
             {k.last.returned ? 'Last time, you came back.' : 'Last time, this ended you.'}
           </div>
-          <div className="last__cards last__cards--laid">
+          <div className={`last__cards last__cards--laid ${k.last.cards.length === 4 ? 'last__cards--cross' : ''}`}>
             {k.last.cards.map((c, i) => (
               <div key={`${c.cardId}-${i}`} className="last__slot" style={{ '--i': i } as React.CSSProperties}>
                 <Card cardId={c.cardId} reversed={c.reversed} size="xs" />
               </div>
             ))}
+            {k.last.tier && (
+              <div className={`last__seal verdict-wrap verdict-wrap--${k.last.tier}`} aria-hidden>
+                <VerdictSeal tier={k.last.tier} word={k.last.returned ? 'returned' : 'fallen'} />
+              </div>
+            )}
           </div>
           <div className="muted small last__outcome">{k.last.outcome}</div>
         </div>

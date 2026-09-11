@@ -2008,3 +2008,15 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .sofar__tick--hurt { color: #f0a09e; }
 
 .settings__help { margin: -6px 0 2px; }
+
+/* --- the title remembers the last reading as a cross, sealed ------------------ */
+.last__cards--cross {
+  display: grid; grid-template-columns: repeat(3, auto); grid-template-areas: '. two .' 'three one four';
+  gap: 4px 6px; justify-content: center; align-items: center; position: relative;
+}
+.last__cards--cross .last__slot:nth-child(1) { grid-area: one; }
+.last__cards--cross .last__slot:nth-child(2) { grid-area: two; }
+.last__cards--cross .last__slot:nth-child(3) { grid-area: three; }
+.last__cards--cross .last__slot:nth-child(4) { grid-area: four; }
+.last__seal { position: absolute; right: -14px; top: -6px; padding: 0; animation: none; opacity: 0.95; }
+.last__seal .verdict { width: 52px; height: 52px; transform: rotate(10deg); }
