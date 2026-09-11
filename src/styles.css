@@ -557,3 +557,10 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .last__cards { display: flex; gap: 6px; }
 .last__cards .card { cursor: default; }
 .last__outcome { font-style: italic; max-width: 32ch; }
+
+/* --- resume / big cards / tappable omens --------------------------------- */
+.resume { display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 12px; background: rgba(214,178,94,0.08); border: 1px solid rgba(214,178,94,0.35); }
+.big-cards .card--lg { --w: min(30vw, 132px); }
+.big-cards .hand--four .card--lg { --w: min(23vw, 104px); }
+.narration__omen--tap { cursor: pointer; }
+.narration__omen--tap:active { opacity: 0.7; }

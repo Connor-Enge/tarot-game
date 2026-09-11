@@ -7,14 +7,16 @@ export interface Settings {
   haptics: boolean;
   /** Keep one hue instead of tinting per scene. */
   fixedTint: boolean;
+  /** Larger cards in hand. */
+  bigCards: boolean;
   /** Player has seen the seat glyph hint on the title screen. */
   set: (patch: Partial<Omit<Settings, 'set'>>) => void;
 }
 
 const KEY = 'arcana-descent.settings.v1';
 
-type Stored = { sound: boolean; reduceMotion: boolean; haptics: boolean; fixedTint: boolean };
-const DEFAULTS: Stored = { sound: true, reduceMotion: false, haptics: true, fixedTint: false };
+type Stored = { sound: boolean; reduceMotion: boolean; haptics: boolean; fixedTint: boolean; bigCards: boolean };
+const DEFAULTS: Stored = { sound: true, reduceMotion: false, haptics: true, fixedTint: false, bigCards: false };
 
 function load(): Stored {
   try {
@@ -37,10 +39,10 @@ export const useSettings = create<Settings>((set, get) => ({
   ...initial,
   set: (patch) => {
     set(patch);
-    const { sound, reduceMotion, haptics, fixedTint } = get();
+    const { sound, reduceMotion, haptics, fixedTint, bigCards } = get();
     setSoundEnabled(sound);
     try {
-      localStorage.setItem(KEY, JSON.stringify({ sound, reduceMotion, haptics, fixedTint }));
+      localStorage.setItem(KEY, JSON.stringify({ sound, reduceMotion, haptics, fixedTint, bigCards }));
     } catch {
       /* ignore */
     }

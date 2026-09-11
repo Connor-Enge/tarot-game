@@ -10,6 +10,9 @@ export function TitleScreen() {
   const newRun = useGame((s) => s.newRun);
   const newDaily = useGame((s) => s.newDaily);
   const newWeekly = useGame((s) => s.newWeekly);
+  const saved = useGame((s) => s.saved);
+  const resume = useGame((s) => s.resume);
+  const abandon = useGame((s) => s.abandon);
   const goto = useGame((s) => s.goto);
   const k = useGame((s) => s.knowledge);
   const descent = useGame((s) => s.descent);
@@ -90,6 +93,21 @@ export function TitleScreen() {
               {k.records[current.id].runs} down · {k.records[current.id].returns} back · deepest {k.records[current.id].bestDepth}
             </p>
           )}
+        </div>
+      )}
+      {saved && (
+        <div className="resume">
+          <div className="muted small">
+            A descent waits, {saved.run.history.length} scene{saved.run.history.length === 1 ? '' : 's'} down · ♥ {saved.run.vitality}
+          </div>
+          <div className="row">
+            <button className="btn" onClick={abandon}>
+              Let it go
+            </button>
+            <button className="btn btn--primary" onClick={resume}>
+              Resume
+            </button>
+          </div>
         </div>
       )}
       <div className="stack">

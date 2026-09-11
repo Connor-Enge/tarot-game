@@ -35,10 +35,12 @@ export function App() {
   const screen = useGame((s) => s.screen);
   const run = useGame((s) => s.run);
   const reduceMotion = useSettings((s) => s.reduceMotion);
+  const bigCards = useSettings((s) => s.bigCards);
   useSceneHue();
   useEffect(() => {
     document.documentElement.classList.toggle('reduce-motion', reduceMotion);
-  }, [reduceMotion]);
+    document.documentElement.classList.toggle('big-cards', bigCards);
+  }, [reduceMotion, bigCards]);
 
   let view = <TitleScreen />;
   let key = 'title';

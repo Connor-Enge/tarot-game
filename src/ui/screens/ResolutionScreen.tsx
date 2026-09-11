@@ -3,17 +3,21 @@ import { currentScene, getRelic, SLOT_IDS, SLOTS } from '../../engine';
 const TIER_GLYPH = { calamity: '✖', harm: '▽', neutral: '◇', boon: '△', triumph: '★' } as const;
 import { useGame } from '../../store';
 import { Card } from '../components/Card';
+import { CodexDetail } from '../components/CodexDetail';
 import { Stats } from '../components/Stat';
 
 function ResolutionScreenInner() {
   const run = useGame((s) => s.run)!;
   const advance = useGame((s) => s.advance);
+  const codexOpen = useGame((s) => s.codexOpen);
+  const openCodex = useGame((s) => s.openCodex);
   if (run.phase.kind !== 'resolved') return null;
   const { resolution, cursed, offer, found } = run.phase;
   const curse = cursed ? getRelic(cursed) : null;
   const relic = found ? getRelic(found) : null;
   const scene = currentScene(run);
   const last = run.history[run.history.length - 1];
+  const lastEntry = last;
   const step = scene.terminal ? 900 : 550;
 
   return (
@@ -36,7 +40,12 @@ function ResolutionScreenInner() {
           const last = i === resolution.narration.length - 1;
           const seat = i < SLOT_IDS.length ? SLOTS[SLOT_IDS[i]].glyph : null;
           return (
-            <p key={i} className={`rise ${last ? 'narration__outcome' : 'narration__omen'}`} style={{ animationDelay: `${400 + i * step}ms` }}>
+            <p
+              key={i}
+              className={`rise ${last ? 'narration__outcome' : 'narration__omen'} ${seat ? 'narration__omen--tap' : ''}`}
+              style={{ animationDelay: `${400 + i * step}ms` }}
+              onClick={seat ? () => openCodex(lastEntry.reading[SLOT_IDS[i]].cardId) : undefined}
+            >
               {seat && <span className="narration__seat">{seat}</span>}
               {last && <span className="narration__tier">{TIER_GLYPH[resolution.tier]} </span>}
               {line}
@@ -59,6 +68,7 @@ function ResolutionScreenInner() {
         </p>
       </section>
 
+      {codexOpen && <CodexDetail cardId={codexOpen} onClose={() => openCodex(null)} />}
       <footer className="actions">
         <button className="btn btn--primary rise" style={{ animationDelay: `${600 + resolution.narration.length * step}ms` }} onClick={advance}>
           {offer ? 'Look closer' : resolution.tier === 'calamity' ? 'Crawl on' : 'Walk on'}

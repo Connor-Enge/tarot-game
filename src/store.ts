@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { sfx, startDrone, stopDrone } from './audio';
+import { clearRun, loadRun, saveRun } from './persist';
 import { hapticsEnabled } from './settings';
 import {
   advance as advanceRun,
@@ -64,6 +65,10 @@ interface GameStore {
 
   goto: (screen: Screen) => void;
   setDescent: (id: string) => void;
+  /** A run saved from a previous session, if any. */
+  saved: ReturnType<typeof loadRun>;
+  resume: () => void;
+  abandon: () => void;
   newRun: (seed?: number) => void;
   newDaily: () => void;
   newWeekly: () => void;
@@ -133,6 +138,17 @@ export const useGame = create<GameStore>((set, get) => ({
 
   goto: (screen) => set({ screen, codexOpen: null }),
   setDescent: (id) => set({ descent: id }),
+  saved: loadRun(),
+  resume: () => {
+    const { saved } = get();
+    if (!saved) return;
+    startDrone();
+    set({ run: saved.run, mode: saved.mode, firstDescent: saved.firstDescent, screen: 'run', lifted: null, earned: [], saved: null });
+  },
+  abandon: () => {
+    clearRun();
+    set({ saved: null });
+  },
 
   newRun: (seed = randomSeed()) => {
     const { descent } = get();
@@ -284,3 +300,8 @@ export function shareText(run: RunState, mode: RunMode): string {
         : `Arcana Descent · ${getDescent(mode.descent).name}${mode.depth ? ` · Depth ${mode.depth}` : ''} · seed ${run.seed.toString(36)}`;
   return `${head}\n${end}\n${tiers}\n${spread}`;
 }
+
+// Persist the run after every change so a closed tab can resume.
+useGame.subscribe((state, prev) => {
+  if (state.run !== prev.run || state.mode !== prev.mode) saveRun(state.run, state.mode, state.firstDescent);
+});

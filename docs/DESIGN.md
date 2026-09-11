@@ -293,6 +293,15 @@ recent run and whether it ended you or brought you back.
 Scenes: eighteen now (orchard, a rest scene in act one; the toll, a passage
 in act two).
 
+**Resume** (`persist.ts`): the run in progress is saved after every
+transition (it is a plain value, so this is JSON) and offered on the title
+screen with "Resume" or "Let it go". Cleared when the run ends.
+
+**Tappable omens**: each omen line on the resolution screen opens the
+Codex detail for its card. Still only what you have earned.
+
+**Larger cards** setting for the hand.
+
 Queued:
 - A weekly leaderboard line in the share text (best depth this week).
 - Localization scaffolding for the card and scene text.

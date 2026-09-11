@@ -7,7 +7,7 @@ export function SettingsScreen() {
   const run = useGame((s) => s.run);
   const resetCodex = useGame((s) => s.resetCodex);
   const newRun = useGame((s) => s.newRun);
-  const { sound, reduceMotion, haptics, fixedTint, set } = useSettings();
+  const { sound, reduceMotion, haptics, fixedTint, bigCards, set } = useSettings();
   const [confirmReset, setConfirmReset] = useState(false);
   const [seed, setSeed] = useState('');
 
@@ -33,6 +33,11 @@ export function SettingsScreen() {
         <label className="toggle">
           <span>Haptics</span>
           <input type="checkbox" checked={haptics} onChange={(e) => set({ haptics: e.target.checked })} />
+          <span className="toggle__track" />
+        </label>
+        <label className="toggle">
+          <span>Larger cards in hand</span>
+          <input type="checkbox" checked={bigCards} onChange={(e) => set({ bigCards: e.target.checked })} />
           <span className="toggle__track" />
         </label>
         <label className="toggle">
