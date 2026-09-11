@@ -104,9 +104,9 @@ function ResolutionScreenInner() {
               key={i}
               className={`rise ${last ? 'narration__outcome' : 'narration__omen'} ${seat ? 'narration__omen--tap' : ''}`}
               style={{ animationDelay: `${400 + i * step}ms` }}
-              onClick={seat ? () => openCodex(lastEntry.reading[SLOT_IDS[i]].cardId) : undefined}
+              onClick={seat ? () => openCodex(resolution.slots[i].card.id) : undefined}
             >
-              {seat && <span className="narration__seat" title={SLOT_POSITION[SLOT_IDS[i]].role}>{SLOT_POSITION[SLOT_IDS[i]].n}</span>}
+              {seat && <span className="narration__seat" title={SLOT_POSITION[resolution.slots[i].slot].role}>{SLOT_POSITION[resolution.slots[i].slot].n}</span>}
               {last && <span className="narration__tier">{TIER_GLYPH[resolution.tier]} </span>}
               <span className="narration__line">{line}</span>
               {seat && (() => {
@@ -114,7 +114,7 @@ function ResolutionScreenInner() {
                 return (
                   <span className={`reckon reckon--${r.verdict}`}>
                     <span className="reckon__score">{r.score > 0 ? '+' : r.score < 0 ? '−' : ''}{Math.abs(r.score) % 1 === 0 ? Math.abs(r.score) : Math.abs(r.score).toFixed(1)}</span>
-                    <span className="reckon__text">{SLOT_POSITION[SLOT_IDS[i]].role}: {reckoningText(r, resolution.slots[i].card.name)}</span>
+                    <span className="reckon__text">{SLOT_POSITION[resolution.slots[i].slot].role}: {reckoningText(r, resolution.slots[i].card.name)}</span>
                   </span>
                 );
               })()}

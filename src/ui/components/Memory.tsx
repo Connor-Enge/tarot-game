@@ -82,9 +82,12 @@ export function MemorySheet({
           const rs = reckon(scene, h.resolution, run.marks);
           return (
             <ol className="memory__story">
-              {SLOT_IDS.map((sl, i) => {
+              {h.resolution.slots
+                .map((seat, i) => ({ seat, i }))
+                .sort((a, b) => SLOT_POSITION[a.seat.slot].n - SLOT_POSITION[b.seat.slot].n)
+                .map(({ seat, i }) => {
                 const r = rs[i];
-                const seat = h.resolution.slots[i];
+                const sl = seat.slot;
                 return (
                   <li key={sl} className={`memory__line reckon--${r.verdict}`} style={{ animationDelay: `${300 + i * 160}ms` }}>
                     <span className="memory__omen">{SLOT_POSITION[sl].n} · {h.resolution.narration[i]}</span>
