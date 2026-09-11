@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { CARDS, COMBO_IDS, comboNote, getCard, SCENES, SIGILS, SLOT_IDS, SLOTS, type Tier } from '../../engine';
 
 type SuitFilter = 'all' | 'major' | 'wands' | 'cups' | 'swords' | 'pentacles';
-type TierFilter = 'all' | 'seen' | 'known';
+type TierFilter = 'all' | 'seen' | 'known' | 'unseen';
 const SUIT_LABEL: Record<SuitFilter, string> = { all: 'All', major: '✦', wands: '⚚', cups: '♆', swords: '⚔', pentacles: '⛤' };
 import { useGame } from '../../store';
 import { Card } from '../components/Card';
@@ -30,6 +30,7 @@ export function CodexScreen() {
     if (suit !== 'all' && suit !== 'major' && c.suit !== suit) return false;
     const e = k.cards[c.id];
     if (tf === 'seen' && !e && !k.dealt?.[c.id]) return false;
+    if (tf === 'unseen' && (e || k.dealt?.[c.id])) return false;
     if (tf === 'known' && (e?.tier ?? 0) < 2) return false;
     return true;
   });
@@ -133,7 +134,7 @@ export function CodexScreen() {
           ))}
         </div>
         <div className="filters__row">
-          {(['all', 'seen', 'known'] as TierFilter[]).map((f) => (
+          {(['all', 'seen', 'known', 'unseen'] as TierFilter[]).map((f) => (
             <button key={f} type="button" className={`chip ${tf === f ? 'chip--on' : ''}`} onClick={() => setTf(f)}>
               {f}
             </button>

@@ -416,6 +416,12 @@ descents, deaths, returns, records, sigils and Study but keeps every card,
 bond and page of the book. The title notes how many cards have never been
 dealt once half the deck has passed through your hands.
 
+**Daily streak**: consecutive daily descents build a streak shown on the
+Daily button; it survives a same-day replay and lapses after a missed day.
+
+**Named, the first time**: the first time a reading produces a combo, its
+line arrives as a toast. The Codex "unseen" filter lists cards never dealt.
+
 ### Pillar sweep: where text reaches the screen
 
 Every surface that can show text about a card, and what gates it:

@@ -170,3 +170,19 @@ describe('resetRecords', () => {
     expect(r.ascensions).toBe(0);
   });
 });
+
+describe('daily streak', () => {
+  it('counts consecutive days and survives a same-day replay', async () => {
+    const { noteDaily, dailyStreakAlive } = await import('../knowledge');
+    let k = noteDaily(emptyKnowledge(), '2026-09-10');
+    k = noteDaily(k, '2026-09-10');
+    expect(k.daily?.streak).toBe(1);
+    k = noteDaily(k, '2026-09-11');
+    expect(k.daily?.streak).toBe(2);
+    expect(dailyStreakAlive(k, '2026-09-11')).toBe(2);
+    expect(dailyStreakAlive(k, '2026-09-12')).toBe(2);
+    expect(dailyStreakAlive(k, '2026-09-13')).toBe(0);
+    k = noteDaily(k, '2026-09-14');
+    expect(k.daily).toEqual({ last: '2026-09-14', streak: 1, best: 2 });
+  });
+});

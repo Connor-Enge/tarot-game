@@ -38,6 +38,8 @@ export interface Knowledge {
   links?: Record<string, number>;
   /** Cards that have been dealt into your hand at least once (face seen). */
   dealt?: Record<string, true>;
+  /** Daily descents: last day played, current streak, best streak. */
+  daily?: { last: string; streak: number; best: number };
   /** Study: correct answers and best streak. */
   study?: { correct: number; asked: number; bestStreak: number };
   /** Omens witnessed, in order. Capped. */
@@ -144,6 +146,29 @@ export function noteDealt(k: Knowledge, cardIds: string[]): Knowledge {
   const dealt = { ...k.dealt };
   for (const id of fresh) dealt[id] = true;
   return { ...k, dealt };
+}
+
+/** A daily descent began on `label` (YYYY-MM-DD, UTC). Consecutive days build a streak. */
+export function noteDaily(k: Knowledge, label: string): Knowledge {
+  const prev = k.daily;
+  if (prev?.last === label) return k;
+  const yesterday = (() => {
+    const d = new Date(`${label}T00:00:00Z`);
+    d.setUTCDate(d.getUTCDate() - 1);
+    return d.toISOString().slice(0, 10);
+  })();
+  const streak = prev?.last === yesterday ? prev.streak + 1 : 1;
+  return { ...k, daily: { last: label, streak, best: Math.max(prev?.best ?? 0, streak) } };
+}
+
+/** The streak still stands if the last daily was today or yesterday. */
+export function dailyStreakAlive(k: Knowledge, today: string): number {
+  const d = k.daily;
+  if (!d) return 0;
+  if (d.last === today) return d.streak;
+  const y = new Date(`${today}T00:00:00Z`);
+  y.setUTCDate(y.getUTCDate() - 1);
+  return d.last === y.toISOString().slice(0, 10) ? d.streak : 0;
 }
 
 export function noteStudyResult(k: Knowledge, correct: boolean, streak: number): Knowledge {

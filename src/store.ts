@@ -22,6 +22,8 @@ import {
   noteCombos,
   noteDeath,
   noteDealt,
+  noteDaily,
+  comboNote,
   noteLinks,
   noteLast,
   noteOmens,
@@ -245,7 +247,7 @@ export const useGame = create<GameStore>((set, get) => ({
 
   newDaily: () => {
     const { seed, label } = dailySeed();
-    const knowledge = noteRunStarted(get().knowledge);
+    const knowledge = noteDaily(noteRunStarted(get().knowledge), label);
     saveKnowledge(knowledge);
     startDrone();
     set({ run: startRun(seed), mode: { kind: 'daily', label }, knowledge, screen: 'run', lifted: null, earned: [], firstDescent: false });
@@ -309,6 +311,9 @@ export const useGame = create<GameStore>((set, get) => ({
     }
     const { knowledge: learned, earned } = learn(knowledge, next, get().mode);
     saveKnowledge(learned);
+    const before = new Set(knowledge.combos ?? []);
+    const firstNamed = (learned.combos ?? []).find((id) => !before.has(id));
+    if (firstNamed) get().showToast('♪', `A named reading: ${comboNote(firstNamed) ?? firstNamed}`);
     const afterglow = next.phase.kind === 'ascended' ? true : next.phase.kind === 'dead' ? false : get().afterglow;
     set({ run: next, knowledge: learned, lifted: null, earned, afterglow });
   },

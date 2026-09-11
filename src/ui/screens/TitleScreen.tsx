@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { CARDS, dailySeed, DEPTHS, DESCENTS, getCard, getDescent, maxDepthUnlocked } from '../../engine';
+import { CARDS, dailySeed, dailyStreakAlive, DEPTHS, DESCENTS, getCard, getDescent, maxDepthUnlocked } from '../../engine';
 import { ReaderMark } from '../components/ReaderMark';
 import { useGame } from '../../store';
 import { Card } from '../components/Card';
@@ -42,10 +42,11 @@ export function TitleScreen() {
   const known = Object.values(k.cards).filter((c) => c.tier > 0).length;
   const current = getDescent(descent);
   const anyUnlocked = DESCENTS.some((d, i) => i > 0 && d.unlocked(k));
-  const today = useMemo(() => {
-    const { seed } = dailySeed();
-    return CARDS[seed % CARDS.length].id;
+  const { today, todayLabel } = useMemo(() => {
+    const { seed, label } = dailySeed();
+    return { today: CARDS[seed % CARDS.length].id, todayLabel: label };
   }, []);
+  const streak = dailyStreakAlive(k, todayLabel);
   // A different fan every visit, seeded off the run count so it feels alive but not random-noise.
   const fan = useMemo(() => {
     const pool = k.runs === 0 ? FAN_IDS : CARDS.filter((c) => c.arcana === 'major').map((c) => c.id);
@@ -148,7 +149,7 @@ export function TitleScreen() {
         </button>
         <div className="row">
           <button className="btn" onClick={newDaily}>
-            Daily
+            Daily{streak > 1 ? ` · ${streak}` : ''}
           </button>
           <button className="btn" onClick={newWeekly} title="A longer road, shared by everyone this week">
             Weekly
