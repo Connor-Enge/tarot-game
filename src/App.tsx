@@ -51,6 +51,12 @@ export function App() {
     document.documentElement.classList.toggle('reduce-motion', reduceMotion);
     document.documentElement.classList.toggle('big-cards', bigCards);
   }, [reduceMotion, bigCards]);
+  const afterglow = useGame((s) => s.afterglow);
+  useEffect(() => {
+    const warm = afterglow && (screen === 'title' || (screen === 'run' && run?.phase.kind === 'map'));
+    document.documentElement.style.setProperty('--mote-hue', warm ? '45' : '');
+    document.documentElement.classList.toggle('afterglow', warm);
+  }, [afterglow, screen, run]);
   const low = screen === 'run' && !!run && run.vitality > 0 && run.vitality <= 2 && run.phase.kind !== 'dead' && run.phase.kind !== 'ascended';
   useEffect(() => {
     document.documentElement.classList.toggle('low-vitality', low);

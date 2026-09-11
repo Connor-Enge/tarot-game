@@ -37,7 +37,8 @@ export function Ambient() {
     const frame = (t: number) => {
       const dt = Math.min(t - last, 50);
       last = t;
-      const hue = getComputedStyle(document.documentElement).getPropertyValue('--scene-hue') || '260';
+      const rootStyle = getComputedStyle(document.documentElement);
+      const hue = rootStyle.getPropertyValue('--mote-hue').trim() || rootStyle.getPropertyValue('--scene-hue') || '260';
       ctx.clearRect(0, 0, w, h);
       for (const m of motes) {
         if (!reduce) {

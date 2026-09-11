@@ -736,3 +736,7 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 
 .codex__cell--dealt { opacity: 0.75; }
 .codex__cell--dealt .card__inner { filter: saturate(0.6); }
+
+/* --- afterglow: warm after a return --------------------------------------- */
+.afterglow #root::before { background: radial-gradient(120% 80% at 50% 0%, hsl(40, 30%, 16%), var(--bg) 70%); }
+.afterglow .title__glyph { text-shadow: 0 0 18px rgba(243,220,138,0.6); }

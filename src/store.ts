@@ -71,6 +71,8 @@ interface GameStore {
   study: { q: ReturnType<typeof studyQuestion>; streak: number; picked: string | null } | null;
   askStudy: () => void;
   answerStudy: (cardId: string) => void;
+  /** A return this session: the title and map glow warm until the next run ends. */
+  afterglow: boolean;
   /** Discard viewer open. */
   deckOpen: boolean;
   openDeck: (open: boolean) => void;
@@ -158,6 +160,7 @@ export const useGame = create<GameStore>((set, get) => ({
   setDepth: (n) => set({ depth: n }),
   earned: [],
   firstDescent: false,
+  afterglow: false,
   study: null,
   askStudy: () => {
     const { knowledge, study } = get();
@@ -279,7 +282,8 @@ export const useGame = create<GameStore>((set, get) => ({
     }
     const { knowledge: learned, earned } = learn(knowledge, next, get().mode);
     saveKnowledge(learned);
-    set({ run: next, knowledge: learned, lifted: null, earned });
+    const afterglow = next.phase.kind === 'ascended' ? true : next.phase.kind === 'dead' ? false : get().afterglow;
+    set({ run: next, knowledge: learned, lifted: null, earned, afterglow });
   },
 
   redraw: () => {

@@ -388,6 +388,9 @@ share text and reads the seed, the descent, and the depth out of it.
 through your hands, dimmed until it is read. Faces are never secret; only
 meanings are.
 
+**Afterglow**: after a return, the title and map glow warm and the motes
+turn gold until the next run ends.
+
 ### Pillar sweep: where text reaches the screen
 
 Every surface that can show text about a card, and what gates it:
@@ -426,6 +429,23 @@ With Depths stacked (`npx vite-node scripts/sim.ts 1200 5`):
 
 A master still returns almost always; a half-learned deck is properly
 tested. That is the intended veteran curve.
+
+Across descents (`npx vite-node scripts/sim-all.ts 800`):
+
+| Descent | random | majors-only | oracle |
+|---------|--------|-------------|--------|
+| The Descent | 26% | 82% | 100% |
+| The Short Road | 41% | 84% | 100% |
+| Arcana Only | 36% | 100% | 100% |
+| The Inverted | 2% | 21% | 99% |
+| Fogbound | 27% | 83% | 100% |
+| Thin Blood | 7% | 66% | 100% |
+| Weekly | 30% | 84% | 100% |
+
+Arcana Only was found at 94% for blind play (the majors are all dense,
+well-fitting cards) and tuned with 45% reversed, 8 vitality, and +1 neutral
+cost. Majors-only is the oracle on that deck, so 100% there is expected.
+The Inverted and Thin Blood are meant to be hard.
 
 The levers that got there: a neutral reading costs 1 vitality times scene
 stakes (0 in rest scenes), harm scales with stakes, starting vitality is 10,
