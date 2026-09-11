@@ -55,6 +55,8 @@ export interface RunState {
   freeRedrawUsed: boolean;
   redraws: number;
   whispers: number;
+  /** Where the deck was cut before the first scene, if it was. */
+  cut?: number;
   slots: SlotState[];
   activeSlot: number;
   phase: Phase;
@@ -164,6 +166,22 @@ function dealSeat(run: RunState, rng: Rng, deck: DeckState, slot: SlotId): { dec
     cards = cards.map((c, j) => (j === i ? { ...c, hidden: true } : c));
   }
   return { deck: dealt.deck, state: { slot, candidates: cards, chosen: null, whispered: [] } };
+}
+
+/**
+ * Cut the deck before the first scene: the top `at` cards go to the bottom.
+ * A ritual with real consequence; the only hand the player gets on the shuffle.
+ */
+export function canCut(run: RunState): boolean {
+  return run.phase.kind === 'map' && run.layer === 0 && run.history.length === 0 && !run.cut;
+}
+
+export function cutDeck(run: RunState, at: number): RunState {
+  if (!canCut(run)) return run;
+  const n = Math.max(1, Math.min(run.deck.draw.length - 1, Math.floor(at)));
+  const top = run.deck.draw.slice(-n); // top of deck = end of array
+  const rest = run.deck.draw.slice(0, -n);
+  return { ...run, deck: { ...run.deck, draw: [...top, ...rest] }, cut: n };
 }
 
 /** Pick a node in the current layer and sit down to read. */

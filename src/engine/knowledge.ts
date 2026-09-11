@@ -169,3 +169,15 @@ export function saveKnowledge(k: Knowledge, storage: Pick<Storage, 'setItem'> | 
     /* private mode etc. */
   }
 }
+
+/**
+ * The word a card whispers depends on the seat it is being considered for.
+ * The same card says something different in the Hand than in the Wake.
+ */
+export function whisperWords(keywords: string[], seat: SlotId, count = 1): string[] {
+  const order: SlotId[] = ['vessel', 'threshold', 'hand', 'wake'];
+  const start = order.indexOf(seat);
+  const out: string[] = [];
+  for (let i = 0; i < Math.min(count, keywords.length); i++) out.push(keywords[(start + i) % keywords.length]);
+  return out;
+}

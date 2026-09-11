@@ -72,3 +72,14 @@ describe('seat outcomes', () => {
     expect(k.cards['cups-2'].seatOutcomes?.wake).toEqual({ good: 0, bad: 0 });
   });
 });
+
+describe('whisperWords', () => {
+  it('rotates by seat and respects count', async () => {
+    const { whisperWords } = await import('../knowledge');
+    const kw = ['a', 'b', 'c'];
+    expect(whisperWords(kw, 'vessel')).toEqual(['a']);
+    expect(whisperWords(kw, 'hand')).toEqual(['c']);
+    expect(whisperWords(kw, 'wake', 2)).toEqual(['a', 'b']);
+    expect(whisperWords(['x'], 'threshold', 2)).toEqual(['x']);
+  });
+});

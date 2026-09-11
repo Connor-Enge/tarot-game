@@ -106,3 +106,20 @@ describe('run', () => {
     else expect(run.layer).toBe(TOTAL_LAYERS - 1);
   });
 });
+
+describe('cut the deck', () => {
+  it('rotates the top cards to the bottom, once, only before the first scene', async () => {
+    const { canCut, cutDeck } = await import('../run');
+    const run = startRun(31);
+    expect(canCut(run)).toBe(true);
+    const before = run.deck.draw;
+    const cut = cutDeck(run, 10);
+    expect(cut.cut).toBe(10);
+    expect(cut.deck.draw.length).toBe(before.length);
+    expect(cut.deck.draw.slice(0, 10)).toEqual(before.slice(-10));
+    expect(cut.deck.draw.slice(10)).toEqual(before.slice(0, -10));
+    expect(canCut(cut)).toBe(false);
+    expect(cutDeck(cut, 5)).toBe(cut);
+    expect(canCut(chooseNode(run, 0))).toBe(false);
+  });
+});

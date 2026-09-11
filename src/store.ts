@@ -5,6 +5,7 @@ import {
   chooseCandidate,
   chooseNode as chooseNodeRun,
   chooseRelic as chooseRelicRun,
+  cutDeck as cutDeckRun,
   dailySeed,
   getDescent,
   finalSpread,
@@ -57,6 +58,7 @@ interface GameStore {
   newDaily: () => void;
   chooseNode: (index: number) => void;
   chooseRelic: (index: number) => void;
+  cutDeck: (at: number) => void;
   lift: (index: number | null) => void;
   confirm: () => void;
   redraw: () => void;
@@ -209,6 +211,16 @@ export const useGame = create<GameStore>((set, get) => ({
     if (!run) return;
     sfx.flip();
     set({ run: advanceRun(run), lifted: null });
+  },
+
+  cutDeck: (at) => {
+    const { run } = get();
+    if (!run) return;
+    const next = cutDeckRun(run, at);
+    if (next === run) return;
+    buzz([6, 30, 10]);
+    sfx.redraw();
+    set({ run: next });
   },
 
   chooseRelic: (index) => {

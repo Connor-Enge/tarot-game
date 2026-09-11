@@ -237,9 +237,20 @@ hands it over if you don't hold it, and the resolution says "You keep it".
 The crossing's satchel is the Second Coin; the stranger's gift is the Small
 Bell; the library holds the Cracked Lens.
 
+**Cut the deck**: before the first scene the map shows the deck's edge.
+Tap or drag to choose a point, then Cut: the top N cards go to the bottom.
+It is the only hand the player gets on the shuffle, and it is real.
+
+**Seat-aware whispers**: `whisperWords` rotates a card's keyword list by
+the seat being filled, so the same card whispers a different word in the
+Hand than in the Wake. With the Small Bell you hear two.
+
+**Codex flip**: tap the big card in the detail sheet to turn it. If you
+have not mastered the reversed meaning, it says so and shows nothing.
+
 Queued:
-- A "cut the deck" gesture at the start of a run.
-- Reversed-orientation toggle in the Codex.
+- Card art for the card back per descent.
+- Weekly seed with a longer map.
 
 ## Content debt
 

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { activeSlotState, currentScene, getCard, hasRelic, redrawCost, sceneNumber, SLOT_IDS, SLOTS, totalScenes, whisperCost } from '../../engine';
+import { activeSlotState, currentScene, getCard, hasRelic, redrawCost, sceneNumber, SLOT_IDS, SLOTS, totalScenes, whisperCost, whisperWords } from '../../engine';
 import { useGame } from '../../store';
 import { Card } from '../components/Card';
 import { CodexDetail } from '../components/CodexDetail';
@@ -75,7 +75,7 @@ export function ReadingScreen() {
           const card = getCard(c.cardId);
           const whispered = active.whispered.includes(i);
           const kws = c.reversed ? card.keywords.reversed : card.keywords.upright;
-          const kw = bell ? kws.slice(0, 2).join(' · ') : kws[0];
+          const kw = whisperWords(kws, active.slot, bell ? 2 : 1).join(' · ');
           return (
             <div className="deal" style={{ animationDelay: `${i * 90}ms` }} key={`${c.cardId}-${i}`}>
               <Card

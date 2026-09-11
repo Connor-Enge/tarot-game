@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, useState } from 'react';
-import { actOfLayer, currentAct, KIND_GLYPH, visitedNodes } from '../../engine';
+import { actOfLayer, canCut, currentAct, KIND_GLYPH, visitedNodes } from '../../engine';
 
 const ACT_NAMES = ['', 'The Shallows', 'The Deep', 'The Abyss'];
 import { useGame } from '../../store';
@@ -13,6 +13,9 @@ import { Stats } from '../components/Stat';
 export function MapScreen() {
   const run = useGame((s) => s.run)!;
   const chooseNode = useGame((s) => s.chooseNode);
+  const cutDeck = useGame((s) => s.cutDeck);
+  const [cutAt, setCutAt] = useState<number | null>(null);
+  const cuttable = canCut(run);
   const visited = visitedNodes(run);
   const visitedIds = new Set(visited.map((n) => n.id));
   const act = currentAct(run);
@@ -60,7 +63,45 @@ export function MapScreen() {
         <Stats vitality={run.vitality} clarity={run.clarity} />
       </header>
 
-      <p className="scene__prompt center">{run.layer === 0 ? 'Choose where the descent begins.' : 'Choose the way down.'}</p>
+      {cuttable ? (
+        <section className="cut" aria-label="cut the deck">
+          <p className="scene__prompt center">Cut the deck.</p>
+          <div
+            className="cut__strip"
+            role="slider"
+            aria-valuemin={1}
+            aria-valuemax={run.deck.draw.length - 1}
+            aria-valuenow={cutAt ?? Math.floor(run.deck.draw.length / 2)}
+            onPointerDown={(e) => {
+              const r = e.currentTarget.getBoundingClientRect();
+              const frac = Math.min(0.98, Math.max(0.02, (e.clientX - r.left) / r.width));
+              setCutAt(Math.round(frac * (run.deck.draw.length - 2)) + 1);
+            }}
+            onPointerMove={(e) => {
+              if (e.buttons === 0) return;
+              const r = e.currentTarget.getBoundingClientRect();
+              const frac = Math.min(0.98, Math.max(0.02, (e.clientX - r.left) / r.width));
+              setCutAt(Math.round(frac * (run.deck.draw.length - 2)) + 1);
+            }}
+          >
+            {Array.from({ length: 26 }, (_, i) => (
+              <span key={i} className="cut__edge" style={{ '--i': i } as React.CSSProperties} />
+            ))}
+            {cutAt !== null && <span className="cut__marker" style={{ left: `${((cutAt - 1) / (run.deck.draw.length - 2)) * 100}%` }} />}
+          </div>
+          <div className="row">
+            <button className="btn" onClick={() => setCutAt(null)} disabled={cutAt === null}>
+              Leave it
+            </button>
+            <button className="btn btn--primary" disabled={cutAt === null} onClick={() => cutAt !== null && cutDeck(cutAt)}>
+              Cut {cutAt !== null ? `· ${cutAt}` : ''}
+            </button>
+          </div>
+          <p className="muted small center">or choose where the descent begins</p>
+        </section>
+      ) : (
+        <p className="scene__prompt center">{run.layer === 0 ? 'Choose where the descent begins.' : 'Choose the way down.'}</p>
+      )}
 
       <section className="map" aria-label="the descent" ref={mapRef}>
         <svg className="map__lines" width={size.w} height={size.h} aria-hidden>

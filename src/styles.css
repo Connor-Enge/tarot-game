@@ -270,7 +270,14 @@ em { color: var(--gold); font-style: normal; }
 .node--mystery.node--choosable { color: #c9b8f2; }
 
 /* --- resolution ---------------------------------------------------------- */
-.spread--final { perspective: none; }
+.spread--final { perspective: none; padding: 10px 0 6px; }
+.spread--final .deal:nth-child(1) { transform: rotate(-7deg) translateY(6px); }
+.spread--final .deal:nth-child(2) { transform: rotate(-2.5deg) translateY(0); }
+.spread--final .deal:nth-child(3) { transform: rotate(2.5deg) translateY(0); }
+.spread--final .deal:nth-child(4) { transform: rotate(7deg) translateY(6px); }
+.spread--final .deal { animation-fill-mode: both; }
+@keyframes deal-laid { from { opacity: 0; translate: 0 40px; } to { opacity: 1; translate: 0 0; } }
+.spread--final .deal { animation-name: deal-laid; }
 .narration { flex: 1; display: flex; flex-direction: column; gap: 10px; padding: 8px 4px; }
 .narration__omen { color: var(--muted); font-style: italic; display: flex; gap: 10px; align-items: baseline; }
 .narration__seat { color: var(--gold); font-style: normal; font-size: 0.9rem; min-width: 1em; }
@@ -491,3 +498,27 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .ledger { display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; border-radius: 12px; background: rgba(255,255,255,0.03); }
 .ledger__row { display: flex; justify-content: space-between; gap: 12px; font-size: 0.9rem; }
 .ledger__row span:last-child { text-align: right; }
+
+/* --- cut the deck -------------------------------------------------------- */
+.cut { display: flex; flex-direction: column; gap: 12px; }
+.cut__strip {
+  position: relative; height: 64px; border-radius: 10px; touch-action: none; cursor: pointer;
+  display: flex; align-items: stretch; gap: 2px; padding: 8px 10px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.25));
+  border: 1px solid rgba(214,178,94,0.25);
+}
+.cut__edge {
+  flex: 1; border-radius: 2px;
+  background: linear-gradient(180deg, #2b2555, #151230);
+  border-top: 1px solid rgba(214,178,94,0.55);
+  transform: translateY(calc(var(--i) * 0.4px));
+}
+.cut__marker {
+  position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px;
+  background: var(--gold-2); box-shadow: 0 0 10px var(--gold-2);
+}
+.cut__marker::before, .cut__marker::after {
+  content: ''; position: absolute; left: -5px; width: 12px; height: 12px; background: var(--gold-2); transform: rotate(45deg);
+}
+.cut__marker::before { top: -6px; }
+.cut__marker::after { bottom: -6px; }

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { CARDS, SLOT_IDS, SLOTS, witnessed, type Tier } from '../../engine';
 import { useGame } from '../../store';
 import { Card } from './Card';
@@ -12,16 +13,18 @@ export function CodexDetail({ cardId, onClose }: { cardId: string; onClose: () =
   const tier: Tier = e?.tier ?? 0;
   const seatsSeen = SLOT_IDS.filter((s) => (e?.seats[s] ?? 0) > 0);
   const nothing = !e;
+  const [flipped, setFlipped] = useState(false);
   return (
     <div className="sheet" role="dialog" aria-label={card.name} onClick={onClose}>
       <div className="sheet__body" onClick={(ev) => ev.stopPropagation()}>
-        <div className="sheet__card">
-          <Card cardId={cardId} size="lg" />
+        <div className="sheet__card" title="Tap to turn the card">
+          <Card cardId={cardId} size="lg" reversed={flipped} onClick={() => setFlipped((f) => !f)} />
         </div>
         <div className="sheet__title">
           {card.name} <span className="pill">{TIER_LABEL[tier]}</span>
         </div>
         {nothing && <p className="muted">You have not read this card yet.</p>}
+        {flipped && tier < 3 && <p className="muted small">Turned. What it means this way, you have not earned.</p>}
         {tier >= 1 && <div className="codex__kw">{card.keywords.upright.join(' · ')}</div>}
         {tier >= 2 && <p className="codex__meaning">{card.meaning.upright}</p>}
         {tier >= 3 && (
