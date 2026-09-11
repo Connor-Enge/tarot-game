@@ -33,6 +33,12 @@ export async function renderSpreadImage(opts: {
   carried?: { id: string; name: string }[];
   /** Sigils earned by this descent, drawn as medallions with their names. */
   sigils?: { id: string; glyph: string; name: string }[];
+  /** Each seat's score, in card order: drawn as a chip under the card, gold when it served, red when it cost. */
+  scores?: number[];
+  /** Each seat's position number, in card order. */
+  positions?: number[];
+  /** The tally line, drawn under the outcome. */
+  tally?: string;
 }): Promise<Blob | null> {
   const W = 1080;
   const H = 1350;
@@ -63,7 +69,21 @@ export async function renderSpreadImage(opts: {
             <text y="2" font-size="24" text-anchor="middle" dominant-baseline="middle" fill="#f3dc8a" font-family="Georgia, serif">✦</text>
           </g>`
         : '';
+      const score = opts.scores?.[i];
+      const chip = score === undefined
+        ? ''
+        : (() => {
+            const col = score >= 1 ? '#f3dc8a' : score <= -1 ? '#f0a09e' : '#c8c9d8';
+            const txt = `${score > 0 ? '+' : score < 0 ? '−' : ''}${Math.abs(score) % 1 === 0 ? Math.abs(score) : Math.abs(score).toFixed(1)}`;
+            return `<g transform="translate(${x + cardW / 2} ${cardY + cardH + 112})">
+              <rect x="-34" y="-17" width="68" height="34" rx="17" fill="#0b0a12" stroke="${col}" stroke-width="1.5" opacity="0.95" />
+              <text y="1" font-size="22" text-anchor="middle" dominant-baseline="middle" fill="${col}" font-family="Georgia, serif">${txt}</text>
+            </g>`;
+          })();
+      const pos = opts.positions?.[i];
       return `
+        ${pos !== undefined ? `<text x="${x + cardW / 2}" y="${cardY - 84}" font-size="22" text-anchor="middle" fill="#8d86a3" font-family="Georgia, serif">${pos}</text>` : ''}
+        ${chip}
         <text x="${x + cardW / 2}" y="${cardY - 40}" font-size="44" text-anchor="middle" fill="#d6b25e" font-family="Georgia, serif">${glyph}</text>
         <g transform="${rot}">
           <g transform="translate(${x} ${cardY}) scale(${cardW / 100})">
@@ -88,11 +108,12 @@ export async function renderSpreadImage(opts: {
     <rect width="${W}" height="${H}" fill="url(#shareBg)" />
     <rect x="30" y="30" width="${W - 60}" height="${H - 60}" rx="18" fill="none" stroke="#c9a24a" stroke-width="2" opacity="0.6" />
     <rect x="42" y="42" width="${W - 84}" height="${H - 84}" rx="14" fill="none" stroke="#c9a24a" stroke-width="0.8" opacity="0.4" />
-    <text x="${W / 2}" y="130" font-size="34" letter-spacing="10" text-anchor="middle" fill="#d6b25e" font-family="Georgia, serif">◯ △ ☐ ☾</text>
+    <text x="${W / 2}" y="130" font-size="34" letter-spacing="10" text-anchor="middle" fill="#d6b25e" font-family="Georgia, serif">◯ △ ☾ ☐</text>
     <text x="${W / 2}" y="215" font-size="60" text-anchor="middle" fill="#e9e4f2" font-family="Georgia, serif">${esc(opts.title)}</text>
     <text x="${W / 2}" y="270" font-size="28" text-anchor="middle" fill="#8d86a3" font-family="Georgia, serif">${esc(opts.subtitle)}</text>
     ${cards}
-    ${opts.outcome ? wrapText(esc(opts.outcome), W / 2, cardY + cardH + 170, 30, 46, '#e9e4f2') : ''}
+    ${opts.tally ? `<text x="${W / 2}" y="${cardY + cardH + 160}" font-size="24" text-anchor="middle" fill="#8d86a3" font-family="Georgia, serif">${esc(opts.tally)}</text>` : ''}
+    ${opts.outcome ? wrapText(esc(opts.outcome), W / 2, cardY + cardH + (opts.tally ? 214 : 170), 30, 46, '#e9e4f2') : ''}
     ${tokens}
     ${opts.stops && opts.stops.length ? roadSvg(opts.stops, W, roadY, opts.title.includes('ended')) : ''}
     ${!opts.stops && opts.road ? `<text x="${W / 2}" y="${H - 262}" font-size="30" letter-spacing="14" text-anchor="middle" fill="#8d86a3" font-family="Georgia, serif">${esc(opts.road)}</text>` : ''}

@@ -275,7 +275,7 @@ meaning, and it is the most direct learning tool in the game.
 **Deck tracker**: a pill in the reading header shows cards left to draw;
 tapping it opens the discard so far. Roguelike deck-tracking, faces only.
 
-**Share image** (`ui/art/render.ts`): the end screen renders the final
+**Share image** (each card carries its position number above and its seat score in a chip beneath, gold if it served and red if it cost, and the tally line sits under the cards, so a shared spread tells the same story the screen did) (`ui/art/render.ts`): the end screen renders the final
 spread to a 1080×1350 PNG (seat glyphs, card faces, names, the outcome
 line, one glyph per scene, descent and seed) and hands it to the OS share
 sheet, or shows it with a download button. Card SVGs are serialized with
