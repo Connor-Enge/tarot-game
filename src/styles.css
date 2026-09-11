@@ -194,7 +194,7 @@ em { color: var(--gold); font-style: normal; }
 .card--xs { --w: 40px; }
 .card--sm { --w: 64px; }
 .card--md { --w: 88px; }
-.card--lg { --w: min(27vw, 116px); }
+.card--lg { --w: min(27vw, 116px); will-change: transform, opacity; }
 .card--lifted { transform: translateY(-16px) scale(1.07); z-index: 2; }
 .card--dim { opacity: 0.45; }
 .card__inner {
@@ -697,3 +697,18 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
   .scene__prompt { font-size: 1.4rem; }
   .scene__art { width: 420px; }
 }
+
+/* --- take back / suit glyphs -------------------------------------------- */
+.spread { position: relative; }
+.takeback {
+  position: absolute; right: 0; top: -6px; z-index: 2;
+  font: inherit; font-size: 0.72rem; letter-spacing: 0.04em; color: var(--muted); cursor: pointer;
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 999px; padding: 4px 10px;
+  animation: rise 300ms ease both;
+}
+.takeback:active { transform: scale(0.96); }
+.seat--filled.seat--wands .seat__glyph { color: #e0a068; }
+.seat--filled.seat--cups .seat__glyph { color: #8fc3e0; }
+.seat--filled.seat--swords .seat__glyph { color: #c8c9d8; }
+.seat--filled.seat--pentacles .seat__glyph { color: #a9c98a; }
+.seat--filled.seat--major .seat__glyph { color: var(--gold-2); text-shadow: 0 0 10px rgba(243,220,138,0.5); }

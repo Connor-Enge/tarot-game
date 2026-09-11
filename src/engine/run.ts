@@ -65,6 +65,10 @@ export interface RunState {
   echo: DrawnCard | null;
   /** Node ids whose place has been foretold. */
   foretold: string[];
+  /** Take-backs remaining this run. */
+  takeBacks: number;
+  /** Candidates put aside by a take-back, to be dealt again unchanged. */
+  pendingDeal: DrawnCard[] | null;
   /** Counters for the scene in progress. */
   sceneSpent: { redraws: number; whispers: number };
   /** Depth modifiers carried by the run. */
@@ -151,6 +155,8 @@ export function startRun(seed: number, config: RunConfig = {}): RunState {
     mods: { extraNeutralCost: config.extraNeutralCost ?? 0, noEcho: !!config.noEcho, abyssStakes: config.abyssStakes },
     sceneSpent: { redraws: 0, whispers: 0 },
     foretold: [],
+    takeBacks: 1,
+    pendingDeal: null,
     slots: [],
     activeSlot: 0,
     phase: { kind: 'map' },
@@ -169,6 +175,9 @@ function applyMarks(run: RunState, cards: DrawnCard[]): DrawnCard[] {
 }
 
 function dealSeat(run: RunState, rng: Rng, deck: DeckState, slot: SlotId): { deck: DeckState; state: SlotState } {
+  if (run.pendingDeal) {
+    return { deck, state: { slot, candidates: run.pendingDeal, chosen: null, whispered: [] } };
+  }
   let count = CANDIDATES_PER_SLOT;
   if (slot === 'threshold' && hasRelic(run, 'lens')) count++;
   if (slot === 'wake' && hasRelic(run, 'shard')) count++;
@@ -213,6 +222,41 @@ export function cutDeck(run: RunState, at: number): RunState {
 
 export const FORETELL_COST = 1;
 
+/**
+ * Take back the last placement, once per run. The card returns to its
+ * candidates, the two it beat come back out of the discard, and the seat
+ * that was just dealt is put aside to be dealt again exactly as it was.
+ */
+export function canTakeBack(run: RunState): boolean {
+  if (run.phase.kind !== 'reading' || run.takeBacks <= 0) return false;
+  if (run.activeSlot === 0) return false;
+  const active = run.slots[run.activeSlot];
+  return !!active && active.chosen === null && active.whispered.length === 0;
+}
+
+export function takeBack(run: RunState): RunState {
+  if (!canTakeBack(run)) return run;
+  const prevIndex = run.activeSlot - 1;
+  const prev = run.slots[prevIndex];
+  const active = run.slots[run.activeSlot];
+  // Pull the rejected candidates back out of the discard (last occurrences).
+  let discard = run.deck.discard.slice();
+  prev.candidates.forEach((c, i) => {
+    if (i === prev.chosen) return;
+    const at = discard.lastIndexOf(c.cardId);
+    if (at >= 0) discard.splice(at, 1);
+  });
+  const slots = run.slots.slice(0, prevIndex + 1).map((s, i) => (i === prevIndex ? { ...s, chosen: null } : s));
+  return {
+    ...run,
+    deck: { ...run.deck, discard },
+    slots,
+    activeSlot: prevIndex,
+    takeBacks: run.takeBacks - 1,
+    pendingDeal: active.candidates,
+  };
+}
+
 /** Spend Clarity to learn a node's place line before choosing it. */
 export function foretell(run: RunState, index: number): RunState {
   if (run.phase.kind !== 'map') return run;
@@ -256,7 +300,7 @@ export function chooseCandidate(run: RunState, index: number): RunState {
     const next = dealSeat(run, rng, deck, SLOT_IDS[nextIndex]);
     deck = next.deck;
     slots.push(next.state);
-    return withRng({ ...run, deck, slots, activeSlot: nextIndex }, rng);
+    return withRng({ ...run, deck, slots, activeSlot: nextIndex, pendingDeal: null }, rng);
   }
   return resolve(withRng({ ...run, deck, slots, activeSlot: nextIndex }, rng));
 }

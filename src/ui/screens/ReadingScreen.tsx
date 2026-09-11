@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { activeSlotState, currentScene, getCard, hasRelic, redrawCost, sceneNumber, SLOT_IDS, SLOTS, totalScenes, whisperCost, whisperWords } from '../../engine';
+import { activeSlotState, canTakeBack, currentScene, getCard, hasRelic, redrawCost, sceneNumber, SLOT_IDS, SLOTS, totalScenes, whisperCost, whisperWords } from '../../engine';
 import { useGame } from '../../store';
 import { Card } from '../components/Card';
 import { SceneArt } from '../art/scenes';
@@ -15,6 +15,7 @@ function ReadingScreenInner() {
   const confirm = useGame((s) => s.confirm);
   const redraw = useGame((s) => s.redraw);
   const whisperLifted = useGame((s) => s.whisperLifted);
+  const takeBack = useGame((s) => s.takeBack);
   const seatsNamed = useGame((s) => s.knowledge.seatsNamed);
   const codexOpen = useGame((s) => s.codexOpen);
   const openCodex = useGame((s) => s.openCodex);
@@ -55,14 +56,21 @@ function ReadingScreenInner() {
       <RelicStrip relics={run.relics} />
 
       <section className="spread" aria-label="the spread">
+        {canTakeBack(run) && (
+          <button type="button" className="takeback" onClick={takeBack} title="Take back the last card, once per descent">
+            ↶ take back
+          </button>
+        )}
         {SLOT_IDS.map((id, i) => {
           const slot = run.slots[i];
           const chosen = slot && slot.chosen !== null ? slot.candidates[slot.chosen] : undefined;
           const isActive = i === run.activeSlot;
+          const chosenCard = chosen ? getCard(chosen.cardId) : null;
+          const suitClass = chosenCard ? `seat--${chosenCard.arcana === 'major' ? 'major' : chosenCard.suit}` : '';
           return (
             <div
               key={id}
-              className={`seat ${isActive ? 'seat--active' : ''} ${chosen ? 'seat--filled' : ''}`}
+              className={`seat ${isActive ? 'seat--active' : ''} ${chosen ? 'seat--filled' : ''} ${suitClass}`}
               style={{ '--seat': i } as React.CSSProperties}
               role="group"
               aria-label={`${seatsNamed ? SLOTS[id].name : `seat ${i + 1}`}${isActive ? ', choosing' : chosen ? ', placed' : ', empty'}`}

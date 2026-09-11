@@ -350,6 +350,15 @@ larger cards. Short landscape hides the scene vignette.
 fan's foil shimmers with device tilt (where no permission prompt is needed)
 or the pointer.
 
+**Take back**: once per descent, a placed card can be taken back before
+the next seat is touched. The two it beat come out of the discard and the
+next seat is dealt again exactly as it was, so it cannot reroll anything.
+Seat glyphs take their card's suit color once filled.
+
+**Performance**: card faces are memoized (they never change for an id) and
+hand cards are promoted to their own layers. At 6x CPU throttling, lift and
+place respond in well under a second.
+
 ## Balance
 
 `scripts/sim.ts` runs whole descents under three policies. Run it with

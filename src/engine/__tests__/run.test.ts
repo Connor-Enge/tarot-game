@@ -185,3 +185,33 @@ describe('foretell', () => {
     expect(foretell(chooseNode(startRun(13), 0), 0).foretold).toEqual([]);
   });
 });
+
+describe('take back', () => {
+  it('restores the previous seat and re-deals the next seat unchanged, once', async () => {
+    const { canTakeBack, takeBack } = await import('../run');
+    let run = chooseNode(startRun(17), 0);
+    expect(canTakeBack(run)).toBe(false);
+    const vesselCandidates = run.slots[0].candidates;
+    run = chooseCandidate(run, 1);
+    const thresholdCandidates = run.slots[1].candidates;
+    const discardBefore = run.deck.discard.length;
+    expect(canTakeBack(run)).toBe(true);
+    const back = takeBack(run);
+    expect(back.activeSlot).toBe(0);
+    expect(back.slots.length).toBe(1);
+    expect(back.slots[0].chosen).toBeNull();
+    expect(back.slots[0].candidates).toEqual(vesselCandidates);
+    expect(back.deck.discard.length).toBe(discardBefore - 2);
+    expect(back.takeBacks).toBe(0);
+    // choose differently; the threshold seat is dealt exactly as before
+    const again = chooseCandidate(back, 2);
+    expect(again.slots[1].candidates).toEqual(thresholdCandidates);
+    expect(again.pendingDeal).toBeNull();
+    expect(canTakeBack(again)).toBe(false);
+    // total cards in circulation unchanged
+    const live = again.slots.flatMap((s) => (s.chosen === null ? s.candidates.map((c) => c.cardId) : [s.candidates[s.chosen].cardId]));
+    const all = [...again.deck.draw, ...again.deck.discard, ...live];
+    expect(all.length).toBe(78);
+    expect(new Set(all).size).toBe(78);
+  });
+});

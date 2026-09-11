@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { getCard, type Card } from '../../engine';
 import { MAJOR_ART } from './majors';
 import { minorArt } from './minors';
@@ -112,7 +113,7 @@ function label(card: Card): string {
 }
 
 /** The full card face: frame, paper, art window, plates. viewBox 100 x 160. */
-export function CardArt({ cardId, className, texture = true }: { cardId: string; className?: string; texture?: boolean }) {
+function CardArtInner({ cardId, className, texture = true }: { cardId: string; className?: string; texture?: boolean }) {
   const card = getCard(cardId);
   const kind = card.arcana === 'major' ? 'major' : card.suit!;
   const art = card.arcana === 'major' ? MAJOR_ART[card.number]() : minorArt(card.suit!, card.number);
@@ -150,7 +151,7 @@ export function CardArt({ cardId, className, texture = true }: { cardId: string;
 
 export type BackVariant = 'standard' | 'arcana' | 'inverted' | 'fogbound' | 'thin' | 'weekly';
 
-export function CardBack({ className, variant = 'standard' }: { className?: string; variant?: BackVariant }) {
+function CardBackInner({ className, variant = 'standard' }: { className?: string; variant?: BackVariant }) {
   const glow = variant === 'standard' ? 'url(#backGlow)' : `url(#backGlow-${variant})`;
   return (
     <svg viewBox="0 0 100 160" className={className} xmlns="http://www.w3.org/2000/svg">
@@ -178,3 +179,7 @@ export function CardBack({ className, variant = 'standard' }: { className?: stri
     </svg>
   );
 }
+
+/** Card faces never change for a given id, so never re-render them. */
+export const CardArt = memo(CardArtInner);
+export const CardBack = memo(CardBackInner);
