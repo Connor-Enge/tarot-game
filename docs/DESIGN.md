@@ -516,8 +516,8 @@ Five scenes keep a rite: a rule stated the moment you arrive, on a plate
 under the prompt, in plain words. The Mirror (the standing pool) reads
 every card the other way up, and what is recorded in the Codex is what
 was read, not what was dealt. The Hush (the library) allows no whispers.
-The Tithe (the toll) takes a drop of vitality at the door and never the
-last one. Moonlit (the hollow) deals the Wake one more. The Bare Table
+The Tithe (the toll) takes a drop of vitality at the door, never the
+last one, and lights one Clarity for it. Moonlit (the hollow) deals the Wake one more. The Bare Table
 (the tomb) deals every seat one fewer. The Ember (the hearth) mends one
 even on a neutral reading. The Long Look (the Abyss itself) deals every
 seat one more and lifts the Fog, so the last reading is read with open
@@ -635,6 +635,23 @@ With Depths stacked (`npx vite-node scripts/sim.ts 1200 5`):
 
 A master still returns almost always; a half-learned deck is properly
 tested. That is the intended veteran curve.
+
+Rites bite, and this is what each costs (1500 random and majors-only
+descents apiece, standard descent, rite removed one at a time):
+
+| Rites | random | majors-only |
+|-------|--------|-------------|
+| all seven | 28.3% | 82.4% |
+| none | 32.7% | 85.0% |
+| without the Tithe | 32.1% | 83.7% |
+| without the Mirror | 30.5% | 84.1% |
+| without the Bare Table | 30.1% | 82.4% |
+| without Moonlit | 29.1% | 84.1% |
+
+The Tithe was the heaviest, so it now lights a Clarity for the drop it
+takes: the same cost to a reader who never spends Clarity, a fair trade
+to one who does. The Hush, the Ember and the Long Look cost nothing
+measurable.
 
 Across descents (`npx vite-node scripts/sim-all.ts 800`):
 

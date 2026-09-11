@@ -37,7 +37,7 @@ export type Rite = 'mirror' | 'hush' | 'tithe' | 'moonlit' | 'bare' | 'ember' | 
 export const RITES: Record<Rite, { name: string; glyph: string; text: string }> = {
   mirror: { name: 'The Mirror', glyph: '⧖', text: 'What lands wrong reads right here, and what lands right reads wrong.' },
   hush: { name: 'The Hush', glyph: '…', text: 'No whispers here. Redraw, turn, or trust your eye.' },
-  tithe: { name: 'The Tithe', glyph: '⚱', text: 'Stepping in costs a drop of vitality, however the reading goes.' },
+  tithe: { name: 'The Tithe', glyph: '⚱', text: 'Stepping in costs a drop of vitality and lights one Clarity.' },
   moonlit: { name: 'Moonlit', glyph: '☾', text: 'The Wake deals one more.' },
   bare: { name: 'The Bare Table', glyph: '▭', text: 'Every seat deals one fewer.' },
   ember: { name: 'The Ember', glyph: '♨', text: 'Even a neutral reading mends one here.' },

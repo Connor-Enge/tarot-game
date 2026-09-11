@@ -38,9 +38,10 @@ describe('rites', () => {
     const plain = enter(4, 'crossing');
     expect(whisper(plain, 0)).not.toBe(plain);
   });
-  it('the Tithe takes a drop at the door, and never the last one', () => {
+  it('the Tithe takes a drop at the door and lights one Clarity, and never takes the last drop', () => {
     const run = enter(5, 'toll');
     expect(run.vitality).toBe(startRun(5).vitality - 1);
+    expect(run.clarity).toBe(7);
     const thin = startRun(6, { startingVitality: 1 });
     const map = thin.map.map((layer, i) => (i === 0 ? layer.map((n, j) => (j === 0 ? { ...n, sceneId: 'toll' } : n)) : layer));
     expect(chooseNode({ ...thin, map }, 0).vitality).toBe(1);

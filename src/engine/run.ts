@@ -378,9 +378,10 @@ export function chooseNode(run: RunState, index: number): RunState {
   const remade = terminal && run.deck.discard.length >= 12;
   const deckIn: DeckState = remade ? { draw: [...run.deck.draw, ...rng.shuffle(run.deck.discard)], discard: [] } : run.deck;
   const first = dealSeat({ ...run, node: index, deck: deckIn }, rng, deckIn, SLOT_IDS[0]);
-  // The Tithe: a drop of vitality at the door. It never kills; the reading may.
-  const tithe = SCENES[layer[index].sceneId].rite === 'tithe' ? Math.min(1, Math.max(0, run.vitality - 1)) : 0;
-  let next: RunState = { ...run, node: index, vitality: run.vitality - tithe, deck: first.deck, slots: [first.state], activeSlot: 0, freeRedrawUsed: false, echo: null, sceneSpent: { redraws: 0, whispers: 0 }, phase: { kind: 'reading' }, abyssRemade: remade || undefined, keepsakeShown: keepsakeShown(run, first.state) };
+  // The Tithe: a drop of vitality at the door, and a light for it. It never kills; the reading may.
+  const tithed = SCENES[layer[index].sceneId].rite === 'tithe';
+  const tithe = tithed ? Math.min(1, Math.max(0, run.vitality - 1)) : 0;
+  let next: RunState = { ...run, node: index, vitality: run.vitality - tithe, clarity: tithed ? clampClarity(run, run.clarity + 1) : run.clarity, deck: first.deck, slots: [first.state], activeSlot: 0, freeRedrawUsed: false, echo: null, sceneSpent: { redraws: 0, whispers: 0 }, phase: { kind: 'reading' }, abyssRemade: remade || undefined, keepsakeShown: keepsakeShown(run, first.state) };
   // A vow kept all the way down pays out as you step into the Abyss.
   if (SCENES[layer[index].sceneId].terminal && run.vow && !run.vow.broken && !run.vow.kept) {
     const reward = getVow(run.vow.id).reward;
