@@ -126,7 +126,15 @@ export function TitleScreen() {
                       <span className="descent-chip__glyph">{d.glyph}</span>
                     </>
                   ) : (
-                    '🔒'
+                    <>
+                      <CardBack variant={d.id === 'short' || d.id === 'standard' ? 'standard' : (d.id as BackVariant)} className="descent-chip__back descent-chip__back--sealed" />
+                      <svg viewBox="0 0 16 20" className="descent-chip__lock" aria-hidden>
+                        <path d="M4 9 V6.5 a4 4 0 0 1 8 0 V9" fill="none" stroke="#c9a24a" strokeWidth={1.4} strokeLinecap="round" />
+                        <rect x={2.5} y={9} width={11} height={9} rx={2} fill="#c9a24a" />
+                        <circle cx={8} cy={13} r={1.3} fill="#14101f" />
+                        <path d="M8 13 v2.4" stroke="#14101f" strokeWidth={1.2} strokeLinecap="round" />
+                      </svg>
+                    </>
                   )}
                 </button>
               );
