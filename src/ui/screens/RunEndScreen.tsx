@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getCard, getDescent, getWeather, KIND_GLYPH, SCENES, SIGILS, SLOT_IDS, SLOTS } from '../../engine';
+import { getCard, getDescent, getVow, getWeather, KIND_GLYPH, SCENES, SIGILS, SLOT_IDS, SLOTS } from '../../engine';
 import { shareText, useGame } from '../../store';
 import { Card } from '../components/Card';
 import { RelicArt } from '../art/relics';
@@ -59,6 +59,10 @@ function RunEndScreenInner() {
         journey: run.history.map((h) => TIER_MARK[h.resolution.tier]).join(''),
         road: run.history.map((h) => KIND_GLYPH[SCENES[h.sceneId].kind]).join(''),
         outcome: last.resolution.narration.at(-1),
+        notes: [
+          mode.kind === 'daily' && mode.weather ? `${getWeather(mode.weather).glyph} ${getWeather(mode.weather).name}` : '',
+          run.vow ? `${getVow(run.vow.id).glyph} ${getVow(run.vow.id).name} · ${run.vow.kept ? 'kept' : run.vow.broken ? 'broken' : 'held'}` : '',
+        ].filter(Boolean).join('   ·   ') || undefined,
       });
       if (!blob) return;
       const file = new File([blob], 'arcana-descent.png', { type: 'image/png' });

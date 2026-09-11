@@ -1052,3 +1052,13 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .book__scene { display: flex; align-items: center; gap: 10px; padding: 8px 0 4px; }
 .book__art { width: 84px; height: auto; flex: 0 0 84px; border-radius: 6px; background: hsl(var(--book-hue, 260) 28% 14%); opacity: 0.9; }
 .book__run { border-left: 1px solid rgba(214,178,94,0.25); padding-left: 10px; }
+
+/* --- map memory sheet: tier-tinted vignette --------------------------------- */
+.memory__art { border-radius: 10px; background: hsl(var(--book-hue, 260) 28% 13%); padding: 6px 0; margin-bottom: 6px; position: relative; overflow: hidden; }
+.memory__art::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: var(--memory-tint, transparent); }
+.sheet__body--triumph { --memory-tint: radial-gradient(80% 60% at 50% 100%, rgba(243,220,138,0.28), transparent 70%); }
+.sheet__body--boon { --memory-tint: radial-gradient(80% 60% at 50% 100%, rgba(214,178,94,0.18), transparent 70%); }
+.sheet__body--harm { --memory-tint: radial-gradient(80% 60% at 50% 100%, rgba(214,96,94,0.16), transparent 70%); }
+.sheet__body--calamity { --memory-tint: radial-gradient(80% 60% at 50% 100%, rgba(214,96,94,0.3), transparent 70%); }
+.sheet__body--triumph .sheet__title, .sheet__body--boon .sheet__title { color: var(--gold-2); }
+.sheet__body--calamity .sheet__title { color: #e0a39a; }

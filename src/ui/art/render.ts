@@ -21,6 +21,8 @@ export async function renderSpreadImage(opts: {
   road?: string;
   /** The last outcome line. */
   outcome?: string;
+  /** A small line under the footer: weather, vow. */
+  notes?: string;
 }): Promise<Blob | null> {
   const W = 1080;
   const H = 1350;
@@ -70,6 +72,7 @@ export async function renderSpreadImage(opts: {
     ${opts.road ? `<text x="${W / 2}" y="${H - 262}" font-size="30" letter-spacing="14" text-anchor="middle" fill="#8d86a3" font-family="Georgia, serif">${esc(opts.road)}</text>` : ''}
     ${opts.journey ? `<text x="${W / 2}" y="${H - 215}" font-size="34" letter-spacing="12" text-anchor="middle" fill="#d6b25e" font-family="Georgia, serif">${esc(opts.journey)}</text>` : ''}
     <text x="${W / 2}" y="${H - 150}" font-size="26" text-anchor="middle" fill="#8d86a3" font-family="Georgia, serif">${esc(opts.footer)}</text>
+    ${opts.notes ? `<text x="${W / 2}" y="${H - 188}" font-size="24" text-anchor="middle" fill="#d6b25e" font-family="Georgia, serif">${esc(opts.notes)}</text>` : ''}
     <text x="${W / 2}" y="${H - 90}" font-size="30" letter-spacing="4" text-anchor="middle" fill="#d6b25e" font-family="Georgia, serif">ARCANA DESCENT</text>
   </svg>`;
 

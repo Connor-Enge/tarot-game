@@ -227,8 +227,10 @@ function MapScreenInner() {
 
       {peek !== null && run.history[peek] && (
         <div className="sheet" role="dialog" aria-label="a scene remembered" onClick={() => setPeek(null)}>
-          <div className="sheet__body" onClick={(ev) => ev.stopPropagation()}>
-            <SceneArt id={run.history[peek].sceneId} className="scene__art" />
+          <div className={`sheet__body sheet__body--${run.history[peek].resolution.tier}`} onClick={(ev) => ev.stopPropagation()}>
+            <div className="memory__art" style={{ '--book-hue': SCENES[run.history[peek].sceneId].hue } as React.CSSProperties}>
+              <SceneArt id={run.history[peek].sceneId} className="scene__art" />
+            </div>
             <div className="sheet__title">
               <span className="muted small">{peek + 1} · </span>
               {SCENES[run.history[peek].sceneId].prompt}
