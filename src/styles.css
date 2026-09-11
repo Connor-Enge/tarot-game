@@ -607,3 +607,5 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .tab { padding: 10px 6px; font-size: 0.85rem; }
 @keyframes fool-hop { 0%, 100% { translate: 0 0; } 30% { translate: 0 -18px; } 50% { translate: 0 0; } 65% { translate: 0 -6px; } }
 .fan--fool .fan__card:nth-child(3) { animation: fool-hop 1.4s ease-out 800ms 1; }
+
+.input--area { font-size: 0.85rem; resize: vertical; min-height: 56px; word-break: break-all; }

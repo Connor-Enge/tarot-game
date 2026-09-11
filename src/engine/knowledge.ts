@@ -251,3 +251,28 @@ export function whisperWords(keywords: string[], seat: SlotId, count = 1): strin
   for (let i = 0; i < Math.min(count, keywords.length); i++) out.push(keywords[(start + i) % keywords.length]);
   return out;
 }
+
+// --- transfer --------------------------------------------------------------
+
+/** A compact, copyable form of the Codex: base64 of JSON with a prefix. */
+export function exportKnowledge(k: Knowledge): string {
+  const json = JSON.stringify(k);
+  const bytes = new TextEncoder().encode(json);
+  let bin = '';
+  for (const b of bytes) bin += String.fromCharCode(b);
+  return `ARCANA1.${btoa(bin)}`;
+}
+
+export function importKnowledge(text: string): Knowledge | null {
+  try {
+    const trimmed = text.trim();
+    if (!trimmed.startsWith('ARCANA1.')) return null;
+    const bin = atob(trimmed.slice('ARCANA1.'.length));
+    const bytes = Uint8Array.from(bin, (c) => c.charCodeAt(0));
+    const parsed = JSON.parse(new TextDecoder().decode(bytes)) as Knowledge;
+    if (parsed.version !== 1 || typeof parsed.cards !== 'object' || typeof parsed.runs !== 'number') return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+}

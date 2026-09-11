@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { CARDS, getCard, type Knowledge } from '../../engine';
+import { renderSkyImage } from '../art/render';
 
 /**
  * Every card as a star. Majors in the inner ring, each suit an arm of the
@@ -61,6 +62,7 @@ export function Constellation({ knowledge: k }: { knowledge: Knowledge }) {
           );
         })}
       </svg>
+      <SkyShare k={k} />
       <p className="muted small center">
         {focus
           ? `${getCard(focus).name} · read alongside ${focusSet.size - 1} other card${focusSet.size === 2 ? '' : 's'}`
@@ -69,5 +71,51 @@ export function Constellation({ knowledge: k }: { knowledge: Knowledge }) {
             : `${Object.values(k.cards).filter((c) => c.tier > 0).length} lit · ${links.length} bonds · tap a star`}
       </p>
     </div>
+  );
+}
+
+function SkyShare({ k }: { k: Knowledge }) {
+  const [url, setUrl] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const lit = Object.values(k.cards).filter((c) => c.tier > 0).length;
+  const share = async () => {
+    if (busy) return;
+    setBusy(true);
+    try {
+      const blob = await renderSkyImage(k, `${lit} of ${CARDS.length} lit · ${Object.keys(k.links ?? {}).length} bonds · ${k.runs} descents`);
+      if (!blob) return;
+      const file = new File([blob], 'arcana-sky.png', { type: 'image/png' });
+      if (navigator.canShare?.({ files: [file] })) {
+        await navigator.share({ files: [file] });
+        return;
+      }
+      setUrl(URL.createObjectURL(blob));
+    } catch {
+      /* dismissed */
+    } finally {
+      setBusy(false);
+    }
+  };
+  return (
+    <>
+      <button className="btn" onClick={share} disabled={busy}>
+        {busy ? '…' : 'Share the sky'}
+      </button>
+      {url && (
+        <div className="sheet" onClick={() => setUrl(null)} role="dialog" aria-label="sky image">
+          <div className="sheet__body" onClick={(ev) => ev.stopPropagation()}>
+            <img src={url} alt="Your sky" className="share-img" />
+            <div className="row">
+              <a className="btn" href={url} download="arcana-sky.png">
+                Download
+              </a>
+              <button className="btn" onClick={() => setUrl(null)}>
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

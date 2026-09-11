@@ -2,6 +2,8 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { getCard, SLOT_IDS, SLOTS, type DrawnCard } from '../../engine';
 import { ArtDefs, CardArt } from './CardArt';
+import { Constellation } from '../components/Constellation';
+import type { Knowledge } from '../../engine';
 
 /**
  * Rasterize a spread to a PNG blob for sharing. Builds a standalone SVG
@@ -109,4 +111,42 @@ function wrapText(text: string, x: number, y: number, size: number, maxChars: nu
 
 function esc(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+/** Rasterize the Codex sky to a square PNG. */
+export async function renderSkyImage(k: Knowledge, caption: string): Promise<Blob | null> {
+  const S = 1080;
+  const inner = renderToStaticMarkup(createElement(Constellation, { knowledge: k }));
+  const svgInner = inner.match(/<svg[^>]*>([\s\S]*?)<\/svg>/)?.[1] ?? '';
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${S}" height="${S}" viewBox="0 0 ${S} ${S}">
+    <defs><radialGradient id="skyBg" cx="0.5" cy="0.5" r="0.7"><stop offset="0" stop-color="#2a2450" /><stop offset="1" stop-color="#0b0a12" /></radialGradient></defs>
+    <rect width="${S}" height="${S}" fill="url(#skyBg)" />
+    <g transform="translate(90 120) scale(3)">${svgInner}</g>
+    <text x="${S / 2}" y="${S - 70}" font-size="30" text-anchor="middle" fill="#8d86a3" font-family="Georgia, serif">${esc(caption)}</text>
+    <text x="${S / 2}" y="70" font-size="30" letter-spacing="6" text-anchor="middle" fill="#d6b25e" font-family="Georgia, serif">ARCANA DESCENT · THE SKY</text>
+  </svg>`;
+  return svgToPng(svg, S, S);
+}
+
+async function svgToPng(svg: string, w: number, h: number): Promise<Blob | null> {
+  const img = new Image();
+  const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml;charset=utf-8' }));
+  try {
+    await new Promise<void>((res, rej) => {
+      img.onload = () => res();
+      img.onerror = () => rej(new Error('svg failed'));
+      img.src = url;
+    });
+    const canvas = document.createElement('canvas');
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return null;
+    ctx.drawImage(img, 0, 0);
+    return await new Promise<Blob | null>((res) => canvas.toBlob(res, 'image/png'));
+  } catch {
+    return null;
+  } finally {
+    URL.revokeObjectURL(url);
+  }
 }

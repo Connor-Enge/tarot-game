@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { exportKnowledge, importKnowledge } from '../../engine';
 import { useSettings } from '../../settings';
 import { useGame } from '../../store';
 
@@ -6,6 +7,10 @@ export function SettingsScreen() {
   const goto = useGame((s) => s.goto);
   const run = useGame((s) => s.run);
   const resetCodex = useGame((s) => s.resetCodex);
+  const importCodex = useGame((s) => s.importCodex);
+  const knowledge = useGame((s) => s.knowledge);
+  const [pasted, setPasted] = useState('');
+  const [note, setNote] = useState<string | null>(null);
   const newRun = useGame((s) => s.newRun);
   const { sound, reduceMotion, haptics, fixedTint, bigCards, set } = useSettings();
   const [confirmReset, setConfirmReset] = useState(false);
@@ -62,6 +67,45 @@ export function SettingsScreen() {
             </button>
           </div>
           <p className="muted small">Seeds appear in a finished run's share text. The same seed deals the same map and the same cards.</p>
+        </div>
+
+        <div className="field">
+          <span>Carry the Codex</span>
+          <div className="row">
+            <button
+              className="btn"
+              onClick={async () => {
+                const text = exportKnowledge(knowledge);
+                try {
+                  if (navigator.share) await navigator.share({ text });
+                  else await navigator.clipboard.writeText(text);
+                  setNote('Copied. Paste it on another device.');
+                } catch {
+                  setNote('Could not copy.');
+                }
+              }}
+            >
+              Copy
+            </button>
+            <button
+              className="btn"
+              disabled={!pasted.trim()}
+              onClick={() => {
+                const k = importKnowledge(pasted);
+                if (!k) {
+                  setNote('That is not a Codex.');
+                  return;
+                }
+                importCodex(k);
+                setPasted('');
+                setNote(`Brought over: ${Object.keys(k.cards).length} cards, ${k.runs} descents.`);
+              }}
+            >
+              Bring over
+            </button>
+          </div>
+          <textarea className="input input--area" placeholder="Paste a copied Codex here" value={pasted} onChange={(e) => setPasted(e.target.value)} rows={2} />
+          {note && <p className="muted small">{note}</p>}
         </div>
 
         <div className="field field--danger">

@@ -322,6 +322,11 @@ glimpsing the card, like a whisper. Tracks streak and totals.
 
 **Journal**: each scene shows Clarity spent (redraws, whispers).
 
+**Carry the Codex**: Settings can copy the whole Codex as a prefixed
+base64 blob and bring one over on another device. Import replaces.
+
+**Share the sky**: the constellation renders to a square PNG.
+
 Queued:
 - A weekly leaderboard line in the share text (best depth this week).
 - Localization scaffolding for the card and scene text.

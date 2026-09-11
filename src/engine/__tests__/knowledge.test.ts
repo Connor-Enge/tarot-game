@@ -125,3 +125,16 @@ describe('study', () => {
     expect(k.study).toEqual({ correct: 1, asked: 2, bestStreak: 1 });
   });
 });
+
+describe('transfer', () => {
+  it('round-trips through export/import and rejects junk', async () => {
+    const { exportKnowledge, importKnowledge } = await import('../knowledge');
+    let k = noteResolved(emptyKnowledge(), 'major-13', 'wake', true);
+    k = { ...k, runs: 4, deaths: 2 };
+    const text = exportKnowledge(k);
+    expect(text.startsWith('ARCANA1.')).toBe(true);
+    expect(importKnowledge(text)).toEqual(k);
+    expect(importKnowledge('hello')).toBeNull();
+    expect(importKnowledge('ARCANA1.!!!')).toBeNull();
+  });
+});

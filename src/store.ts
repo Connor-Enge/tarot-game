@@ -92,6 +92,7 @@ interface GameStore {
   endRun: () => void;
   openCodex: (cardId: string | null) => void;
   resetCodex: () => void;
+  importCodex: (k: Knowledge) => void;
 }
 
 function buzz(ms: number | number[]) {
@@ -325,6 +326,10 @@ export const useGame = create<GameStore>((set, get) => ({
   },
 
   resetCodex: () => set({ knowledge: resetKnowledge() }),
+  importCodex: (k) => {
+    saveKnowledge(k);
+    set({ knowledge: k });
+  },
 }));
 
 /** A shareable line for a finished run. Names the final spread; never the meanings. */
