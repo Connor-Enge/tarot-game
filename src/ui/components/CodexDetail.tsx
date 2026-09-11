@@ -9,6 +9,7 @@ export const TIER_LABEL: Record<Tier, string> = { 0: 'unread', 1: 'glimpsed', 2:
 /** Bottom sheet: everything the player has earned about one card. */
 export function CodexDetail({ cardId, onClose }: { cardId: string; onClose: () => void }) {
   const openCodex = useGame((s) => s.openCodex);
+  const setSignature = useGame((s) => s.setSignature);
   const k = useGame((s) => s.knowledge);
   const card = CARDS.find((c) => c.id === cardId)!;
   const e = k.cards[cardId];
@@ -64,6 +65,12 @@ export function CodexDetail({ cardId, onClose }: { cardId: string; onClose: () =
             <em>Reversed:</em> {card.meaning.reversed}
           </p>
         )}
+        {tier >= 3 && (
+          <button type="button" className={`chip chip--sig ${k.signature === cardId ? 'chip--on' : ''}`} onClick={() => setSignature(k.signature === cardId ? null : cardId)}>
+            {k.signature === cardId ? '✦ Your signature · release it' : '✦ Make it your signature'}
+          </button>
+        )}
+        {tier >= 3 && k.signature !== cardId && <p className="muted small center">A signature is dealt, upright, into the first Vessel of every free descent.</p>}
         {(witnessed(k, cardId, false) || witnessed(k, cardId, true)) && (
           <div className="sheet__omens">
             <div className="muted small">What you have seen it do</div>

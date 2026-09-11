@@ -50,6 +50,7 @@ import {
   SCENES,
   noteSigils,
   noteVow,
+  setSignature as setSignatureK,
   noteResolved,
   noteRunStarted,
   noteWhisper,
@@ -123,6 +124,7 @@ interface GameStore {
   confirm: () => void;
   redraw: () => void;
   turnLifted: () => void;
+  setSignature: (id: string | null) => void;
   whisperLifted: () => void;
   advance: () => void;
   acceptTrade: () => void;
@@ -277,7 +279,7 @@ export const useGame = create<GameStore>((set, get) => ({
     saveKnowledge(knowledge);
     startDrone();
     const depth = d.id === 'standard' ? (opts?.depth ?? get().depth) : 0;
-    const config = { ...d.config, ...(depth ? depthConfig(depth) : {}), ...(first ? { majorsFirst: true } : {}) };
+    const config = { ...d.config, ...(depth ? depthConfig(depth) : {}), ...(first ? { majorsFirst: true } : {}), signature: knowledge.signature };
     set({ run: startRun(seed, config), mode: { kind: 'free', descent: d.id, depth }, knowledge, screen: 'run', lifted: null, earned: [], firstDescent: first });
   },
 
@@ -374,6 +376,13 @@ export const useGame = create<GameStore>((set, get) => ({
     set({ run: next, lifted: null, knowledge });
   },
 
+  setSignature: (id) => {
+    const next = setSignatureK(get().knowledge, id);
+    if (next === get().knowledge) return;
+    saveKnowledge(next);
+    sfx.vow();
+    set({ knowledge: next });
+  },
   turnLifted: () => {
     const { run, lifted } = get();
     if (!run || lifted === null) return;

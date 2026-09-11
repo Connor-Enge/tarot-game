@@ -193,6 +193,11 @@ export function TitleScreen() {
       {Object.keys(k.dealt ?? {}).length >= CARDS.length / 2 && Object.keys(k.dealt ?? {}).length < CARDS.length && (
         <p className="muted small">{CARDS.length - Object.keys(k.dealt ?? {}).length} cards have never been dealt to you.</p>
       )}
+      {k.signature && (
+        <p className="muted small center signature-line">
+          <span className="card__sig card__sig--inline" aria-hidden>✦</span> Signature · {getCard(k.signature).name}
+        </p>
+      )}
       {k.last && (
         <div className={`last ${k.last.returned ? 'last--returned' : 'last--died'}`} aria-label="your last reading">
           <div className="muted small last__lead">

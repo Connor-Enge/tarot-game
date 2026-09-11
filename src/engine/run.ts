@@ -102,6 +102,8 @@ export interface RunState {
   traded?: boolean;
   /** True once the Stranger has appeared this run. They come once. */
   strangerMet?: boolean;
+  /** The reader's signature card, if any. */
+  signature?: string;
 }
 
 function rngOf(run: RunState): Rng {
@@ -160,8 +162,12 @@ export function startRun(seed: number, config: RunConfig = {}): RunState {
     const rest = deck.draw.filter((id) => !majors.includes(id));
     deck = { draw: [...rest, ...majors], discard: [] }; // top of deck = end of array
   }
+  if (config.signature && deck.draw.includes(config.signature)) {
+    deck = { draw: [...deck.draw.filter((id) => id !== config.signature), config.signature], discard: [] };
+  }
   return {
     seed,
+    signature: config.signature && deck.draw.includes(config.signature) ? config.signature : undefined,
     reversedChance: config.reversedChance ?? REVERSED_CHANCE,
     rngState: rng.state(),
     deck,
@@ -208,6 +214,8 @@ function dealSeat(run: RunState, rng: Rng, deck: DeckState, slot: SlotId): { dec
   if (slot === 'wake' && hasRelic(run, 'shard')) count++;
   const dealt = draw(deck, rng, count, run.reversedChance);
   let cards = applyMarks(run, dealt.cards);
+  // The signature lands upright the first time it is dealt, in the first Vessel.
+  if (run.signature && slot === 'vessel' && run.history.length === 0) cards = cards.map((c) => (c.cardId === run.signature ? { ...c, reversed: false } : c));
   let outDeck = dealt.deck;
   if (slot === 'vessel' && run.echo) {
     // Pull the echoed card back out of the discard so it is not duplicated.

@@ -468,6 +468,14 @@ Winds, Thin Air, Lantern Light, Salted Road, Fog, Heavy Air, Still Water,
 The Long Road). Everyone walking today's road walks in the same weather.
 The title names it before you commit; share text carries it.
 
+## Signature
+
+Once a card is mastered (tier 3), its Codex page offers to make it your
+signature. A signature is dealt, upright, into the first Vessel of every
+free descent. One at a time; release it whenever. Daily and Weekly roads
+ignore it so everyone walking them holds the same deck. It is the only
+meta-progression that changes a run, and it is gated on knowledge alone.
+
 ## Turn
 
 Once per scene, for one clarity, the lifted card can be turned over:

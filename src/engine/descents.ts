@@ -12,6 +12,8 @@ export interface RunConfig {
   reversedChance?: number;
   /** Relics held from the start. */
   startingRelics?: string[];
+  /** A mastered card the reader has made their own: dealt, upright, into the first Vessel. */
+  signature?: string;
   startingVitality?: number;
   startingClarity?: number;
   /** Put twelve shuffled Major Arcana on top of the deck. Used for a player's first descent. */

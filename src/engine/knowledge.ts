@@ -32,6 +32,8 @@ export interface Knowledge {
   seatsNamed: boolean;
   /** Named readings the player has produced at least once. */
   combos?: string[];
+  /** A mastered card the reader has made their own. */
+  signature?: string;
   /** Vows sworn: how often each was kept to the Abyss and how often broken. */
   vows?: Record<string, { kept: number; broken: number }>;
   /** Milestones earned. */
@@ -218,6 +220,17 @@ export function noteLast(k: Knowledge, cards: { cardId: string; reversed: boolea
 export function noteCombos(k: Knowledge, ids: string[]): Knowledge {
   if (ids.length === 0) return k;
   return { ...k, combos: Array.from(new Set([...(k.combos ?? []), ...ids])) };
+}
+
+/** Choose a signature card. Only a mastered card may be chosen; null releases it. */
+export function setSignature(k: Knowledge, id: string | null): Knowledge {
+  if (id === null) {
+    const { signature: _s, ...rest } = k;
+    void _s;
+    return rest;
+  }
+  if ((k.cards[id]?.tier ?? 0) < 3) return k;
+  return { ...k, signature: id };
 }
 
 /** Remember how a sworn vow ended. Unresolved vows (died before the Abyss, unbroken) count as neither. */

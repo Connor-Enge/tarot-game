@@ -46,6 +46,7 @@ export function Card({ cardId, reversed = false, faceDown = false, size = 'md', 
   const card = cardId ? getCard(cardId) : undefined;
   // The deck ages with you: cards read many times pick up wear.
   const resolved = useGame((s) => (cardId ? s.knowledge.cards[cardId]?.resolved ?? 0 : 0));
+  const isSignature = useGame((s) => !!cardId && s.knowledge.signature === cardId);
   const wear = faceDown || !card ? 0 : resolved >= 25 ? 3 : resolved >= 12 ? 2 : resolved >= 5 ? 1 : 0;
   const cls = [
     'card',
@@ -87,6 +88,7 @@ export function Card({ cardId, reversed = false, faceDown = false, size = 'md', 
         {faceDown || !card ? <CardBack className="card__svg" variant={variant} /> : <CardArt cardId={card.id} className="card__svg" texture={size === 'lg' || size === 'md'} />}
         {mark === 'scarred' && <div className="card__scar" aria-hidden />}
         {wear > 0 && <div className="card__wear" aria-hidden />}
+        {isSignature && !faceDown && <span className="card__sig" aria-hidden>✦</span>}
       </div>
       {whisper && <div className="card__whisper">{whisper}</div>}
       {echo && !whisper && <div className="card__whisper card__whisper--echo">echo</div>}
