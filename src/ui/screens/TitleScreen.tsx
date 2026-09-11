@@ -3,6 +3,7 @@ import { canOfferInstall, useInstall } from '../../install';
 import { HowToPlay } from '../components/HowToPlay';
 import { CARDS, dailySeed, dailyStreakAlive, dailyWeather, daylight, moonName, moonPhase, weeklySeed, weeklyWeather, DEPTHS, DESCENTS, getCard, getDescent, maxDepthUnlocked } from '../../engine';
 import { CardBack, type BackVariant } from '../art/CardArt';
+import { WeatherArt } from '../art/weather';
 import { StreakFlames } from '../art/flames';
 import { TitleSky } from '../art/sky';
 import { ReaderMark } from '../components/ReaderMark';
@@ -204,6 +205,7 @@ export function TitleScreen() {
             Weekly <span className="weather__glyph">{weekWeather.glyph}</span>
           </button>
         </div>
+        <WeatherArt id={weather.id} className="weather__art" />
         <p className="weather muted small center">
           Today · <span className="weather__name">{weather.glyph} {weather.name}</span> · {weather.text}
           <br />
