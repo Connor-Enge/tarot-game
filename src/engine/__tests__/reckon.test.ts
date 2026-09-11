@@ -15,8 +15,15 @@ describe('the reckoning', () => {
       for (const t of r[i].against) expect(scene.affinity[r[i].slot][t]).toBeLessThan(0);
       const text = reckoningText(r[i], res.slots[i].card.name);
       expect(text).toContain(res.slots[i].card.name);
-      expect(text.startsWith('This seat wanted')).toBe(true);
+      expect(text.endsWith('.')).toBe(true);
     }
+    // Each position tells it in its own terms.
+    const texts = r.map((x, i) => reckoningText(x, res.slots[i].card.name));
+    expect(texts[0].startsWith('The situation called for')).toBe(true);
+    expect(texts[1].startsWith('What stood in the way')).toBe(true);
+    expect(texts[2].startsWith('What you might have missed')).toBe(true);
+    expect(texts[3].startsWith('The best course was')).toBe(true);
+    for (let i = 0; i < 4; i++) expect(/It (served you|cost you|changed little)\.$/.test(texts[i])).toBe(true);
     expect(r[1].reversed).toBe(true);
     expect(reckoningText(r[1], 'The Tower')).toContain('lay reversed');
   });

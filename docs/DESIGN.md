@@ -53,9 +53,13 @@ always (number and role); the seats' own names still wait for
 `seatsNamed`.
 
 **The reckoning** (also the owner's request: the story was too vague):
-when a reading resolves, each seat's omen line is followed by a plain
-sentence, "This seat wanted patience and wisdom, feared action. The
-Knight of Wands brought action, and lay reversed." with the seat's
+when a reading resolves, each seat's omen line is followed by plain
+sentences in the position's own terms: "The situation called for
+patience and wisdom, and could not bear action. The Knight of Wands
+brought action, and lay reversed. It cost you." (the Challenge opens
+"What stood in the way answered to…", the Hidden Insight "What you
+might have missed here was…", the Guidance "The best course was…"),
+with the seat's
 score in a chip, and the outcome line is followed by the tally: "the
 four seats −3, named readings +1: −2 in all, which reads as harm." The
 end screen's final spread carries the same lines. This names only the

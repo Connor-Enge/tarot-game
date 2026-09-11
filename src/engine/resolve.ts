@@ -380,13 +380,22 @@ export function reckon(scene: Scene, resolution: Resolution, marks: Marks = {}):
 
 const list = (tags: readonly string[]) => (tags.length === 0 ? '' : tags.length === 1 ? tags[0] : `${tags.slice(0, -1).join(', ')} and ${tags[tags.length - 1]}`);
 
-/** One plain sentence per seat: what it wanted, what the card brought. */
+/** How each position opens its sentence: the same facts, told in the position's own terms. */
+const OPENER: Record<SlotId, (want: string, fear: string) => string> = {
+  vessel: (want, fear) => `The situation called for ${want}${fear ? `, and could not bear ${fear}` : ''}.`,
+  threshold: (want, fear) => `What stood in the way answered to ${want}${fear ? `, and turned worse with ${fear}` : ''}.`,
+  hand: (want, fear) => `What you might have missed here was ${want}${fear ? `; ${fear} would have blinded you` : ''}.`,
+  wake: (want, fear) => `The best course was ${want}${fear ? `, and the worst ${fear}` : ''}.`,
+};
+
+/** Two plain sentences per seat, in the position's own terms: what it asked for, and what the card brought. */
 export function reckoningText(r: SlotReckoning, cardName: string): string {
-  const want = r.wanted.length ? `wanted ${list(r.wanted)}` : 'wanted nothing in particular';
-  const fear = r.feared.length ? `, feared ${list(r.feared)}` : '';
+  const want = r.wanted.length ? list(r.wanted) : 'nothing in particular';
+  const fear = r.feared.length ? list(r.feared) : '';
   const brought = r.met.length && r.against.length ? `brought ${list(r.met)}, but also ${list(r.against)}` : r.met.length ? `brought ${list(r.met)}` : r.against.length ? `brought ${list(r.against)}` : 'brought none of it';
   const extra = [r.reversed ? 'lay reversed' : '', r.charged ? 'was charged' : ''].filter(Boolean).join(' and ');
-  return `This seat ${want}${fear}. ${cardName} ${brought}${extra ? `, and ${extra}` : ''}.`;
+  const verdict = r.verdict === 'helped' ? 'It served you.' : r.verdict === 'hurt' ? 'It cost you.' : 'It changed little.';
+  return `${OPENER[r.slot](want, fear)} ${cardName} ${brought}${extra ? `, and ${extra}` : ''}. ${verdict}`;
 }
 
 /** The tally: fit, named readings, the total, and the tier it made. */
