@@ -653,6 +653,11 @@ scene and the played cards to the Table in the Codex, so the rest of the
 hand can be tried without cost.
 
 Engine: `HistoryEntry.passed`, `engine/road.ts` (`roadNotTaken`, `roadText`).
+The Codex keeps a running record (`knowledge.hand`): seats with a choice,
+how often the best card was played, the regret left behind, scenes played
+clean. The ledger shows it once eight seats are in. Two sigils hang on it:
+Sure Hand (a return with every seat best-played) and Steady Hand (a hundred
+best cards played).
 
 ## The Long Night
 
@@ -847,7 +852,7 @@ identity, not power, which is the point.
   omen is distinct.
 - **Scenes**: 30 exist (29 plus the Abyss), which was the target; more are welcome. Latest: the mill, the drowned chapel, the hunt.
 - **Named readings**: 34. Each is a memorable line, never a definition.
-- **Relics**: 12 boons, 8 curses. **Vows**: 7. **Weathers**: 14. **Trades**: 6. **Sigils**: 31. **Rites**: 7.
+- **Relics**: 12 boons, 8 curses. **Vows**: 7. **Weathers**: 14. **Trades**: 6. **Sigils**: 33. **Rites**: 7.
 - **Combos**: 37 named readings exist (three of them readings of tone: four upright, four reversed, one suit). Their banners are coloured by what they are: pale gold for four upright, violet for four reversed, the suit's colour for one suit, and a dark red ribbon for any named reading that drags the total down. This is the richest vein for "the
   combined meaning" and should keep growing with named, memorable results.
 - **Art**: all 78 faces are procedural SVG (`src/ui/art/`). Majors are

@@ -52,6 +52,8 @@ export interface Knowledge {
   keepsake?: string;
   /** Study: correct answers and best streak. */
   study?: { correct: number; asked: number; bestStreak: number };
+  /** The hand: seats with a choice, how often the best card was played, what was left behind, scenes played clean. */
+  hand?: { seats: number; best: number; regret: number; clean: number };
   /** Omens witnessed, in order. Capped. */
   omenLog?: { run: number; scene: string; seat: SlotId; cardId: string; reversed: boolean; tier: string }[];
   /** The final spread of the most recent run, for the title screen. */
@@ -215,6 +217,15 @@ export function takeKeepsake(k: Knowledge): { knowledge: Knowledge; keepsake?: s
   if (!k.keepsake) return { knowledge: k };
   const { keepsake, ...rest } = k;
   return { knowledge: rest, keepsake };
+}
+
+/** A scene was played: how the hand was read, seat by seat. */
+export function noteHand(k: Knowledge, road: { seats: { passed: unknown[]; better: unknown | null }[]; regret: number }): Knowledge {
+  const cur = k.hand ?? { seats: 0, best: 0, regret: 0, clean: 0 };
+  const withChoice = road.seats.filter((s) => s.passed.length > 0);
+  if (withChoice.length === 0) return k;
+  const best = withChoice.filter((s) => !s.better).length;
+  return { ...k, hand: { seats: cur.seats + withChoice.length, best: cur.best + best, regret: cur.regret + road.regret, clean: cur.clean + (road.regret === 0 ? 1 : 0) } };
 }
 
 export function noteStudyResult(k: Knowledge, correct: boolean, streak: number): Knowledge {

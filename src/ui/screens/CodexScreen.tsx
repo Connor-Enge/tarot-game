@@ -326,6 +326,10 @@ function buildLedger(k: ReturnType<typeof useGame.getState>['knowledge']): [stri
     return best;
   })();
   if (streak >= 2) rows.push(['Longest run of luck', `${streak} good readings in a row`]);
+  if (k.hand && k.hand.seats >= 8) {
+    const pct = Math.round((100 * k.hand.best) / k.hand.seats);
+    rows.push(['The hand', `best card ${pct}% of seats · ${k.hand.clean} scene${k.hand.clean === 1 ? '' : 's'} played clean`]);
+  }
   const vows = Object.entries(k.vows ?? {});
   if (vows.length) {
     const kept = vows.reduce((a, [, v]) => a + v.kept, 0);

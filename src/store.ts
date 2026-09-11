@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { CARDS, setKnownCards, scoreSlot, currentScene, hasRelic, type TableLay } from './engine';
+import { CARDS, setKnownCards, scoreSlot, currentScene, hasRelic, roadNotTaken, noteHand, type TableLay } from './engine';
 setKnownCards(CARDS.map((c) => c.id));
 import { sfx, startDrone, stopDrone } from './audio';
 import { clearRun, loadRun, saveRun } from './persist';
@@ -185,6 +185,8 @@ function learn(k: Knowledge, run: RunState, mode: RunMode): { knowledge: Knowled
     next,
     SLOT_IDS.map((s) => ({ scene: last.sceneId, seat: s, cardId: last.reading[s].cardId, reversed: last.reading[s].reversed, tier })),
   );
+  const road = roadNotTaken(SCENES[last.sceneId], last, run.marks, hasRelic(run, 'ring') ? 2 : undefined);
+  if (road) next = noteHand(next, road);
   let earned: string[] = [];
   if (run.phase.kind === 'dead' || run.phase.kind === 'ascended') {
     const returned = run.phase.kind === 'ascended';

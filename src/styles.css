@@ -2081,3 +2081,28 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .road__score { font-size: 0.62rem; padding: 0 5px; border-radius: 999px; border: 1px solid rgba(233,228,242,0.2); color: var(--muted); font-variant-numeric: tabular-nums; line-height: 1.4; }
 .road__score--up { color: var(--gold-2); border-color: rgba(214,178,94,0.5); }
 .road__score--down { color: #f0a09e; border-color: rgba(214,96,94,0.5); }
+
+/* the seat's verdict, made of light: gold motes rise when it served, a red fracture when it cost */
+.seat--helped .seat__card::before, .seat--hurt .seat__card::before {
+  content: ''; position: absolute; inset: -14px -10px; pointer-events: none; border-radius: 14px; z-index: 2;
+}
+.seat--helped .seat__card::before {
+  background:
+    radial-gradient(circle at 18% 90%, rgba(243,220,138,0.95) 0 1.6px, transparent 2.4px),
+    radial-gradient(circle at 42% 96%, rgba(243,220,138,0.85) 0 1.2px, transparent 2px),
+    radial-gradient(circle at 66% 92%, rgba(255,240,190,0.95) 0 1.8px, transparent 2.6px),
+    radial-gradient(circle at 84% 98%, rgba(243,220,138,0.8) 0 1.2px, transparent 2px),
+    radial-gradient(circle at 30% 70%, rgba(243,220,138,0.7) 0 1px, transparent 1.8px),
+    radial-gradient(circle at 74% 74%, rgba(243,220,138,0.7) 0 1.3px, transparent 2px);
+  animation: motes-rise 1100ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+@keyframes motes-rise { 0% { opacity: 0; transform: translateY(6px) scale(0.96); } 20% { opacity: 1; } 100% { opacity: 0; transform: translateY(-38px) scale(1.06); } }
+.seat--hurt .seat__card::before {
+  background:
+    linear-gradient(115deg, transparent 47.5%, rgba(214,96,94,0.85) 48%, rgba(214,96,94,0.85) 49%, transparent 49.5%),
+    linear-gradient(62deg, transparent 58%, rgba(214,96,94,0.7) 58.5%, rgba(214,96,94,0.7) 59.2%, transparent 59.7%),
+    linear-gradient(150deg, transparent 33%, rgba(240,160,158,0.6) 33.4%, rgba(240,160,158,0.6) 34%, transparent 34.4%);
+  animation: fracture 900ms ease-out both;
+}
+@keyframes fracture { 0% { opacity: 0; clip-path: inset(50% 0 50% 0); } 30% { opacity: 1; clip-path: inset(0 0 0 0); } 100% { opacity: 0; clip-path: inset(0 0 0 0); transform: translateY(2px); } }
+.reduce-motion .seat--helped .seat__card::before, .reduce-motion .seat--hurt .seat__card::before { animation: none; opacity: 0; }
