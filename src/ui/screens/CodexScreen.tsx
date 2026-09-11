@@ -74,8 +74,22 @@ export function CodexScreen() {
       {view === 'sky' && <Constellation knowledge={k} />}
       {view === 'book' && <OmenBook onOpen={openCodex} />}
       {view === 'cards' && (<>
-      <div className="progress" aria-hidden>
-        <div className="progress__bar" style={{ width: `${(100 * knownCount) / CARDS.length}%` }} />
+      <div className="suits" aria-label="known cards by suit">
+        {([['major', 'Majors'], ['wands', 'Wands'], ['cups', 'Cups'], ['swords', 'Swords'], ['pentacles', 'Pentacles']] as const).map(([suit, label]) => {
+          const all = CARDS.filter((c) => (suit === 'major' ? c.arcana === 'major' : c.suit === suit));
+          const known = all.filter((c) => (k.cards[c.id]?.tier ?? 0) > 0).length;
+          const mastered = all.filter((c) => (k.cards[c.id]?.tier ?? 0) >= 3).length;
+          return (
+            <div key={suit} className={`suits__row suits__row--${suit}`}>
+              <span className="suits__label">{label}</span>
+              <div className="progress">
+                <div className="progress__bar" style={{ width: `${(100 * known) / all.length}%` }} />
+                <div className="progress__bar progress__bar--deep" style={{ width: `${(100 * mastered) / all.length}%` }} />
+              </div>
+              <span className="suits__count">{known}/{all.length}</span>
+            </div>
+          );
+        })}
       </div>
       <div className="legend" aria-label="tiers">
         <span><i className="codex__dot--t1" /> glimpsed</span>

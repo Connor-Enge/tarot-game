@@ -82,6 +82,16 @@ function RunEndScreenInner() {
           <span className="narration__death"> It cost only a little. It was the last little you had.</span>
         )}
       </p>
+      {(() => {
+        const wake = last.reading.wake;
+        const wakeCard = getCard(wake.cardId);
+        return (
+          <p className="last-words center rise" style={{ animationDelay: '500ms' }}>
+            <span className="muted small">{dead ? 'The Wake, as you fell' : 'The Wake, as you rose'}</span>
+            <em>☾ {wake.reversed ? wakeCard.omen.reversed : wakeCard.omen.upright}</em>
+          </p>
+        );
+      })()}
       {finest && <p className="finest center">Your finest descent yet.</p>}
       {mode.kind === 'daily' && <p className="muted small center">Daily descent · {mode.label}</p>}
       {mode.kind === 'weekly' && <p className="muted small center">Weekly descent · {mode.label}</p>}
