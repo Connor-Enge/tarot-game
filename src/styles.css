@@ -1566,3 +1566,23 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .skykey__swatch--pick { transform: translateY(-4px); color: var(--gold-2); }
 .skykey__swatch--pick .skykey__sky { box-shadow: 0 6px 14px rgba(0,0,0,0.6), 0 0 0 1.5px var(--gold-2); }
 .skykey__cap { margin: 0; min-height: 2.4em; }
+
+/* --- the Abyss deals from what you have read: the read cards rise once ------ */
+.abyss-rise { position: absolute; inset: -40px 0 0; pointer-events: none; z-index: 1; overflow: visible; }
+.abyss-rise__card {
+  position: absolute; bottom: -10%; width: 26px; height: 42px; border-radius: 3px; opacity: 0;
+  left: calc(6% + var(--i) * 11%); filter: drop-shadow(0 0 8px rgba(214,178,94,0.5));
+  animation: abyss-rise 2400ms cubic-bezier(0.2, 0.7, 0.3, 1) both; animation-delay: calc(var(--i) * 110ms);
+}
+.abyss-rise__card:nth-child(1) { --i: 0; } .abyss-rise__card:nth-child(2) { --i: 1; } .abyss-rise__card:nth-child(3) { --i: 2; }
+.abyss-rise__card:nth-child(4) { --i: 3; } .abyss-rise__card:nth-child(5) { --i: 4; } .abyss-rise__card:nth-child(6) { --i: 5; }
+.abyss-rise__card:nth-child(7) { --i: 6; } .abyss-rise__card:nth-child(8) { --i: 7; } .abyss-rise__card:nth-child(9) { --i: 8; }
+@keyframes abyss-rise {
+  0% { opacity: 0; transform: translateY(0) rotate(calc(var(--i) * 7deg - 28deg)) scale(0.9); }
+  20% { opacity: 0.9; }
+  70% { opacity: 0.6; }
+  100% { opacity: 0; transform: translateY(-190px) rotate(calc(var(--i) * -5deg + 20deg)) scale(0.7); }
+}
+.scene__remade { margin: 2px 0 0; color: var(--gold); animation: fade-in 900ms ease 1400ms both; }
+.reduce-motion .abyss-rise { display: none; }
+.reduce-motion .scene__remade { animation: none; }

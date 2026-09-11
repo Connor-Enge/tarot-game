@@ -7,6 +7,7 @@ const ORACLE = import.meta.env.DEV && typeof location !== 'undefined' && locatio
 import { buzz, useGame } from '../../store';
 import { Card } from '../components/Card';
 import { DeckStack } from '../art/deck';
+import { CardBack } from '../art/CardArt';
 import { canTurn, getVow, TURN_COST } from '../../engine';
 import { AbyssRings } from '../art/flourish';
 import { VowArt } from '../art/relics';
@@ -111,6 +112,13 @@ function ReadingScreenInner() {
 
       <section className="spread" aria-label="the spread">
         {scene.terminal && <AbyssRings />}
+        {scene.terminal && run.abyssRemade && run.activeSlot === 0 && run.slots[0]?.chosen === null && (
+          <div className="abyss-rise" aria-hidden key={`rise-${run.history.length}`}>
+            {Array.from({ length: 9 }, (_, i) => (
+              <CardBack key={i} className="abyss-rise__card" variant="well" />
+            ))}
+          </div>
+        )}
         {SLOT_IDS.map((id, i) => {
           const slot = run.slots[i];
           const chosen = slot && slot.chosen !== null ? slot.candidates[slot.chosen] : undefined;
