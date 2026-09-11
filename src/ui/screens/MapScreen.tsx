@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { actOfLayer, canCut, canTakeVow, currentAct, foretellCost, getVow, KIND_GLYPH, SCENES, visitedNodes, vowOffer } from '../../engine';
+import { actOfLayer, canCut, canTakeVow, currentAct, cycleLength, foretellCost, getVow, KIND_GLYPH, SCENES, visitedNodes, vowOffer, wellTurn } from '../../engine';
 import { ActBanner } from '../art/banners';
 import { RoadStrip } from '../art/road';
 import { VowArt } from '../art/relics';
@@ -35,9 +35,16 @@ function MapScreenInner() {
   const visitedIds = new Set(visited.map((n) => n.id));
   const act = currentAct(run);
   const mapRef = useRef<HTMLElement>(null);
+  const inWell = run.well !== undefined;
+  const cycle = cycleLength(run);
+  const cycleLayer = inWell ? run.layer % cycle : run.layer;
+  const turn = wellTurn(run);
   // A banner when a new act opens under you: the first map of act two or later, before choosing.
+  // In the Well, also when a deeper map opens after an Abyss.
   const actStart = run.actLayers.slice(0, act - 1).reduce((a, b) => a + b, 0);
-  const newAct = act > 1 && run.layer === actStart && run.node === null;
+  const newWell = inWell && turn > 1 && cycleLayer === 0 && run.node === null;
+  const newAct = (act > 1 && cycleLayer === actStart && run.node === null) || newWell;
+  const bannerName = newWell ? `The Well · ${toRoman(turn)}` : ACT_NAMES[act] ?? `Act ${act}`;
   const [banner, setBanner] = useState<number | null>(newAct ? act : null);
   // Keys: 1-3 choose a door (or foretell it while foretelling), arrows move between doors.
   useEffect(() => {
@@ -114,7 +121,7 @@ function MapScreenInner() {
       {banner !== null && (
         <div className="act-banner" role="status" onClick={() => setBanner(null)}>
           <div className="act-banner__plate">
-            <ActBanner act={banner} name={ACT_NAMES[banner] ?? `Act ${banner}`} />
+            <ActBanner act={banner} name={bannerName} />
             {run.history.length > 0 && (
               <div className="act-banner__road">
                 <RoadStrip run={run} />
@@ -125,7 +132,7 @@ function MapScreenInner() {
         </div>
       )}
       <header className="topbar">
-        <span className="muted small">Act {toRoman(act)}</span>
+        <span className="muted small">{inWell ? `Well ${toRoman(turn)} · ` : ''}Act {toRoman(act)}</span>
         <Stats vitality={run.vitality} clarity={run.clarity} />
       </header>
 
@@ -234,10 +241,13 @@ function MapScreenInner() {
         {run.map.map((layer, li) => {
           const isCurrent = li === run.layer;
           const isPast = li < run.layer;
-          const actStart = li > 0 && actOfLayer(li, run.actLayers) !== actOfLayer(li - 1, run.actLayers);
+          const cl = inWell ? li % cycle : li;
+          const actHere = actOfLayer(cl, run.actLayers);
+          const actStart = li > 0 && (cl === 0 || actHere !== actOfLayer(cl - 1, run.actLayers));
+          const label = inWell && cl === 0 ? `The Well · ${toRoman(Math.floor(li / cycle) + 1)}` : ACT_NAMES[actHere] ?? `Act ${actHere}`;
           return (
             <div key={li} className={`map__layer ${isCurrent ? 'map__layer--current' : ''} ${isPast ? 'map__layer--past' : ''} ${actStart ? 'map__layer--act' : ''}`}>
-              {(li === 0 || actStart) && <div className="map__act">{ACT_NAMES[actOfLayer(li, run.actLayers)] ?? `Act ${actOfLayer(li, run.actLayers)}`}</div>}
+              {(li === 0 || actStart) && <div className="map__act">{label}</div>}
               {layer.map((node, ni) => {
                 const wasHere = visitedIds.has(node.id);
                 const historyIndex = wasHere ? visited.findIndex((v) => v.id === node.id) : -1;
@@ -278,7 +288,7 @@ function MapScreenInner() {
 }
 
 function toRoman(n: number): string {
-  return ['', 'I', 'II', 'III', 'IV'][n] ?? String(n);
+  return ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'][n] ?? String(n);
 }
 
 /** Screens can linger for a crossfade after the run ends; render nothing without a run. */

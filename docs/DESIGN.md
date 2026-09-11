@@ -477,6 +477,18 @@ The title names it before you commit; share text carries it. The Weekly
 has weather too, from the week's seed, on top of its longer road and its
 two extra hearts.
 
+## The Well
+
+An endless descent, unlocked by three returns. The map is the usual two
+acts and an Abyss, but surviving the Abyss does not bring you up: a
+deeper map is appended under it, you take one breath (+2 vitality), and
+every scene from then on reads at stakes one higher than it would. The
+second Abyss adds another. There is no return and no ascension record;
+the score is depth, kept in the Well's own record. Node ids and layers
+continue past the first map so the memory sheet, road strip, and journal
+work unchanged. The act banner names each turn of the Well. A sigil marks
+passing two Abysses.
+
 ## The almanac
 
 Every daily descent writes one line into the almanac, keyed by its date:

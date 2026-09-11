@@ -37,6 +37,7 @@ export const SIGILS: Sigil[] = [
   { id: 'ten-deaths', glyph: '⚰', name: 'Regular', text: 'Die ten times.', when: (_r, k) => k.deaths >= 10 },
   { id: 'remembered', glyph: '☷', name: 'Remembered', text: 'Answer ten Study questions correctly.', when: (_r, k) => (k.study?.correct ?? 0) >= 10 },
   { id: 'bound', glyph: '✶', name: 'Bound', text: 'Join a hundred pairs of cards in the sky.', when: (_r, k) => Object.keys(k.links ?? {}).length >= 100 },
+  { id: 'well-two', glyph: '⨀', name: 'Deeper Still', text: 'Pass two Abysses in the Well.', when: (r) => (r.well ?? 0) >= 2 },
   { id: 'all-descents', glyph: '◉', name: 'Every Way Down', text: 'Return by every descent.', when: (_r, k) => ['standard', 'arcana', 'inverted', 'fogbound', 'thin'].every((d) => (k.records?.[d]?.returns ?? 0) >= 1) },
 ];
 

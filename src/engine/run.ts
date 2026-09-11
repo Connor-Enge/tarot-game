@@ -98,6 +98,8 @@ export interface RunState {
   history: HistoryEntry[];
   /** A vow taken before the first scene, if any. `kept` is set on entering the Abyss unbroken. */
   vow?: { id: string; broken: boolean; kept?: boolean };
+  /** The Well: how many Abysses have opened onto a deeper map. Absent outside the Well. */
+  well?: number;
   /** True once the Stranger's trade has been taken this run. */
   traded?: boolean;
   /** True once the Stranger has appeared this run. They come once. */
@@ -141,7 +143,7 @@ function clampClarity(run: RunState, clarity: number): number {
 }
 
 export function currentAct(run: RunState): number {
-  return actOfLayer(run.layer, run.actLayers);
+  return actOfLayer(run.well === undefined ? run.layer : run.layer % cycleLength(run), run.actLayers);
 }
 
 export function sceneNumber(run: RunState): number {
@@ -192,7 +194,18 @@ export function startRun(seed: number, config: RunConfig = {}): RunState {
     activeSlot: 0,
     phase: { kind: 'map' },
     history: [],
+    well: config.endless ? 0 : undefined,
   };
+}
+
+/** Layers in one full descent (all acts and the Abyss). In the Well the map repeats in cycles of this length. */
+export function cycleLength(run: RunState): number {
+  return run.actLayers.reduce((a, b) => a + b, 0) + 1;
+}
+
+/** In the Well, which descent this is (1 for the first). Elsewhere 1. */
+export function wellTurn(run: RunState): number {
+  return (run.well ?? 0) + 1;
 }
 
 /** Marks override orientation: charged cards land upright, scarred cards land reversed. */
@@ -420,7 +433,8 @@ function resolve(run: RunState): RunState {
   const reading = readingOf(run);
   if (!reading) return run;
   const baseScene = currentScene(run);
-  const scene = baseScene.terminal && run.mods.abyssStakes ? { ...baseScene, stakes: run.mods.abyssStakes } : baseScene;
+  const baseStakes = baseScene.terminal && run.mods.abyssStakes ? run.mods.abyssStakes : baseScene.stakes;
+  const scene = { ...baseScene, stakes: baseStakes + (run.well ?? 0) };
   const resolution = resolveReading(scene, reading, run.marks, {
     chargedBonus: hasRelic(run, 'ring') ? 2 : undefined,
     extraNeutralCost: (hasRelic(run, 'weight') ? 1 : 0) + run.mods.extraNeutralCost || undefined,
@@ -479,6 +493,12 @@ function resolve(run: RunState): RunState {
   }
   const base = withRng({ ...gained, deck, history, vitality, clarity, marks, relics, echo, vow, strangerMet: run.strangerMet || !!trade }, rng);
   if (vitality <= 0) return { ...base, vitality: 0, phase: { kind: 'dead', resolution } };
+  if (scene.terminal && run.well !== undefined) {
+    // The Well: no surface. A deeper map opens under the Abyss, and a breath comes with it.
+    const offset = run.map.length;
+    const deeper = buildMap(rng, run.actLayers).map((layer) => layer.map((n) => ({ ...n, id: `${n.layer + offset}-${n.id.split('-')[1]}`, layer: n.layer + offset })));
+    return withRng({ ...base, map: [...run.map, ...deeper], well: run.well + 1, vitality: vitality + 2, phase: { kind: 'resolved', resolution } }, rng);
+  }
   if (scene.terminal) return { ...base, phase: { kind: 'ascended', resolution } };
   return { ...base, phase: { kind: 'resolved', resolution, offer, cursed, found, trade } };
 }

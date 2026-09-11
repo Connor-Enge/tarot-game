@@ -127,6 +127,7 @@ function RunEndScreenInner() {
           </p>
         );
       })()}
+      {run.well !== undefined && run.well > 0 && <p className="muted small center">The Well · {run.well} {run.well === 1 ? 'Abyss' : 'Abysses'} passed · {run.history.length} scenes down</p>}
       {finest && <p className="finest center">Your finest descent yet.</p>}
       {mode.kind === 'daily' && <p className="muted small center">Daily descent · {mode.label}{mode.weather ? ` · ${getWeather(mode.weather).glyph} ${getWeather(mode.weather).name}` : ''}</p>}
       {mode.kind === 'weekly' && <p className="muted small center">Weekly descent · {mode.label}{mode.weather ? ` · ${getWeather(mode.weather).glyph} ${getWeather(mode.weather).name}` : ''}</p>}
@@ -201,6 +202,7 @@ function RunEndScreenInner() {
           </div>
           <div className="summary rise">
             <div className="summary__cell"><span className="summary__n">{run.history.length}</span><span className="muted small">scenes</span></div>
+            {run.well !== undefined && <div className="summary__cell"><span className="summary__n">{run.well}</span><span className="muted small">{run.well === 1 ? 'abyss' : 'abysses'}</span></div>}
             <div className="summary__cell"><span className="summary__n">{run.history.filter((h) => h.resolution.tier === 'triumph' || h.resolution.tier === 'boon').length}</span><span className="muted small">good</span></div>
             <div className="summary__cell"><span className="summary__n">{run.history.filter((h) => h.resolution.tier === 'harm' || h.resolution.tier === 'calamity').length}</span><span className="muted small">bad</span></div>
             <div className="summary__cell"><span className="summary__n">{Object.values(run.marks).filter((m) => m === 'charged').length}</span><span className="muted small">charged</span></div>

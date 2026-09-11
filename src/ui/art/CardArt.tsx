@@ -94,6 +94,10 @@ export function ArtDefs() {
           <stop offset="0" stopColor="#2f5a4a" />
           <stop offset="1" stopColor="#0a1a14" />
         </radialGradient>
+        <radialGradient id="backGlow-well" cx="0.5" cy="0.5" r="0.6">
+          <stop offset="0" stopColor="#1a1a2e" />
+          <stop offset="1" stopColor="#020208" />
+        </radialGradient>
         <filter id="paper" x="0" y="0" width="100%" height="100%">
           <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="3" result="n" />
           <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.35  0 0 0 0 0.28  0 0 0 0 0.18  0 0 0 0.08 0" />
@@ -149,7 +153,7 @@ function CardArtInner({ cardId, className, texture = true }: { cardId: string; c
   );
 }
 
-export type BackVariant = 'standard' | 'arcana' | 'inverted' | 'fogbound' | 'thin' | 'weekly';
+export type BackVariant = 'standard' | 'arcana' | 'inverted' | 'fogbound' | 'thin' | 'weekly' | 'well';
 
 function CardBackInner({ className, variant = 'standard' }: { className?: string; variant?: BackVariant }) {
   const glow = variant === 'standard' ? 'url(#backGlow)' : `url(#backGlow-${variant})`;
@@ -172,6 +176,14 @@ function CardBackInner({ className, variant = 'standard' }: { className?: string
       {variant === 'fogbound' && <path d="M14 140 q8 -4 16 0 t16 0 t16 0 t16 0 t8 0" fill="none" stroke={GOLD_FLAT} strokeWidth={0.8} opacity={0.6} />}
       {variant === 'thin' && <path d="M50 22 q-3 4 0 8 q3 -4 0 -8" fill={GOLD_FLAT} opacity={0.8} />}
       {variant === 'weekly' && <path d="M40 22 h20 M50 18 v8" stroke={GOLD_FLAT} strokeWidth={0.8} opacity={0.7} />}
+      {variant === 'well' && (
+        <g opacity={0.8}>
+          <ellipse cx={50} cy={24} rx={10} ry={3.5} fill="none" stroke={GOLD_FLAT} strokeWidth={0.8} />
+          <ellipse cx={50} cy={24} rx={6} ry={2} fill="none" stroke={GOLD_FLAT} strokeWidth={0.5} />
+          <ellipse cx={50} cy={136} rx={10} ry={3.5} fill="none" stroke={GOLD_FLAT} strokeWidth={0.8} />
+          <ellipse cx={50} cy={136} rx={6} ry={2} fill="none" stroke={GOLD_FLAT} strokeWidth={0.5} />
+        </g>
+      )}
       <circle cx={50} cy={80} r={1.5} fill={GOLD_FLAT} />
       {[[50, 24], [50, 136], [18, 80], [82, 80]].map(([x, y], i) => (
         <path key={i} d={`M${x} ${y - 4} l3 4 l-3 4 l-3 -4 z`} fill={GOLD_FLAT} opacity={0.8} />

@@ -1253,3 +1253,7 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .keep__key { color: var(--gold-2); border: 1px solid rgba(214,178,94,0.4); border-radius: 6px; padding: 0 6px; }
 .keep__row { justify-content: center; }
 .keep .btn--ghost { color: var(--muted); }
+
+/* --- the well: going under ------------------------------------------------- */
+.under { text-align: center; color: var(--text); font-style: italic; padding: 8px 12px; border-top: 1px solid rgba(214,178,94,0.25); border-bottom: 1px solid rgba(214,178,94,0.25); }
+.under__mark { color: var(--gold-2); font-style: normal; }

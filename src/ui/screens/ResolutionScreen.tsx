@@ -129,6 +129,11 @@ function ResolutionScreenInner() {
           </div>
         )}
         {traded && <p className="trade__done muted small rise">You shake on it. They do not look up.</p>}
+        {scene.terminal && run.well !== undefined && (
+          <p className="under rise" style={{ animationDelay: `${300 + resolution.narration.length * step}ms` }}>
+            <span className="under__mark" aria-hidden>⨀</span> There is no surface here. The dark opens again beneath you, and you take one breath before it. <span className="stat--vit">♥ +2</span>
+          </p>
+        )}
         <p className="deltas rise" style={{ animationDelay: `${400 + resolution.narration.length * step}ms` }}>
           {resolution.deltas.vitality !== 0 && <span className="stat--vit">♥ {fmt(resolution.deltas.vitality)}</span>}
           {resolution.deltas.clarity !== 0 && <span className="stat--cla">◈ {fmt(resolution.deltas.clarity)}</span>}
@@ -138,7 +143,7 @@ function ResolutionScreenInner() {
       {codexOpen && <CodexDetail cardId={codexOpen} onClose={() => openCodex(null)} />}
       <footer className="actions">
         <button className="btn btn--primary rise" style={{ animationDelay: `${600 + resolution.narration.length * step}ms` }} onClick={advance}>
-          {offer ? 'Look closer' : resolution.tier === 'calamity' ? 'Crawl on' : 'Walk on'}
+          {offer ? 'Look closer' : scene.terminal && run.well !== undefined ? 'Go under' : resolution.tier === 'calamity' ? 'Crawl on' : 'Walk on'}
         </button>
       </footer>
     </main>

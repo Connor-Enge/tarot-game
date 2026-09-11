@@ -502,7 +502,7 @@ export const useGame = create<GameStore>((set, get) => ({
 
 /** A shareable line for a finished run. Names the final spread; never the meanings. */
 export function shareText(run: RunState, mode: RunMode, knowledge?: Knowledge): string {
-  const end = run.phase.kind === 'ascended' ? 'Returned from the Abyss' : run.phase.kind === 'dead' ? `Died at scene ${run.layer + 1}` : 'Still descending';
+  const end = run.phase.kind === 'ascended' ? 'Returned from the Abyss' : run.phase.kind === 'dead' ? `Died at scene ${run.layer + 1}${run.well ? ` · ${run.well} ${run.well === 1 ? 'Abyss' : 'Abysses'} passed` : ''}` : 'Still descending';
   const spread = finalSpread(run)
     .map((c) => `${getCard(c.cardId).name}${c.reversed ? ' (rev)' : ''}`)
     .join(' · ');

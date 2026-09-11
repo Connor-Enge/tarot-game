@@ -58,7 +58,7 @@ Open `?gallery` on the dev server to see all 78 card faces at once.
   blood, a boon for a boon, or a curse lifted for a price.
 - **Vows.** Swear something before the first scene (never redraw, never rest,
   never a reversed card in the Hand). Keep it to the Abyss and it pays out.
-- **Ways down.** Standard, Daily, Weekly, four unlockable descents, and five
+- **Ways down.** Standard, Daily, Weekly, five unlockable descents (one of them endless), and five
   stacked Depths for veterans.
 - **Feel.** Procedural SVG art for all 78 cards, synthesized sound, haptics,
   a share image of your final spread or your sky, resume after closing the

@@ -26,6 +26,8 @@ export interface RunConfig {
   noEcho?: boolean;
   /** Stakes override for the terminal scene. */
   abyssStakes?: number;
+  /** No surface: each Abyss opens onto a deeper map, and stakes climb by one each time. */
+  endless?: boolean;
 }
 
 /**
@@ -115,6 +117,15 @@ export const DESCENTS: Descent[] = [
     config: { startingRelics: ['fog'], startingClarity: 4 },
     unlocked: (k) => k.runs >= 5,
     unlockText: 'Descend five times.',
+  },
+  {
+    id: 'well',
+    name: 'The Well',
+    glyph: '⨀',
+    text: 'No way back up. Each Abyss opens onto a deeper one, and every reading costs more. How far?',
+    config: { endless: true },
+    unlocked: (k) => k.ascensions >= 3,
+    unlockText: 'Return from the Abyss three times.',
   },
   {
     id: 'thin',
