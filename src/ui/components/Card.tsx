@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { getCard } from '../../engine';
 import { CardArt, CardBack } from '../art/CardArt';
 
@@ -15,10 +16,26 @@ interface Props {
   animKey?: string | number;
   delay?: number;
   onClick?: () => void;
+  /** Press and hold. Used to magnify a card in hand. */
+  onLongPress?: () => void;
 }
 
 /** Card faces show name and art only. Meaning lives in the Codex. */
-export function Card({ cardId, reversed = false, faceDown = false, size = 'md', lifted, dim, mark, whisper, animKey, delay = 0, onClick }: Props) {
+export function Card({ cardId, reversed = false, faceDown = false, size = 'md', lifted, dim, mark, whisper, animKey, delay = 0, onClick, onLongPress }: Props) {
+  const timer = useRef<number | null>(null);
+  const fired = useRef(false);
+  const start = () => {
+    if (!onLongPress) return;
+    fired.current = false;
+    timer.current = window.setTimeout(() => {
+      fired.current = true;
+      onLongPress();
+    }, 380);
+  };
+  const cancel = () => {
+    if (timer.current) window.clearTimeout(timer.current);
+    timer.current = null;
+  };
   const card = cardId ? getCard(cardId) : undefined;
   const cls = [
     'card',
@@ -35,7 +52,18 @@ export function Card({ cardId, reversed = false, faceDown = false, size = 'md', 
     <button
       type="button"
       className={cls}
-      onClick={onClick}
+      onClick={() => {
+        if (fired.current) {
+          fired.current = false;
+          return;
+        }
+        onClick?.();
+      }}
+      onPointerDown={start}
+      onPointerUp={cancel}
+      onPointerLeave={cancel}
+      onPointerCancel={cancel}
+      onContextMenu={(e) => onLongPress && e.preventDefault()}
       style={{ animationDelay: `${delay}ms` }}
       key={animKey}
       aria-label={card ? `${card.name}${reversed ? ', reversed' : ''}` : 'face-down card'}

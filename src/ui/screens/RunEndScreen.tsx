@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { getCard, getDescent, getRelic, SCENES, SIGILS, SLOT_IDS, SLOTS } from '../../engine';
 import { shareText, useGame } from '../../store';
 import { Card } from '../components/Card';
+import { renderSpreadImage } from '../art/render';
 
 const TIER_MARK = { calamity: '✖', harm: '▽', neutral: '◇', boon: '△', triumph: '★' } as const;
 
@@ -18,6 +19,8 @@ export function RunEndScreen() {
   const earned = useGame((s) => s.earned);
   const [tab, setTab] = useState<'reveal' | 'journal'>('reveal');
   const [copied, setCopied] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
   if (run.phase.kind !== 'dead' && run.phase.kind !== 'ascended') return null;
   const dead = run.phase.kind === 'dead';
   const last = run.history[run.history.length - 1];
@@ -34,6 +37,34 @@ export function RunEndScreen() {
       setTimeout(() => setCopied(false), 1600);
     } catch {
       /* dismissed */
+    }
+  };
+
+  const shareImage = async () => {
+    if (busy) return;
+    setBusy(true);
+    try {
+      const cards = SLOT_IDS.map((s) => last.reading[s]);
+      const blob = await renderSpreadImage({
+        cards,
+        title: dead ? 'The reading ended you.' : 'You read it true.',
+        subtitle: run.phase.kind === 'dead' ? `Scene ${run.history.length} · ${SCENES[last.sceneId].prompt}` : SCENES[last.sceneId].prompt,
+        footer: mode.kind === 'daily' ? `Daily ${mode.label}` : `${getDescent(mode.descent).name} · seed ${run.seed.toString(36)}`,
+        seatsNamed: knowledge.seatsNamed,
+        journey: run.history.map((h) => TIER_MARK[h.resolution.tier]).join(''),
+        outcome: run.phase.resolution.narration.at(-1),
+      });
+      if (!blob) return;
+      const file = new File([blob], 'arcana-descent.png', { type: 'image/png' });
+      if (navigator.canShare?.({ files: [file] })) {
+        await navigator.share({ files: [file], text: shareText(run, mode) });
+        return;
+      }
+      setImageUrl(URL.createObjectURL(blob));
+    } catch {
+      /* dismissed */
+    } finally {
+      setBusy(false);
     }
   };
 
@@ -121,9 +152,29 @@ export function RunEndScreen() {
         </section>
       )}
 
+      {imageUrl && (
+        <div className="sheet" onClick={() => setImageUrl(null)} role="dialog" aria-label="share image">
+          <div className="sheet__body" onClick={(ev) => ev.stopPropagation()}>
+            <img src={imageUrl} alt="Your final spread" className="share-img" />
+            <p className="muted small">Press and hold the image to save it, or download.</p>
+            <div className="row">
+              <a className="btn" href={imageUrl} download="arcana-descent.png">
+                Download
+              </a>
+              <button className="btn" onClick={() => setImageUrl(null)}>
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <footer className="actions">
         <button className="btn" onClick={share}>
           {copied ? 'Copied' : 'Share'}
+        </button>
+        <button className="btn btn--icon" onClick={shareImage} aria-label="Share as image" title="Share as image" disabled={busy}>
+          {busy ? '…' : '▣'}
         </button>
         <button className="btn" onClick={() => goto('codex')}>
           Codex

@@ -212,6 +212,17 @@ meaning, and it is the most direct learning tool in the game.
 **Deck tracker**: a pill in the reading header shows cards left to draw;
 tapping it opens the discard so far. Roguelike deck-tracking, faces only.
 
+**Share image** (`ui/art/render.ts`): the end screen renders the final
+spread to a 1080×1350 PNG (seat glyphs, card faces, names, the outcome
+line, one glyph per scene, descent and seed) and hands it to the OS share
+sheet, or shows it with a download button. Card SVGs are serialized with
+the shared defs inlined so the foil and paper survive rasterization.
+
+**Magnify**: press and hold any card in hand to see it large. Faces only.
+
+**Card of the day**: the title screen shows one card chosen by the daily
+seed. Pure ornament; it never explains itself.
+
 Queued:
 - Scene-specific relic flavor (the satchel on the bridge is a real relic).
 

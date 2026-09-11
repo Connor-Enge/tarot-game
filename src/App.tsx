@@ -4,6 +4,7 @@ import { useSettings } from './settings';
 import { useGame } from './store';
 import { ArtDefs } from './ui/art/CardArt';
 import { Ambient } from './ui/components/Ambient';
+import { Fader } from './ui/components/Fader';
 import { CodexScreen } from './ui/screens/CodexScreen';
 import { GalleryScreen } from './ui/screens/GalleryScreen';
 import { MapScreen } from './ui/screens/MapScreen';
@@ -78,9 +79,7 @@ export function App() {
     <>
       <ArtDefs />
       <Ambient />
-      <div className="view" key={key}>
-        {view}
-      </div>
+      <Fader viewKey={key}>{view}</Fader>
     </>
   );
 }

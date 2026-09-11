@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { activeSlotState, currentScene, getCard, hasRelic, redrawCost, sceneNumber, SLOT_IDS, SLOTS, totalScenes, whisperCost } from '../../engine';
 import { useGame } from '../../store';
 import { Card } from '../components/Card';
@@ -19,6 +20,7 @@ export function ReadingScreen() {
   const firstDescent = useGame((s) => s.firstDescent);
   const deckOpen = useGame((s) => s.deckOpen);
   const openDeck = useGame((s) => s.openDeck);
+  const [zoom, setZoom] = useState<{ cardId: string; reversed: boolean } | null>(null);
 
   const scene = currentScene(run);
   const active = activeSlotState(run);
@@ -86,6 +88,7 @@ export function ReadingScreen() {
                 mark={run.marks[c.cardId]}
                 whisper={whispered ? kw : undefined}
                 onClick={() => lift(lifted === i ? null : i)}
+                onLongPress={c.hidden ? undefined : () => setZoom({ cardId: c.cardId, reversed: c.reversed })}
               />
             </div>
           );
@@ -120,6 +123,14 @@ export function ReadingScreen() {
       </footer>
       {codexOpen && <CodexDetail cardId={codexOpen} onClose={() => openCodex(null)} />}
       {deckOpen && <DeckSheet run={run} onClose={() => openDeck(false)} />}
+      {zoom && (
+        <div className="zoom" onClick={() => setZoom(null)} role="dialog" aria-label="magnified card">
+          <div className="zoom__card">
+            <Card cardId={zoom.cardId} reversed={zoom.reversed} size="lg" />
+          </div>
+          <p className="muted small">{getCard(zoom.cardId).name}{zoom.reversed ? ' · reversed' : ''}</p>
+        </div>
+      )}
     </main>
   );
 }

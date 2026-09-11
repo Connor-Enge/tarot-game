@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { CARDS, DESCENTS, getDescent } from '../../engine';
+import { CARDS, dailySeed, DESCENTS, getCard, getDescent } from '../../engine';
 import { useGame } from '../../store';
 import { Card } from '../components/Card';
 
@@ -16,6 +16,10 @@ export function TitleScreen() {
   const known = Object.values(k.cards).filter((c) => c.tier > 0).length;
   const current = getDescent(descent);
   const anyUnlocked = DESCENTS.some((d, i) => i > 0 && d.unlocked(k));
+  const today = useMemo(() => {
+    const { seed } = dailySeed();
+    return CARDS[seed % CARDS.length].id;
+  }, []);
   // A different fan every visit, seeded off the run count so it feels alive but not random-noise.
   const fan = useMemo(() => {
     const pool = k.runs === 0 ? FAN_IDS : CARDS.filter((c) => c.arcana === 'major').map((c) => c.id);
@@ -88,6 +92,10 @@ export function TitleScreen() {
       <p className="muted small">
         {k.runs === 0 ? 'The deck is unread.' : `${k.runs} descents · ${k.deaths} deaths · ${k.ascensions} returns`}
       </p>
+      <div className="today" aria-label="card of the day">
+        <Card cardId={today} size="xs" />
+        <span className="muted small">Today's card · {getCard(today).name}</span>
+      </div>
     </main>
   );
 }
