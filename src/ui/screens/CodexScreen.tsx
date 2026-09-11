@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { CARDS, COMBO_IDS, comboNote, getCard, getVow, SCENES, SIGILS, SLOT_IDS, SLOTS, type Tier } from '../../engine';
+import { CARDS, COMBO_IDS, comboNote, getCard, getVow, KIND_GLYPH, SCENES, SIGILS, SLOT_IDS, SLOTS, type Tier } from '../../engine';
+import { SceneArt } from '../art/scenes';
 
 type SuitFilter = 'all' | 'major' | 'wands' | 'cups' | 'swords' | 'pentacles';
 type TierFilter = 'all' | 'seen' | 'known' | 'unseen';
@@ -245,16 +246,26 @@ function OmenBook({ onOpen }: { onOpen: (id: string) => void }) {
   const ordered = Array.from(runs.entries()).sort((a, b) => b[0] - a[0]);
   return (
     <section className="book">
-      {ordered.map(([run, entries]) => (
+      {ordered.map(([run, entries]) => {
+        const road = entries.filter((e, i) => i === 0 || entries[i - 1].scene !== e.scene).map((e) => KIND_GLYPH[SCENES[e.scene]?.kind ?? 'mystery']).join('');
+        return (
         <div key={run} className="book__run">
-          <div className="book__head muted small">Descent {run}</div>
+          <div className="book__head muted small">
+            Descent {run} <span className="book__road">{road}</span>
+          </div>
           {entries.map((e, i) => {
             const card = getCard(e.cardId);
             const omen = e.reversed ? card.omen.reversed : card.omen.upright;
             const newScene = i === 0 || entries[i - 1].scene !== e.scene;
+            const scene = SCENES[e.scene];
             return (
               <div key={i}>
-                {newScene && <div className="book__scene muted small">{SCENES[e.scene]?.prompt ?? e.scene}</div>}
+                {newScene && (
+                  <div className="book__scene muted small" style={scene ? ({ '--book-hue': scene.hue } as React.CSSProperties) : undefined}>
+                    {scene && <SceneArt id={e.scene} className="book__art" />}
+                    <span>{scene?.prompt ?? e.scene}</span>
+                  </div>
+                )}
                 <button type="button" className={`book__line tier--${e.tier}`} onClick={() => onOpen(e.cardId)}>
                   <Card cardId={e.cardId} reversed={e.reversed} size="xs" />
                   <span className="book__text">
@@ -266,7 +277,8 @@ function OmenBook({ onOpen }: { onOpen: (id: string) => void }) {
             );
           })}
         </div>
-      ))}
+        );
+      })}
     </section>
   );
 }
