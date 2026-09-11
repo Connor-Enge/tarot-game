@@ -39,6 +39,11 @@ export const SIGILS: Sigil[] = [
   { id: 'bound', glyph: '✶', name: 'Bound', text: 'Join a hundred pairs of cards in the sky.', when: (_r, k) => Object.keys(k.links ?? {}).length >= 100 },
   { id: 'well-two', glyph: '⨀', name: 'Deeper Still', text: 'Pass two Abysses in the Well.', when: (r) => (r.well ?? 0) >= 2 },
   { id: 'all-descents', glyph: '◉', name: 'Every Way Down', text: 'Return by every descent.', when: (_r, k) => ['standard', 'arcana', 'inverted', 'fogbound', 'thin'].every((d) => (k.records?.[d]?.returns ?? 0) >= 1) },
+  { id: 'blessed', glyph: '☼', name: 'Blessed', text: 'Take the Stranger\'s blessing.', when: (r) => r.tradeTaken === 'bless-hand' },
+  { id: 'cut-return', glyph: '✂', name: 'A Clean Cut', text: 'Cut the deck and return.', when: (r) => ascended(r) && r.cut !== undefined },
+  { id: 'seven-days', glyph: '▦', name: 'Seven Days', text: 'Return from seven different daily descents.', when: (_r, k) => Object.values(k.almanac ?? {}).filter((a) => a.returned).length >= 7 },
+  { id: 'three-vows', glyph: '⚭', name: 'Oathbound', text: 'Keep three different vows.', when: (_r, k) => Object.values(k.vows ?? {}).filter((v) => v.kept >= 1).length >= 3 },
+  { id: 'well-worn', glyph: '❂', name: 'Well Worn', text: 'Read one card twenty-five times.', when: (_r, k) => Object.values(k.cards).some((c) => c.resolved >= 25) },
 ];
 
 function countDealt(r: RunState): number {
@@ -56,7 +61,7 @@ export function newSigils(run: RunState, k: Knowledge): string[] {
 }
 
 /** Sigils that depend only on the Codex, checked outside a run (e.g. after Study). */
-const KNOWLEDGE_ONLY = new Set(['remembered', 'bound', 'majors-glimpsed', 'ten-mastered', 'named-five', 'ten-deaths']);
+const KNOWLEDGE_ONLY = new Set(['remembered', 'bound', 'majors-glimpsed', 'ten-mastered', 'named-five', 'ten-deaths', 'seven-days', 'three-vows', 'well-worn']);
 export function newKnowledgeSigils(k: Knowledge): string[] {
   const held = new Set(k.sigils ?? []);
   const dummy = { phase: { kind: 'dead' } } as unknown as RunState;

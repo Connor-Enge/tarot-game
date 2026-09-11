@@ -104,6 +104,8 @@ export interface RunState {
   well?: number;
   /** True once the Stranger's trade has been taken this run. */
   traded?: boolean;
+  /** Which trade it was. */
+  tradeTaken?: Trade['id'];
   /** True once the Stranger has appeared this run. They come once. */
   strangerMet?: boolean;
   /** The reader's signature card, if any. */
@@ -517,16 +519,16 @@ export function acceptTrade(run: RunState): RunState {
   switch (t.id) {
     case 'clarity-for-vitality':
       if (run.clarity < t.give) return run;
-      return { ...run, clarity: run.clarity - t.give, vitality: run.vitality + t.get, phase, traded: true };
+      return { ...run, clarity: run.clarity - t.give, vitality: run.vitality + t.get, phase, traded: true, tradeTaken: t.id };
     case 'swap-boon':
       if (!run.relics.includes(t.give)) return run;
-      return { ...onGain(run, t.get), relics: run.relics.map((id) => (id === t.give ? t.get : id)), phase, traded: true };
+      return { ...onGain(run, t.get), relics: run.relics.map((id) => (id === t.give ? t.get : id)), phase, traded: true, tradeTaken: t.id };
     case 'lift-curse':
       if (run.vitality <= t.give) return run;
-      return { ...run, vitality: run.vitality - t.give, relics: run.relics.filter((id) => id !== t.curse), phase, traded: true };
+      return { ...run, vitality: run.vitality - t.give, relics: run.relics.filter((id) => id !== t.curse), phase, traded: true, tradeTaken: t.id };
     case 'bless-hand':
       if (run.clarity < t.give) return run;
-      return { ...run, clarity: run.clarity - t.give, marks: { ...run.marks, [t.cardId]: 'charged' }, phase, traded: true };
+      return { ...run, clarity: run.clarity - t.give, marks: { ...run.marks, [t.cardId]: 'charged' }, phase, traded: true, tradeTaken: t.id };
   }
 }
 

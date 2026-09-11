@@ -32,6 +32,28 @@ describe('sigils', () => {
     expect(newSigils(run, k)).toEqual([]);
   });
 
+  it('marks the blessing, the cut, and three Codex milestones', async () => {
+    const { acceptTrade } = await import('../run');
+    const { newKnowledgeSigils } = await import('../sigils');
+    const { noteVow, noteAlmanac, noteResolved } = await import('../knowledge');
+    const sig = (id: string) => SIGILS.find((s) => s.id === id)!;
+    let run = { ...startRun(3), clarity: 3, phase: { kind: 'resolved', resolution: {} as never, trade: { id: 'bless-hand', give: 2, cardId: 'major-1' } } } as RunState;
+    run = acceptTrade(run);
+    expect(run.tradeTaken).toBe('bless-hand');
+    expect(sig('blessed').when(run, emptyKnowledge())).toBe(true);
+    const back = { ...finish(12), cut: 20 };
+    expect(sig('cut-return').when(back, emptyKnowledge())).toBe(true);
+    expect(sig('cut-return').when({ ...back, cut: undefined }, emptyKnowledge())).toBe(false);
+    let k = emptyKnowledge();
+    for (let i = 1; i <= 7; i++) k = noteAlmanac(k, `2026-01-0${i}`, { depth: 9, returned: true, good: 3 });
+    for (const v of ['silence', 'thrift', 'long-way']) k = noteVow(k, v, 'kept');
+    for (let i = 0; i < 25; i++) k = noteResolved(k, 'major-0', 'hand', false);
+    const got = newKnowledgeSigils(k);
+    expect(got).toContain('seven-days');
+    expect(got).toContain('three-vows');
+    expect(got).toContain('well-worn');
+  });
+
   it('does nothing mid-run', () => {
     expect(newSigils(startRun(1), emptyKnowledge())).toEqual([]);
   });
