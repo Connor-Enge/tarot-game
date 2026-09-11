@@ -16,3 +16,14 @@ describe('sky', () => {
     expect(daylight(at(2))).toBe('night');
   });
 });
+
+describe('moon names', () => {
+  it('names the eight phases and wraps at the end of the cycle', async () => {
+    const { moonName } = await import('../sky');
+    expect(moonName(0)).toBe('New Moon');
+    expect(moonName(0.5)).toBe('Full Moon');
+    expect(moonName(0.25)).toBe('First Quarter');
+    expect(moonName(0.99)).toBe('New Moon');
+    expect(moonName(0.62)).toBe('Waning Gibbous');
+  });
+});

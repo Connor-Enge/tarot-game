@@ -14,6 +14,13 @@ export function moonPhase(date: Date = new Date()): number {
   return f < 0 ? f + 1 : f;
 }
 
+export const MOON_NAMES = ['New Moon', 'Waxing Crescent', 'First Quarter', 'Waxing Gibbous', 'Full Moon', 'Waning Gibbous', 'Last Quarter', 'Waning Crescent'] as const;
+
+/** The common name for a phase fraction: eight names around the cycle. */
+export function moonName(phase: number): (typeof MOON_NAMES)[number] {
+  return MOON_NAMES[Math.round(phase * 8) % 8];
+}
+
 export type Daylight = 'dawn' | 'day' | 'dusk' | 'night';
 
 /** Local hour to a light. Dawn and dusk are short on purpose. */

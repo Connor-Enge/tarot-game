@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { canOfferInstall, useInstall } from '../../install';
 import { HowToPlay } from '../components/HowToPlay';
-import { CARDS, dailySeed, dailyStreakAlive, dailyWeather, daylight, weeklySeed, weeklyWeather, DEPTHS, DESCENTS, getCard, getDescent, maxDepthUnlocked } from '../../engine';
+import { CARDS, dailySeed, dailyStreakAlive, dailyWeather, daylight, moonName, moonPhase, weeklySeed, weeklyWeather, DEPTHS, DESCENTS, getCard, getDescent, maxDepthUnlocked } from '../../engine';
 import { CardBack, type BackVariant } from '../art/CardArt';
 import { StreakFlames } from '../art/flames';
 import { TitleSky } from '../art/sky';
@@ -10,6 +10,9 @@ import { useGame } from '../../store';
 import { Card } from '../components/Card';
 
 const FAN_IDS = ['major-17', 'major-18', 'major-16', 'major-0', 'major-19'];
+
+/** What the hour is called on the title's sky line. */
+const LIGHT_WORDS = { dawn: 'first light', day: 'full daylight', dusk: 'dusk coming on', night: 'deep night' } as const;
 
 export function TitleScreen() {
   const newRun = useGame((s) => s.newRun);
@@ -205,6 +208,8 @@ export function TitleScreen() {
           Today · <span className="weather__name">{weather.glyph} {weather.name}</span> · {weather.text}
           <br />
           This week · <span className="weather__name">{weekWeather.glyph} {weekWeather.name}</span> · {weekWeather.text}
+          <br />
+          Tonight · <span className="weather__name">☾ {moonName(moonPhase())}</span> · {LIGHT_WORDS[light]}
         </p>
         <div className="row">
           <button className="btn btn--codex" onClick={() => goto('codex')}>

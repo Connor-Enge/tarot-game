@@ -1372,3 +1372,4 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .hand .deal > .card { position: relative; z-index: 1; }
 @keyframes lantern-flicker { 0%, 100% { transform: scale(1); opacity: 0.85; } 50% { transform: scale(1.06); opacity: 1; } }
 .reduce-motion .hand .deal--lantern::before { animation: none; }
+.seat--filled .seat__card::after { animation: fade-in 700ms ease 300ms both, lantern-flicker 4s ease-in-out 1s infinite; }
