@@ -527,7 +527,7 @@ Across descents (`npx vite-node scripts/sim-all.ts 800`):
 
 | Descent | random | majors-only | oracle |
 |---------|--------|-------------|--------|
-| The Descent | 26% | 82% | 100% |
+| The Descent | 29% | 83% | 100% |
 | The Short Road | 46% | 85% | 100% |
 | Arcana Only | 38% | 100% | 100% |
 | The Inverted | 1% | 21% | 98% |
@@ -587,8 +587,8 @@ a hoarder's spare clarity is not a free heal.
   `engine/minorText.ts` (112 omen lines, 112 meanings). A test asserts every
   omen is distinct.
 - **Scenes**: 24 exist (23 plus the Abyss). Aim for 30+ across three acts. Latest: wolves, the lighthouse, the tomb.
-- **Combos**: 5 exist. This is the richest vein for "the combined meaning"
-  and should be grown deliberately with named, memorable results.
+- **Combos**: 24 named readings exist. This is the richest vein for "the
+  combined meaning" and should keep growing with named, memorable results.
 - **Art**: all 78 faces are procedural SVG (`src/ui/art/`). Majors are
   bespoke compositions; Minors use traditional pip layouts and court
   silhouettes. Open `?gallery` in dev to see every face at once. Shared

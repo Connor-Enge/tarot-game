@@ -41,3 +41,18 @@ describe('resolveReading', () => {
     expect(r.narration[r.narration.length - 1]).toBe(SCENES.crossing.outcomes[r.tier]);
   });
 });
+
+const d = (cardId: string, reversed = false) => ({ cardId, reversed });
+
+describe('more named readings', () => {
+  it('names a ten with an ace, a slipping chariot, and the two thrones', () => {
+    const scene = SCENES.crossing;
+    const tenAce = { vessel: d('wands-1'), threshold: d('wands-10'), hand: d('cups-2'), wake: d('swords-3') };
+    expect(resolveReading(scene, tenAce, {}).comboNotes).toContain('An ending and a beginning of the same kind.');
+    const chariot = { vessel: d('major-7', true), threshold: d('cups-2'), hand: d('cups-3'), wake: d('cups-4') };
+    expect(resolveReading(scene, chariot, {}).comboIds).toContain('chariot-slipping');
+    const thrones = { vessel: d('major-3'), threshold: d('major-4'), hand: d('cups-3'), wake: d('cups-4') };
+    expect(resolveReading(scene, thrones, {}).comboIds).toContain('two-thrones');
+    expect(resolveReading(scene, { vessel: d('major-7'), threshold: d('cups-2'), hand: d('cups-3'), wake: d('cups-4') }, {}).comboIds).not.toContain('chariot-slipping');
+  });
+});

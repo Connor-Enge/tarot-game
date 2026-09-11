@@ -138,6 +138,51 @@ const COMBOS: Combo[] = [
     score: 1,
     note: 'Even the fall was measured.',
   },
+  {
+    id: 'judgement-wake',
+    when: (r) => has(r, 'major-20', 'wake'),
+    score: 1,
+    note: 'What you did was called by name.',
+  },
+  {
+    id: 'hanged-hand',
+    when: (r) => has(r, 'major-12', 'hand') && !r.hand.reversed,
+    score: 1,
+    note: 'You did nothing, and it was the right thing.',
+  },
+  {
+    id: 'ten-and-ace',
+    when: (r) => {
+      const minors = SLOT_IDS.map((s) => getCard(r[s].cardId)).filter((c) => c.arcana === 'minor');
+      return minors.some((a) => a.number === 1 && minors.some((b) => b.number === 10 && b.suit === a.suit));
+    },
+    score: 1,
+    note: 'An ending and a beginning of the same kind.',
+  },
+  {
+    id: 'two-queens',
+    when: (r) => SLOT_IDS.filter((s) => getCard(r[s].cardId).arcana === 'minor' && getCard(r[s].cardId).number === 13).length >= 2,
+    score: 0.5,
+    note: 'Two queens conferred over you.',
+  },
+  {
+    id: 'chariot-slipping',
+    when: (r) => has(r, 'major-7', 'vessel') && r.vessel.reversed,
+    score: -2,
+    note: 'You came in with the reins already slipping.',
+  },
+  {
+    id: 'priestess-threshold',
+    when: (r) => has(r, 'major-2', 'threshold'),
+    score: 0.5,
+    note: 'The veil was the door.',
+  },
+  {
+    id: 'two-thrones',
+    when: (r) => has(r, 'major-3') && has(r, 'major-4'),
+    score: 1,
+    note: 'The two thrones agreed.',
+  },
 ];
 
 /** Names of every combo, for the Codex once discovered. */
