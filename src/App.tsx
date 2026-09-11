@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { currentNode, SCENES } from './engine';
+import { useSettings } from './settings';
 import { useGame } from './store';
 import { ArtDefs } from './ui/art/CardArt';
 import { Ambient } from './ui/components/Ambient';
@@ -8,6 +9,7 @@ import { GalleryScreen } from './ui/screens/GalleryScreen';
 import { MapScreen } from './ui/screens/MapScreen';
 import { ReadingScreen } from './ui/screens/ReadingScreen';
 import { ResolutionScreen } from './ui/screens/ResolutionScreen';
+import { SettingsScreen } from './ui/screens/SettingsScreen';
 import { RunEndScreen } from './ui/screens/RunEndScreen';
 import { TitleScreen } from './ui/screens/TitleScreen';
 
@@ -29,7 +31,11 @@ function useSceneHue() {
 export function App() {
   const screen = useGame((s) => s.screen);
   const run = useGame((s) => s.run);
+  const reduceMotion = useSettings((s) => s.reduceMotion);
   useSceneHue();
+  useEffect(() => {
+    document.documentElement.classList.toggle('reduce-motion', reduceMotion);
+  }, [reduceMotion]);
 
   let view = <TitleScreen />;
   let key = 'title';
@@ -39,6 +45,9 @@ export function App() {
   } else if (screen === 'codex') {
     view = <CodexScreen />;
     key = 'codex';
+  } else if (screen === 'settings') {
+    view = <SettingsScreen />;
+    key = 'settings';
   } else if (screen === 'run' && run) {
     switch (run.phase.kind) {
       case 'map':

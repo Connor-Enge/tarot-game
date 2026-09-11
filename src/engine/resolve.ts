@@ -15,6 +15,7 @@ export interface SlotResolution {
 
 export interface Resolution {
   slots: SlotResolution[];
+  comboIds: string[];
   comboNotes: string[];
   total: number;
   tier: OutcomeTier;
@@ -68,7 +69,82 @@ const COMBOS: Combo[] = [
     score: 2,
     note: 'Four great arcana. The room went quiet.',
   },
+  {
+    id: 'one-suit',
+    when: (r) => {
+      const suits = SLOT_IDS.map((s) => getCard(r[s].cardId).suit);
+      return suits.every((x) => x && x === suits[0]);
+    },
+    score: 2,
+    note: 'One suit, four seats. The reading spoke with a single voice.',
+  },
+  {
+    id: 'sun-in-the-wake',
+    when: (r) => has(r, 'major-19', 'wake') && !r.wake.reversed,
+    score: 2,
+    note: 'Whatever else, it ended in daylight.',
+  },
+  {
+    id: 'moon-vessel',
+    when: (r) => has(r, 'major-18', 'vessel') && !r.vessel.reversed,
+    score: -2,
+    note: 'You came to this already dreaming.',
+  },
+  {
+    id: 'fool-and-world',
+    when: (r) => has(r, 'major-0') && has(r, 'major-21'),
+    score: 3,
+    note: 'The first step and the last, in one hand.',
+  },
+  {
+    id: 'hermit-hand',
+    when: (r) => has(r, 'major-9', 'hand') && !r.hand.reversed,
+    score: 1,
+    note: 'You did the quiet thing.',
+  },
+  {
+    id: 'wheel-anywhere-reversed',
+    when: (r) => SLOT_IDS.some((s) => r[s].cardId === 'major-10' && r[s].reversed),
+    score: -1,
+    note: 'The wheel caught on something.',
+  },
+  {
+    id: 'three-swords-threshold',
+    when: (r) => has(r, 'swords-3', 'threshold'),
+    score: -1,
+    note: 'What stood before you had already been wounded, and knew it.',
+  },
+  {
+    id: 'court-of-four',
+    when: (r) => SLOT_IDS.every((s) => getCard(r[s].cardId).number >= 11 && getCard(r[s].cardId).arcana === 'minor'),
+    score: 2,
+    note: 'A full court. Something bowed.',
+  },
+  {
+    id: 'aces-high',
+    when: (r) => SLOT_IDS.filter((s) => getCard(r[s].cardId).number === 1 && getCard(r[s].cardId).arcana === 'minor').length >= 2,
+    score: 1,
+    note: 'Two beginnings at once. The air changed.',
+  },
+  {
+    id: 'strength-vs-devil',
+    when: (r) => has(r, 'major-8', 'hand') && has(r, 'major-15', 'threshold'),
+    score: 3,
+    note: 'You met the chain with an open hand.',
+  },
+  {
+    id: 'temperance-storm',
+    when: (r) => has(r, 'major-14') && has(r, 'major-16'),
+    score: 1,
+    note: 'Even the fall was measured.',
+  },
 ];
+
+/** Names of every combo, for the Codex once discovered. */
+export const COMBO_IDS = COMBOS.map((c) => c.id);
+export function comboNote(id: string): string | undefined {
+  return COMBOS.find((c) => c.id === id)?.note;
+}
 
 export type Marks = Record<string, 'charged' | 'scarred'>;
 export const CHARGED_BONUS = 1;
@@ -112,11 +188,13 @@ const BASE_DELTAS: Record<OutcomeTier, { vitality: number; clarity: number }> = 
 export function resolveReading(scene: Scene, reading: Reading, marks: Marks = {}): Resolution {
   const slots = SLOT_IDS.map((s) => scoreSlot(scene, s, reading[s], marks));
   const comboNotes: string[] = [];
+  const comboIds: string[] = [];
   let total = slots.reduce((a, s) => a + s.score, 0);
   for (const c of COMBOS) {
     if (c.when(reading)) {
       total += c.score;
       comboNotes.push(c.note);
+      comboIds.push(c.id);
     }
   }
   const tier = tierFor(total);
@@ -130,7 +208,7 @@ export function resolveReading(scene: Scene, reading: Reading, marks: Marks = {}
     ...comboNotes,
     scene.outcomes[tier],
   ];
-  return { slots, comboNotes, total, tier, deltas, narration };
+  return { slots, comboIds, comboNotes, total, tier, deltas, narration };
 }
 
 export function tierIndex(t: OutcomeTier): number {

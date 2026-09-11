@@ -17,6 +17,8 @@ export interface CardKnowledge {
   resolved: number;
   /** Seats this card has been chosen into. Used for per-seat hints later. */
   seats: Partial<Record<SlotId, number>>;
+  /** Orientations the player has watched resolve. Unlocks the omen line in the Codex. */
+  witnessed?: { upright?: boolean; reversed?: boolean };
 }
 
 export interface Knowledge {
@@ -24,6 +26,8 @@ export interface Knowledge {
   cards: Record<string, CardKnowledge>;
   /** Seat names unlock after the first death; before that only glyphs show. */
   seatsNamed: boolean;
+  /** Named readings the player has produced at least once. */
+  combos?: string[];
   runs: number;
   deaths: number;
   ascensions: number;
@@ -44,10 +48,11 @@ function raise(k: CardKnowledge, tier: Tier): CardKnowledge {
 }
 
 /** A card was chosen into a seat and the reading resolved. */
-export function noteResolved(k: Knowledge, cardId: string, seat: SlotId): Knowledge {
+export function noteResolved(k: Knowledge, cardId: string, seat: SlotId, reversed = false): Knowledge {
   const e = entry(k, cardId);
   const resolved = e.resolved + 1;
-  let next: CardKnowledge = { ...e, resolved, seats: { ...e.seats, [seat]: (e.seats[seat] ?? 0) + 1 } };
+  const witnessed = { ...e.witnessed, [reversed ? 'reversed' : 'upright']: true };
+  let next: CardKnowledge = { ...e, resolved, witnessed, seats: { ...e.seats, [seat]: (e.seats[seat] ?? 0) + 1 } };
   if (resolved >= RESOLVES_TO_GLIMPSE) next = raise(next, 1);
   return { ...k, cards: { ...k.cards, [cardId]: next } };
 }
@@ -83,12 +88,32 @@ export function noteAscension(k: Knowledge, finalSpread: { cardId: string }[]): 
   return { ...k, cards, seatsNamed: true, ascensions: k.ascensions + 1 };
 }
 
+export function noteCombos(k: Knowledge, ids: string[]): Knowledge {
+  if (ids.length === 0) return k;
+  return { ...k, combos: Array.from(new Set([...(k.combos ?? []), ...ids])) };
+}
+
 export function noteRunStarted(k: Knowledge): Knowledge {
   return { ...k, runs: k.runs + 1 };
 }
 
 export function tierOf(k: Knowledge, cardId: string): Tier {
   return entry(k, cardId).tier;
+}
+
+export function witnessed(k: Knowledge, cardId: string, reversed: boolean): boolean {
+  const w = entry(k, cardId).witnessed;
+  return !!(reversed ? w?.reversed : w?.upright);
+}
+
+/** Wipe everything. The Codex is the only progression, so this is a true reset. */
+export function resetKnowledge(storage: Pick<Storage, 'removeItem'> | undefined = globalThis.localStorage): Knowledge {
+  try {
+    storage?.removeItem(KEY);
+  } catch {
+    /* ignore */
+  }
+  return emptyKnowledge();
 }
 
 // --- persistence -----------------------------------------------------------

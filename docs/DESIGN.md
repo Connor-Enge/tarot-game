@@ -130,11 +130,34 @@ what you did with it.
 (orientation-aware). Shown as a ribbon on the card. Counts toward glimpsing
 that card in the Codex. This is the only mid-run knowledge purchase.
 
+**Daily descent**: one seed per UTC day (`dailySeed`). The end screen's
+Share button produces a spoiler-light result string: mode, outcome, a glyph
+per scene's tier, and the final spread's card names. Never meanings.
+
+**Journal**: the end screen has a second tab listing every reading of the
+run with its outcome line. Reading it back is how you notice patterns.
+
+**Named readings**: combos (`resolve.ts`) are recorded in the Codex once
+produced. There are 17. The Codex shows only the ones you have caused.
+
+**Witnessed omens**: the Codex detail sheet shows a card's omen line for any
+orientation you have watched resolve, even at tier 0. Omens are the
+sanctioned leak, so they are the first thing you get to keep.
+
+**Sound** (`audio.ts`): all synthesized. A low drone runs during a run;
+short stings for lift, place, whisper, node, redraw, and one per outcome
+tier. Off switch in Settings, persisted.
+
+**Settings**: sound, reduce motion (also honors the OS preference), descend
+by seed, and "Forget everything" (wipes the Codex).
+
+**Offline**: a small service worker caches the app after first load.
+
 Queued:
 - Boons/curses as persistent seat modifiers for the run ("the Wake always
   deals 4"; "the Threshold is always reversed").
-- Daily seed with a shared result string.
-- A run journal on the end screen (every reading, in order).
+- Balance pass with a Monte Carlo sim (random vs. greedy policy survival).
+- Reversed-only and majors-only deck variants as unlockable descents.
 
 ## Content debt
 

@@ -1,6 +1,9 @@
-import { getCard, SLOT_IDS, SLOTS } from '../../engine';
-import { useGame } from '../../store';
+import { useState } from 'react';
+import { getCard, SCENES, SLOT_IDS, SLOTS } from '../../engine';
+import { shareText, useGame } from '../../store';
 import { Card } from '../components/Card';
+
+const TIER_MARK = { calamity: '✖', harm: '▽', neutral: '◇', boon: '△', triumph: '★' } as const;
 
 /**
  * Death or ascension. This is the ONE place meanings are handed to the player
@@ -8,43 +11,94 @@ import { Card } from '../components/Card';
  */
 export function RunEndScreen() {
   const run = useGame((s) => s.run)!;
+  const mode = useGame((s) => s.mode);
   const endRun = useGame((s) => s.endRun);
   const goto = useGame((s) => s.goto);
   const knowledge = useGame((s) => s.knowledge);
+  const [tab, setTab] = useState<'reveal' | 'journal'>('reveal');
+  const [copied, setCopied] = useState(false);
   if (run.phase.kind !== 'dead' && run.phase.kind !== 'ascended') return null;
   const dead = run.phase.kind === 'dead';
   const last = run.history[run.history.length - 1];
+
+  const share = async () => {
+    const text = shareText(run, mode);
+    try {
+      if (navigator.share) {
+        await navigator.share({ text });
+        return;
+      }
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1600);
+    } catch {
+      /* dismissed */
+    }
+  };
 
   return (
     <main className={`screen screen--end ${dead ? 'screen--dead' : 'screen--ascended'}`}>
       <h2>{dead ? 'The reading ended you.' : 'You read it true.'}</h2>
       <p className="narration__outcome">{run.phase.resolution.narration.at(-1)}</p>
-      <p className="muted small">{dead ? 'What killed you, you now understand.' : 'What carried you, you now understand.'}</p>
+      {mode.kind === 'daily' && <p className="muted small center">Daily descent · {mode.label}</p>}
 
-      <section className="reveal">
-        {SLOT_IDS.map((id, i) => {
-          const d = last.reading[id];
-          const card = getCard(d.cardId);
-          const tier = knowledge.cards[d.cardId]?.tier ?? 0;
-          return (
-            <article key={id} className="reveal__row rise" style={{ animationDelay: `${300 + i * 350}ms` }}>
-              <Card cardId={d.cardId} reversed={d.reversed} size="sm" mark={run.marks[d.cardId]} />
-              <div className="reveal__text">
-                <div className="reveal__seat">
-                  {SLOTS[id].glyph} {SLOTS[id].name}
+      <div className="tabs">
+        <button className={`tab ${tab === 'reveal' ? 'tab--on' : ''}`} onClick={() => setTab('reveal')}>
+          The final spread
+        </button>
+        <button className={`tab ${tab === 'journal' ? 'tab--on' : ''}`} onClick={() => setTab('journal')}>
+          The descent
+        </button>
+      </div>
+
+      {tab === 'reveal' ? (
+        <section className="reveal">
+          <p className="muted small">{dead ? 'What killed you, you now understand.' : 'What carried you, you now understand.'}</p>
+          {SLOT_IDS.map((id, i) => {
+            const d = last.reading[id];
+            const card = getCard(d.cardId);
+            const tier = knowledge.cards[d.cardId]?.tier ?? 0;
+            return (
+              <article key={id} className="reveal__row rise" style={{ animationDelay: `${200 + i * 300}ms` }}>
+                <Card cardId={d.cardId} reversed={d.reversed} size="sm" mark={run.marks[d.cardId]} />
+                <div className="reveal__text">
+                  <div className="reveal__seat">
+                    {SLOTS[id].glyph} {SLOTS[id].name}
+                  </div>
+                  <div className="reveal__name">
+                    {card.name}
+                    {d.reversed && <span className="muted"> · reversed</span>}
+                  </div>
+                  <p className="reveal__meaning">{d.reversed && tier >= 3 ? card.meaning.reversed : card.meaning.upright}</p>
                 </div>
-                <div className="reveal__name">
-                  {card.name}
-                  {d.reversed && <span className="muted"> · reversed</span>}
-                </div>
-                <p className="reveal__meaning">{d.reversed && tier >= 3 ? card.meaning.reversed : card.meaning.upright}</p>
+              </article>
+            );
+          })}
+        </section>
+      ) : (
+        <section className="journal">
+          {run.history.map((h, i) => (
+            <article key={i} className={`journal__row tier--${h.resolution.tier} rise`} style={{ animationDelay: `${i * 80}ms` }}>
+              <div className="journal__head">
+                <span className="journal__n">{i + 1}</span>
+                <span className="journal__place">{SCENES[h.sceneId].prompt}</span>
+                <span className="journal__tier">{TIER_MARK[h.resolution.tier]}</span>
               </div>
+              <div className="journal__cards">
+                {SLOT_IDS.map((s) => (
+                  <Card key={s} cardId={h.reading[s].cardId} reversed={h.reading[s].reversed} size="xs" />
+                ))}
+              </div>
+              <p className="journal__outcome">{h.resolution.narration.at(-1)}</p>
             </article>
-          );
-        })}
-      </section>
+          ))}
+        </section>
+      )}
 
       <footer className="actions">
+        <button className="btn" onClick={share}>
+          {copied ? 'Copied' : 'Share'}
+        </button>
         <button className="btn" onClick={() => goto('codex')}>
           Codex
         </button>

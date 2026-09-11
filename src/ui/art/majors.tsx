@@ -129,14 +129,16 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <Infinity x={30} y={14} s={5} />
       <Mountains y={72} opacity={0.25} />
       <Figure x={30} y={80} h={44} arms="down" fill={PALE} />
-      <circle cx={56} cy={82} r={11} fill={GOLD} stroke={INK} strokeWidth={0.8} />
-      {Array.from({ length: 12 }, (_, i) => {
-        const a = (i / 12) * Math.PI * 2;
-        return <path key={i} d={`M${56 + Math.cos(a) * 11} ${82 + Math.sin(a) * 11} l${Math.cos(a) * 4} ${Math.sin(a) * 4}`} stroke={BLOOD} strokeWidth={1.6} strokeLinecap="round" />;
+      <ellipse cx={68} cy={96} rx={14} ry={7} fill="#c98a3c" stroke={INK} strokeWidth={0.8} />
+      <path d="M78 92 q6 -8 2 -14" fill="none" stroke="#c98a3c" strokeWidth={2} strokeLinecap="round" />
+      {Array.from({ length: 14 }, (_, i) => {
+        const a = (i / 14) * Math.PI * 2;
+        return <path key={i} d={`M${56 + Math.cos(a) * 9} ${82 + Math.sin(a) * 9} l${Math.cos(a) * 5} ${Math.sin(a) * 5}`} stroke="#8a5a22" strokeWidth={2.4} strokeLinecap="round" />;
       })}
+      <circle cx={56} cy={82} r={9.5} fill="#e0a85a" stroke={INK} strokeWidth={0.8} />
       <circle cx={53} cy={80} r={1} fill={INK} />
-      <circle cx={60} cy={80} r={1} fill={INK} />
-      <ellipse cx={72} cy={94} rx={12} ry={6} fill={GOLD} stroke={INK} strokeWidth={0.8} />
+      <circle cx={59} cy={80} r={1} fill={INK} />
+      <path d="M54 85 q2 2 4 0" fill="none" stroke={INK} strokeWidth={0.7} />
       <path d="M36 72 q12 4 16 8" stroke={PALE} strokeWidth={2} fill="none" strokeLinecap="round" />
       <Ground y={102} fill={GOLD_FLAT} opacity={0.5} />
     </g>
@@ -193,11 +195,12 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       {[20, 30, 46, 56].map((x) => (
         <path key={x} d={`M${x} 11 q3 4 0 8 q-3 -4 0 -8`} fill={GOLD} stroke={INK} strokeWidth={0.4} />
       ))}
-      <g transform="rotate(180 40 58)">
-        <Figure x={40} y={44} h={40} arms="hold" halo />
-      </g>
-      <line x1={40} y1={11} x2={40} y2={20} stroke={INK} strokeWidth={1.6} />
-      <path d="M34 26 l8 8" stroke={INK} strokeWidth={2.2} strokeLinecap="round" />
+      <line x1={40} y1={11} x2={40} y2={24} stroke={INK} strokeWidth={1.8} />
+      <path d="M40 24 l-8 10 M40 24 l6 4" stroke={INK} strokeWidth={2.4} strokeLinecap="round" />
+      <path d="M32 34 l16 0 l-4 30 l-8 0 z" fill={INK} />
+      <path d="M34 62 l-6 8 M46 62 l6 8" stroke={INK} strokeWidth={2.2} strokeLinecap="round" />
+      <circle cx={40} cy={76} r={4.4} fill={INK} />
+      <circle cx={40} cy={76} r={8} fill="none" stroke={GOLD_FLAT} strokeWidth={0.9} />
     </g>
   ),
   13: () => (

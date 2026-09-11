@@ -22,3 +22,15 @@ describe('deck', () => {
     expect(a.cards).toEqual(b.cards);
   });
 });
+
+describe('daily seed', () => {
+  it('is stable for a date and differs across days', async () => {
+    const { dailySeed } = await import('../rng');
+    const a = dailySeed(new Date('2026-09-11T05:00:00Z'));
+    const b = dailySeed(new Date('2026-09-11T23:00:00Z'));
+    const c = dailySeed(new Date('2026-09-12T01:00:00Z'));
+    expect(a.seed).toBe(b.seed);
+    expect(a.label).toBe('2026-09-11');
+    expect(a.seed).not.toBe(c.seed);
+  });
+});

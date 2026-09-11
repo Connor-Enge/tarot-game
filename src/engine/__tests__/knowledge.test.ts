@@ -46,3 +46,18 @@ describe('whisper', () => {
     expect(tierOf(k, 'swords-3')).toBe(1);
   });
 });
+
+describe('witness + combos + reset', () => {
+  it('records witnessed orientations and discovered combos', async () => {
+    const { noteCombos, witnessed, resetKnowledge } = await import('../knowledge');
+    let k = emptyKnowledge();
+    k = noteResolved(k, 'major-16', 'threshold', true);
+    expect(witnessed(k, 'major-16', true)).toBe(true);
+    expect(witnessed(k, 'major-16', false)).toBe(false);
+    k = noteCombos(k, ['tower-then-star', 'tower-then-star']);
+    expect(k.combos).toEqual(['tower-then-star']);
+    const removed: string[] = [];
+    expect(resetKnowledge({ removeItem: (key) => void removed.push(key) })).toEqual(emptyKnowledge());
+    expect(removed.length).toBe(1);
+  });
+});

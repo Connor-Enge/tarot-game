@@ -1,0 +1,170 @@
+/**
+ * Synthesized sound. No assets: everything is oscillators and noise through
+ * a shared AudioContext, created lazily on the first user gesture (mobile
+ * browsers require it). Volume is deliberately low; this is texture.
+ */
+import type { OutcomeTier } from './engine';
+
+let ctx: AudioContext | null = null;
+let master: GainNode | null = null;
+let drone: { stop: () => void } | null = null;
+let enabled = true;
+
+export function setSoundEnabled(on: boolean) {
+  enabled = on;
+  if (!on) stopDrone();
+  if (master) master.gain.setTargetAtTime(on ? 0.6 : 0, now(), 0.05);
+}
+
+function now() {
+  return ctx ? ctx.currentTime : 0;
+}
+
+function ensure(): AudioContext | null {
+  if (!enabled) return null;
+  try {
+    if (!ctx) {
+      const AC = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      ctx = new AC();
+      master = ctx.createGain();
+      master.gain.value = 0.6;
+      master.connect(ctx.destination);
+    }
+    if (ctx.state === 'suspended') void ctx.resume();
+    return ctx;
+  } catch {
+    return null;
+  }
+}
+
+function tone(freq: number, dur: number, type: OscillatorType = 'sine', gain = 0.12, when = 0, detune = 0) {
+  const c = ensure();
+  if (!c || !master) return;
+  const t0 = c.currentTime + when;
+  const o = c.createOscillator();
+  const g = c.createGain();
+  o.type = type;
+  o.frequency.value = freq;
+  o.detune.value = detune;
+  g.gain.setValueAtTime(0, t0);
+  g.gain.linearRampToValueAtTime(gain, t0 + 0.012);
+  g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  o.connect(g).connect(master);
+  o.start(t0);
+  o.stop(t0 + dur + 0.05);
+}
+
+function noise(dur: number, gain = 0.08, when = 0, lp = 1200) {
+  const c = ensure();
+  if (!c || !master) return;
+  const t0 = c.currentTime + when;
+  const buf = c.createBuffer(1, Math.ceil(c.sampleRate * dur), c.sampleRate);
+  const d = buf.getChannelData(0);
+  for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / d.length);
+  const src = c.createBufferSource();
+  src.buffer = buf;
+  const f = c.createBiquadFilter();
+  f.type = 'lowpass';
+  f.frequency.value = lp;
+  const g = c.createGain();
+  g.gain.value = gain;
+  src.connect(f).connect(g).connect(master);
+  src.start(t0);
+}
+
+export const sfx = {
+  /** A card lifted from the hand: paper slide. */
+  lift: () => noise(0.09, 0.05, 0, 2400),
+  /** A card placed in its seat: soft thump + low tick. */
+  place: () => {
+    noise(0.06, 0.09, 0, 600);
+    tone(180, 0.12, 'triangle', 0.08);
+  },
+  /** Seat flip. */
+  flip: () => {
+    noise(0.12, 0.06, 0, 3000);
+    tone(520, 0.08, 'sine', 0.04, 0.05);
+  },
+  whisper: () => {
+    tone(880, 0.5, 'sine', 0.05);
+    tone(1320, 0.6, 'sine', 0.03, 0.08, 6);
+  },
+  node: () => tone(440, 0.15, 'triangle', 0.06),
+  redraw: () => {
+    noise(0.15, 0.06, 0, 1800);
+    noise(0.15, 0.06, 0.08, 1800);
+    noise(0.15, 0.06, 0.16, 1800);
+  },
+  /** Resolution sting by tier. */
+  resolve: (tier: OutcomeTier) => {
+    switch (tier) {
+      case 'triumph':
+        [523, 659, 784, 1047].forEach((f, i) => tone(f, 0.9, 'sine', 0.07, i * 0.09));
+        break;
+      case 'boon':
+        [523, 659, 784].forEach((f, i) => tone(f, 0.7, 'sine', 0.06, i * 0.08));
+        break;
+      case 'neutral':
+        tone(392, 0.6, 'sine', 0.05);
+        tone(587, 0.6, 'sine', 0.04, 0.05);
+        break;
+      case 'harm':
+        tone(311, 0.7, 'sawtooth', 0.03);
+        tone(233, 0.8, 'sine', 0.06, 0.05);
+        break;
+      case 'calamity':
+        noise(0.5, 0.12, 0, 400);
+        tone(110, 1.4, 'sawtooth', 0.05);
+        tone(104, 1.4, 'sawtooth', 0.05, 0.02);
+        break;
+    }
+  },
+  death: () => {
+    noise(0.8, 0.1, 0, 300);
+    [110, 98, 87].forEach((f, i) => tone(f, 1.6, 'triangle', 0.07, i * 0.5));
+  },
+  ascend: () => {
+    [261, 329, 392, 523, 659, 784].forEach((f, i) => tone(f, 1.8, 'sine', 0.05, i * 0.12));
+  },
+};
+
+/** A slow, low pad that follows the scene hue (as a filter cutoff). Starts silent, fades in. */
+export function startDrone() {
+  const c = ensure();
+  if (!c || !master || drone) return;
+  const g = c.createGain();
+  g.gain.value = 0;
+  const f = c.createBiquadFilter();
+  f.type = 'lowpass';
+  f.frequency.value = 220;
+  const oscs = [55, 55.4, 82.5].map((freq, i) => {
+    const o = c.createOscillator();
+    o.type = i === 2 ? 'triangle' : 'sawtooth';
+    o.frequency.value = freq;
+    o.connect(f);
+    o.start();
+    return o;
+  });
+  const lfo = c.createOscillator();
+  const lfoGain = c.createGain();
+  lfo.frequency.value = 0.07;
+  lfoGain.gain.value = 90;
+  lfo.connect(lfoGain).connect(f.frequency);
+  lfo.start();
+  f.connect(g).connect(master);
+  g.gain.linearRampToValueAtTime(0.045, c.currentTime + 4);
+  drone = {
+    stop: () => {
+      g.gain.setTargetAtTime(0, c.currentTime, 0.8);
+      setTimeout(() => {
+        oscs.forEach((o) => o.stop());
+        lfo.stop();
+      }, 3000);
+    },
+  };
+}
+
+export function stopDrone() {
+  drone?.stop();
+  drone = null;
+}

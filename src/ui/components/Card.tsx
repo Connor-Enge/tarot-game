@@ -5,7 +5,7 @@ interface Props {
   cardId?: string;
   reversed?: boolean;
   faceDown?: boolean;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
   lifted?: boolean;
   dim?: boolean;
   mark?: 'charged' | 'scarred';

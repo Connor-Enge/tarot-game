@@ -47,3 +47,9 @@ export function seedFromString(str: string): number {
 export function randomSeed(): number {
   return (Math.random() * 0xffffffff) >>> 0;
 }
+
+/** Same seed for everyone on the same UTC day. */
+export function dailySeed(date = new Date()): { seed: number; label: string } {
+  const label = date.toISOString().slice(0, 10);
+  return { seed: seedFromString(`arcana-descent:${label}`), label };
+}
