@@ -519,7 +519,9 @@ was read, not what was dealt. The Hush (the library) allows no whispers.
 The Tithe (the toll) takes a drop of vitality at the door and never the
 last one. Moonlit (the hollow) deals the Wake one more. The Bare Table
 (the tomb) deals every seat one fewer. The Ember (the hearth) mends one
-even on a neutral reading. Doors still show only the kind of place; the
+even on a neutral reading. The Long Look (the Abyss itself) deals every
+seat one more and lifts the Fog, so the last reading is read with open
+eyes. Walking all seven earns the sigil Every Rite. Doors still show only the kind of place; the
 rite is learned by walking in, and remembered: the Codex keeps a rites
 shelf, one glyph each, silhouettes until walked (`ritesWalked` reads the
 omen log, so no new state). Once a rite has been walked, its glyph
@@ -703,7 +705,7 @@ identity, not power, which is the point.
   omen is distinct.
 - **Scenes**: 30 exist (29 plus the Abyss), which was the target; more are welcome. Latest: the mill, the drowned chapel, the hunt.
 - **Named readings**: 34. Each is a memorable line, never a definition.
-- **Relics**: 12 boons, 8 curses. **Vows**: 7. **Weathers**: 14. **Trades**: 6. **Sigils**: 29. **Rites**: 6.
+- **Relics**: 12 boons, 8 curses. **Vows**: 7. **Weathers**: 14. **Trades**: 6. **Sigils**: 30. **Rites**: 7.
 - **Combos**: 34 named readings exist. This is the richest vein for "the
   combined meaning" and should keep growing with named, memorable results.
 - **Art**: all 78 faces are procedural SVG (`src/ui/art/`). Majors are

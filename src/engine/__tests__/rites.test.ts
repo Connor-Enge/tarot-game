@@ -14,7 +14,7 @@ describe('rites', () => {
   it('every rite is stated, and the scenes that carry one exist', () => {
     for (const r of Object.values(RITES)) expect(r.text.length).toBeGreaterThan(10);
     const carried = Object.values(SCENES).filter((s) => s.rite).map((s) => s.rite);
-    expect(carried.length).toBeGreaterThanOrEqual(6);
+    expect(carried.length).toBeGreaterThanOrEqual(7);
     for (const rite of Object.keys(RITES)) expect(carried).toContain(rite);
   });
   it('the Bare Table deals one fewer to every seat', () => {
@@ -59,6 +59,15 @@ describe('rites', () => {
       expect(plain.deltas.vitality).toBe(0);
     }
     expect(found).toBe(true);
+  });
+  it('the Long Look deals every seat one more, and lifts the fog', () => {
+    let run = enter(9, 'abyss', { startingRelics: ['fog'] });
+    for (let i = 0; i < 4; i++) {
+      const seat = run.slots[run.activeSlot];
+      expect(seat.candidates.length).toBe(4);
+      expect(seat.candidates.some((c) => c.hidden)).toBe(false);
+      if (i < 3) run = chooseCandidate(run, 0);
+    }
   });
   it('rites walked are read from the omen log', () => {
     expect(ritesWalked(undefined)).toEqual([]);

@@ -1,4 +1,5 @@
 import type { Knowledge } from './knowledge';
+import { RITES, ritesWalked } from './scenes';
 import type { RunState } from './run';
 import { CURSE_IDS } from './relics';
 import { SLOT_IDS } from './scenes';
@@ -44,6 +45,7 @@ export const SIGILS: Sigil[] = [
   { id: 'seven-days', glyph: '▦', name: 'Seven Days', text: 'Return from seven different daily descents.', when: (_r, k) => Object.values(k.almanac ?? {}).filter((a) => a.returned).length >= 7 },
   { id: 'three-vows', glyph: '⚭', name: 'Oathbound', text: 'Keep three different vows.', when: (_r, k) => Object.values(k.vows ?? {}).filter((v) => v.kept >= 1).length >= 3 },
   { id: 'well-worn', glyph: '❂', name: 'Well Worn', text: 'Read one card twenty-five times.', when: (_r, k) => Object.values(k.cards).some((c) => c.resolved >= 25) },
+  { id: 'every-rite', glyph: '⧖', name: 'Every Rite', text: 'Walk every rite a scene can keep.', when: (_r, k) => ritesWalked(k.omenLog).length === Object.keys(RITES).length },
   ...(['wands', 'cups', 'swords', 'pentacles'] as const).map((suit) => {
     const NAMES: Record<string, [string, string]> = { wands: ['Fire Read Through', '⚚'], cups: ['Water Read Through', '♆'], swords: ['Air Read Through', '⚔'], pentacles: ['Earth Read Through', '⛤'] };
     return {
@@ -83,7 +85,7 @@ export function newSigils(run: RunState, k: Knowledge): string[] {
 }
 
 /** Sigils that depend only on the Codex, checked outside a run (e.g. after Study). */
-const KNOWLEDGE_ONLY = new Set(['remembered', 'bound', 'majors-glimpsed', 'ten-mastered', 'named-five', 'ten-deaths', 'seven-days', 'three-vows', 'well-worn', 'wands-read', 'cups-read', 'swords-read', 'pentacles-read']);
+const KNOWLEDGE_ONLY = new Set(['every-rite', 'remembered', 'bound', 'majors-glimpsed', 'ten-mastered', 'named-five', 'ten-deaths', 'seven-days', 'three-vows', 'well-worn', 'wands-read', 'cups-read', 'swords-read', 'pentacles-read']);
 export function newKnowledgeSigils(k: Knowledge): string[] {
   const held = new Set(k.sigils ?? []);
   const dummy = { phase: { kind: 'dead' } } as unknown as RunState;

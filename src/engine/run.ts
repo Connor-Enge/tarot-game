@@ -252,6 +252,7 @@ function dealSeat(run: RunState, rng: Rng, deck: DeckState, slot: SlotId): { dec
   const rite = currentScene(run).rite;
   let count = rite === 'bare' ? CANDIDATES_PER_SLOT - 1 : CANDIDATES_PER_SLOT;
   if (slot === 'wake' && rite === 'moonlit') count++;
+  if (rite === 'look') count++;
   if (slot === 'threshold' && hasRelic(run, 'lens')) count++;
   if (slot === 'wake' && hasRelic(run, 'shard')) count++;
   if (slot === 'vessel' && hasRelic(run, 'lodestone')) count++;
@@ -273,7 +274,7 @@ function dealSeat(run: RunState, rng: Rng, deck: DeckState, slot: SlotId): { dec
     const i = cards.findIndex((c) => run.marks[c.cardId] !== 'charged');
     if (i >= 0) cards = cards.map((c, j) => (j === i ? { ...c, reversed: true } : c));
   }
-  if (hasRelic(run, 'fog') && cards.length) {
+  if (hasRelic(run, 'fog') && cards.length && rite !== 'look') {
     const i = rng.int(cards.length);
     cards = cards.map((c, j) => (j === i ? { ...c, hidden: true } : c));
   }

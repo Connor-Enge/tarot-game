@@ -1849,3 +1849,6 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .codex__cell--t2 .card__inner { box-shadow: 0 0 0 1px rgba(214,178,94,0.55), 0 4px 10px rgba(0,0,0,0.5); }
 .codex__cell--t3 .card__inner { box-shadow: 0 0 0 1px var(--gold-2), 0 0 12px rgba(243,220,138,0.45), 0 4px 10px rgba(0,0,0,0.5); }
 .codex__cell--t3::after { content: ''; position: absolute; inset: -4px; border-radius: 8px; pointer-events: none; background: radial-gradient(circle, rgba(243,220,138,0.16), transparent 70%); z-index: -1; }
+
+.scene__rite--look { color: var(--gold-2); border-color: rgba(243,220,138,0.5); background: rgba(214,178,94,0.1); }
+.node__rite--look { color: var(--gold-2); border-color: rgba(243,220,138,0.7); }

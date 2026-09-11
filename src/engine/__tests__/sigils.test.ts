@@ -132,3 +132,18 @@ describe('reader title', () => {
     expect(readerTitle({ ...k, cards: many })).toBe('Oracle');
   });
 });
+
+describe('every rite', () => {
+  it('is earned once every rite has been walked', async () => {
+    const { newKnowledgeSigils } = await import('../sigils');
+    const { emptyKnowledge } = await import('../knowledge');
+    const { RITES, SCENES } = await import('../scenes');
+    const scenes = Object.values(SCENES).filter((sc) => sc.rite).map((sc) => sc.id);
+    const e = (scene: string) => ({ run: 1, scene, seat: 'hand' as const, cardId: 'major-0', reversed: false, tier: 'boon' });
+    const some = { ...emptyKnowledge(), omenLog: scenes.slice(0, 2).map(e) };
+    expect(newKnowledgeSigils(some)).not.toContain('every-rite');
+    const all = { ...emptyKnowledge(), omenLog: scenes.map(e) };
+    expect(Object.keys(RITES).length).toBeGreaterThanOrEqual(7);
+    expect(newKnowledgeSigils(all)).toContain('every-rite');
+  });
+});
