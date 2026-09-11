@@ -6,6 +6,7 @@ import { activeSlotState, canTakeBack, currentScene, getCard, hasRelic, redrawCo
 const ORACLE = import.meta.env.DEV && typeof location !== 'undefined' && location.search.includes('oracle');
 import { buzz, useGame } from '../../store';
 import { Card } from '../components/Card';
+import { Held } from '../components/Held';
 import { DeckStack } from '../art/deck';
 import { CardBack } from '../art/CardArt';
 import { canTurn, getVow, TURN_COST } from '../../engine';
@@ -249,9 +250,9 @@ function ReadingScreenInner() {
       {deckOpen && <DeckSheet run={run} onClose={() => openDeck(false)} />}
       {zoom && (
         <div className="zoom" onClick={() => setZoom(null)} role="dialog" aria-label="magnified card">
-          <div className="zoom__card alive">
+          <Held className="zoom__card alive">
             <Card cardId={zoom.cardId} reversed={zoom.reversed} size="lg" />
-          </div>
+          </Held>
           <p className="muted small">{getCard(zoom.cardId).name}{zoom.reversed ? ' · reversed' : ''}</p>
         </div>
       )}

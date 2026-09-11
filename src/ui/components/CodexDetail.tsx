@@ -3,6 +3,7 @@ import { CARDS, getCard, SCENES, SLOT_IDS, SLOTS, witnessed, type Tier } from '.
 import { SceneArt } from '../art/scenes';
 import { useGame } from '../../store';
 import { Card } from './Card';
+import { Held } from './Held';
 
 export const TIER_LABEL: Record<Tier, string> = { 0: 'unread', 1: 'glimpsed', 2: 'known', 3: 'mastered' };
 
@@ -50,9 +51,9 @@ export function CodexDetail({ cardId, onClose }: { cardId: string; onClose: () =
   return (
     <div className="sheet" role="dialog" aria-label={card.name} onClick={onClose}>
       <div className="sheet__body" onClick={(ev) => ev.stopPropagation()}>
-        <div className={`sheet__card alive sheet__card--${card.arcana === 'major' ? 'major' : card.suit}`} title="Tap to turn the card">
+        <Held className={`sheet__card alive sheet__card--${card.arcana === 'major' ? 'major' : card.suit}`}>
           <Card cardId={cardId} size="lg" reversed={flipped} onClick={() => setFlipped((f) => !f)} />
-        </div>
+        </Held>
         <div className="sheet__title">
           {card.name}
         </div>

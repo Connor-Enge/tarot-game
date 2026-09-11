@@ -693,7 +693,10 @@ identity, not power, which is the point.
   Tower's bolt flickers, flames lick, the Hanged Man sways, the Moon's
   crayfish rises. Nowhere else; the hand and the seats stay still. The
   hooks are `live-*` classes on the primitives and a few major groups,
-  gated by an `.alive` ancestor and switched off by reduce-motion.
+  gated by an `.alive` ancestor and switched off by reduce-motion. The
+  same two places hold the card in the hand (`Held`): it tilts toward the
+  finger and a gold glare slides across the face like foil catching
+  light, and left alone it settles and breathes.
 
 ## Open questions
 
