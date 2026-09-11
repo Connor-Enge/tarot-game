@@ -48,7 +48,7 @@ import {
   KIND_GLYPH,
   getRelic,
   getVow,
-  dailyWeather, dayCard,
+  dailyWeather, dailyCharges,
   weeklyWeather,
   getWeather,
   SCENES,
@@ -303,7 +303,7 @@ export const useGame = create<GameStore>((set, get) => ({
     saveKnowledge(knowledge);
     startDrone();
     const weather = dailyWeather(seed);
-    set({ run: startRun(seed, { ...weather.config, charged: [...(weather.config.charged ?? []), dayCard(seed)] }), mode: { kind: 'daily', label, weather: weather.id }, knowledge, screen: 'run', lifted: null, earned: [], firstDescent: false });
+    set({ run: startRun(seed, { ...weather.config, charged: [...(weather.config.charged ?? []), ...dailyCharges(knowledge, label, seed, weeklySeed().seed)] }), mode: { kind: 'daily', label, weather: weather.id }, knowledge, screen: 'run', lifted: null, earned: [], firstDescent: false });
   },
 
   newWeekly: () => {

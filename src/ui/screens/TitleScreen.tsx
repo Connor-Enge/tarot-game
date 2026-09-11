@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { canOfferInstall, useInstall } from '../../install';
 import { HowToPlay } from '../components/HowToPlay';
-import { CARDS, dailySeed, dailyStreakAlive, dailyWeather, dayCard, daylight, moonName, moonPhase, weeklySeed, weeklyWeather, DEPTHS, DESCENTS, getCard, getDescent, maxDepthUnlocked } from '../../engine';
+import { CARDS, dailySeed, dailyStreakAlive, dailyWeather, dayCard, daylight, STREAK_FOR_WEEK_CARD, moonName, moonPhase, weeklySeed, weeklyWeather, DEPTHS, DESCENTS, getCard, getDescent, maxDepthUnlocked } from '../../engine';
 import { CardBack, type BackVariant } from '../art/CardArt';
 import { WeatherArt } from '../art/weather';
 import { StreakFlames } from '../art/flames';
@@ -277,6 +277,11 @@ export function TitleScreen() {
         </span>
         <span className="today__text">
           <span className="muted small">Today's card · {getCard(today).name} · <span className="today__charged">charged in the Daily</span></span>
+          {streak >= STREAK_FOR_WEEK_CARD ? (
+            <span className="muted small today__week">{streak} days running · the week's card, {getCard(dayCard(weeklySeed().seed)).name}, is charged too</span>
+          ) : streak >= 3 ? (
+            <span className="muted small today__week">{STREAK_FOR_WEEK_CARD - streak} more day{STREAK_FOR_WEEK_CARD - streak === 1 ? '' : 's'} and the week's card is charged too</span>
+          ) : null}
           {todayOpen && <em className="today__omen rise">{getCard(today).omen.upright}</em>}
         </span>
       </button>

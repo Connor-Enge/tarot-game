@@ -1625,3 +1625,4 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .week { display: flex; flex-direction: column; gap: 2px; padding: 8px 10px 4px; border-radius: 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(214,178,94,0.18); }
 .week__road { display: block; width: 100%; max-width: 360px; margin: 0 auto; height: auto; }
 .week__cap { margin: 0; }
+.today__week { color: var(--gold); opacity: 0.85; }

@@ -1,5 +1,6 @@
 import { CARDS } from './cards';
 import type { RunConfig } from './descents';
+import { dailyStreakAlive, type Knowledge } from './knowledge';
 
 /**
  * Daily weather: one named condition per day, drawn from the daily seed.
@@ -51,4 +52,15 @@ export function weeklyWeather(seed: number): Weather {
 /** The card of the day, from the daily seed. It is charged in the Daily, so the title's card matters. */
 export function dayCard(seed: number): string {
   return CARDS[(seed >>> 0) % CARDS.length].id;
+}
+
+/** A daily streak this long charges the week's card too. */
+export const STREAK_FOR_WEEK_CARD = 7;
+
+/** What the Daily charges: the card of the day, and on a long streak the week's card as well. */
+export function dailyCharges(k: Knowledge, label: string, daySeed: number, weekSeed: number): string[] {
+  const out = [dayCard(daySeed)];
+  const week = dayCard(weekSeed);
+  if (dailyStreakAlive(k, label) >= STREAK_FOR_WEEK_CARD && !out.includes(week)) out.push(week);
+  return out;
 }

@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { dailySeed } from '../rng';
 import { startRun } from '../run';
-import { dailyWeather, dayCard, weeklyWeather, WEATHERS } from '../weather';
+import { dailyCharges, dailyWeather, dayCard, weeklyWeather, WEATHERS } from '../weather';
+import { emptyKnowledge } from '../knowledge';
 
 describe('daily weather', () => {
   it('is stable for a seed and covers the list over a month', () => {
@@ -42,5 +43,21 @@ describe('the card of the day', () => {
     const run = startRun(seed, { charged: [dayCard(seed)] });
     expect(run.marks[dayCard(seed)]).toBe('charged');
     expect(Object.keys(startRun(seed).marks)).toHaveLength(0);
+  });
+});
+
+describe("the week's card", () => {
+  it('is charged too once the daily streak reaches seven', () => {
+    const label = '2026-09-11';
+    const day = 12345;
+    const week = 999;
+    const fresh = emptyKnowledge();
+    expect(dailyCharges(fresh, label, day, week)).toEqual([dayCard(day)]);
+    const long = { ...fresh, daily: { last: label, streak: 7, best: 7 } };
+    const charges = dailyCharges(long, label, day, week);
+    expect(charges[0]).toBe(dayCard(day));
+    expect(charges).toContain(dayCard(week));
+    const stale = { ...fresh, daily: { last: '2026-09-01', streak: 9, best: 9 } };
+    expect(dailyCharges(stale, label, day, week)).toEqual([dayCard(day)]);
   });
 });
