@@ -36,6 +36,8 @@ export interface Knowledge {
   sigils?: string[];
   /** Cards that have sat in the same reading: "a|b" (sorted) -> count. */
   links?: Record<string, number>;
+  /** Cards that have been dealt into your hand at least once (face seen). */
+  dealt?: Record<string, true>;
   /** Study: correct answers and best streak. */
   study?: { correct: number; asked: number; bestStreak: number };
   /** Omens witnessed, in order. Capped. */
@@ -134,6 +136,14 @@ export function noteLinks(k: Knowledge, cardIds: string[]): Knowledge {
       links[key] = (links[key] ?? 0) + 1;
     }
   return { ...k, links };
+}
+
+export function noteDealt(k: Knowledge, cardIds: string[]): Knowledge {
+  const fresh = cardIds.filter((id) => !k.dealt?.[id]);
+  if (fresh.length === 0) return k;
+  const dealt = { ...k.dealt };
+  for (const id of fresh) dealt[id] = true;
+  return { ...k, dealt };
 }
 
 export function noteStudyResult(k: Knowledge, correct: boolean, streak: number): Knowledge {
@@ -299,4 +309,20 @@ export function importKnowledge(text: string): Knowledge | null {
   } catch {
     return null;
   }
+}
+
+/** Read a seed (and descent, depth) out of a share text or a bare base36 seed. */
+export function parseShare(text: string, descentNames: { id: string; name: string }[]): { seed: number; descent?: string; depth?: number } | null {
+  const t = text.trim();
+  if (!t) return null;
+  const m = t.match(/seed\s+([0-9a-z]+)/i);
+  const raw = m ? m[1] : /^[0-9a-z]+$/i.test(t) ? t : null;
+  if (!raw) return null;
+  const seed = parseInt(raw, 36);
+  if (Number.isNaN(seed)) return null;
+  const out: { seed: number; descent?: string; depth?: number } = { seed: seed >>> 0 };
+  for (const d of descentNames) if (t.includes(d.name)) out.descent = d.id;
+  const dm = t.match(/Depth\s+(\d)/);
+  if (dm) out.depth = Number(dm[1]);
+  return out;
 }

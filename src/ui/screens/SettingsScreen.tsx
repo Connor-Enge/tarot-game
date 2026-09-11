@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { exportKnowledge, importKnowledge } from '../../engine';
+import { DESCENTS, exportKnowledge, importKnowledge, parseShare } from '../../engine';
 import { useSettings } from '../../settings';
 import { useGame } from '../../store';
 
@@ -70,19 +70,19 @@ export function SettingsScreen() {
         <div className="field">
           <span>Descend with a seed</span>
           <div className="row">
-            <input className="input" placeholder="e.g. 1k2j9z" value={seed} onChange={(e) => setSeed(e.target.value)} inputMode="text" autoCapitalize="off" />
+            <input className="input" placeholder="a seed, or a pasted share" value={seed} onChange={(e) => setSeed(e.target.value)} inputMode="text" autoCapitalize="off" />
             <button
               className="btn"
-              disabled={!seed.trim()}
+              disabled={!parseShare(seed, DESCENTS)}
               onClick={() => {
-                const n = parseInt(seed.trim(), 36);
-                if (!Number.isNaN(n)) newRun(n >>> 0);
+                const parsed = parseShare(seed, DESCENTS);
+                if (parsed) newRun(parsed.seed, { descent: parsed.descent, depth: parsed.depth });
               }}
             >
               Go
             </button>
           </div>
-          <p className="muted small">Seeds appear in a finished run's share text. The same seed deals the same map and the same cards.</p>
+          <p className="muted small">Paste a whole share text and you will walk the same road, on the same descent and depth. The same seed deals the same map and the same cards.</p>
         </div>
 
         <div className="field">

@@ -733,3 +733,6 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 
 .reveal__lead { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .chip--inline { padding: 4px 10px; font-size: 0.72rem; }
+
+.codex__cell--dealt { opacity: 0.75; }
+.codex__cell--dealt .card__inner { filter: saturate(0.6); }

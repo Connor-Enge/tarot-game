@@ -381,13 +381,20 @@ screen's hue shifts to that suit's color. No text; the room just changes.
 **Read again**: the end screen can replay the final spread's four omens
 with the seat seals, slowly, before the meanings.
 
+**Walk a friend's road**: the seed field in Settings accepts a whole pasted
+share text and reads the seed, the descent, and the depth out of it.
+
+**Dealt faces**: the Codex shows the face of any card that has passed
+through your hands, dimmed until it is read. Faces are never secret; only
+meanings are.
+
 ### Pillar sweep: where text reaches the screen
 
 Every surface that can show text about a card, and what gates it:
 
 | Surface | Shows | Gate |
 |---------|-------|------|
-| Card face | name, art | none |
+| Card face | name, art | none (Codex shows faces once dealt) |
 | Resolution omens | omen line | none (the sanctioned leak) |
 | Whisper ribbon | one keyword (two with the Bell) | costs Clarity |
 | Run end reveal | upright meaning; reversed if reversed | death or return with the card on the table |

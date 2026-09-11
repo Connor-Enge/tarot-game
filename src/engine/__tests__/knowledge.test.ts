@@ -138,3 +138,17 @@ describe('transfer', () => {
     expect(importKnowledge('ARCANA1.!!!')).toBeNull();
   });
 });
+
+describe('dealt + parseShare', () => {
+  it('remembers dealt cards and parses share texts', async () => {
+    const { noteDealt, parseShare } = await import('../knowledge');
+    let k = noteDealt(emptyKnowledge(), ['major-0', 'cups-2']);
+    expect(k.dealt).toEqual({ 'major-0': true, 'cups-2': true });
+    expect(noteDealt(k, ['major-0'])).toBe(k);
+    const names = [{ id: 'standard', name: 'The Descent' }, { id: 'arcana', name: 'Arcana Only' }];
+    expect(parseShare('Arcana Descent · Arcana Only · Depth 2 · seed 1k2j\\nDied at scene 4', names)).toEqual({ seed: parseInt('1k2j', 36), descent: 'arcana', depth: 2 });
+    expect(parseShare('c', names)).toEqual({ seed: 12 });
+    expect(parseShare('hello world', names)).toBeNull();
+    expect(parseShare('', names)).toBeNull();
+  });
+});

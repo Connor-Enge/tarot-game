@@ -29,7 +29,7 @@ export function CodexScreen() {
     if (suit === 'major' && c.arcana !== 'major') return false;
     if (suit !== 'all' && suit !== 'major' && c.suit !== suit) return false;
     const e = k.cards[c.id];
-    if (tf === 'seen' && !e) return false;
+    if (tf === 'seen' && !e && !k.dealt?.[c.id]) return false;
     if (tf === 'known' && (e?.tier ?? 0) < 2) return false;
     return true;
   });
@@ -146,9 +146,9 @@ export function CodexScreen() {
         {shown.map((c) => {
           const e = k.cards[c.id];
           const tier: Tier = e?.tier ?? 0;
-          const seen = !!e;
+          const seen = !!e || !!k.dealt?.[c.id];
           return (
-            <button key={c.id} type="button" className={`codex__cell codex__cell--t${tier}`} onClick={() => seen && openCodex(c.id)} disabled={!seen} aria-label={seen ? c.name : 'unread card'}>
+            <button key={c.id} type="button" className={`codex__cell codex__cell--t${tier} ${!e && seen ? 'codex__cell--dealt' : ''}`} onClick={() => seen && openCodex(c.id)} disabled={!seen} aria-label={seen ? c.name : 'unread card'}>
               <Card cardId={c.id} size="xs" faceDown={!seen} />
               {tier > 0 && <span className={`codex__dot codex__dot--t${tier}`} />}
             </button>

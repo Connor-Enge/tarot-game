@@ -35,7 +35,7 @@ export function CodexDetail({ cardId, onClose }: { cardId: string; onClose: () =
         <div className="sheet__title">
           {card.name} <span className="pill">{TIER_LABEL[tier]}</span>
         </div>
-        {nothing && <p className="muted">You have not read this card yet.</p>}
+        {nothing && <p className="muted">{k.dealt?.[cardId] ? 'It has passed through your hands. You have not read it.' : 'You have not read this card yet.'}</p>}
         {flipped && tier < 3 && <p className="muted small">Turned. What it means this way, you have not earned.</p>}
         {tier >= 1 && <div className="codex__kw">{card.keywords.upright.join(' · ')}</div>}
         {tier >= 2 && <p className="codex__meaning">{card.meaning.upright}</p>}

@@ -21,6 +21,7 @@ import {
   noteAscension,
   noteCombos,
   noteDeath,
+  noteDealt,
   noteLinks,
   noteLast,
   noteOmens,
@@ -80,7 +81,7 @@ interface GameStore {
   saved: ReturnType<typeof loadRun>;
   resume: () => void;
   abandon: () => void;
-  newRun: (seed?: number) => void;
+  newRun: (seed?: number, opts?: { descent?: string; depth?: number }) => void;
   newDaily: () => void;
   newWeekly: () => void;
   chooseNode: (index: number) => void;
@@ -97,6 +98,11 @@ interface GameStore {
   openCodex: (cardId: string | null) => void;
   resetCodex: () => void;
   importCodex: (k: Knowledge) => void;
+}
+
+function dealtIn(run: RunState): string[] {
+  const slot = run.slots[run.activeSlot];
+  return slot ? slot.candidates.filter((c) => !c.hidden).map((c) => c.cardId) : [];
 }
 
 function buzz(ms: number | number[]) {
@@ -195,14 +201,14 @@ export const useGame = create<GameStore>((set, get) => ({
     set({ saved: null });
   },
 
-  newRun: (seed = randomSeed()) => {
-    const { descent } = get();
+  newRun: (seed = randomSeed(), opts) => {
+    const descent = opts?.descent ?? get().descent;
     const d = getDescent(descent);
     const first = get().knowledge.runs === 0;
     const knowledge = noteRunStarted(get().knowledge);
     saveKnowledge(knowledge);
     startDrone();
-    const depth = d.id === 'standard' ? get().depth : 0;
+    const depth = d.id === 'standard' ? (opts?.depth ?? get().depth) : 0;
     const config = { ...d.config, ...(depth ? depthConfig(depth) : {}), ...(first ? { majorsFirst: true } : {}) };
     set({ run: startRun(seed, config), mode: { kind: 'free', descent: d.id, depth }, knowledge, screen: 'run', lifted: null, earned: [], firstDescent: first });
   },
@@ -231,7 +237,9 @@ export const useGame = create<GameStore>((set, get) => ({
     buzz(abyss ? [20, 60, 40] : 6);
     if (abyss) sfx.abyss();
     else sfx.node();
-    set({ run: next, lifted: null });
+    const knowledge = noteDealt(get().knowledge, dealtIn(next));
+    if (knowledge !== get().knowledge) saveKnowledge(knowledge);
+    set({ run: next, lifted: null, knowledge });
   },
 
   lift: (index) => {
@@ -252,7 +260,9 @@ export const useGame = create<GameStore>((set, get) => ({
     if (next.phase.kind === 'reading') {
       buzz(10);
       sfx.place(suit);
-      set({ run: next, lifted: null });
+      const k2 = noteDealt(knowledge, dealtIn(next));
+      if (k2 !== knowledge) saveKnowledge(k2);
+      set({ run: next, lifted: null, knowledge: k2 });
       return;
     }
     const tier = 'resolution' in next.phase ? next.phase.resolution.tier : null;
@@ -277,7 +287,9 @@ export const useGame = create<GameStore>((set, get) => ({
     if (!run) return;
     const next = redrawActive(run);
     if (next !== run) sfx.redraw();
-    set({ run: next, lifted: null });
+    const knowledge = noteDealt(get().knowledge, dealtIn(next));
+    if (knowledge !== get().knowledge) saveKnowledge(knowledge);
+    set({ run: next, lifted: null, knowledge });
   },
 
   whisperLifted: () => {
