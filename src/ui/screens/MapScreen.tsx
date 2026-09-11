@@ -28,7 +28,9 @@ function MapScreenInner() {
   const foretell = useGame((s) => s.foretell);
   const [foretelling, setForetelling] = useState(false);
   const canForetell = run.clarity >= foretellCost(run);
-  const cuttable = canCut(run);
+  const firstDescent = useGame((s) => s.firstDescent);
+  // The first descent shows only the map: no cut, no vows. Those come once the shape of a run is known.
+  const cuttable = canCut(run) && !firstDescent;
   const visited = visitedNodes(run);
   const visitedIds = new Set(visited.map((n) => n.id));
   const act = currentAct(run);
@@ -174,7 +176,7 @@ function MapScreenInner() {
         </div>
       )}
 
-      {canTakeVow(run) && (
+      {canTakeVow(run) && !firstDescent && (
         <section className="vows" aria-label="take a vow">
           <p className="muted small center">Or swear something first. Keep it to the Abyss and it pays.</p>
           <div className="vows__row">

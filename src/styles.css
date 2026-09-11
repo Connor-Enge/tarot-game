@@ -925,7 +925,7 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 }
 
 /* --- vows ------------------------------------------------------------------ */
-.vows { display: flex; flex-direction: column; gap: 8px; }
+.vows { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
 .vows__row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .vow {
   display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left;
