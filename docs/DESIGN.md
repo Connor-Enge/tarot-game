@@ -230,7 +230,9 @@ Ledger aggregates play: most read card, kindest and cruelest (net good minus
 bad over at least three reads), most often on the table at death, busiest
 seat. All of it is consequence.
 
-**Scene relics**: eight scenes name a relic (`scene.relic`). A boon there
+**Scene relics** (the alcove after a triumph sets the offered relics on
+its shelf in the candle's light, and the one whose card is touched
+brightens; the candle licks): eight scenes name a relic (`scene.relic`). A boon there
 hands it over if you don't hold it, and the resolution says "You keep it".
 The crossing's satchel is the Second Coin; the stranger's gift is the Small
 Bell; the library holds the Cracked Lens.

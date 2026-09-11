@@ -1487,7 +1487,7 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .reduce-motion .codex__combo { animation: none; }
 
 /* --- the relic screen: an alcove, tokens set in sockets --------------------- */
-.alcove { width: min(100%, 320px); height: auto; margin: 0 auto -6px; display: block; filter: drop-shadow(0 10px 24px rgba(0,0,0,0.5)); }
+.alcove { width: min(100%, 360px); height: auto; margin: 0 auto -6px; display: block; filter: drop-shadow(0 10px 24px rgba(0,0,0,0.5)); }
 .relic-title { position: relative; margin-bottom: 0; }
 .relic-title::after { content: ''; display: block; width: 90px; height: 1px; margin: 8px auto 0; background: linear-gradient(90deg, transparent, rgba(214,178,94,0.6), transparent); }
 .relic { grid-template-columns: 60px 1fr; position: relative; padding: 14px 16px; }
@@ -1852,3 +1852,8 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 
 .scene__rite--look { color: var(--gold-2); border-color: rgba(243,220,138,0.5); background: rgba(214,178,94,0.1); }
 .node__rite--look { color: var(--gold-2); border-color: rgba(243,220,138,0.7); }
+
+/* --- the alcove holds the offer: relics on the shelf, lit as their card is touched --- */
+.alcove__item { transition: transform 260ms ease, filter 260ms ease; filter: drop-shadow(0 0 3px rgba(243,220,138,0.25)); }
+.alcove__item--lit { filter: drop-shadow(0 0 8px rgba(243,220,138,0.7)) brightness(1.25); }
+.relic--lit { border-color: var(--gold-2); box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 18px rgba(243,220,138,0.25); }

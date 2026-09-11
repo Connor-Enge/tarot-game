@@ -241,7 +241,13 @@ export function VowArt({ id, className }: { id: string; className?: string }) {
  * The alcove where relics are found: a niche in dark stone, a low shelf,
  * candlelight pooling on it. Drawn 200 x 80, above the offer.
  */
-export function AlcoveArt({ className }: { className?: string }) {
+/**
+ * The alcove: a stone niche with a candle, and the offered relics set on
+ * the shelf in its light. Pass `lit` to brighten one of them while its
+ * card is hovered or focused. The candle flame licks when held alive.
+ */
+export function AlcoveArt({ className, offer = [], lit = null }: { className?: string; offer?: string[]; lit?: number | null }) {
+  const slots = offer.length === 1 ? [100] : offer.length === 2 ? [66, 134] : [56, 100, 144];
   return (
     <svg viewBox="0 0 200 80" className={className} aria-hidden preserveAspectRatio="xMidYMid meet">
       <defs>
@@ -250,16 +256,43 @@ export function AlcoveArt({ className }: { className?: string }) {
           <stop offset="55%" stopColor="#d6b25e" stopOpacity={0.12} />
           <stop offset="100%" stopColor="#d6b25e" stopOpacity={0} />
         </radialGradient>
+        <linearGradient id="alcoveStone" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#1a1626" />
+          <stop offset="1" stopColor="#0c0a14" />
+        </linearGradient>
       </defs>
-      <path d="M0 80 V30 Q0 0 30 0 H170 Q200 0 200 30 V80 Z" fill="rgba(10,8,18,0.9)" />
+      <path d="M0 80 V30 Q0 0 30 0 H170 Q200 0 200 30 V80 Z" fill="url(#alcoveStone)" />
+      {/* mortar lines in the stone */}
+      {[[8, 40], [8, 56], [8, 72], [164, 40], [164, 56], [164, 72]].map(([x, y], i) => (
+        <path key={i} d={`M${x} ${y} h26`} stroke={GOLD_FLAT} strokeWidth={0.4} opacity={0.18} />
+      ))}
+      {[[20, 32], [20, 64], [176, 48]].map(([x, y], i) => (
+        <path key={i} d={`M${x} ${y} v8`} stroke={GOLD_FLAT} strokeWidth={0.4} opacity={0.18} />
+      ))}
+      {/* the niche, with a keystone */}
       <path d="M40 80 V34 Q40 14 60 14 H140 Q160 14 160 34 V80 Z" fill="#050410" />
+      <path d="M40 80 V34 Q40 14 60 14 H140 Q160 14 160 34 V80" fill="none" stroke={GOLD_FLAT} strokeWidth={0.6} opacity={0.35} />
+      <path d="M95 14 l2 -6 h6 l2 6 z" fill="#1a1626" stroke={GOLD_FLAT} strokeWidth={0.5} opacity={0.6} />
       <ellipse cx={100} cy={64} rx={70} ry={26} fill="url(#alcoveGlow)" />
       <path d="M44 64 H156" stroke={GOLD_FLAT} strokeWidth={0.8} opacity={0.7} />
       <path d="M46 66 H154" stroke={GOLD_FLAT} strokeWidth={0.4} opacity={0.35} />
+      {/* the offered relics on the shelf */}
+      {offer.map((id, i) => {
+        const Art = ART[id];
+        if (!Art) return null;
+        const x = slots[i] ?? 100;
+        const on = lit === i;
+        return (
+          <g key={id} className={`alcove__item ${on ? 'alcove__item--lit' : ''}`} transform={`translate(${x - 13} ${on ? 36 : 38}) scale(0.65)`}>
+            <ellipse cx={20} cy={41} rx={13} ry={2.4} fill="#000" opacity={0.5} />
+            <Art />
+          </g>
+        );
+      })}
+      {/* the candle, at the back */}
       <path d="M98 64 V54 H102 V64 Z" fill={GOLD_FLAT} opacity={0.55} />
-      <path d="M100 53 q-2.2 -4 0 -7 q2.2 3 0 7" fill="#f3dc8a" opacity={0.95} />
+      <path d="M100 53 q-2.2 -4 0 -7 q2.2 3 0 7" fill="#f3dc8a" opacity={0.95} className="live-flame" />
       <circle cx={100} cy={50} r={6} fill="#f3dc8a" opacity={0.12} />
-      <path d="M70 64 q4 -6 8 0 M126 64 l3 -7 l3 7" fill="none" stroke={GOLD_FLAT} strokeWidth={0.6} opacity={0.4} />
       {[0, 1, 2].map((i) => (
         <path key={i} d={`M${52 + i * 6} 14 v-${4 + i * 2}`} stroke={GOLD_FLAT} strokeWidth={0.5} opacity={0.25} />
       ))}
