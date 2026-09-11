@@ -1,4 +1,4 @@
-import { CARDS, COMBO_IDS, comboNote, SLOTS, type Tier } from '../../engine';
+import { CARDS, COMBO_IDS, comboNote, SIGILS, SLOTS, type Tier } from '../../engine';
 import { useGame } from '../../store';
 import { Card } from '../components/Card';
 import { CodexDetail } from '../components/CodexDetail';
@@ -12,6 +12,7 @@ export function CodexScreen() {
   const openCodex = useGame((s) => s.openCodex);
   const knownCount = Object.values(k.cards).filter((c) => c.tier > 0).length;
   const combos = k.combos ?? [];
+  const sigils = new Set(k.sigils ?? []);
 
   return (
     <main className="screen screen--codex">
@@ -23,6 +24,10 @@ export function CodexScreen() {
           {knownCount} / {CARDS.length}
         </span>
       </header>
+
+      <div className="progress" aria-hidden>
+        <div className="progress__bar" style={{ width: `${(100 * knownCount) / CARDS.length}%` }} />
+      </div>
 
       {k.seatsNamed && (
         <section className="codex__seats">
@@ -45,6 +50,22 @@ export function CodexScreen() {
           ))}
         </section>
       )}
+
+      <section className="sigils">
+        <div className="muted small">Sigils · {sigils.size} / {SIGILS.length}</div>
+        <div className="sigils__grid">
+          {SIGILS.map((sg) => {
+            const has = sigils.has(sg.id);
+            return (
+              <div key={sg.id} className={`sigil ${has ? 'sigil--on' : ''}`} title={`${sg.name} — ${sg.text}`}>
+                <span className="sigil__glyph">{has ? sg.glyph : '·'}</span>
+                <span className="sigil__name">{has ? sg.name : '???'}</span>
+                <span className="sigil__text">{sg.text}</span>
+              </div>
+            );
+          })}
+        </div>
+      </section>
 
       <section className="codex__grid">
         {CARDS.map((c) => {

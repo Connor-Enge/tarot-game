@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getCard, getDescent, getRelic, SCENES, SLOT_IDS, SLOTS } from '../../engine';
+import { getCard, getDescent, getRelic, SCENES, SIGILS, SLOT_IDS, SLOTS } from '../../engine';
 import { shareText, useGame } from '../../store';
 import { Card } from '../components/Card';
 
@@ -15,6 +15,7 @@ export function RunEndScreen() {
   const endRun = useGame((s) => s.endRun);
   const goto = useGame((s) => s.goto);
   const knowledge = useGame((s) => s.knowledge);
+  const earned = useGame((s) => s.earned);
   const [tab, setTab] = useState<'reveal' | 'journal'>('reveal');
   const [copied, setCopied] = useState(false);
   if (run.phase.kind !== 'dead' && run.phase.kind !== 'ascended') return null;
@@ -41,6 +42,21 @@ export function RunEndScreen() {
       <h2>{dead ? 'The reading ended you.' : 'You read it true.'}</h2>
       <p className="narration__outcome">{run.phase.resolution.narration.at(-1)}</p>
       {mode.kind === 'daily' && <p className="muted small center">Daily descent · {mode.label}</p>}
+      {earned.length > 0 && (
+        <div className="sigil-banner rise" style={{ animationDelay: '900ms' }}>
+          {earned.map((id) => {
+            const sg = SIGILS.find((x) => x.id === id)!;
+            return (
+              <div key={id} className="sigil-banner__item">
+                <span className="sigil__glyph">{sg.glyph}</span>
+                <span>
+                  <strong>{sg.name}</strong> <span className="muted">· {sg.text}</span>
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       <div className="tabs">
         <button className={`tab ${tab === 'reveal' ? 'tab--on' : ''}`} onClick={() => setTab('reveal')}>

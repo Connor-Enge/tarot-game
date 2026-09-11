@@ -62,6 +62,11 @@ export function TitleScreen() {
             })}
           </div>
           <p className="muted small">{lockedNote ? `Locked · ${lockedNote}` : `${current.name} · ${current.text}`}</p>
+          {!lockedNote && k.records?.[current.id] && (
+            <p className="muted small record">
+              {k.records[current.id].runs} down · {k.records[current.id].returns} back · deepest {k.records[current.id].bestDepth}
+            </p>
+          )}
         </div>
       )}
       <div className="stack">

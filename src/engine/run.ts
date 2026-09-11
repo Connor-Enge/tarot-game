@@ -53,6 +53,8 @@ export interface RunState {
   /** Relic ids held this run (boons and curses). */
   relics: string[];
   freeRedrawUsed: boolean;
+  redraws: number;
+  whispers: number;
   slots: SlotState[];
   activeSlot: number;
   phase: Phase;
@@ -122,6 +124,8 @@ export function startRun(seed: number, config: RunConfig = {}): RunState {
     marks: {},
     relics: [...(config.startingRelics ?? [])],
     freeRedrawUsed: false,
+    redraws: 0,
+    whispers: 0,
     slots: [],
     activeSlot: 0,
     phase: { kind: 'map' },
@@ -207,7 +211,7 @@ export function redrawActive(run: RunState): RunState {
   const deck = discard(run.deck, slot.candidates);
   const next = dealSeat(run, rng, deck, slot.slot);
   const slots = run.slots.map((s, i) => (i === run.activeSlot ? next.state : s));
-  return withRng({ ...run, deck: next.deck, slots, clarity: run.clarity - cost, freeRedrawUsed: run.freeRedrawUsed || cost === 0 }, rng);
+  return withRng({ ...run, deck: next.deck, slots, clarity: run.clarity - cost, freeRedrawUsed: run.freeRedrawUsed || cost === 0, redraws: run.redraws + 1 }, rng);
 }
 
 /** Spend Clarity to hear one keyword of a candidate. The UI shows it; the Codex remembers it. */
@@ -220,7 +224,7 @@ export function whisper(run: RunState, index: number): RunState {
   if (index < 0 || index >= slot.candidates.length || slot.whispered.includes(index)) return run;
   if (slot.candidates[index].hidden) return run;
   const slots = run.slots.map((s, i) => (i === run.activeSlot ? { ...s, whispered: [...s.whispered, index] } : s));
-  return { ...run, slots, clarity: run.clarity - cost };
+  return { ...run, slots, clarity: run.clarity - cost, whispers: run.whispers + 1 };
 }
 
 export function readingOf(run: RunState): Reading | null {

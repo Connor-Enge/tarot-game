@@ -404,3 +404,28 @@ em { color: var(--gold); font-style: normal; }
 .summary { display: flex; justify-content: space-between; padding: 12px 8px; border-radius: 12px; background: rgba(255,255,255,0.04); }
 .summary__cell { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 0; }
 .summary__n { font-size: 1.15rem; color: var(--gold-2); white-space: nowrap; }
+
+/* --- sigils -------------------------------------------------------------- */
+.sigils { display: flex; flex-direction: column; gap: 8px; }
+.sigils__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.sigil { display: grid; grid-template-columns: 26px 1fr; grid-template-rows: auto auto; column-gap: 8px; padding: 8px 10px; border-radius: 10px; background: rgba(255,255,255,0.03); opacity: 0.55; }
+.sigil--on { opacity: 1; background: rgba(214,178,94,0.08); border: 1px solid rgba(214,178,94,0.3); }
+.sigil__glyph { grid-row: 1 / span 2; color: var(--gold-2); font-size: 1.2rem; text-align: center; align-self: center; }
+.sigil__name { font-size: 0.9rem; }
+.sigil__text { font-size: 0.72rem; color: var(--muted); }
+.sigil-banner { display: flex; flex-direction: column; gap: 8px; padding: 10px 14px; border-radius: 12px; background: rgba(214,178,94,0.1); border: 1px solid rgba(214,178,94,0.35); }
+.sigil-banner__item { display: flex; gap: 10px; align-items: center; font-size: 0.95rem; }
+.progress { height: 3px; border-radius: 2px; background: rgba(255,255,255,0.08); overflow: hidden; }
+.progress__bar { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-2)); transition: width 600ms ease; }
+.record { margin-top: -4px; }
+
+/* --- resolution vignette ------------------------------------------------- */
+.screen--resolution { position: relative; }
+.screen--resolution::before {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: -1;
+  opacity: 0; animation: fade-in 1200ms ease 300ms both;
+}
+.tier--calamity.screen--resolution::before { background: radial-gradient(120% 90% at 50% 100%, rgba(214,96,94,0.28), transparent 60%); }
+.tier--harm.screen--resolution::before { background: radial-gradient(120% 90% at 50% 100%, rgba(214,96,94,0.14), transparent 60%); }
+.tier--boon.screen--resolution::before { background: radial-gradient(120% 90% at 50% 100%, rgba(214,178,94,0.16), transparent 60%); }
+.tier--triumph.screen--resolution::before { background: radial-gradient(120% 90% at 50% 100%, rgba(243,220,138,0.3), transparent 60%); }

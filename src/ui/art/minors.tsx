@@ -1,6 +1,20 @@
 import type { ReactElement } from 'react';
 import type { Suit } from '../../engine';
-import { Cloud, Figure, Horse, INK, Mountains, PALE, SUIT_SYMBOL, Throne, Water } from './primitives';
+import { Cloud, Figure, GOLD_FLAT, Horse, INK, Mountains, PALE, SUIT_SYMBOL, Throne, Tree, Water } from './primitives';
+
+/** Suit-specific ornament behind each Ace. */
+function AceFlourish({ suit }: { suit: Suit }) {
+  switch (suit) {
+    case 'wands':
+      return <g>{[30, 44, 58, 72].map((x, i) => <path key={i} d={`M${x} 96 q2 -8 5 -12 q0 8 -5 12`} fill={GOLD_FLAT} stroke={INK} strokeWidth={0.4} />)}</g>;
+    case 'cups':
+      return <g><path d="M40 70 q8 10 20 6" fill="none" stroke="#6ab7d6" strokeWidth={1.6} /><path d="M62 74 q6 8 4 18" fill="none" stroke="#6ab7d6" strokeWidth={1.2} /></g>;
+    case 'swords':
+      return <path d="M40 30 l4 -6 l4 4 l4 -6 l4 6 l4 -4 l4 6 v6 h-24 z" fill={GOLD_FLAT} stroke={INK} strokeWidth={0.5} />;
+    default:
+      return <g><Tree x={14} y={96} h={18} /><Tree x={70} y={98} h={16} /></g>;
+  }
+}
 
 type Pt = [number, number];
 
@@ -43,9 +57,15 @@ export function minorArt(suit: Suit, rank: number): ReactElement {
     return (
       <g>
         <Scenery />
-        <Cloud x={-8} y={60} w={34} />
-        <path d="M18 58 q10 -2 14 4 l-4 2 q-6 -2 -10 -2 z" fill={PALE} stroke={INK} strokeWidth={0.7} />
-        <Sym x={46} y={54} s={16} />
+        <Cloud x={-10} y={64} w={36} />
+        {/* an open hand from the cloud */}
+        <path d="M14 60 q8 -6 18 -2 l6 -3 q2 3 -2 5 l3 -1 q2 3 -3 5 q-4 4 -12 4 q-8 0 -10 -4 z" fill={PALE} stroke={INK} strokeWidth={0.7} strokeLinejoin="round" />
+        <AceFlourish suit={suit} />
+        <Sym x={50} y={52} s={17} />
+        {Array.from({ length: 8 }, (_, i) => {
+          const a = (i / 8) * Math.PI * 2;
+          return <line key={i} x1={50 + Math.cos(a) * 22} y1={52 + Math.sin(a) * 22} x2={50 + Math.cos(a) * 26} y2={52 + Math.sin(a) * 26} stroke={GOLD_FLAT} strokeWidth={0.8} strokeLinecap="round" />;
+        })}
       </g>
     );
   }
@@ -67,17 +87,18 @@ export function minorArt(suit: Suit, rank: number): ReactElement {
       return (
         <g>
           <Scenery />
-          <Figure x={34} y={98} h={50} arms="right-up" />
-          <Sym x={54} y={54} s={8} />
+          <Figure x={34} y={98} h={48} arms="hold" />
+          <Sym x={34} y={70} s={7} />
+          <path d="M28 54 q6 2 12 0" fill="none" stroke={PALE} strokeWidth={0.8} />
         </g>
       );
     case 12:
       return (
         <g>
           <Scenery />
-          <Horse x={40} y={104} fill={PALE} w={48} />
-          <Figure x={38} y={84} h={34} arms="right-up" />
-          <Sym x={56} y={54} s={8} />
+          <Horse x={38} y={104} fill={PALE} w={52} />
+          <Figure x={34} y={84} h={34} arms="right-up" />
+          <Sym x={50} y={52} s={8} />
         </g>
       );
     case 13:

@@ -7,3 +7,4 @@ export * from './resolve';
 export * from './rng';
 export * from './run';
 export * from './scenes';
+export * from './sigils';

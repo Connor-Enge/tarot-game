@@ -192,9 +192,19 @@ Thin Blood (6 vitality, after two returns). Each is a `RunConfig` passed to
 the lifted candidate. It shows only what the Codex already holds, so it is
 a memory aid, never a hint.
 
+**Sigils** (`sigils.ts`): fourteen milestones evaluated when a run ends,
+with the knowledge after that run folded in. Conditions are rules, so they
+are stated even when locked. Earned sigils show on the end screen and in
+the Codex. They change nothing about play.
+
+**Records**: per-descent runs, returns, and deepest scene, shown under the
+descent picker on the title screen.
+
 Queued:
 - Scene-specific relic flavor (the satchel on the bridge is a real relic).
-- Per-descent records (best depth, returns) on the title screen.
+- A "first descent" onboarding that teaches by doing, not by telling: the
+  first scene deals only Major Arcana and the first death is guaranteed to
+  reveal the four cards' meanings (it already does).
 
 ## Content debt
 

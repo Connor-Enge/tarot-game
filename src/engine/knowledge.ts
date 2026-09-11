@@ -28,6 +28,10 @@ export interface Knowledge {
   seatsNamed: boolean;
   /** Named readings the player has produced at least once. */
   combos?: string[];
+  /** Milestones earned. */
+  sigils?: string[];
+  /** Per-descent records. */
+  records?: Record<string, { runs: number; returns: number; bestDepth: number }>;
   runs: number;
   deaths: number;
   ascensions: number;
@@ -91,6 +95,23 @@ export function noteAscension(k: Knowledge, finalSpread: { cardId: string }[]): 
 export function noteCombos(k: Knowledge, ids: string[]): Knowledge {
   if (ids.length === 0) return k;
   return { ...k, combos: Array.from(new Set([...(k.combos ?? []), ...ids])) };
+}
+
+export function noteSigils(k: Knowledge, ids: string[]): Knowledge {
+  if (ids.length === 0) return k;
+  return { ...k, sigils: Array.from(new Set([...(k.sigils ?? []), ...ids])) };
+}
+
+/** A run ended on `descent`, reaching `depth` scenes; `returned` if it ascended. */
+export function noteRecord(k: Knowledge, descent: string, depth: number, returned: boolean): Knowledge {
+  const prev = k.records?.[descent] ?? { runs: 0, returns: 0, bestDepth: 0 };
+  return {
+    ...k,
+    records: {
+      ...k.records,
+      [descent]: { runs: prev.runs + 1, returns: prev.returns + (returned ? 1 : 0), bestDepth: Math.max(prev.bestDepth, depth) },
+    },
+  };
 }
 
 export function noteRunStarted(k: Knowledge): Knowledge {

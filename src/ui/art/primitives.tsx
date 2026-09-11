@@ -130,13 +130,21 @@ export function Throne({ x, y, w = 30, h = 34, fill = PALE }: P & { w?: number; 
 }
 
 export function Horse({ x, y, fill = PALE, w = 34 }: P & { fill?: string; w?: number }) {
-  const h = w * 0.5;
+  const h = w * 0.55;
+  const bx = x; const by = y - h * 0.5; // body center
   return (
-    <g fill={fill} stroke={INK} strokeWidth={0.8} strokeLinejoin="round">
-      <ellipse cx={x} cy={y - h * 0.55} rx={w * 0.38} ry={h * 0.32} />
-      <path d={`M${x + w * 0.3} ${y - h * 0.8} l${w * 0.14} ${-h * 0.5} l${w * 0.12} ${h * 0.05} l${w * 0.05} ${h * 0.35} l${-w * 0.09} ${h * 0.2} Z`} />
-      <path d={`M${x - w * 0.28} ${y - h * 0.4} l${-w * 0.04} ${h * 0.4} M${x - w * 0.14} ${y - h * 0.35} l0 ${h * 0.35} M${x + w * 0.12} ${y - h * 0.35} l0 ${h * 0.35} M${x + w * 0.26} ${y - h * 0.4} l${w * 0.05} ${h * 0.4}`} strokeWidth={1.4} />
-      <path d={`M${x - w * 0.38} ${y - h * 0.6} q${-w * 0.12} ${h * 0.2} ${-w * 0.06} ${h * 0.5}`} fill="none" />
+    <g fill={fill} stroke={INK} strokeWidth={0.8} strokeLinejoin="round" strokeLinecap="round">
+      {/* legs */}
+      <path d={`M${bx - w * 0.3} ${by + h * 0.1} l${-w * 0.06} ${h * 0.42} M${bx - w * 0.18} ${by + h * 0.15} l${w * 0.02} ${h * 0.38} M${bx + w * 0.16} ${by + h * 0.15} l${-w * 0.02} ${h * 0.38} M${bx + w * 0.3} ${by + h * 0.1} l${w * 0.07} ${h * 0.42}`} fill="none" strokeWidth={w * 0.06} />
+      {/* body */}
+      <ellipse cx={bx} cy={by} rx={w * 0.4} ry={h * 0.3} />
+      {/* neck + head */}
+      <path d={`M${bx + w * 0.28} ${by - h * 0.15} q${w * 0.1} ${-h * 0.5} ${w * 0.26} ${-h * 0.6} l${w * 0.14} ${h * 0.12} q${-w * 0.02} ${h * 0.16} ${-w * 0.16} ${h * 0.14} q${-w * 0.08} ${h * 0.2} ${-w * 0.14} ${h * 0.3} Z`} />
+      {/* ear, eye, mane, tail */}
+      <path d={`M${bx + w * 0.5} ${by - h * 0.72} l${w * 0.03} ${-h * 0.14} l${w * 0.05} ${h * 0.1}`} fill="none" />
+      <circle cx={bx + w * 0.58} cy={by - h * 0.62} r={w * 0.02} fill={INK} stroke="none" />
+      <path d={`M${bx + w * 0.3} ${by - h * 0.2} q${w * 0.06} ${-h * 0.3} ${w * 0.2} ${-h * 0.5}`} fill="none" strokeWidth={1.4} />
+      <path d={`M${bx - w * 0.4} ${by - h * 0.05} q${-w * 0.14} ${h * 0.15} ${-w * 0.08} ${h * 0.5}`} fill="none" strokeWidth={1.4} />
     </g>
   );
 }

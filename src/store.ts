@@ -13,6 +13,9 @@ import {
   noteAscension,
   noteCombos,
   noteDeath,
+  newSigils,
+  noteRecord,
+  noteSigils,
   noteResolved,
   noteRunStarted,
   noteWhisper,
@@ -40,6 +43,8 @@ interface GameStore {
   codexOpen: string | null;
   /** Chosen descent variant for free runs. */
   descent: string;
+  /** Sigils earned by the run that just ended. */
+  earned: string[];
 
   goto: (screen: Screen) => void;
   setDescent: (id: string) => void;
@@ -65,9 +70,9 @@ function buzz(ms: number | number[]) {
   }
 }
 
-function learn(k: Knowledge, run: RunState): Knowledge {
+function learn(k: Knowledge, run: RunState, mode: RunMode): { knowledge: Knowledge; earned: string[] } {
   const last = run.history[run.history.length - 1];
-  if (!last) return k;
+  if (!last) return { knowledge: k, earned: [] };
   let next = k;
   for (const s of run.slots) {
     if (s.chosen !== null) {
@@ -76,9 +81,16 @@ function learn(k: Knowledge, run: RunState): Knowledge {
     }
   }
   next = noteCombos(next, last.resolution.comboIds);
-  if (run.phase.kind === 'dead') next = noteDeath(next, finalSpread(run));
-  if (run.phase.kind === 'ascended') next = noteAscension(next, finalSpread(run));
-  return next;
+  let earned: string[] = [];
+  if (run.phase.kind === 'dead' || run.phase.kind === 'ascended') {
+    const returned = run.phase.kind === 'ascended';
+    if (returned) next = noteAscension(next, finalSpread(run));
+    else next = noteDeath(next, finalSpread(run));
+    next = noteRecord(next, mode.kind === 'daily' ? 'daily' : mode.descent, run.history.length, returned);
+    earned = newSigils(run, next);
+    next = noteSigils(next, earned);
+  }
+  return { knowledge: next, earned };
 }
 
 export const useGame = create<GameStore>((set, get) => ({
@@ -89,6 +101,7 @@ export const useGame = create<GameStore>((set, get) => ({
   lifted: null,
   codexOpen: null,
   descent: 'standard',
+  earned: [],
 
   goto: (screen) => set({ screen, codexOpen: null }),
   setDescent: (id) => set({ descent: id }),
@@ -99,7 +112,7 @@ export const useGame = create<GameStore>((set, get) => ({
     const knowledge = noteRunStarted(get().knowledge);
     saveKnowledge(knowledge);
     startDrone();
-    set({ run: startRun(seed, d.config), mode: { kind: 'free', descent: d.id }, knowledge, screen: 'run', lifted: null });
+    set({ run: startRun(seed, d.config), mode: { kind: 'free', descent: d.id }, knowledge, screen: 'run', lifted: null, earned: [] });
   },
 
   newDaily: () => {
@@ -107,7 +120,7 @@ export const useGame = create<GameStore>((set, get) => ({
     const knowledge = noteRunStarted(get().knowledge);
     saveKnowledge(knowledge);
     startDrone();
-    set({ run: startRun(seed), mode: { kind: 'daily', label }, knowledge, screen: 'run', lifted: null });
+    set({ run: startRun(seed), mode: { kind: 'daily', label }, knowledge, screen: 'run', lifted: null, earned: [] });
   },
 
   chooseNode: (index) => {
@@ -148,9 +161,9 @@ export const useGame = create<GameStore>((set, get) => ({
       stopDrone();
       sfx.ascend();
     }
-    const learned = learn(knowledge, next);
+    const { knowledge: learned, earned } = learn(knowledge, next, get().mode);
     saveKnowledge(learned);
-    set({ run: next, knowledge: learned, lifted: null });
+    set({ run: next, knowledge: learned, lifted: null, earned });
   },
 
   redraw: () => {
