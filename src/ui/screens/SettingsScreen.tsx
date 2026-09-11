@@ -27,6 +27,7 @@ export function SettingsScreen() {
       </header>
 
       <section className="settings">
+        <h3 className="settings__h">Feel</h3>
         <label className="toggle">
           <span>Sound</span>
           <input type="checkbox" checked={sound} onChange={(e) => set({ sound: e.target.checked })} />
@@ -42,6 +43,7 @@ export function SettingsScreen() {
           <input type="checkbox" checked={haptics} onChange={(e) => set({ haptics: e.target.checked })} />
           <span className="toggle__track" />
         </label>
+        <h3 className="settings__h">The reading</h3>
         <div className="field">
           <span>Reading pace</span>
           <div className="seg">
@@ -69,6 +71,7 @@ export function SettingsScreen() {
           <span className="toggle__track" />
         </label>
 
+        <h3 className="settings__h">The road</h3>
         <div className="field">
           <span>Descend with a seed</span>
           <div className="row">
@@ -87,6 +90,7 @@ export function SettingsScreen() {
           <p className="muted small">Paste a whole share text and you will walk the same road, on the same descent and depth. The same seed deals the same map and the same cards.</p>
         </div>
 
+        <h3 className="settings__h">The Codex</h3>
         <div className="field">
           <span>Carry the Codex</span>
           <div className="row">

@@ -932,3 +932,17 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .vow-line { display: inline-flex; align-items: center; justify-content: center; gap: 4px; width: 100%; }
 .vow-line__art { width: 18px; height: 18px; }
 .vow__record { margin-top: 1px; }
+
+/* --- descent chips wear their card backs ---------------------------------- */
+.descent-chip { position: relative; overflow: hidden; width: 38px; height: 54px; border-radius: 7px; }
+.descent-chip__back { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.55; transition: opacity 200ms; }
+.descent-chip--on .descent-chip__back { opacity: 1; }
+.descent-chip__glyph { position: relative; z-index: 1; text-shadow: 0 0 6px rgba(0,0,0,0.9), 0 0 2px rgba(0,0,0,0.9); color: var(--ink); }
+.descent-chip--on .descent-chip__glyph { color: var(--gold-2); }
+
+/* --- settings sections ---------------------------------------------------- */
+.settings__h {
+  margin: 4px 0 -10px; font-weight: normal; font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold);
+  display: flex; align-items: center; gap: 10px;
+}
+.settings__h::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(214,178,94,0.4), transparent); }

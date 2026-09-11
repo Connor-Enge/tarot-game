@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { CARDS, dailySeed, dailyStreakAlive, daylight, DEPTHS, DESCENTS, getCard, getDescent, maxDepthUnlocked } from '../../engine';
+import { CardBack, type BackVariant } from '../art/CardArt';
 import { TitleSky } from '../art/sky';
 import { ReaderMark } from '../components/ReaderMark';
 import { useGame } from '../../store';
@@ -93,7 +94,14 @@ export function TitleScreen() {
                   }}
                   aria-label={d.name}
                 >
-                  {open ? d.glyph : '🔒'}
+                  {open ? (
+                    <>
+                      <CardBack variant={d.id === 'short' || d.id === 'standard' ? 'standard' : (d.id as BackVariant)} className="descent-chip__back" />
+                      <span className="descent-chip__glyph">{d.glyph}</span>
+                    </>
+                  ) : (
+                    '🔒'
+                  )}
                 </button>
               );
             })}
