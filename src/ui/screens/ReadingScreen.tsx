@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { useSettings } from '../../settings';
-import { activeSlotState, canTakeBack, currentScene, getCard, hasRelic, redrawCost, sceneNumber, SLOT_IDS, SLOTS, totalScenes, whisperCost, whisperWords } from '../../engine';
+import { activeSlotState, canTakeBack, currentScene, getCard, hasRelic, redrawCost, sceneNumber, scoreSlot, SLOT_IDS, SLOTS, totalScenes, whisperCost, whisperWords } from '../../engine';
+
+/** Dev only: show the oracle's score on each candidate when the page is opened with ?oracle. */
+const ORACLE = import.meta.env.DEV && typeof location !== 'undefined' && location.search.includes('oracle');
 import { useGame } from '../../store';
 import { Card } from '../components/Card';
 import { SceneArt } from '../art/scenes';
@@ -100,10 +103,12 @@ function ReadingScreenInner() {
           const kw = whisperWords(kws, active.slot, bell ? 2 : 1).join(' · ');
           return (
             <div className="deal" style={{ animationDelay: `${i * 90}ms` }} key={`${c.cardId}-${i}`}>
+              {ORACLE && <span className="oracle-badge">{scoreSlot(scene, active.slot, c, run.marks).score.toFixed(1)}</span>}
               <Card
                 cardId={c.cardId}
                 reversed={c.reversed}
                 faceDown={c.hidden}
+                hiddenSuit={c.hidden ? (card.arcana === 'major' ? 'major' : card.suit) : undefined}
                 echo={c.echo}
                 size="lg"
                 lifted={lifted === i}

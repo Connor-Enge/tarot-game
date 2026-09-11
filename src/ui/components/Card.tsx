@@ -21,10 +21,12 @@ interface Props {
   onLongPress?: () => void;
   /** The last scene's Wake, following you. */
   echo?: boolean;
+  /** A Fog-hidden card lets its suit's color through. */
+  hiddenSuit?: string;
 }
 
 /** Card faces show name and art only. Meaning lives in the Codex. */
-export function Card({ cardId, reversed = false, faceDown = false, size = 'md', lifted, dim, mark, whisper, animKey, delay = 0, onClick, onLongPress, echo }: Props) {
+export function Card({ cardId, reversed = false, faceDown = false, size = 'md', lifted, dim, mark, whisper, animKey, delay = 0, onClick, onLongPress, echo, hiddenSuit }: Props) {
   const mode = useGame((s) => s.mode);
   const variant: BackVariant = mode.kind === 'weekly' ? 'weekly' : mode.kind === 'free' && mode.descent !== 'standard' && mode.descent !== 'short' ? (mode.descent as BackVariant) : 'standard';
   const timer = useRef<number | null>(null);
@@ -51,6 +53,7 @@ export function Card({ cardId, reversed = false, faceDown = false, size = 'md', 
     dim && 'card--dim',
     mark && `card--${mark}`,
     echo && 'card--echo',
+    hiddenSuit && `card--fog-${hiddenSuit}`,
   ]
     .filter(Boolean)
     .join(' ');

@@ -21,6 +21,7 @@ export function DeckSheet({ run, onClose }: { run: RunState; onClose: () => void
         <div className="sheet__title">
           {run.deck.draw.length} to draw · {discard.length} gone by
         </div>
+        <div className="muted small">seed {run.seed.toString(36)}{run.cut ? ` · cut at ${run.cut}` : ''}</div>
         {discard.length === 0 ? (
           <p className="muted">Nothing has gone by yet.</p>
         ) : (

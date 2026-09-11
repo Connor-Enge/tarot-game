@@ -740,3 +740,12 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 /* --- afterglow: warm after a return --------------------------------------- */
 .afterglow #root::before { background: radial-gradient(120% 80% at 50% 0%, hsl(40, 30%, 16%), var(--bg) 70%); }
 .afterglow .title__glyph { text-shadow: 0 0 18px rgba(243,220,138,0.6); }
+
+/* --- fog tint / dev oracle ---------------------------------------------- */
+.card--fog-wands .card__inner { box-shadow: 0 6px 18px rgba(0,0,0,0.5), inset 0 0 30px rgba(224,160,104,0.35); }
+.card--fog-cups .card__inner { box-shadow: 0 6px 18px rgba(0,0,0,0.5), inset 0 0 30px rgba(143,195,224,0.35); }
+.card--fog-swords .card__inner { box-shadow: 0 6px 18px rgba(0,0,0,0.5), inset 0 0 30px rgba(200,201,216,0.35); }
+.card--fog-pentacles .card__inner { box-shadow: 0 6px 18px rgba(0,0,0,0.5), inset 0 0 30px rgba(169,201,138,0.35); }
+.card--fog-major .card__inner { box-shadow: 0 6px 18px rgba(0,0,0,0.5), inset 0 0 30px rgba(243,220,138,0.4); }
+.oracle-badge { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); z-index: 3; font-size: 0.7rem; padding: 2px 8px; border-radius: 999px; background: #0f8; color: #000; font-family: monospace; }
+.deal { position: relative; }

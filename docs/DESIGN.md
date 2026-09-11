@@ -391,6 +391,13 @@ meanings are.
 **Afterglow**: after a return, the title and map glow warm and the motes
 turn gold until the next run ends.
 
+**Dev oracle**: on the dev server, `?oracle` shows the oracle's score on
+every candidate. It is compiled out of production builds. Use it with the
+sim when authoring a scene's affinities.
+
+**Fog tint**: a card hidden by Fog lets a faint suit color through its
+back. The deck sheet shows the run seed and where it was cut.
+
 ### Pillar sweep: where text reaches the screen
 
 Every surface that can show text about a card, and what gates it:
