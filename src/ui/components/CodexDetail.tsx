@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { CARDS, getCard, SLOT_IDS, SLOTS, witnessed, type Tier } from '../../engine';
+import { CARDS, getCard, SCENES, SLOT_IDS, SLOTS, witnessed, type Tier } from '../../engine';
+import { SceneArt } from '../art/scenes';
 import { useGame } from '../../store';
 import { Card } from './Card';
 
@@ -27,6 +28,19 @@ export function CodexDetail({ cardId, onClose }: { cardId: string; onClose: () =
   })();
   const nothing = !e;
   const [flipped, setFlipped] = useState(false);
+  // Where this card has been read: each scene once, with the best it did there.
+  const RANK: Record<string, number> = { calamity: 0, harm: 1, neutral: 2, boon: 3, triumph: 4 };
+  const MARK: Record<string, string> = { calamity: '✖', harm: '▽', neutral: '◇', boon: '△', triumph: '★' };
+  const places = (() => {
+    const map = new Map<string, { n: number; best: string }>();
+    for (const o of k.omenLog ?? []) {
+      if (o.cardId !== cardId || !SCENES[o.scene]) continue;
+      const cur = map.get(o.scene);
+      if (!cur) map.set(o.scene, { n: 1, best: o.tier });
+      else map.set(o.scene, { n: cur.n + 1, best: RANK[o.tier] > RANK[cur.best] ? o.tier : cur.best });
+    }
+    return Array.from(map.entries()).sort((a, b) => b[1].n - a[1].n).slice(0, 6);
+  })();
   const bonds = Object.entries(k.links ?? {})
     .filter(([key]) => key.split('|').includes(cardId))
     .map(([key, n]) => ({ other: key.split('|').find((id) => id !== cardId)!, n }))
@@ -101,6 +115,19 @@ export function CodexDetail({ cardId, onClose }: { cardId: string; onClose: () =
                   </div>
                 );
               })}
+            </div>
+          </div>
+        )}
+        {places.length > 0 && (
+          <div className="places">
+            <div className="muted small">Where you have read it</div>
+            <div className="places__row">
+              {places.map(([scene, p]) => (
+                <div key={scene} className={`place tier--${p.best}`} title={SCENES[scene].prompt} style={{ '--book-hue': SCENES[scene].hue } as React.CSSProperties}>
+                  <SceneArt id={scene} className="place__art" />
+                  <span className="place__mark">{MARK[p.best]}{p.n > 1 ? ` ×${p.n}` : ''}</span>
+                </div>
+              ))}
             </div>
           </div>
         )}
