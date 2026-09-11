@@ -50,6 +50,67 @@ const SUIT_SCENERY: Record<Suit, () => ReactElement> = {
   ),
 };
 
+/**
+ * A quiet motif for each rank, shared across suits and drawn behind the pips
+ * in the scenery's ink: the rank's mood without a word of its meaning.
+ */
+const RANK_MOTIF: Record<number, () => ReactElement> = {
+  2: () => (
+    <g opacity={0.3}>
+      <path d="M-4 104 q22 -14 44 0" fill={INK} />
+      <path d="M40 104 q22 -14 44 0" fill={INK} />
+    </g>
+  ),
+  3: () => (
+    <g opacity={0.35}>
+      {[18, 40, 62].map((x, i) => (
+        <path key={x} d={`M${x} 100 l0 -${8 + (i % 2) * 3} l6 ${8 + (i % 2) * 3} z`} fill={INK} />
+      ))}
+      <path d="M0 101 H80" stroke={INK} strokeWidth={0.6} />
+    </g>
+  ),
+  4: () => (
+    <g opacity={0.3}>
+      <path d="M12 104 V40 a28 28 0 0 1 56 0 V104" fill="none" stroke={INK} strokeWidth={1.4} />
+      {[20, 32, 44, 56].map((x) => <circle key={x} cx={x + 2} cy={22 + Math.abs(x - 38) * 0.18} r={1.4} fill={INK} />)}
+    </g>
+  ),
+  5: () => (
+    <g opacity={0.35}>
+      <path d="M0 96 L14 92 L22 100 L36 90 L44 98 L58 88 L66 96 L80 90" fill="none" stroke={INK} strokeWidth={1} strokeLinejoin="round" />
+    </g>
+  ),
+  6: () => (
+    <g opacity={0.45}>
+      <Figure x={40} y={106} h={18} arms="down" fill={INK} cloak />
+      <path d="M0 106 H80" stroke={INK} strokeWidth={0.6} />
+    </g>
+  ),
+  7: () => (
+    <g opacity={0.35}>
+      <path d="M0 106 Q40 76 80 106 Z" fill={INK} />
+      <Figure x={40} y={90} h={14} arms="hold" fill={INK} />
+    </g>
+  ),
+  8: () => (
+    <g opacity={0.25}>
+      {[0, 1, 2, 3].map((i) => <path key={i} d={`M${-10 + i * 24} 108 L${30 + i * 24} 4`} stroke={INK} strokeWidth={0.8} />)}
+    </g>
+  ),
+  9: () => (
+    <g opacity={0.35}>
+      {[6, 18, 30, 42, 54, 66, 78].map((x) => <rect key={x} x={x - 1} y={94} width={2} height={12} fill={INK} />)}
+      <rect x={0} y={97} width={80} height={1.2} fill={INK} />
+    </g>
+  ),
+  10: () => (
+    <g opacity={0.3}>
+      <path d="M-6 26 Q40 -6 86 26" fill="none" stroke={INK} strokeWidth={3} />
+      <path d="M-6 30 Q40 2 86 30" fill="none" stroke={INK} strokeWidth={1} />
+    </g>
+  ),
+};
+
 export function minorArt(suit: Suit, rank: number): ReactElement {
   const Sym = SUIT_SYMBOL[suit];
   const Scenery = SUIT_SCENERY[suit];
@@ -71,10 +132,12 @@ export function minorArt(suit: Suit, rank: number): ReactElement {
   }
   if (rank <= 10) {
     const pts = PIP_LAYOUT[rank];
-    const s = rank <= 4 ? 9 : rank <= 7 ? 7.5 : 6.5;
+    const s = rank <= 4 ? 10.5 : rank <= 7 ? 8.5 : 7.2;
+    const Motif = RANK_MOTIF[rank];
     return (
       <g>
         <Scenery />
+        {Motif && <Motif />}
         {pts.map(([x, y], i) => (
           <Sym key={i} x={x} y={y} s={s} />
         ))}
