@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { SCENES, SLOT_IDS, SLOTS, type RunState } from '../../engine';
+import { reckon, reckoningText, SCENES, SLOT_IDS, SLOT_POSITION, SLOTS, tallyText, type RunState } from '../../engine';
 import { SceneArt } from '../art/scenes';
 import { Card } from './Card';
 import { sfx } from '../../audio';
@@ -78,9 +78,30 @@ export function MemorySheet({
             </span>
           ))}
         </div>
+        {(() => {
+          const rs = reckon(scene, h.resolution, run.marks);
+          return (
+            <ol className="memory__story">
+              {SLOT_IDS.map((sl, i) => {
+                const r = rs[i];
+                const seat = h.resolution.slots[i];
+                return (
+                  <li key={sl} className={`memory__line reckon--${r.verdict}`} style={{ animationDelay: `${300 + i * 160}ms` }}>
+                    <span className="memory__omen">{SLOT_POSITION[sl].n} · {h.resolution.narration[i]}</span>
+                    <span className="reckon">
+                      <span className="reckon__score">{r.score > 0 ? '+' : r.score < 0 ? '−' : ''}{Math.abs(r.score) % 1 === 0 ? Math.abs(r.score) : Math.abs(r.score).toFixed(1)}</span>
+                      <span className="reckon__text">{reckoningText(r, seat.card.name)}</span>
+                    </span>
+                  </li>
+                );
+              })}
+            </ol>
+          );
+        })()}
         <p className={`narration__outcome tier--${tier} memory__outcome`}>
           {TIER_MARK[tier]} {h.resolution.narration.at(-1)}
         </p>
+        <p className="memory__tally muted small">{tallyText(h.resolution)}</p>
         {h.resolution.comboNotes.length > 0 && (
           <p className="memory__named muted small">{h.resolution.comboNotes.join(' ')}</p>
         )}

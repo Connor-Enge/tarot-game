@@ -1994,3 +1994,11 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 @keyframes seat-flash { 0% { opacity: 0; transform: scale(0.92); } 25% { opacity: 1; transform: scale(1.04); } 100% { opacity: 0; transform: scale(1.1); } }
 .seat--hurt .seat__seal { color: #f0a09e; text-shadow: 0 0 14px rgba(214,96,94,0.9); }
 .reduce-motion .seat--helped .seat__card::after, .reduce-motion .seat--hurt .seat__card::after { animation: none; opacity: 0; }
+
+/* --- a scene remembered, told in full ------------------------------------------ */
+.memory__story { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; text-align: left; }
+.memory__line { display: flex; flex-direction: column; gap: 3px; animation: rise 400ms ease both; }
+.memory__omen { font-style: italic; color: var(--ink); font-size: 0.95rem; }
+.memory__line .reckon { font-size: 0.78rem; }
+.memory__tally { margin: 0; text-align: center; }
+.reduce-motion .memory__line { animation: none; }

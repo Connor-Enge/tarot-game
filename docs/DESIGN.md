@@ -339,7 +339,7 @@ star to see its bonds. Your readings, as a constellation.
 cups soft sine fifth, swords a sharp saw, pentacles low triangle, majors a
 two-note chord).
 
-**Memory of the road**: visited map nodes stay tappable and open a sheet
+**Memory of the road** (each remembered scene is now told in full: the four omens with their seat scores and reckoning sentences, the outcome, and the tally, so retelling the road reads as the story of the descent): visited map nodes stay tappable and open a sheet
 with that scene's vignette, prompt, the four cards, and the outcome line.
 
 **Last reading**: the title screen remembers the final spread of the most
