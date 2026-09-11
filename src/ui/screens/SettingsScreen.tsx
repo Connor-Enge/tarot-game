@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { DESCENTS, exportKnowledge, importKnowledge, parseShare } from '../../engine';
+import { CARDS, DESCENTS, exportKnowledge, getDescent, importKnowledge, parseShare, readerTitle } from '../../engine';
 import { useSettings } from '../../settings';
 import { useGame } from '../../store';
+import { CardBack, type BackVariant } from '../art/CardArt';
+import { SigilToken } from '../art/sigil';
 
 export function SettingsScreen() {
   const goto = useGame((s) => s.goto);
@@ -17,6 +19,8 @@ export function SettingsScreen() {
   const { sound, reduceMotion, haptics, fixedTint, bigCards, readingSpeed, hideSeatNames, set } = useSettings();
   const [confirmReset, setConfirmReset] = useState(false);
   const [seed, setSeed] = useState('');
+  const [sealed, setSealed] = useState(false);
+  const descent = useGame((st) => st.descent);
 
   return (
     <main className="screen screen--settings">
@@ -72,6 +76,13 @@ export function SettingsScreen() {
         </label>
 
         <h3 className="settings__h">The road</h3>
+        <div className="road-preview">
+          <CardBack variant={descent === 'short' || descent === 'standard' ? 'standard' : (descent as BackVariant)} className="road-preview__back" />
+          <div className="road-preview__text">
+            <div>{getDescent(descent).name}</div>
+            <div className="muted small">{getDescent(descent).text}</div>
+          </div>
+        </div>
         <div className="field">
           <span>Descend with a seed</span>
           <div className="row">
@@ -93,6 +104,15 @@ export function SettingsScreen() {
         <h3 className="settings__h">The Codex</h3>
         <div className="field">
           <span>Carry the Codex</span>
+          {sealed && (
+            <div className="codex-seal rise">
+              <SigilToken id="codex-seal" glyph="☷" earned className="codex-seal__token" />
+              <div>
+                <div>Sealed · {readerTitle(knowledge)}</div>
+                <div className="muted small">{Object.values(knowledge.cards).filter((c) => c.tier > 0).length} of {CARDS.length} known · {knowledge.runs} descents</div>
+              </div>
+            </div>
+          )}
           <div className="row">
             <button
               className="btn"
@@ -102,6 +122,7 @@ export function SettingsScreen() {
                   if (navigator.share) await navigator.share({ text });
                   else await navigator.clipboard.writeText(text);
                   setNote('Copied. Paste it on another device.');
+                  setSealed(true);
                 } catch {
                   setNote('Could not copy.');
                 }
