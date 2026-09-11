@@ -1925,3 +1925,13 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .narration__outcome { flex-wrap: wrap; }
 .narration__outcome .tally { flex: 1 0 100%; }
 .narration__line { flex: 1 1 0; min-width: 12ch; }
+
+/* --- the guide page in the Codex ---------------------------------------------- */
+.lore { text-align: left; width: 100%; max-width: 44ch; margin: 6px auto 0; color: var(--ink); font-size: 0.92rem; line-height: 1.5; }
+.lore p { margin: 0 0 8px; }
+.lore__desc { color: var(--muted); font-style: italic; }
+.lore__h { margin: 10px 0 3px; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); font-weight: 600; }
+.lore__h--rev { color: #e0a39a; }
+.lore__locked { margin-top: 8px; text-align: center; }
+.lore__kwlabel { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-right: 4px; }
+.codex__kw { line-height: 1.6; }

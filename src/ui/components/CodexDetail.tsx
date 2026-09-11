@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CARDS, getCard, SCENES, SLOT_IDS, SLOTS, witnessed, type Tier } from '../../engine';
+import { CARDS, getCard, getLore, SCENES, SLOT_IDS, SLOTS, witnessed, type Tier } from '../../engine';
 import { SceneArt } from '../art/scenes';
 import { useGame } from '../../store';
 import { Card } from './Card';
@@ -70,13 +70,39 @@ export function CodexDetail({ cardId, onClose }: { cardId: string; onClose: () =
         </div>
         {nothing && <p className="muted">{k.dealt?.[cardId] ? 'It has passed through your hands. You have not read it.' : 'You have not read this card yet.'}</p>}
         {flipped && tier < 3 && <p className="muted small">Turned. What it means this way, you have not earned.</p>}
-        {tier >= 1 && <div className="codex__kw">{card.keywords.upright.join(' · ')}</div>}
-        {tier >= 2 && <p className="codex__meaning">{card.meaning.upright}</p>}
-        {tier >= 3 && (
-          <p className="codex__meaning codex__meaning--rev">
-            <em>Reversed:</em> {card.meaning.reversed}
-          </p>
+        {tier >= 1 && (
+          <div className="codex__kw">
+            <span className="lore__kwlabel">Upright</span> {card.keywords.upright.join(' · ')}
+            {tier >= 3 && (
+              <>
+                <br />
+                <span className="lore__kwlabel">Reversed</span> {card.keywords.reversed.join(' · ')}
+              </>
+            )}
+          </div>
         )}
+        {tier >= 2 && (() => {
+          const lore = getLore(cardId);
+          return (
+            <div className="lore">
+              <p className="lore__desc">{lore.description}</p>
+              <h4 className="lore__h">Upright meaning</h4>
+              <p>{lore.upright}</p>
+              <h4 className="lore__h">Relationships</h4>
+              <p>{lore.relationships}</p>
+              <h4 className="lore__h">Career</h4>
+              <p>{lore.career}</p>
+              {tier >= 3 ? (
+                <>
+                  <h4 className="lore__h lore__h--rev">Reversed</h4>
+                  <p>{lore.reversed}</p>
+                </>
+              ) : (
+                <p className="muted small lore__locked">Its reversed meaning waits for mastery.</p>
+              )}
+            </div>
+          );
+        })()}
         {tier >= 3 && (
           <button type="button" className={`chip chip--sig ${k.signature === cardId ? 'chip--on' : ''}`} onClick={() => setSignature(k.signature === cardId ? null : cardId)}>
             {k.signature === cardId ? '✦ Your signature · release it' : '✦ Make it your signature'}

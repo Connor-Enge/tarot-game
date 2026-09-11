@@ -1,4 +1,5 @@
 export * from './cards';
+export * from './lore';
 export * from './deck';
 export * from './descents';
 export * from './knowledge';

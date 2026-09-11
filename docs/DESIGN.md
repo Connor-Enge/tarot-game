@@ -118,6 +118,16 @@ Tower is without a definition.
 
 ## Knowledge (the Codex)
 
+**The guide page** (`src/engine/lore.ts`, owner's request: the old
+one-line meanings were far too thin): every one of the 78 cards has a
+full page in the Codex, in the shape of a printed guidebook: a
+description of the picture and what it symbolises, the upright meaning,
+how it reads for relationships and for career, and the reversed
+meaning, with upright and reversed keywords above. Pages are shown by
+tier: keywords at glimpsed, the page at known, the reversed half at
+mastered. Nothing of it ever appears on a card face or in a reading.
+
+
 `src/engine/knowledge.ts`. Per card, a tier:
 
 | Tier | Name | Unlocks | How |
