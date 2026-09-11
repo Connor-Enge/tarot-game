@@ -59,7 +59,9 @@ em { color: var(--gold); font-style: normal; }
   margin: 0 auto;
 }
 
-.topbar { display: flex; justify-content: space-between; align-items: center; }
+.topbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.topbar > .small { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.topbar .stats { flex-shrink: 0; }
 .stats { display: flex; gap: 12px; font-variant-numeric: tabular-nums; }
 .stat--vit { color: var(--vit); }
 .stat--cla { color: var(--cla); }
