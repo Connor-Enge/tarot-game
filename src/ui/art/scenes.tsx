@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import { Chain, Cloud, Figure, Flame, GOLD_FLAT, INK, Lantern, Lightning, Moon, Mountains, PALE, Pillar, Star, Sun, Tree, Water } from './primitives';
+import { Chain, Cloud, Figure, Flame, GOLD_FLAT, Horse, INK, Lantern, Lightning, Moon, Mountains, PALE, Pillar, Star, Sun, Tree, Water } from './primitives';
 
 /**
  * A small vignette per scene, drawn in a 200 x 60 window. Silhouettes on a
@@ -319,6 +319,66 @@ const ART: Record<string, () => ReactElement> = {
       <path d="M20 52 Q60 40 100 50 T180 48" fill="none" stroke={DARK} strokeWidth={2} opacity={0.8} strokeLinecap="round" />
       <path d="M0 31 L28 14 L54 31 L86 18 L118 31 L150 22 L200 31 Z" fill={DARK} opacity={0.9} />
       <Figure x={140} y={50} h={16} fill={DARK} cloak />
+    </g>
+  ),
+  mill: () => (
+    <g>
+      <path d="M0 60 L0 50 L200 48 L200 60 Z" fill={DARK} />
+      <path d="M92 60 L94 28 L106 28 L108 60 Z" fill={DARK} />
+      <path d="M90 30 L100 22 L110 30 Z" fill={DARK} />
+      <g transform="rotate(20 100 26)">
+        {[0, 90, 180, 270].map((a) => (
+          <g key={a} transform={`rotate(${a} 100 26)`}>
+            <path d="M100 26 L100 4" stroke={GOLD_FLAT} strokeWidth={0.8} opacity={0.8} />
+            <path d="M100 6 L106 8 L106 20 L100 22 Z" fill={PALE} opacity={0.35} />
+          </g>
+        ))}
+      </g>
+      <circle cx={100} cy={26} r={1.2} fill={GOLD_FLAT} />
+      {[30, 52, 140, 168].map((x, i) => (
+        <circle key={x} cx={x} cy={38 + i * 3} r={0.7} fill={PALE} opacity={0.4} />
+      ))}
+      <ellipse cx={100} cy={52} rx={30} ry={3} fill={HAZE} />
+    </g>
+  ),
+  chapel: () => (
+    <g>
+      <path d="M80 44 L80 22 L100 10 L120 22 L120 44 Z" fill={DARK} />
+      <path d="M96 22 L100 6 L104 22" fill={DARK} />
+      <line x1={100} y1={6} x2={100} y2={0} stroke={GOLD_FLAT} strokeWidth={0.7} />
+      <line x1={98} y1={2} x2={102} y2={2} stroke={GOLD_FLAT} strokeWidth={0.7} />
+      <path d="M92 44 V32 a4 4 0 0 1 8 0 V44 Z M104 44 V32 a4 4 0 0 1 8 0 V44 Z" fill={GOLD_FLAT} opacity={0.5} />
+      <path d="M0 44 Q40 40 80 44 T160 44 T200 44 L200 60 L0 60 Z" fill="#0a0c1a" opacity={0.9} />
+      {[0, 1, 2].map((i) => (
+        <path key={i} d={`M0 ${47 + i * 5} Q50 ${44 + i * 5} 100 ${47 + i * 5} T200 ${47 + i * 5}`} fill="none" stroke={PALE} strokeWidth={0.4} opacity={0.25} />
+      ))}
+      <path d="M92 48 V46 M108 48 V46" stroke={GOLD_FLAT} strokeWidth={4} opacity={0.18} />
+      {[20, 40, 160, 180].map((x) => (
+        <path key={x} d={`M${x} 44 v-10 M${x - 2} 36 l2 -4 l2 4`} fill="none" stroke={DARK} strokeWidth={0.8} />
+      ))}
+    </g>
+  ),
+  hunt: () => (
+    <g>
+      <path d="M0 60 L0 50 L200 52 L200 60 Z" fill={DARK} />
+      <path d="M0 50 L200 52" stroke={GOLD_FLAT} strokeWidth={0.4} opacity={0.5} />
+      {[22, 52].map((x, i) => (
+        <g key={x} opacity={1 - i * 0.3}>
+          <Horse x={x} y={50} fill={DARK} w={30} />
+          <path d={`M${x - 3} ${41} q3 -9 6 0 Z`} fill={DARK} />
+          <circle cx={x} cy={30} r={2.2} fill={DARK} />
+        </g>
+      ))}
+      <path d="M30 26 q6 -8 14 -4" fill="none" stroke={GOLD_FLAT} strokeWidth={0.9} opacity={0.9} />
+      {[92, 108].map((x, i) => (
+        <path key={x} d={`M${x} 51 l2 -3 l7 -1 l4 -3 l1 4 l3 1 l0 2 Z`} fill={DARK} opacity={0.9 - i * 0.2} />
+      ))}
+      <g transform="skewX(-12)">
+        <Figure x={172} y={52} h={20} fill={DARK} cloak />
+      </g>
+      {[1, 2, 3].map((i) => (
+        <path key={i} d={`M${60 + i * 18} ${32 - i * 4} a${10 + i * 4} ${10 + i * 4} 0 0 1 ${20 + i * 8} 0`} fill="none" stroke={HAZE} strokeWidth={0.6} opacity={0.5 - i * 0.12} />
+      ))}
     </g>
   ),
   abyss: () => (
