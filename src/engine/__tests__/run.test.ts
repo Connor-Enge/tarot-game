@@ -123,3 +123,40 @@ describe('cut the deck', () => {
     expect(canCut(chooseNode(run, 0))).toBe(false);
   });
 });
+
+describe('echo', () => {
+  it('deals the last Wake into the next Vessel without duplicating it', () => {
+    let run = chooseNode({ ...startRun(8), vitality: 99 }, 0);
+    for (let i = 0; i < SLOT_IDS.length; i++) run = chooseCandidate(run, 0);
+    expect(run.phase.kind).toBe('resolved');
+    const wake = run.history[0].reading.wake;
+    expect(run.echo?.cardId).toBe(wake.cardId);
+    run = advance(run);
+    if (run.phase.kind === 'relic') run = { ...run, phase: { kind: 'map' }, layer: run.layer + 1, node: null } as typeof run;
+    run = chooseNode(run, 0);
+    const vessel = run.slots[0].candidates;
+    expect(vessel.length).toBe(4);
+    const echoed = vessel.find((c) => c.echo);
+    expect(echoed?.cardId).toBe(wake.cardId);
+    expect(run.echo).toBeNull();
+    // exactly one copy of the card in circulation
+    const all = [...run.deck.draw, ...run.deck.discard, ...vessel.map((c) => c.cardId)];
+    expect(all.filter((id) => id === wake.cardId).length).toBe(1);
+  });
+});
+
+describe('weekly config', () => {
+  it('builds a longer map and seeds by ISO week', async () => {
+    const { WEEKLY_CONFIG } = await import('../descents');
+    const { weeklySeed } = await import('../rng');
+    const run = startRun(3, WEEKLY_CONFIG);
+    expect(run.map.length).toBe(11);
+    expect(run.vitality).toBe(12);
+    const a = weeklySeed(new Date('2026-09-07T01:00:00Z'));
+    const b = weeklySeed(new Date('2026-09-13T23:00:00Z'));
+    const c = weeklySeed(new Date('2026-09-14T01:00:00Z'));
+    expect(a.seed).toBe(b.seed);
+    expect(a.label).toBe('2026-W37');
+    expect(a.seed).not.toBe(c.seed);
+  });
+});

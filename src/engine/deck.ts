@@ -7,6 +7,8 @@ export interface DrawnCard {
   reversed: boolean;
   /** Dealt face down (Fog curse). The player chooses blind; the seat reveals it. */
   hidden?: boolean;
+  /** The previous scene's Wake, following you into this Vessel. */
+  echo?: boolean;
 }
 
 export interface DeckState {

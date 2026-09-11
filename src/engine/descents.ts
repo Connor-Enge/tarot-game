@@ -16,7 +16,12 @@ export interface RunConfig {
   startingClarity?: number;
   /** Put twelve shuffled Major Arcana on top of the deck. Used for a player's first descent. */
   majorsFirst?: boolean;
+  /** Layers per act. Default [4, 4]. */
+  actLayers?: readonly number[];
 }
+
+/** The weekly descent: a longer road, a little more blood. */
+export const WEEKLY_CONFIG: RunConfig = { actLayers: [5, 5], startingVitality: 12 };
 
 export interface Descent {
   id: string;

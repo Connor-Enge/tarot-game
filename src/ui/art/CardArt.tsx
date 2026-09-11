@@ -73,6 +73,26 @@ export function ArtDefs() {
           <stop offset="0" stopColor="#4a3f7c" />
           <stop offset="1" stopColor="#151230" />
         </radialGradient>
+        <radialGradient id="backGlow-arcana" cx="0.5" cy="0.5" r="0.6">
+          <stop offset="0" stopColor="#6b5a2a" />
+          <stop offset="1" stopColor="#1e1708" />
+        </radialGradient>
+        <radialGradient id="backGlow-inverted" cx="0.5" cy="0.5" r="0.6">
+          <stop offset="0" stopColor="#6e2a3a" />
+          <stop offset="1" stopColor="#1c0a10" />
+        </radialGradient>
+        <radialGradient id="backGlow-fogbound" cx="0.5" cy="0.5" r="0.6">
+          <stop offset="0" stopColor="#3f5a5a" />
+          <stop offset="1" stopColor="#0f1a1a" />
+        </radialGradient>
+        <radialGradient id="backGlow-thin" cx="0.5" cy="0.5" r="0.6">
+          <stop offset="0" stopColor="#5a1c1c" />
+          <stop offset="1" stopColor="#140606" />
+        </radialGradient>
+        <radialGradient id="backGlow-weekly" cx="0.5" cy="0.5" r="0.6">
+          <stop offset="0" stopColor="#2f5a4a" />
+          <stop offset="1" stopColor="#0a1a14" />
+        </radialGradient>
         <filter id="paper" x="0" y="0" width="100%" height="100%">
           <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="3" result="n" />
           <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.35  0 0 0 0 0.28  0 0 0 0 0.18  0 0 0 0.08 0" />
@@ -128,21 +148,29 @@ export function CardArt({ cardId, className }: { cardId: string; className?: str
   );
 }
 
-export function CardBack({ className }: { className?: string }) {
+export type BackVariant = 'standard' | 'arcana' | 'inverted' | 'fogbound' | 'thin' | 'weekly';
+
+export function CardBack({ className, variant = 'standard' }: { className?: string; variant?: BackVariant }) {
+  const glow = variant === 'standard' ? 'url(#backGlow)' : `url(#backGlow-${variant})`;
   return (
     <svg viewBox="0 0 100 160" className={className} xmlns="http://www.w3.org/2000/svg">
-      <rect x={0} y={0} width={100} height={160} rx={6} fill="url(#backGlow)" />
+      <rect x={0} y={0} width={100} height={160} rx={6} fill={glow} />
       <rect x={4} y={4} width={92} height={152} rx={4} fill="url(#backLattice)" />
       <rect x={4} y={4} width={92} height={152} rx={4} fill="none" stroke={GOLD_FLAT} strokeWidth={1.2} />
       <rect x={8} y={8} width={84} height={144} rx={3} fill="none" stroke={GOLD_FLAT} strokeWidth={0.4} opacity={0.6} />
-      <circle cx={50} cy={80} r={26} fill="#151230" stroke={GOLD_FLAT} strokeWidth={0.8} />
+      <circle cx={50} cy={80} r={26} fill={glow} stroke={GOLD_FLAT} strokeWidth={0.8} />
       <circle cx={50} cy={80} r={22} fill="none" stroke={GOLD_FLAT} strokeWidth={0.4} strokeDasharray="1 2" />
       {Array.from({ length: 8 }, (_, i) => {
         const a = (i / 8) * Math.PI * 2;
         return <line key={i} x1={50 + Math.cos(a) * 8} y1={80 + Math.sin(a) * 8} x2={50 + Math.cos(a) * 20} y2={80 + Math.sin(a) * 20} stroke={GOLD_FLAT} strokeWidth={i % 2 ? 0.5 : 1} />;
       })}
       <circle cx={50} cy={80} r={7} fill="none" stroke={GOLD_FLAT} strokeWidth={0.8} />
-      <circle cx={53} cy={79} r={5.5} fill="#151230" />
+      <circle cx={53} cy={79} r={5.5} fill={glow} />
+      {variant === 'inverted' && <path d="M50 30 l4 6 h-8 z M50 130 l-4 -6 h8 z" fill={GOLD_FLAT} opacity={0.8} />}
+      {variant === 'arcana' && <text x={50} y={26} fontSize={7} textAnchor="middle" fill={GOLD_FLAT} fontFamily="Georgia, serif" letterSpacing={2}>XXII</text>}
+      {variant === 'fogbound' && <path d="M14 140 q8 -4 16 0 t16 0 t16 0 t16 0 t8 0" fill="none" stroke={GOLD_FLAT} strokeWidth={0.8} opacity={0.6} />}
+      {variant === 'thin' && <path d="M50 22 q-3 4 0 8 q3 -4 0 -8" fill={GOLD_FLAT} opacity={0.8} />}
+      {variant === 'weekly' && <path d="M40 22 h20 M50 18 v8" stroke={GOLD_FLAT} strokeWidth={0.8} opacity={0.7} />}
       <circle cx={50} cy={80} r={1.5} fill={GOLD_FLAT} />
       {[[50, 24], [50, 136], [18, 80], [82, 80]].map(([x, y], i) => (
         <path key={i} d={`M${x} ${y - 4} l3 4 l-3 4 l-3 -4 z`} fill={GOLD_FLAT} opacity={0.8} />

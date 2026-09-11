@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { getCard } from '../../engine';
-import { CardArt, CardBack } from '../art/CardArt';
+import { useGame } from '../../store';
+import { CardArt, CardBack, type BackVariant } from '../art/CardArt';
 
 interface Props {
   cardId?: string;
@@ -18,10 +19,14 @@ interface Props {
   onClick?: () => void;
   /** Press and hold. Used to magnify a card in hand. */
   onLongPress?: () => void;
+  /** The last scene's Wake, following you. */
+  echo?: boolean;
 }
 
 /** Card faces show name and art only. Meaning lives in the Codex. */
-export function Card({ cardId, reversed = false, faceDown = false, size = 'md', lifted, dim, mark, whisper, animKey, delay = 0, onClick, onLongPress }: Props) {
+export function Card({ cardId, reversed = false, faceDown = false, size = 'md', lifted, dim, mark, whisper, animKey, delay = 0, onClick, onLongPress, echo }: Props) {
+  const mode = useGame((s) => s.mode);
+  const variant: BackVariant = mode.kind === 'weekly' ? 'weekly' : mode.kind === 'free' && mode.descent !== 'standard' ? (mode.descent as BackVariant) : 'standard';
   const timer = useRef<number | null>(null);
   const fired = useRef(false);
   const start = () => {
@@ -45,6 +50,7 @@ export function Card({ cardId, reversed = false, faceDown = false, size = 'md', 
     lifted && 'card--lifted',
     dim && 'card--dim',
     mark && `card--${mark}`,
+    echo && 'card--echo',
   ]
     .filter(Boolean)
     .join(' ');
@@ -69,10 +75,11 @@ export function Card({ cardId, reversed = false, faceDown = false, size = 'md', 
       aria-label={card ? `${card.name}${reversed ? ', reversed' : ''}` : 'face-down card'}
     >
       <div className="card__inner">
-        {faceDown || !card ? <CardBack className="card__svg" /> : <CardArt cardId={card.id} className="card__svg" />}
+        {faceDown || !card ? <CardBack className="card__svg" variant={variant} /> : <CardArt cardId={card.id} className="card__svg" />}
         {mark === 'scarred' && <div className="card__scar" aria-hidden />}
       </div>
       {whisper && <div className="card__whisper">{whisper}</div>}
+      {echo && !whisper && <div className="card__whisper card__whisper--echo">echo</div>}
     </button>
   );
 }

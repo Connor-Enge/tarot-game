@@ -82,6 +82,7 @@ export function ReadingScreen() {
                 cardId={c.cardId}
                 reversed={c.reversed}
                 faceDown={c.hidden}
+                echo={c.echo}
                 size="lg"
                 lifted={lifted === i}
                 dim={lifted !== null && lifted !== i}

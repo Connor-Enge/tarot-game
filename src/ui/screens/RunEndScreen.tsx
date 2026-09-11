@@ -49,7 +49,7 @@ export function RunEndScreen() {
         cards,
         title: dead ? 'The reading ended you.' : 'You read it true.',
         subtitle: run.phase.kind === 'dead' ? `Scene ${run.history.length} · ${SCENES[last.sceneId].prompt}` : SCENES[last.sceneId].prompt,
-        footer: mode.kind === 'daily' ? `Daily ${mode.label}` : `${getDescent(mode.descent).name} · seed ${run.seed.toString(36)}`,
+        footer: mode.kind === 'daily' ? `Daily ${mode.label}` : mode.kind === 'weekly' ? `Weekly ${mode.label}` : `${getDescent(mode.descent).name} · seed ${run.seed.toString(36)}`,
         seatsNamed: knowledge.seatsNamed,
         journey: run.history.map((h) => TIER_MARK[h.resolution.tier]).join(''),
         outcome: last.resolution.narration.at(-1),
@@ -73,6 +73,7 @@ export function RunEndScreen() {
       <h2>{dead ? 'The reading ended you.' : 'You read it true.'}</h2>
       <p className="narration__outcome">{run.phase.resolution.narration.at(-1)}</p>
       {mode.kind === 'daily' && <p className="muted small center">Daily descent · {mode.label}</p>}
+      {mode.kind === 'weekly' && <p className="muted small center">Weekly descent · {mode.label}</p>}
       {earned.length > 0 && (
         <div className="sigil-banner rise" style={{ animationDelay: '900ms' }}>
           {earned.map((id) => {
@@ -132,7 +133,7 @@ export function RunEndScreen() {
             <div className="summary__cell"><span className="summary__n">{run.relics.length ? run.relics.map((r) => getRelic(r).glyph).join(' ') : '—'}</span><span className="muted small">relics</span></div>
           </div>
           <p className="muted small center">
-            {mode.kind === 'daily' ? `Daily ${mode.label}` : getDescent(mode.descent).name} · seed {run.seed.toString(36)}
+            {mode.kind === 'daily' ? `Daily ${mode.label}` : mode.kind === 'weekly' ? `Weekly ${mode.label}` : getDescent(mode.descent).name} · seed {run.seed.toString(36)}
           </p>
           {run.history.map((h, i) => (
             <article key={i} className={`journal__row tier--${h.resolution.tier} rise`} style={{ animationDelay: `${i * 80}ms` }}>

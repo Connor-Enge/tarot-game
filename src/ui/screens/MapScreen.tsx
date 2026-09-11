@@ -112,10 +112,10 @@ export function MapScreen() {
         {run.map.map((layer, li) => {
           const isCurrent = li === run.layer;
           const isPast = li < run.layer;
-          const actStart = li > 0 && actOfLayer(li) !== actOfLayer(li - 1);
+          const actStart = li > 0 && actOfLayer(li, run.actLayers) !== actOfLayer(li - 1, run.actLayers);
           return (
             <div key={li} className={`map__layer ${isCurrent ? 'map__layer--current' : ''} ${isPast ? 'map__layer--past' : ''} ${actStart ? 'map__layer--act' : ''}`}>
-              {(li === 0 || actStart) && <div className="map__act">{ACT_NAMES[actOfLayer(li)]}</div>}
+              {(li === 0 || actStart) && <div className="map__act">{ACT_NAMES[actOfLayer(li, run.actLayers)] ?? `Act ${actOfLayer(li, run.actLayers)}`}</div>}
               {layer.map((node, ni) => {
                 const wasHere = visitedIds.has(node.id);
                 return (

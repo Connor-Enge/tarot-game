@@ -7,6 +7,8 @@ import {
   chooseRelic as chooseRelicRun,
   cutDeck as cutDeckRun,
   dailySeed,
+  WEEKLY_CONFIG,
+  weeklySeed,
   getDescent,
   finalSpread,
   getCard,
@@ -31,7 +33,7 @@ import {
 } from './engine';
 
 export type Screen = 'title' | 'run' | 'codex' | 'settings';
-export type RunMode = { kind: 'free'; descent: string } | { kind: 'daily'; label: string };
+export type RunMode = { kind: 'free'; descent: string } | { kind: 'daily'; label: string } | { kind: 'weekly'; label: string };
 
 interface GameStore {
   screen: Screen;
@@ -56,6 +58,7 @@ interface GameStore {
   setDescent: (id: string) => void;
   newRun: (seed?: number) => void;
   newDaily: () => void;
+  newWeekly: () => void;
   chooseNode: (index: number) => void;
   chooseRelic: (index: number) => void;
   cutDeck: (at: number) => void;
@@ -95,7 +98,7 @@ function learn(k: Knowledge, run: RunState, mode: RunMode): { knowledge: Knowled
     const returned = run.phase.kind === 'ascended';
     if (returned) next = noteAscension(next, finalSpread(run));
     else next = noteDeath(next, finalSpread(run));
-    next = noteRecord(next, mode.kind === 'daily' ? 'daily' : mode.descent, run.history.length, returned);
+    next = noteRecord(next, mode.kind === 'free' ? mode.descent : mode.kind, run.history.length, returned);
     earned = newSigils(run, next);
     next = noteSigils(next, earned);
   }
@@ -135,6 +138,14 @@ export const useGame = create<GameStore>((set, get) => ({
     saveKnowledge(knowledge);
     startDrone();
     set({ run: startRun(seed), mode: { kind: 'daily', label }, knowledge, screen: 'run', lifted: null, earned: [], firstDescent: false });
+  },
+
+  newWeekly: () => {
+    const { seed, label } = weeklySeed();
+    const knowledge = noteRunStarted(get().knowledge);
+    saveKnowledge(knowledge);
+    startDrone();
+    set({ run: startRun(seed, WEEKLY_CONFIG), mode: { kind: 'weekly', label }, knowledge, screen: 'run', lifted: null, earned: [], firstDescent: false });
   },
 
   chooseNode: (index) => {
@@ -251,6 +262,8 @@ export function shareText(run: RunState, mode: RunMode): string {
   const head =
     mode.kind === 'daily'
       ? `Arcana Descent · Daily ${mode.label}`
-      : `Arcana Descent · ${getDescent(mode.descent).name} · seed ${run.seed.toString(36)}`;
+      : mode.kind === 'weekly'
+        ? `Arcana Descent · Weekly ${mode.label}`
+        : `Arcana Descent · ${getDescent(mode.descent).name} · seed ${run.seed.toString(36)}`;
   return `${head}\n${end}\n${tiers}\n${spread}`;
 }

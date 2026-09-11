@@ -8,6 +8,7 @@ const FAN_IDS = ['major-17', 'major-18', 'major-16', 'major-0', 'major-19'];
 export function TitleScreen() {
   const newRun = useGame((s) => s.newRun);
   const newDaily = useGame((s) => s.newDaily);
+  const newWeekly = useGame((s) => s.newWeekly);
   const goto = useGame((s) => s.goto);
   const k = useGame((s) => s.knowledge);
   const descent = useGame((s) => s.descent);
@@ -77,9 +78,14 @@ export function TitleScreen() {
         <button className="btn btn--primary" onClick={() => newRun()}>
           {current.id === 'standard' ? 'Descend' : `Descend · ${current.name}`}
         </button>
-        <button className="btn" onClick={newDaily}>
-          Daily descent
-        </button>
+        <div className="row">
+          <button className="btn" onClick={newDaily}>
+            Daily
+          </button>
+          <button className="btn" onClick={newWeekly} title="A longer road, shared by everyone this week">
+            Weekly
+          </button>
+        </div>
         <div className="row">
           <button className="btn" onClick={() => goto('codex')}>
             Codex {known > 0 && <span className="pill">{known}</span>}

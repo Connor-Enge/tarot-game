@@ -451,11 +451,11 @@ export const TOTAL_LAYERS = ACT_LAYERS.reduce((a, b) => a + b, 0) + 1;
  * A layered map: every node in layer N connects to every node in layer N+1.
  * Cheap to render on a phone, still gives a real choice each step.
  */
-export function buildMap(rng: { pick<T>(arr: readonly T[]): T; int(max: number): number }): MapNode[][] {
+export function buildMap(rng: { pick<T>(arr: readonly T[]): T; int(max: number): number }, actLayers: readonly number[] = ACT_LAYERS): MapNode[][] {
   const layers: MapNode[][] = [];
   const used = new Set<string>();
   let layerIndex = 0;
-  ACT_LAYERS.forEach((count, actIdx) => {
+  actLayers.forEach((count, actIdx) => {
     const act = actIdx + 1;
     const pool = Object.values(SCENES).filter((s) => !s.terminal && s.minAct <= act);
     for (let l = 0; l < count; l++) {
@@ -478,15 +478,15 @@ export function buildMap(rng: { pick<T>(arr: readonly T[]): T; int(max: number):
       layerIndex++;
     }
   });
-  layers.push([{ id: `${layerIndex}-0`, sceneId: 'abyss', kind: 'abyss', act: ACT_LAYERS.length + 1, layer: layerIndex }]);
+  layers.push([{ id: `${layerIndex}-0`, sceneId: 'abyss', kind: 'abyss', act: actLayers.length + 1, layer: layerIndex }]);
   return layers;
 }
 
-export function actOfLayer(layer: number): number {
+export function actOfLayer(layer: number, actLayers: readonly number[] = ACT_LAYERS): number {
   let acc = 0;
-  for (let i = 0; i < ACT_LAYERS.length; i++) {
-    acc += ACT_LAYERS[i];
+  for (let i = 0; i < actLayers.length; i++) {
+    acc += actLayers[i];
     if (layer < acc) return i + 1;
   }
-  return ACT_LAYERS.length + 1;
+  return actLayers.length + 1;
 }

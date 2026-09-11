@@ -3,7 +3,7 @@ import type { RunConfig } from './descents';
 import { resolveReading, type Reading, type Resolution } from './resolve';
 import { createRng, type Rng } from './rng';
 import { BOON_IDS, CURSE_IDS } from './relics';
-import { actOfLayer, buildMap, SCENES, SLOT_IDS, type MapNode, type Scene, type SlotId } from './scenes';
+import { ACT_LAYERS, actOfLayer, buildMap, SCENES, SLOT_IDS, type MapNode, type Scene, type SlotId } from './scenes';
 
 export const CANDIDATES_PER_SLOT = 3;
 export const STARTING_VITALITY = 10;
@@ -57,6 +57,10 @@ export interface RunState {
   whispers: number;
   /** Where the deck was cut before the first scene, if it was. */
   cut?: number;
+  /** Layers per act for this run. */
+  actLayers: readonly number[];
+  /** The last scene's Wake card, waiting to be dealt into the next Vessel. */
+  echo: DrawnCard | null;
   slots: SlotState[];
   activeSlot: number;
   phase: Phase;
@@ -98,7 +102,7 @@ function clampClarity(run: RunState, clarity: number): number {
 }
 
 export function currentAct(run: RunState): number {
-  return actOfLayer(run.layer);
+  return actOfLayer(run.layer, run.actLayers);
 }
 
 export function sceneNumber(run: RunState): number {
@@ -111,7 +115,8 @@ export function totalScenes(run: RunState): number {
 
 export function startRun(seed: number, config: RunConfig = {}): RunState {
   const rng = createRng(seed);
-  const map = buildMap(rng);
+  const actLayers = config.actLayers ?? ACT_LAYERS;
+  const map = buildMap(rng, actLayers);
   let deck = createDeck(rng, config.deck);
   if (config.majorsFirst) {
     const majors = rng.shuffle(deck.draw.filter((id) => id.startsWith('major-'))).slice(0, 12);
@@ -133,6 +138,8 @@ export function startRun(seed: number, config: RunConfig = {}): RunState {
     freeRedrawUsed: false,
     redraws: 0,
     whispers: 0,
+    actLayers,
+    echo: null,
     slots: [],
     activeSlot: 0,
     phase: { kind: 'map' },
@@ -156,6 +163,15 @@ function dealSeat(run: RunState, rng: Rng, deck: DeckState, slot: SlotId): { dec
   if (slot === 'wake' && hasRelic(run, 'shard')) count++;
   const dealt = draw(deck, rng, count, run.reversedChance);
   let cards = applyMarks(run, dealt.cards);
+  let outDeck = dealt.deck;
+  if (slot === 'vessel' && run.echo) {
+    // Pull the echoed card back out of the discard so it is not duplicated.
+    const i = outDeck.discard.lastIndexOf(run.echo.cardId);
+    if (i >= 0) {
+      outDeck = { ...outDeck, discard: [...outDeck.discard.slice(0, i), ...outDeck.discard.slice(i + 1)] };
+      cards = [...cards, { ...run.echo, hidden: false, echo: true }];
+    }
+  }
   if (slot === 'hand' && hasRelic(run, 'salt')) cards = cards.map((c) => (run.marks[c.cardId] === 'scarred' ? c : { ...c, reversed: false }));
   if (slot === 'vessel' && hasRelic(run, 'splinter') && cards.length && !cards.some((c) => c.reversed)) {
     const i = cards.findIndex((c) => run.marks[c.cardId] !== 'charged');
@@ -165,7 +181,7 @@ function dealSeat(run: RunState, rng: Rng, deck: DeckState, slot: SlotId): { dec
     const i = rng.int(cards.length);
     cards = cards.map((c, j) => (j === i ? { ...c, hidden: true } : c));
   }
-  return { deck: dealt.deck, state: { slot, candidates: cards, chosen: null, whispered: [] } };
+  return { deck: outDeck, state: { slot, candidates: cards, chosen: null, whispered: [] } };
 }
 
 /**
@@ -192,7 +208,7 @@ export function chooseNode(run: RunState, index: number): RunState {
   const rng = rngOf(run);
   const first = dealSeat(run, rng, run.deck, SLOT_IDS[0]);
   return withRng(
-    { ...run, node: index, deck: first.deck, slots: [first.state], activeSlot: 0, freeRedrawUsed: false, phase: { kind: 'reading' } },
+    { ...run, node: index, deck: first.deck, slots: [first.state], activeSlot: 0, freeRedrawUsed: false, echo: null, phase: { kind: 'reading' } },
     rng,
   );
 }
@@ -300,7 +316,8 @@ function resolve(run: RunState): RunState {
     }
   }
 
-  const base = withRng({ ...run, deck, history, vitality, clarity, marks, relics }, rng);
+  const echo: DrawnCard = { cardId: revealed.wake.cardId, reversed: revealed.wake.reversed };
+  const base = withRng({ ...run, deck, history, vitality, clarity, marks, relics, echo }, rng);
   if (vitality <= 0) return { ...base, vitality: 0, phase: { kind: 'dead', resolution } };
   if (scene.terminal) return { ...base, phase: { kind: 'ascended', resolution } };
   return { ...base, phase: { kind: 'resolved', resolution, offer, cursed, found } };

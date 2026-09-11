@@ -53,3 +53,14 @@ export function dailySeed(date = new Date()): { seed: number; label: string } {
   const label = date.toISOString().slice(0, 10);
   return { seed: seedFromString(`arcana-descent:${label}`), label };
 }
+
+/** Same seed for everyone in the same ISO week. */
+export function weeklySeed(date = new Date()): { seed: number; label: string } {
+  const d = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+  const day = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - day);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  const week = Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+  const label = `${d.getUTCFullYear()}-W${String(week).padStart(2, '0')}`;
+  return { seed: seedFromString(`arcana-descent:week:${label}`), label };
+}

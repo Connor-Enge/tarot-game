@@ -248,9 +248,17 @@ Hand than in the Wake. With the Small Bell you hear two.
 **Codex flip**: tap the big card in the detail sheet to turn it. If you
 have not mastered the reversed meaning, it says so and shows nothing.
 
+**Echo**: the Wake card of one scene follows you into the next. It is
+dealt as a fourth candidate for the Vessel, marked as an echo, pulled back
+out of the discard so nothing is duplicated. "What follows in your wake"
+is literal. Balance: majors-only rose from ~78% to ~83%; random unchanged.
+
+**Weekly descent**: one seed per ISO week, a longer map (five layers per
+act), twelve vitality. Its own card back, as does every descent.
+
 Queued:
-- Card art for the card back per descent.
-- Weekly seed with a longer map.
+- A "the reader" avatar that gathers marks over many runs.
+- Difficulty ascension tiers after returning.
 
 ## Content debt
 
