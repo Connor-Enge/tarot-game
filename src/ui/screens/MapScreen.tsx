@@ -37,6 +37,33 @@ function MapScreenInner() {
   const actStart = run.actLayers.slice(0, act - 1).reduce((a, b) => a + b, 0);
   const newAct = act > 1 && run.layer === actStart && run.node === null;
   const [banner, setBanner] = useState<number | null>(newAct ? act : null);
+  // Keys: 1-3 choose a door (or foretell it while foretelling), arrows move between doors.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement | null;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.getAttribute('role') === 'slider')) return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      const st = useGame.getState();
+      const r = st.run;
+      if (!r || r.phase.kind !== 'map') return;
+      const doors = Array.from(document.querySelectorAll<HTMLButtonElement>('.node--choosable'));
+      if (!doors.length) return;
+      if (/^[1-3]$/.test(e.key)) {
+        const i = Number(e.key) - 1;
+        if (i < doors.length) {
+          doors[i].click();
+          e.preventDefault();
+        }
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+        const cur = doors.findIndex((d) => d === document.activeElement);
+        const next = cur < 0 ? 0 : (cur + (e.key === 'ArrowRight' ? 1 : doors.length - 1)) % doors.length;
+        doors[next].focus();
+        e.preventDefault();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
   useEffect(() => {
     if (!newAct) return;
     setBanner(act);

@@ -45,8 +45,8 @@ Open `?gallery` on the dev server to see all 78 card faces at once.
   sigils, a Ledger, and search. Export it to another device.
 - **Signature.** Master a card and make it yours: dealt upright into the first
   Vessel of every free descent.
-- **Keys.** On the reading screen, 1 to 4 lift a card, Enter places it, R redraws,
-  W whispers, T turns.
+- **Keys.** On the map, 1 to 3 choose a door and arrows move between them. On the
+  reading screen, 1 to 4 lift a card, Enter places it, R redraws, W whispers, T turns.
 - **Turn.** Once a scene, one clarity turns the lifted card over.
 - **The Stranger.** At a good rest, a cloaked figure offers one trade: clarity for
   blood, a boon for a boon, or a curse lifted for a price.
