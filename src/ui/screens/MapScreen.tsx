@@ -118,9 +118,25 @@ function MapScreenInner() {
 
       <section className="map" aria-label="the descent" ref={mapRef}>
         <svg className="map__lines" width={size.w} height={size.h} aria-hidden>
-          {lines.map((l, i) => (
-            <line key={i} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} className={`map__line map__line--${l.kind}`} />
-          ))}
+          {lines.map((l, i) => {
+            if (l.kind === 'open') return <line key={i} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} className="map__line map__line--open" />;
+            // The walked road bends a little, like a path worn by feet rather than drawn by a rule.
+            const mx = (l.x1 + l.x2) / 2;
+            const my = (l.y1 + l.y2) / 2;
+            const dx = l.x2 - l.x1;
+            const dy = l.y2 - l.y1;
+            const len = Math.hypot(dx, dy) || 1;
+            const bend = ((i % 3) - 1) * Math.min(14, len * 0.18) + ((run.seed + i) % 5) - 2;
+            const cx = mx + (-dy / len) * bend;
+            const cy = my + (dx / len) * bend;
+            const d = `M${l.x1} ${l.y1} Q${cx} ${cy} ${l.x2} ${l.y2}`;
+            return (
+              <g key={i}>
+                <path d={d} className="map__line map__line--done" />
+                <path d={d} className="map__line map__line--steps" />
+              </g>
+            );
+          })}
         </svg>
         {run.map.map((layer, li) => {
           const isCurrent = li === run.layer;
@@ -132,12 +148,14 @@ function MapScreenInner() {
               {layer.map((node, ni) => {
                 const wasHere = visitedIds.has(node.id);
                 const historyIndex = wasHere ? visited.findIndex((v) => v.id === node.id) : -1;
+                const tierHere = historyIndex >= 0 ? run.history[historyIndex]?.resolution.tier : undefined;
+                const passed = isPast && !wasHere;
                 return (
                   <button
                     key={node.id}
                     type="button"
                     data-node={node.id}
-                    className={`node node--${node.kind} node--stakes-${SCENES[node.sceneId].stakes} ${wasHere ? 'node--visited' : ''} ${isCurrent ? 'node--choosable' : ''}`}
+                    className={`node node--${node.kind} node--stakes-${SCENES[node.sceneId].stakes} ${wasHere ? 'node--visited' : ''} ${isCurrent ? 'node--choosable' : ''} ${passed ? 'node--passed' : ''}`}
                     disabled={!isCurrent && !wasHere}
                     onClick={() => {
                       if (isCurrent && foretelling) {
@@ -149,6 +167,7 @@ function MapScreenInner() {
                     aria-label={wasHere ? `remember scene ${historyIndex + 1}` : `${node.kind} node`}
                   >
                     <span className="node__glyph">{KIND_GLYPH[node.kind]}</span>
+                    {tierHere && <span className={`node__tier node__tier--${tierHere}`} aria-hidden>{TIER_MARK[tierHere]}</span>}
                     {run.foretold.includes(node.id) && <span className="node__place">{SCENES[node.sceneId].place}</span>}
                   </button>
                 );
