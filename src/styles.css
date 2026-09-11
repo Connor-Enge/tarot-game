@@ -1150,3 +1150,7 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .card__sig--inline { position: static; display: inline-grid; vertical-align: -3px; margin-right: 4px; }
 .chip--sig { align-self: center; }
 .signature-line { margin: -6px 0 0; }
+
+/* --- tap targets ------------------------------------------------------------- */
+.deck-pill { min-height: 32px; padding-top: 6px; padding-bottom: 6px; }
+.cut__strip:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; border-radius: 8px; }

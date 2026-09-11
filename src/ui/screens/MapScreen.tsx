@@ -100,6 +100,14 @@ function MapScreenInner() {
           <div
             className="cut__strip"
             role="slider"
+            aria-label="where to cut the deck"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              const max = run.deck.draw.length - 1;
+              const cur = cutAt ?? Math.floor(run.deck.draw.length / 2);
+              if (e.key === 'ArrowLeft') setCutAt(Math.max(1, cur - 1));
+              if (e.key === 'ArrowRight') setCutAt(Math.min(max, cur + 1));
+            }}
             aria-valuemin={1}
             aria-valuemax={run.deck.draw.length - 1}
             aria-valuenow={cutAt ?? Math.floor(run.deck.draw.length / 2)}
