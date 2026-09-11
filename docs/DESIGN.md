@@ -296,6 +296,11 @@ screen with "Resume" or "Let it go". Cleared when the run ends.
 **Tappable omens**: each omen line on the resolution screen opens the
 Codex detail for its card. Still only what you have earned.
 
+**The verdict seal**: once a reading is read, a wax seal presses onto
+the resolution screen under the deltas: rings, notches, the tier's mark,
+its word around the rim, coloured by tier (gold for triumph, blood for
+calamity). The same marks and words the map and the book use.
+
 **Larger cards** setting for the hand.
 
 **Robustness**: an error boundary catches any render failure and offers

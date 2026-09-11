@@ -7,6 +7,7 @@ import { sfx } from '../../audio';
 import { useSettings } from '../../settings';
 import { useGame } from '../../store';
 import { TierFlourish } from '../art/flourish';
+import { VerdictSeal } from '../art/verdict';
 import { RelicArt } from '../art/relics';
 import { Card } from '../components/Card';
 import { CodexDetail } from '../components/CodexDetail';
@@ -145,6 +146,9 @@ function ResolutionScreenInner() {
           {resolution.deltas.vitality !== 0 && <span className="stat--vit">♥ {fmt(resolution.deltas.vitality)}</span>}
           {resolution.deltas.clarity !== 0 && <span className="stat--cla">◈ {fmt(resolution.deltas.clarity)}</span>}
         </p>
+        <div className={`verdict-wrap verdict-wrap--${resolution.tier}`} style={{ animationDelay: revealAll ? '0ms' : `${700 + resolution.narration.length * step}ms` }} aria-hidden>
+          <VerdictSeal tier={resolution.tier} />
+        </div>
       </section>
 
       {codexOpen && <CodexDetail cardId={codexOpen} onClose={() => openCodex(null)} />}
