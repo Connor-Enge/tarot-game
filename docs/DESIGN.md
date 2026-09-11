@@ -687,7 +687,13 @@ identity, not power, which is the point.
   matters: the Fool's white rose, the white rose on Death's black banner,
   roses and lilies in the Magician's garden. Open `?gallery` in dev to see
   every face at once. Shared gradients/filters live in one `<ArtDefs />`
-  block at the app root.
+  block at the app root. Held close (the long-press zoom in a reading,
+  the Codex sheet) the art is alive: the Wheel and the World's wreath
+  turn, the Sun's rays wheel, stars twinkle, water and clouds drift, the
+  Tower's bolt flickers, flames lick, the Hanged Man sways, the Moon's
+  crayfish rises. Nowhere else; the hand and the seats stay still. The
+  hooks are `live-*` classes on the primitives and a few major groups,
+  gated by an `.alive` ancestor and switched off by reduce-motion.
 
 ## Open questions
 

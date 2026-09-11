@@ -22,7 +22,7 @@ export function Sun({ x, y, r = 10, rays = 12, face = false }: P & { r?: number;
   }
   return (
     <g>
-      {lines}
+      <g className="live-rays">{lines}</g>
       <circle cx={x} cy={y} r={r} fill={GOLD} stroke={INK} strokeWidth={0.8} />
       {face && (
         <g stroke={INK} strokeWidth={0.8} fill="none">
@@ -51,7 +51,7 @@ export function Star({ x, y, r = 4, points = 8, fill = GOLD }: P & { r?: number;
     const rr = i % 2 === 0 ? r : r * 0.42;
     pts.push(`${x + Math.cos(a) * rr},${y + Math.sin(a) * rr}`);
   }
-  return <polygon points={pts.join(' ')} fill={fill} stroke={INK} strokeWidth={0.4} />;
+  return <polygon points={pts.join(' ')} fill={fill} stroke={INK} strokeWidth={0.4} className="live-star" style={{ animationDelay: `${((x * 7 + y * 3) % 40) / 10}s` }} />;
 }
 
 export function Ground({ y = 96, fill = INK, opacity = 1 }: { y?: number; fill?: string; opacity?: number }) {
@@ -66,7 +66,7 @@ export function Water({ y = 92, rows = 3 }: { y?: number; rows?: number }) {
   return (
     <g fill="none" stroke={INK} strokeWidth={0.7} opacity={0.7}>
       {Array.from({ length: rows }, (_, i) => (
-        <path key={i} d={`M0 ${y + i * 5} q5 -2.5 10 0 t10 0 t10 0 t10 0 t10 0 t10 0 t10 0 t10 0`} />
+        <path key={i} className="live-water" style={{ animationDelay: `${i * -0.9}s` }} d={`M-20 ${y + i * 5} q5 -2.5 10 0 t10 0 t10 0 t10 0 t10 0 t10 0 t10 0 t10 0 t10 0 t10 0`} />
       ))}
     </g>
   );
@@ -74,7 +74,7 @@ export function Water({ y = 92, rows = 3 }: { y?: number; rows?: number }) {
 
 export function Cloud({ x, y, w = 24 }: P & { w?: number }) {
   const h = w * 0.4;
-  return <path d={`M${x} ${y} a${h * 0.5} ${h * 0.5} 0 0 1 ${w * 0.25} ${-h * 0.5} a${h * 0.6} ${h * 0.6} 0 0 1 ${w * 0.35} 0 a${h * 0.5} ${h * 0.5} 0 0 1 ${w * 0.3} ${h * 0.4} a${h * 0.4} ${h * 0.4} 0 0 1 ${-w * 0.05} ${h * 0.5} L${x} ${y + h * 0.4} Z`} fill={PALE} stroke={INK} strokeWidth={0.6} />;
+  return <path d={`M${x} ${y} a${h * 0.5} ${h * 0.5} 0 0 1 ${w * 0.25} ${-h * 0.5} a${h * 0.6} ${h * 0.6} 0 0 1 ${w * 0.35} 0 a${h * 0.5} ${h * 0.5} 0 0 1 ${w * 0.3} ${h * 0.4} a${h * 0.4} ${h * 0.4} 0 0 1 ${-w * 0.05} ${h * 0.5} L${x} ${y + h * 0.4} Z`} fill={PALE} stroke={INK} strokeWidth={0.6} className="live-cloud" style={{ animationDelay: `${(x % 5) * -2}s` }} />;
 }
 
 export function Pillar({ x, y = 8, h = 80, w = 8, dark = false }: P & { h?: number; w?: number; dark?: boolean }) {
@@ -150,11 +150,11 @@ export function Horse({ x, y, fill = PALE, w = 34 }: P & { fill?: string; w?: nu
 }
 
 export function Lightning({ x, y, len = 40 }: P & { len?: number }) {
-  return <path d={`M${x} ${y} l${-len * 0.18} ${len * 0.33} l${len * 0.16} ${-len * 0.02} l${-len * 0.22} ${len * 0.4} l${len * 0.3} ${-len * 0.45} l${-len * 0.14} ${0.01 * len} l${len * 0.12} ${-len * 0.27} Z`} fill={GOLD} stroke={INK} strokeWidth={0.5} />;
+  return <path d={`M${x} ${y} l${-len * 0.18} ${len * 0.33} l${len * 0.16} ${-len * 0.02} l${-len * 0.22} ${len * 0.4} l${len * 0.3} ${-len * 0.45} l${-len * 0.14} ${0.01 * len} l${len * 0.12} ${-len * 0.27} Z`} fill={GOLD} stroke={INK} strokeWidth={0.5} className="live-bolt" />;
 }
 
 export function Flame({ x, y, s = 6 }: P & { s?: number }) {
-  return <path d={`M${x} ${y} q${-s * 0.9} ${-s * 0.9} ${-s * 0.2} ${-s * 2} q${s * 0.2} ${s * 0.8} ${s * 0.5} ${s * 0.5} q${s * 0.1} ${-s * 0.9} ${s * 0.6} ${-s * 1.3} q${s * 0.7} ${s * 1.6} ${-s * 0.9} ${s * 2.8} Z`} fill={GOLD} stroke={BLOOD} strokeWidth={0.5} />;
+  return <path d={`M${x} ${y} q${-s * 0.9} ${-s * 0.9} ${-s * 0.2} ${-s * 2} q${s * 0.2} ${s * 0.8} ${s * 0.5} ${s * 0.5} q${s * 0.1} ${-s * 0.9} ${s * 0.6} ${-s * 1.3} q${s * 0.7} ${s * 1.6} ${-s * 0.9} ${s * 2.8} Z`} fill={GOLD} stroke={BLOOD} strokeWidth={0.5} className="live-flame" style={{ animationDelay: `${((x + y) % 7) * -0.15}s` }} />;
 }
 
 export function Infinity({ x, y, s = 6 }: P & { s?: number }) {

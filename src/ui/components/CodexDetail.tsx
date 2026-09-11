@@ -50,7 +50,7 @@ export function CodexDetail({ cardId, onClose }: { cardId: string; onClose: () =
   return (
     <div className="sheet" role="dialog" aria-label={card.name} onClick={onClose}>
       <div className="sheet__body" onClick={(ev) => ev.stopPropagation()}>
-        <div className={`sheet__card sheet__card--${card.arcana === 'major' ? 'major' : card.suit}`} title="Tap to turn the card">
+        <div className={`sheet__card alive sheet__card--${card.arcana === 'major' ? 'major' : card.suit}`} title="Tap to turn the card">
           <Card cardId={cardId} size="lg" reversed={flipped} onClick={() => setFlipped((f) => !f)} />
         </div>
         <div className="sheet__title">

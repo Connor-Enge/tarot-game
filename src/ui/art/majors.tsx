@@ -204,6 +204,7 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <Cloud x={56} y={12} w={22} />
       <Cloud x={2} y={100} w={20} />
       <Cloud x={56} y={100} w={22} />
+      <g className="live-spin">
       <circle cx={40} cy={56} r={28} fill={PALE} stroke={INK} strokeWidth={1.2} />
       <circle cx={40} cy={56} r={18} fill="none" stroke={INK} strokeWidth={0.8} />
       <circle cx={40} cy={56} r={6} fill={GOLD} stroke={INK} strokeWidth={0.8} />
@@ -215,6 +216,7 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
         const a = (i / 4) * Math.PI * 2 - Math.PI / 4;
         return <text key={ch} x={40 + Math.cos(a) * 23} y={56 + Math.sin(a) * 23 + 2.5} fontSize={7} textAnchor="middle" fill={INK} fontFamily="serif">{ch}</text>;
       })}
+      </g>
       <path d="M12 70 q-6 12 2 22" fill="none" stroke={INK} strokeWidth={2} strokeLinecap="round" />
       <path d="M66 40 l6 -10 l4 12 z" fill={BLOOD} />
       <path d="M32 24 q8 -8 16 0 l-2 6 h-12 z" fill={GOLD} stroke={INK} strokeWidth={0.6} />
@@ -249,12 +251,14 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       {[20, 30, 46, 56].map((x) => (
         <path key={x} d={`M${x} 11 q3 4 0 8 q-3 -4 0 -8`} fill={GOLD} stroke={INK} strokeWidth={0.4} />
       ))}
+      <g className="live-sway">
       <line x1={40} y1={11} x2={40} y2={24} stroke={INK} strokeWidth={1.8} />
       <path d="M40 24 l-8 10 M40 24 l6 4" stroke={INK} strokeWidth={2.4} strokeLinecap="round" />
       <path d="M32 34 l16 0 l-4 30 l-8 0 z" fill={INK} />
       <path d="M34 62 l-6 8 M46 62 l6 8" stroke={INK} strokeWidth={2.2} strokeLinecap="round" />
       <circle cx={40} cy={76} r={4.4} fill={INK} />
       <circle cx={40} cy={76} r={8} fill="none" stroke={GOLD_FLAT} strokeWidth={0.9} />
+      </g>
     </g>
   ),
   13: () => (
@@ -372,7 +376,7 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <ellipse cx={60} cy={82} rx={6} ry={3.5} fill={INK} />
       <circle cx={55} cy={78} r={2.2} fill={INK} />
       <Water y={94} rows={3} />
-      <path d="M36 104 q4 -6 8 0 q-2 4 -4 4 q-2 0 -4 -4 M34 100 l2 4 M46 100 l-2 4" fill={BLOOD} stroke={INK} strokeWidth={0.5} />
+      <path className="live-rise" d="M36 104 q4 -6 8 0 q-2 4 -4 4 q-2 0 -4 -4 M34 100 l2 4 M46 100 l-2 4" fill={BLOOD} stroke={INK} strokeWidth={0.5} />
     </g>
   ),
   19: () => (
@@ -426,6 +430,7 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
     <g>
       <rect x={0} y={0} width={80} height={112} fill="url(#skyDeep)" opacity={0.25} />
       {/* laurel wreath */}
+      <g className="live-spin live-spin--slow">
       <ellipse cx={40} cy={56} rx={27} ry={41} fill="none" stroke={INK} strokeWidth={7} />
       <ellipse cx={40} cy={56} rx={27} ry={41} fill="none" stroke="#5a7a3a" strokeWidth={5} />
       {Array.from({ length: 22 }, (_, i) => {
@@ -434,6 +439,7 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
         const y = 56 + Math.sin(a) * 41;
         return <ellipse key={i} cx={x} cy={y} rx={3.2} ry={1.6} fill="#8fb35a" stroke={INK} strokeWidth={0.4} transform={`rotate(${(a * 180) / Math.PI + 90} ${x} ${y})`} />;
       })}
+      </g>
       {[[40, 15], [40, 97]].map(([x, y], i) => (
         <path key={i} d={`M${x - 5} ${y} q5 -4 10 0 q-5 4 -10 0`} fill={BLOOD} stroke={INK} strokeWidth={0.5} />
       ))}

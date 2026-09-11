@@ -249,7 +249,7 @@ function ReadingScreenInner() {
       {deckOpen && <DeckSheet run={run} onClose={() => openDeck(false)} />}
       {zoom && (
         <div className="zoom" onClick={() => setZoom(null)} role="dialog" aria-label="magnified card">
-          <div className="zoom__card">
+          <div className="zoom__card alive">
             <Card cardId={zoom.cardId} reversed={zoom.reversed} size="lg" />
           </div>
           <p className="muted small">{getCard(zoom.cardId).name}{zoom.reversed ? ' · reversed' : ''}</p>
