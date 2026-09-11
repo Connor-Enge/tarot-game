@@ -135,11 +135,14 @@ export function CodexScreen() {
 
       <section className="sigils">
         <div className="muted small">Sigils · {sigils.size} / {SIGILS.length}</div>
+        <div className="progress progress--sigils" aria-hidden>
+          <div className="progress__bar" style={{ width: `${(sigils.size / SIGILS.length) * 100}%` }} />
+        </div>
         <div className="sigils__grid">
-          {SIGILS.map((sg) => {
+          {SIGILS.map((sg, i) => {
             const has = sigils.has(sg.id);
             return (
-              <div key={sg.id} className={`sigil ${has ? 'sigil--on' : ''}`} title={`${sg.name} — ${sg.text}`}>
+              <div key={sg.id} className={`sigil ${has ? 'sigil--on' : ''}`} title={`${sg.name} — ${sg.text}`} style={{ '--i': i } as React.CSSProperties}>
                 <SigilToken id={sg.id} glyph={sg.glyph} earned={has} className="sigil__token" />
                 <span className="sigil__name">{has ? sg.name : '???'}</span>
                 <span className="sigil__text">{sg.text}</span>
