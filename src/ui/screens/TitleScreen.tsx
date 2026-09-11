@@ -38,7 +38,7 @@ export function TitleScreen() {
 
   return (
     <main className="screen screen--title">
-      <div className="fan" aria-hidden>
+      <div className={`fan ${today === 'major-0' ? 'fan--fool' : ''}`} aria-hidden>
         {fan.map((id, i) => (
           <div key={id} className="fan__card" style={{ '--i': i } as React.CSSProperties}>
             <Card cardId={id} size="md" reversed={i === 1} />

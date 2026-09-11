@@ -36,6 +36,8 @@ export interface Knowledge {
   sigils?: string[];
   /** Cards that have sat in the same reading: "a|b" (sorted) -> count. */
   links?: Record<string, number>;
+  /** Study: correct answers and best streak. */
+  study?: { correct: number; asked: number; bestStreak: number };
   /** Omens witnessed, in order. Capped. */
   omenLog?: { run: number; scene: string; seat: SlotId; cardId: string; reversed: boolean; tier: string }[];
   /** The final spread of the most recent run, for the title screen. */
@@ -74,6 +76,11 @@ export function noteResolved(k: Knowledge, cardId: string, seat: SlotId, reverse
   let next: CardKnowledge = { ...e, resolved, witnessed, seatOutcomes, seats: { ...e.seats, [seat]: (e.seats[seat] ?? 0) + 1 } };
   if (resolved >= RESOLVES_TO_GLIMPSE) next = raise(next, 1);
   return { ...k, cards: { ...k.cards, [cardId]: next } };
+}
+
+/** A correct recall in Study counts toward glimpsing the card, like a whisper. */
+export function noteStudy(k: Knowledge, cardId: string): Knowledge {
+  return noteWhisper(k, cardId);
 }
 
 /** A whispered keyword counts toward glimpsing the card. */
@@ -117,6 +124,34 @@ export function noteLinks(k: Knowledge, cardIds: string[]): Knowledge {
       links[key] = (links[key] ?? 0) + 1;
     }
   return { ...k, links };
+}
+
+export function noteStudyResult(k: Knowledge, correct: boolean, streak: number): Knowledge {
+  const prev = k.study ?? { correct: 0, asked: 0, bestStreak: 0 };
+  return { ...k, study: { correct: prev.correct + (correct ? 1 : 0), asked: prev.asked + 1, bestStreak: Math.max(prev.bestStreak, streak) } };
+}
+
+/**
+ * Build a study question from witnessed omens: one omen line and three
+ * witnessed cards, one of which it belongs to. Pure; the caller supplies
+ * randomness. Returns null when fewer than three cards have been witnessed.
+ */
+export function studyQuestion(
+  k: Knowledge,
+  rng: { int(max: number): number; shuffle<T>(arr: readonly T[]): T[] },
+  cardOmen: (cardId: string, reversed: boolean) => string,
+): { omen: string; answer: string; reversed: boolean; choices: string[] } | null {
+  const pool: { cardId: string; reversed: boolean }[] = [];
+  for (const [id, e] of Object.entries(k.cards)) {
+    if (e.witnessed?.upright) pool.push({ cardId: id, reversed: false });
+    if (e.witnessed?.reversed) pool.push({ cardId: id, reversed: true });
+  }
+  const ids = Array.from(new Set(pool.map((p) => p.cardId)));
+  if (ids.length < 3) return null;
+  const pick = pool[rng.int(pool.length)];
+  const others = rng.shuffle(ids.filter((id) => id !== pick.cardId)).slice(0, 2);
+  const choices = rng.shuffle([pick.cardId, ...others]);
+  return { omen: cardOmen(pick.cardId, pick.reversed), answer: pick.cardId, reversed: pick.reversed, choices };
 }
 
 export const OMEN_LOG_CAP = 240;

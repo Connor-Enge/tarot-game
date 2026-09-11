@@ -591,3 +591,19 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .book__tier { color: var(--muted); }
 .tier--triumph .book__tier { color: var(--gold-2); }
 .tier--calamity .book__tier { color: var(--vit); }
+
+/* --- study / fool -------------------------------------------------------- */
+.study { display: flex; flex-direction: column; gap: 14px; align-items: center; }
+.study__meta { letter-spacing: 0.06em; }
+.study__omen { font-size: 1.15rem; font-style: italic; text-align: center; max-width: 34ch; }
+.study__choices { display: flex; gap: 10px; justify-content: center; align-items: flex-end; }
+.study__choice { display: flex; flex-direction: column; align-items: center; gap: 6px; transition: transform 200ms, opacity 200ms; }
+.study__choice .card--lg { --w: min(26vw, 110px); }
+.study__choice--right { transform: translateY(-8px); }
+.study__choice--right .card__inner { box-shadow: 0 0 0 2px var(--gold-2), 0 0 24px rgba(243,220,138,0.5); }
+.study__choice--wrong .card__inner { box-shadow: 0 0 0 2px var(--vit); filter: saturate(0.4); }
+.study__choice--dim { opacity: 0.35; }
+.study__label { font-size: 0.8rem; color: var(--gold-2); }
+.tab { padding: 10px 6px; font-size: 0.85rem; }
+@keyframes fool-hop { 0%, 100% { translate: 0 0; } 30% { translate: 0 -18px; } 50% { translate: 0 0; } 65% { translate: 0 -6px; } }
+.fan--fool .fan__card:nth-child(3) { animation: fool-hop 1.4s ease-out 800ms 1; }

@@ -160,3 +160,13 @@ describe('weekly config', () => {
     expect(a.seed).not.toBe(c.seed);
   });
 });
+
+describe('clarity spent per scene', () => {
+  it('records redraws and whispers into the history entry', () => {
+    let run = chooseNode({ ...startRun(6), clarity: 5 }, 0);
+    run = redrawActive(run);
+    run = whisper(run, 0);
+    for (let i = 0; i < SLOT_IDS.length; i++) run = chooseCandidate(run, 0);
+    expect(run.history[0].spent).toEqual({ redraws: 1, whispers: 1 });
+  });
+});

@@ -8,6 +8,7 @@ import { useGame } from '../../store';
 import { Card } from '../components/Card';
 import { CodexDetail } from '../components/CodexDetail';
 import { Constellation } from '../components/Constellation';
+import { Study } from '../components/Study';
 
 /** Everything the player has earned the right to know. Nothing else. */
 export function CodexScreen() {
@@ -21,7 +22,7 @@ export function CodexScreen() {
   const sigils = new Set(k.sigils ?? []);
   const [suit, setSuit] = useState<SuitFilter>('all');
   const [tf, setTf] = useState<TierFilter>('all');
-  const [view, setView] = useState<'cards' | 'sky' | 'book'>('cards');
+  const [view, setView] = useState<'cards' | 'sky' | 'book' | 'study'>('cards');
   const [q, setQ] = useState('');
   const shown = CARDS.filter((c) => {
     if (q && !c.name.toLowerCase().includes(q.toLowerCase())) return false;
@@ -55,7 +56,11 @@ export function CodexScreen() {
         <button className={`tab ${view === 'book' ? 'tab--on' : ''}`} onClick={() => setView('book')}>
           The book
         </button>
+        <button className={`tab ${view === 'study' ? 'tab--on' : ''}`} onClick={() => setView('study')}>
+          Study
+        </button>
       </div>
+      {view === 'study' && <Study />}
       {view === 'sky' && <Constellation knowledge={k} />}
       {view === 'book' && <OmenBook onOpen={openCodex} />}
       {view === 'cards' && (<>

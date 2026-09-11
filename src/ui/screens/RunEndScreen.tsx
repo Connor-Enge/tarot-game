@@ -147,7 +147,12 @@ function RunEndScreenInner() {
                   <Card key={s} cardId={h.reading[s].cardId} reversed={h.reading[s].reversed} size="xs" />
                 ))}
               </div>
-              <p className="journal__outcome">{h.resolution.narration.at(-1)}</p>
+              <p className="journal__outcome">
+                {h.resolution.narration.at(-1)}
+                {h.spent && (h.spent.redraws > 0 || h.spent.whispers > 0) && (
+                  <span className="journal__spent"> · ◈ {h.spent.redraws > 0 ? `${h.spent.redraws} redraw${h.spent.redraws > 1 ? 's' : ''}` : ''}{h.spent.redraws > 0 && h.spent.whispers > 0 ? ', ' : ''}{h.spent.whispers > 0 ? `${h.spent.whispers} whisper${h.spent.whispers > 1 ? 's' : ''}` : ''}</span>
+                )}
+              </p>
             </article>
           ))}
         </section>

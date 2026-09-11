@@ -315,6 +315,13 @@ grouped by descent and scene, with the seat glyph and outcome tier. Capped
 at 240 lines. Tap a line to open the card. Reading the book back is where
 the meanings settle; it is the Codex's most on-pillar page.
 
+**Study** (`studyQuestion` in `knowledge.ts`): a Codex tab that shows one
+omen you have witnessed and three witnessed cards; which card did this?
+Never a meaning, only recall of consequence. A right answer counts toward
+glimpsing the card, like a whisper. Tracks streak and totals.
+
+**Journal**: each scene shows Clarity spent (redraws, whispers).
+
 Queued:
 - A weekly leaderboard line in the share text (best depth this week).
 - Localization scaffolding for the card and scene text.

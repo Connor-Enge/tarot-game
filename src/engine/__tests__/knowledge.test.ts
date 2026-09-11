@@ -105,3 +105,23 @@ describe('omen log', () => {
     expect(k.omenLog?.at(-1)?.cardId).toBe('cups-1');
   });
 });
+
+describe('study', () => {
+  it('builds a question only from witnessed cards and counts results', async () => {
+    const { studyQuestion, noteStudyResult } = await import('../knowledge');
+    const { createRng } = await import('../rng');
+    let k = emptyKnowledge();
+    expect(studyQuestion(k, createRng(1), () => 'x')).toBeNull();
+    k = noteResolved(k, 'major-0', 'hand', false);
+    k = noteResolved(k, 'major-1', 'hand', true);
+    k = noteResolved(k, 'major-2', 'wake', false);
+    const q = studyQuestion(k, createRng(2), (id, r) => `${id}:${r}`)!;
+    expect(q).not.toBeNull();
+    expect(q.choices.length).toBe(3);
+    expect(q.choices).toContain(q.answer);
+    expect(q.omen).toBe(`${q.answer}:${q.reversed}`);
+    k = noteStudyResult(k, true, 1);
+    k = noteStudyResult(k, false, 0);
+    expect(k.study).toEqual({ correct: 1, asked: 2, bestStreak: 1 });
+  });
+});

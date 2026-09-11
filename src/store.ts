@@ -22,6 +22,10 @@ import {
   noteLinks,
   noteLast,
   noteOmens,
+  noteStudy,
+  noteStudyResult,
+  studyQuestion,
+  createRng,
   newSigils,
   noteRecord,
   noteSigils,
@@ -60,6 +64,10 @@ interface GameStore {
   earned: string[];
   /** The player's very first run: show the three wordless nudges. */
   firstDescent: boolean;
+  /** Study mode. */
+  study: { q: ReturnType<typeof studyQuestion>; streak: number; picked: string | null } | null;
+  askStudy: () => void;
+  answerStudy: (cardId: string) => void;
   /** Discard viewer open. */
   deckOpen: boolean;
   openDeck: (open: boolean) => void;
@@ -138,6 +146,29 @@ export const useGame = create<GameStore>((set, get) => ({
   setDepth: (n) => set({ depth: n }),
   earned: [],
   firstDescent: false,
+  study: null,
+  askStudy: () => {
+    const { knowledge, study } = get();
+    const q = studyQuestion(knowledge, createRng(randomSeed()), (id, r) => (r ? getCard(id).omen.reversed : getCard(id).omen.upright));
+    set({ study: { q, streak: study?.streak ?? 0, picked: null } });
+  },
+  answerStudy: (cardId) => {
+    const { knowledge, study } = get();
+    if (!study?.q || study.picked) return;
+    const correct = cardId === study.q.answer;
+    const streak = correct ? study.streak + 1 : 0;
+    let next = noteStudyResult(knowledge, correct, streak);
+    if (correct) {
+      next = noteStudy(next, cardId);
+      sfx.whisper();
+      buzz([5, 30, 5]);
+    } else {
+      sfx.resolve('harm');
+      buzz(30);
+    }
+    saveKnowledge(next);
+    set({ knowledge: next, study: { ...study, streak, picked: cardId } });
+  },
   deckOpen: false,
   openDeck: (open) => {
     if (open) sfx.page();

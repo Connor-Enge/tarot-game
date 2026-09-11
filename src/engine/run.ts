@@ -34,6 +34,8 @@ export interface HistoryEntry {
   sceneId: string;
   reading: Reading;
   resolution: Resolution;
+  /** Clarity spent in this scene. */
+  spent?: { redraws: number; whispers: number };
 }
 
 export interface RunState {
@@ -61,6 +63,8 @@ export interface RunState {
   actLayers: readonly number[];
   /** The last scene's Wake card, waiting to be dealt into the next Vessel. */
   echo: DrawnCard | null;
+  /** Counters for the scene in progress. */
+  sceneSpent: { redraws: number; whispers: number };
   /** Depth modifiers carried by the run. */
   mods: { extraNeutralCost: number; noEcho: boolean; abyssStakes?: number };
   slots: SlotState[];
@@ -143,6 +147,7 @@ export function startRun(seed: number, config: RunConfig = {}): RunState {
     actLayers,
     echo: null,
     mods: { extraNeutralCost: config.extraNeutralCost ?? 0, noEcho: !!config.noEcho, abyssStakes: config.abyssStakes },
+    sceneSpent: { redraws: 0, whispers: 0 },
     slots: [],
     activeSlot: 0,
     phase: { kind: 'map' },
@@ -211,7 +216,7 @@ export function chooseNode(run: RunState, index: number): RunState {
   const rng = rngOf(run);
   const first = dealSeat(run, rng, run.deck, SLOT_IDS[0]);
   return withRng(
-    { ...run, node: index, deck: first.deck, slots: [first.state], activeSlot: 0, freeRedrawUsed: false, echo: null, phase: { kind: 'reading' } },
+    { ...run, node: index, deck: first.deck, slots: [first.state], activeSlot: 0, freeRedrawUsed: false, echo: null, sceneSpent: { redraws: 0, whispers: 0 }, phase: { kind: 'reading' } },
     rng,
   );
 }
@@ -253,7 +258,7 @@ export function redrawActive(run: RunState): RunState {
   const deck = discard(run.deck, slot.candidates);
   const next = dealSeat(run, rng, deck, slot.slot);
   const slots = run.slots.map((s, i) => (i === run.activeSlot ? next.state : s));
-  return withRng({ ...run, deck: next.deck, slots, clarity: run.clarity - cost, freeRedrawUsed: run.freeRedrawUsed || cost === 0, redraws: run.redraws + 1 }, rng);
+  return withRng({ ...run, deck: next.deck, slots, clarity: run.clarity - cost, freeRedrawUsed: run.freeRedrawUsed || cost === 0, redraws: run.redraws + 1, sceneSpent: { ...run.sceneSpent, redraws: run.sceneSpent.redraws + 1 } }, rng);
 }
 
 /** Spend Clarity to hear one keyword of a candidate. The UI shows it; the Codex remembers it. */
@@ -266,7 +271,7 @@ export function whisper(run: RunState, index: number): RunState {
   if (index < 0 || index >= slot.candidates.length || slot.whispered.includes(index)) return run;
   if (slot.candidates[index].hidden) return run;
   const slots = run.slots.map((s, i) => (i === run.activeSlot ? { ...s, whispered: [...s.whispered, index] } : s));
-  return { ...run, slots, clarity: run.clarity - cost, whispers: run.whispers + 1 };
+  return { ...run, slots, clarity: run.clarity - cost, whispers: run.whispers + 1, sceneSpent: { ...run.sceneSpent, whispers: run.sceneSpent.whispers + 1 } };
 }
 
 export function readingOf(run: RunState): Reading | null {
@@ -293,7 +298,7 @@ function resolve(run: RunState): RunState {
   for (const s of SLOT_IDS) revealed[s] = { ...reading[s], hidden: false };
   const played = SLOT_IDS.map((s) => revealed[s]);
   const deck = discard(run.deck, played);
-  const history = [...run.history, { sceneId: scene.id, reading: revealed, resolution }];
+  const history = [...run.history, { sceneId: scene.id, reading: revealed, resolution, spent: { ...run.sceneSpent } }];
 
   const marks = { ...run.marks };
   if (resolution.tier === 'triumph') for (const c of played) marks[c.cardId] = 'charged';
