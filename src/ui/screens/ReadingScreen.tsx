@@ -15,6 +15,8 @@ import { DeckSheet } from '../components/DeckSheet';
 import { RelicStrip } from '../components/RelicStrip';
 import { Stats } from '../components/Stat';
 
+/** The lantern that follows the lifted card, in its suit's light. */
+const LANTERN: Record<string, string> = { wands: 'rgba(224,160,104,0.45)', cups: 'rgba(143,195,224,0.4)', swords: 'rgba(216,217,232,0.35)', pentacles: 'rgba(169,201,138,0.4)', major: 'rgba(243,220,138,0.45)', hidden: 'rgba(141,134,163,0.3)' };
 /** How far up (px) a card must be dragged to land in the seat. */
 const DRAG_TO_SEAT = 90;
 /** How far down (px) a card must be pulled to sweep the hand into a redraw. */
@@ -142,7 +144,11 @@ function ReadingScreenInner() {
           const kws = c.reversed ? card.keywords.reversed : card.keywords.upright;
           const kw = whisperWords(kws, active.slot, bell ? 2 : 1).join(' · ');
           return (
-            <div className="deal" style={{ animationDelay: `${i * 90}ms` }} key={`${c.cardId}-${i}`}>
+            <div
+              className={`deal ${lifted === i ? 'deal--lantern' : ''}`}
+              style={{ animationDelay: `${i * 90}ms`, '--lantern': LANTERN[c.hidden ? 'hidden' : card.arcana === 'major' ? 'major' : (card.suit ?? 'major')] } as React.CSSProperties}
+              key={`${c.cardId}-${i}`}
+            >
               {ORACLE && <span className="oracle-badge">{scoreSlot(scene, active.slot, c, run.marks).score.toFixed(1)}</span>}
               <Card
                 cardId={c.cardId}

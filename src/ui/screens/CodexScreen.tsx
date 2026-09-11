@@ -236,6 +236,23 @@ function buildLedger(k: ReturnType<typeof useGame.getState>['knowledge']): [stri
   const seatTotals = SLOT_IDS.map((s) => [s, entries.reduce((a, [, e]) => a + (e.seats[s] ?? 0), 0)] as const);
   const busiest = seatTotals.slice().sort((a, b) => b[1] - a[1])[0];
   if (busiest && busiest[1] > 0 && k.seatsNamed) rows.push(['Busiest seat', `${SLOTS[busiest[0]].glyph} ${SLOTS[busiest[0]].name}`]);
+  // The longest run of good readings in a row, counted along the omen log.
+  const streak = (() => {
+    let best = 0;
+    let cur = 0;
+    let lastKey = '';
+    for (const o of k.omenLog ?? []) {
+      const key = `${o.run}:${o.scene}`;
+      if (key === lastKey) continue;
+      lastKey = key;
+      if (o.tier === 'boon' || o.tier === 'triumph') {
+        cur++;
+        best = Math.max(best, cur);
+      } else cur = 0;
+    }
+    return best;
+  })();
+  if (streak >= 2) rows.push(['Longest run of luck', `${streak} good readings in a row`]);
   const vows = Object.entries(k.vows ?? {});
   if (vows.length) {
     const kept = vows.reduce((a, [, v]) => a + v.kept, 0);
