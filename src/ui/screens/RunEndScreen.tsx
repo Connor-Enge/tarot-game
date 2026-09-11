@@ -109,7 +109,7 @@ function RunEndScreenInner() {
   };
 
   return (
-    <main className={`screen screen--end ${dead ? 'screen--dead' : 'screen--ascended'}`}>
+    <main className={`screen screen--end ${dead ? 'screen--dead' : 'screen--ascended'} screen--end-${run.phase.resolution.tier}`}>
       <EndArt kind={dead ? 'dead' : 'ascended'} className="scene__art end__art" />
       <h2>{endTitle(run, dead)}</h2>
       <p className="narration__outcome">
