@@ -715,3 +715,5 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 
 .end__art { margin-top: 8px; animation: fade-in 1200ms ease both; }
 .screen--end h2 { margin-top: 4px; }
+
+.narration__death { color: var(--vit); }

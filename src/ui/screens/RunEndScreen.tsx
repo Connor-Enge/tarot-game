@@ -73,7 +73,12 @@ function RunEndScreenInner() {
     <main className={`screen screen--end ${dead ? 'screen--dead' : 'screen--ascended'}`}>
       <EndArt kind={dead ? 'dead' : 'ascended'} className="scene__art end__art" />
       <h2>{dead ? 'The reading ended you.' : 'You read it true.'}</h2>
-      <p className="narration__outcome">{run.phase.resolution.narration.at(-1)}</p>
+      <p className="narration__outcome">
+        {run.phase.resolution.narration.at(-1)}
+        {dead && !['harm', 'calamity'].includes(run.phase.resolution.tier) && (
+          <span className="narration__death"> It cost only a little. It was the last little you had.</span>
+        )}
+      </p>
       {mode.kind === 'daily' && <p className="muted small center">Daily descent · {mode.label}</p>}
       {mode.kind === 'weekly' && <p className="muted small center">Weekly descent · {mode.label}</p>}
       {earned.length > 0 && (
