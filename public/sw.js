@@ -1,8 +1,8 @@
 /* Minimal offline support: network-first, falling back to a runtime cache.
    After one online visit the whole game works offline. */
-const CACHE = 'arcana-descent-v2';
+const CACHE = 'arcana-descent-v3';
 self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(['/', '/index.html', '/manifest.webmanifest', '/icon.svg', '/icon-192.png'])));
+  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(['./', './index.html', './manifest.webmanifest', './icon.svg', './icon-192.png'])));
   self.skipWaiting();
 });
 self.addEventListener('activate', (e) => {
@@ -18,6 +18,6 @@ self.addEventListener('fetch', (e) => {
         caches.open(CACHE).then((c) => c.put(e.request, copy));
         return res;
       })
-      .catch(() => caches.match(e.request).then((hit) => hit || caches.match('/index.html'))),
+      .catch(() => caches.match(e.request).then((hit) => hit || caches.match('./index.html'))),
   );
 });

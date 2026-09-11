@@ -9,6 +9,12 @@ See [docs/DESIGN.md](docs/DESIGN.md) for the design notes, every system, and
 the balance targets.
 
 
+## Play it
+
+The game is published to GitHub Pages from `main`:
+https://connor-enge.github.io/tarot-game/ . It installs as a PWA and works
+offline after one visit.
+
 ## Run it
 
 ```sh

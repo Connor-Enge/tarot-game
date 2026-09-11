@@ -15,7 +15,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 if (import.meta.env.PROD && 'serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
     try {
-      const reg = await navigator.serviceWorker.register('/sw.js');
+      const reg = await navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`);
       reg.addEventListener('updatefound', () => {
         const fresh = reg.installing;
         if (!fresh) return;
