@@ -25,7 +25,12 @@ describe('daily weather', () => {
 });
 
 describe('weekly weather', () => {
-  it('never picks the long road', () => {
-    for (let i = 0; i < 200; i++) expect(weeklyWeather(i * 7919 + 3).id).not.toBe('long');
+  it('never picks a road length', () => {
+    for (let i = 0; i < 200; i++) expect(['long', 'short']).not.toContain(weeklyWeather(i * 7919 + 3).id);
+  });
+  it('has fourteen distinct weathers', () => {
+    expect(WEATHERS.length).toBe(14);
+    expect(new Set(WEATHERS.map((w) => w.id)).size).toBe(14);
+    expect(new Set(WEATHERS.map((w) => w.name)).size).toBe(14);
   });
 });

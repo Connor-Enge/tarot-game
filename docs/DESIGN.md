@@ -474,12 +474,15 @@ Every surface that can show text about a card, and what gates it:
 
 ## Daily weather
 
-The daily seed also picks one of nine named conditions (Clear, Reversed
-Winds, Thin Air, Lantern Light, Salted Road, Fog, Heavy Air, Still Water,
-The Long Road). Everyone walking today's road walks in the same weather.
-The title names it before you commit; share text carries it. The Weekly
-has weather too, from the week's seed, on top of its longer road and its
-two extra hearts.
+The daily seed also picks one of fourteen named conditions (Clear,
+Reversed Winds, Thin Air, Lantern Light, Salted Road, Fog, Heavy Air,
+Still Water, The Long Road, The Short Road, Light Winds, Candlelit,
+Guttering, Black Tide). Everyone walking today's road walks in the same
+weather. The title names it before you commit; share text carries it, and
+during the run a veil over the screen shows it: mist for Fog, streaks for
+Reversed Winds, a warm flicker for Candlelit, a rising dark for Black
+Tide. The Weekly has weather too, from the week's seed, on top of its
+longer road and its two extra hearts; road lengths are skipped for it.
 
 ## The Well
 
@@ -634,7 +637,7 @@ identity, not power, which is the point.
   omen is distinct.
 - **Scenes**: 30 exist (29 plus the Abyss), which was the target; more are welcome. Latest: the mill, the drowned chapel, the hunt.
 - **Named readings**: 34. Each is a memorable line, never a definition.
-- **Relics**: 12 boons, 8 curses. **Vows**: 7. **Weathers**: 9. **Trades**: 4. **Sigils**: 24.
+- **Relics**: 12 boons, 8 curses. **Vows**: 7. **Weathers**: 14. **Trades**: 4. **Sigils**: 24.
 - **Combos**: 34 named readings exist. This is the richest vein for "the
   combined meaning" and should keep growing with named, memorable results.
 - **Art**: all 78 faces are procedural SVG (`src/ui/art/`). Majors are

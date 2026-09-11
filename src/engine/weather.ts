@@ -23,6 +23,11 @@ export const WEATHERS: Weather[] = [
   { id: 'heavy', glyph: '⏚', name: 'Heavy Air', text: 'Neutral readings cost one more.', config: { extraNeutralCost: 1 } },
   { id: 'still', glyph: '☾', name: 'Still Water', text: 'The Wake does not follow you.', config: { noEcho: true } },
   { id: 'long', glyph: '⛩', name: 'The Long Road', text: 'Five layers to each act.', config: { actLayers: [5, 5] } },
+  { id: 'short', glyph: '⛩', name: 'The Short Road', text: 'Three layers to each act.', config: { actLayers: [3, 3] } },
+  { id: 'feathered', glyph: '❦', name: 'Light Winds', text: 'You carry a Grey Feather.', config: { startingRelics: ['feather'] } },
+  { id: 'candlelit', glyph: '✶', name: 'Candlelit', text: 'You carry a Candle Stub.', config: { startingRelics: ['candle'] } },
+  { id: 'guttering', glyph: '⌇', name: 'Guttering', text: 'Tallow follows you. Five clarity to begin.', config: { startingRelics: ['tallow'], startingClarity: 5 } },
+  { id: 'black-tide', glyph: '◉', name: 'Black Tide', text: 'The Abyss holds higher stakes.', config: { abyssStakes: 4 } },
 ];
 
 export function getWeather(id: string): Weather {
@@ -36,8 +41,8 @@ export function dailyWeather(seed: number): Weather {
   return WEATHERS[((seed >>> 0) % 7919) % WEATHERS.length];
 }
 
-/** The weather for a weekly seed. The Weekly is already the long road, so that one is skipped. */
+/** The weather for a weekly seed. The Weekly is already the long road, so the road lengths are skipped. */
 export function weeklyWeather(seed: number): Weather {
-  const pool = WEATHERS.filter((w) => w.id !== 'long');
+  const pool = WEATHERS.filter((w) => w.id !== 'long' && w.id !== 'short');
   return pool[((seed >>> 0) % 7919) % pool.length];
 }

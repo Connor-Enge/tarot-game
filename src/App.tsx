@@ -21,6 +21,7 @@ function useSceneHue() {
   const run = useGame((s) => s.run);
   const screen = useGame((s) => s.screen);
   const fixedTint = useSettings((s) => s.fixedTint);
+  const mode = useGame((s) => s.mode);
   useEffect(() => {
     let hue = 260;
     if (!fixedTint && screen === 'run' && run) {
@@ -41,7 +42,10 @@ function useSceneHue() {
     document.documentElement.style.setProperty('--scene-hue', String(hue));
     const inScene = screen === 'run' && run && run.node !== null && (run.phase.kind === 'reading' || run.phase.kind === 'resolved' || run.phase.kind === 'relic');
     document.documentElement.style.setProperty('--mote-kind', inScene ? currentScene(run).kind : '');
-  }, [run, screen, fixedTint]);
+    // The day's weather shows: a veil over the whole run, keyed by weather id.
+    if (screen === 'run' && run && (mode.kind === 'daily' || mode.kind === 'weekly') && mode.weather) document.documentElement.dataset.weather = mode.weather;
+    else delete document.documentElement.dataset.weather;
+  }, [run, screen, fixedTint, mode]);
 }
 
 export function App() {

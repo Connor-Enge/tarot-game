@@ -33,7 +33,7 @@ export const RELICS: Record<string, Relic> = {
   weight: { id: 'weight', kind: 'curse', name: 'The Weight', glyph: '⏚', text: 'Neutral readings cost one more.' },
   hush: { id: 'hush', kind: 'curse', name: 'Hush', glyph: '⊘', text: 'Whispers cost 2.' },
   ash: { id: 'ash', kind: 'curse', name: 'Ash', glyph: '⁂', text: 'Rest mends 1 less.' },
-  stillwater: { id: 'stillwater', kind: 'curse', name: 'Still Water', glyph: '≈', text: 'The last Wake no longer follows you.' },
+  stillwater: { id: 'stillwater', kind: 'curse', name: 'Lethe', glyph: '≈', text: 'The last Wake no longer follows you.' },
   tallow: { id: 'tallow', kind: 'curse', name: 'Tallow', glyph: '⌇', text: 'Lose 1 Clarity each time you walk on.' },
 };
 

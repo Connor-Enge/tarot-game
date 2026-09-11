@@ -1504,3 +1504,54 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .relic__socket .relic__art { width: 40px; height: 40px; }
 .relic__name { color: var(--gold-2); font-size: 1.15rem; }
 .relic:hover .relic__socket, .relic:focus-visible .relic__socket { box-shadow: inset 0 2px 6px rgba(0,0,0,0.6), inset 0 0 0 1px var(--gold-2), 0 0 22px rgba(243,220,138,0.35); }
+
+/* --- weather veils: the day's condition, drawn over the whole run ----------- */
+html[data-weather]::before {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 3; opacity: 0.9;
+}
+html[data-weather="fog"]::before {
+  background:
+    radial-gradient(60% 40% at 20% 80%, rgba(233,228,242,0.30), transparent 70%),
+    radial-gradient(50% 35% at 80% 30%, rgba(233,228,242,0.22), transparent 70%),
+    radial-gradient(70% 30% at 50% 100%, rgba(233,228,242,0.34), transparent 70%),
+    linear-gradient(180deg, transparent 35%, rgba(233,228,242,0.22) 100%);
+  animation: veil-breathe 14s ease-in-out infinite;
+}
+html[data-weather="reversed-winds"]::before {
+  background: repeating-linear-gradient(115deg, transparent 0 38px, rgba(233,228,242,0.05) 38px 40px, transparent 40px 90px);
+  background-size: 300% 300%; animation: veil-sweep 14s linear infinite; opacity: 0.7;
+}
+html[data-weather="thin-air"]::before { background: radial-gradient(80% 70% at 50% 45%, transparent 50%, rgba(0,0,0,0.65)); }
+html[data-weather="heavy"]::before { background: radial-gradient(70% 60% at 50% 40%, transparent 45%, rgba(0,0,0,0.75)); animation: veil-breathe 9s ease-in-out infinite; }
+html[data-weather="lantern"]::before, html[data-weather="candlelit"]::before {
+  background: radial-gradient(60% 40% at 50% 100%, rgba(243,220,138,0.14), transparent 70%);
+  animation: veil-flicker 3.2s ease-in-out infinite;
+}
+html[data-weather="guttering"]::before {
+  background: radial-gradient(60% 40% at 50% 100%, rgba(214,120,94,0.12), transparent 70%), radial-gradient(90% 80% at 50% 40%, transparent 60%, rgba(0,0,0,0.4));
+  animation: veil-gutter 2.1s steps(5) infinite;
+}
+html[data-weather="salted"]::before {
+  background-image: radial-gradient(rgba(246,239,221,0.35) 0.6px, transparent 0.8px), radial-gradient(rgba(246,239,221,0.25) 0.5px, transparent 0.7px);
+  background-size: 37px 41px, 53px 47px; background-position: 0 0, 17px 23px;
+  mask-image: linear-gradient(180deg, transparent 40%, black 100%); -webkit-mask-image: linear-gradient(180deg, transparent 40%, black 100%);
+}
+html[data-weather="still"]::before {
+  background: repeating-linear-gradient(180deg, transparent 0 22px, rgba(143,195,224,0.06) 22px 23px);
+  mask-image: linear-gradient(180deg, transparent 55%, black 100%); -webkit-mask-image: linear-gradient(180deg, transparent 55%, black 100%);
+}
+html[data-weather="feathered"]::before {
+  background: repeating-linear-gradient(80deg, transparent 0 60px, rgba(243,220,138,0.05) 60px 61px, transparent 61px 130px);
+  background-size: 300% 300%; animation: veil-sweep 22s linear infinite reverse; opacity: 0.8;
+}
+html[data-weather="black-tide"]::before {
+  background: linear-gradient(180deg, transparent 45%, rgba(0,0,6,0.85) 100%);
+  animation: veil-tide 12s ease-in-out infinite alternate;
+}
+@keyframes veil-drift { 0% { background-position: 0% 0%; } 100% { background-position: 100% 100%; } }
+@keyframes veil-sweep { 0% { background-position: 0% 0%; } 100% { background-position: 100% 100%; } }
+@keyframes veil-breathe { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
+@keyframes veil-flicker { 0%, 100% { opacity: 0.85; } 40% { opacity: 1; } 55% { opacity: 0.8; } 70% { opacity: 0.95; } }
+@keyframes veil-gutter { 0% { opacity: 0.9; } 30% { opacity: 0.6; } 60% { opacity: 1; } 100% { opacity: 0.7; } }
+@keyframes veil-tide { 0% { transform: translateY(6%); } 100% { transform: translateY(0); } }
+.reduce-motion html[data-weather]::before, html.reduce-motion[data-weather]::before { animation: none; }
