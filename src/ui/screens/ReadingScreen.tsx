@@ -59,7 +59,13 @@ function ReadingScreenInner() {
           const chosen = slot && slot.chosen !== null ? slot.candidates[slot.chosen] : undefined;
           const isActive = i === run.activeSlot;
           return (
-            <div key={id} className={`seat ${isActive ? 'seat--active' : ''} ${chosen ? 'seat--filled' : ''}`} style={{ '--seat': i } as React.CSSProperties}>
+            <div
+              key={id}
+              className={`seat ${isActive ? 'seat--active' : ''} ${chosen ? 'seat--filled' : ''}`}
+              style={{ '--seat': i } as React.CSSProperties}
+              role="group"
+              aria-label={`${seatsNamed ? SLOTS[id].name : `seat ${i + 1}`}${isActive ? ', choosing' : chosen ? ', placed' : ', empty'}`}
+            >
               <div className="seat__glyph" title={seatsNamed ? SLOTS[id].role : undefined}>
                 {SLOTS[id].glyph}
               </div>
@@ -73,7 +79,7 @@ function ReadingScreenInner() {
         })}
       </section>
 
-      <section className={`hand ${active.candidates.length > 3 ? 'hand--four' : ''}`} aria-label="choose one" key={handKey}>
+      <section className={`hand ${active.candidates.length > 3 ? 'hand--four' : ''}`} aria-label={`candidates for ${seatsNamed ? SLOTS[active.slot].name : `seat ${run.activeSlot + 1}`}: choose one`} key={handKey}>
         {active.candidates.map((c, i) => {
           const card = getCard(c.cardId);
           const whispered = active.whispered.includes(i);

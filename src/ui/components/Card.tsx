@@ -72,7 +72,8 @@ export function Card({ cardId, reversed = false, faceDown = false, size = 'md', 
       onContextMenu={(e) => onLongPress && e.preventDefault()}
       style={{ animationDelay: `${delay}ms` }}
       key={animKey}
-      aria-label={card ? `${card.name}${reversed ? ', reversed' : ''}` : 'face-down card'}
+      aria-label={card ? `${card.name}${reversed ? ', reversed' : ''}${echo ? ', echo' : ''}` : 'face-down card'}
+      aria-pressed={lifted === undefined ? undefined : !!lifted}
     >
       <div className="card__inner">
         {faceDown || !card ? <CardBack className="card__svg" variant={variant} /> : <CardArt cardId={card.id} className="card__svg" texture={size === 'lg' || size === 'md'} />}

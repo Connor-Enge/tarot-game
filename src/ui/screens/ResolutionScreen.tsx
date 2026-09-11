@@ -51,7 +51,7 @@ function ResolutionScreenInner() {
         ))}
       </section>
 
-      <section className={`narration ${revealAll ? 'narration--all' : ''}`} onClick={() => setRevealAll(true)}>
+      <section className={`narration ${revealAll ? 'narration--all' : ''}`} onClick={() => setRevealAll(true)} aria-live="polite">
         {resolution.narration.map((line, i) => {
           const last = i === resolution.narration.length - 1;
           const seat = i < SLOT_IDS.length ? SLOTS[SLOT_IDS[i]].glyph : null;

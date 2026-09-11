@@ -12,6 +12,18 @@ export function CodexDetail({ cardId, onClose }: { cardId: string; onClose: () =
   const e = k.cards[cardId];
   const tier: Tier = e?.tier ?? 0;
   const seatsSeen = SLOT_IDS.filter((s) => (e?.seats[s] ?? 0) > 0);
+  const best = (() => {
+    if (!e) return null;
+    let top: { seat: (typeof SLOT_IDS)[number]; score: number; n: number } | null = null;
+    for (const s of SLOT_IDS) {
+      const n = e.seats[s] ?? 0;
+      const o = e.seatOutcomes?.[s];
+      if (n < 2 || !o) continue;
+      const score = (o.good - o.bad) / n;
+      if (!top || score > top.score) top = { seat: s, score, n };
+    }
+    return top && top.score > 0 ? top : null;
+  })();
   const nothing = !e;
   const [flipped, setFlipped] = useState(false);
   return (
@@ -37,6 +49,12 @@ export function CodexDetail({ cardId, onClose }: { cardId: string; onClose: () =
             <div className="muted small">What you have seen it do</div>
             {witnessed(k, cardId, false) && <p className="narration__omen">{card.omen.upright}</p>}
             {witnessed(k, cardId, true) && <p className="narration__omen">{card.omen.reversed}</p>}
+          </div>
+        )}
+        {best && (
+          <div className="best-seat">
+            Sits well in <span className="seat__glyph">{SLOTS[best.seat].glyph}</span>
+            {k.seatsNamed ? ` ${SLOTS[best.seat].name}` : ''} <span className="muted small">· {best.n} reads</span>
           </div>
         )}
         {seatsSeen.length > 0 && (

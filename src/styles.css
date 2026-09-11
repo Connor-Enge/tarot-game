@@ -642,3 +642,10 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .seg__btn--on { background: rgba(214,178,94,0.14); color: var(--gold-2); }
 .fan { cursor: pointer; }
 .fan .card { cursor: pointer; }
+
+/* --- accessibility --------------------------------------------------------- */
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--gold-2); outline-offset: 3px; border-radius: 12px; }
+.card:focus-visible { outline-offset: 4px; border-radius: 8px; }
+.node:focus-visible, .descent-chip:focus-visible, .relic-chip:focus-visible { border-radius: 50%; }
+.best-seat { font-size: 0.95rem; color: var(--gold-2); }

@@ -1,5 +1,10 @@
 # Arcana Descent — Design Notes
 
+Contents: [Pitch](#the-pitch-in-one-breath) · [Pillars](#pillars) ·
+[Core loop](#core-loop) · [Knowledge](#knowledge-the-codex) ·
+[Systems, as built](#systems-as-built) · [Balance](#balance) ·
+[Content debt](#content-debt) · [Open questions](#open-questions)
+
 Working title. A mobile-first roguelike built on one mechanic: **the four-seat spread**.
 
 ## The pitch in one breath
@@ -113,7 +118,10 @@ Ideas queued:
 - **The Fool's exception**: the very first run could reveal one random card
   in full, so the player has one anchor.
 
-## Roguelike structure
+## Systems, as built
+
+Each entry names the file that owns it. Together with *Core loop* and
+*Knowledge* above, this is the whole game.
 
 **The map** (`buildMap` in `scenes.ts`): two acts of four layers each, then
 the Abyss. Every layer holds 2-3 nodes and every node connects to every node
@@ -162,34 +170,6 @@ Stub (+1 Clarity on walking on), Iron Ring (charged +2), Hard Bread (rest
 mends more). Curses: Fog (one card per seat face down), Splinter (Vessel
 always holds a reversed card), Debt (Clarity capped at 2), The Weight
 (neutral costs one more), Hush (whispers cost 2).
-
-## Balance
-
-`scripts/sim.ts` runs whole descents under three policies. Run it with
-`npx vite-node scripts/sim.ts 2000`.
-
-| Policy | Knows | Survives |
-|--------|-------|----------|
-| random | nothing | ~26% |
-| majors-only | the 22 Major Arcana | ~75% |
-| oracle | every affinity | ~100% |
-
-With Depths stacked (`npx vite-node scripts/sim.ts 1200 5`):
-
-| Depth | random | majors-only | oracle |
-|-------|--------|-------------|--------|
-| 3 | ~1% | ~33% | ~99% |
-| 5 | ~1% | ~25% | ~97% |
-
-A master still returns almost always; a half-learned deck is properly
-tested. That is the intended veteran curve.
-
-The levers that got there: a neutral reading costs 1 vitality times scene
-stakes (0 in rest scenes), harm scales with stakes, starting vitality is 10,
-and the harm threshold is a total of -1.5. Re-run the sim after any change
-to scenes, thresholds, or deltas and keep the three numbers in roughly that
-shape: blind play should usually die, a half-learned deck should usually
-return, a fully learned deck should never lose.
 
 **Descents** (`descents.ts`): run variants unlocked by play. The unlock
 condition is stated on the title screen (it is a rule, not a meaning).
@@ -361,6 +341,34 @@ shows all of it at once.
 Localization was considered and deferred: all authored text already lives
 in three data files (`cards.ts`, `minorText.ts`, `scenes.ts`) plus relics
 and sigils, so a translation is a data swap when it is wanted.
+
+## Balance
+
+`scripts/sim.ts` runs whole descents under three policies. Run it with
+`npx vite-node scripts/sim.ts 2000`.
+
+| Policy | Knows | Survives |
+|--------|-------|----------|
+| random | nothing | ~26% |
+| majors-only | the 22 Major Arcana | ~75% |
+| oracle | every affinity | ~100% |
+
+With Depths stacked (`npx vite-node scripts/sim.ts 1200 5`):
+
+| Depth | random | majors-only | oracle |
+|-------|--------|-------------|--------|
+| 3 | ~1% | ~33% | ~99% |
+| 5 | ~1% | ~25% | ~97% |
+
+A master still returns almost always; a half-learned deck is properly
+tested. That is the intended veteran curve.
+
+The levers that got there: a neutral reading costs 1 vitality times scene
+stakes (0 in rest scenes), harm scales with stakes, starting vitality is 10,
+and the harm threshold is a total of -1.5. Re-run the sim after any change
+to scenes, thresholds, or deltas and keep the three numbers in roughly that
+shape: blind play should usually die, a half-learned deck should usually
+return, a fully learned deck should never lose.
 
 ## Content debt
 
