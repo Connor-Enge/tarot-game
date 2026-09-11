@@ -484,6 +484,16 @@ Reversed Winds, a warm flicker for Candlelit, a rising dark for Black
 Tide. The Weekly has weather too, from the week's seed, on top of its
 longer road and its two extra hearts; road lengths are skipped for it.
 
+## The Abyss deals from what you have read
+
+As you step into the Abyss, the discard pile is shuffled onto the top of
+the deck, so the final reading's candidates are cards this run has
+already dealt and read. Nothing is lost (the unread cards sit beneath),
+but the last spread is the road coming back: a reader who has paid
+attention knows what the Abyss can offer. If fewer than twelve cards have
+been read, the Abyss deals as any scene does. The reading screen says so
+in one line.
+
 ## The Well
 
 An endless descent, unlocked by three returns. The map is the usual two

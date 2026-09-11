@@ -115,6 +115,8 @@ export interface RunState {
   traded?: boolean;
   /** True once the peddler at the market has made an offer this run. */
   peddlerMet?: boolean;
+  /** True while reading the Abyss after it was dealt from the run's own discard. */
+  abyssRemade?: boolean;
   /** Which trade it was. */
   tradeTaken?: Trade['id'];
   /** True once the Stranger has appeared this run. They come once. */
@@ -356,8 +358,12 @@ export function chooseNode(run: RunState, index: number): RunState {
   const layer = run.map[run.layer];
   if (!layer || index < 0 || index >= layer.length) return run;
   const rng = rngOf(run);
-  const first = dealSeat(run, rng, run.deck, SLOT_IDS[0]);
-  let next: RunState = { ...run, node: index, deck: first.deck, slots: [first.state], activeSlot: 0, freeRedrawUsed: false, echo: null, sceneSpent: { redraws: 0, whispers: 0 }, phase: { kind: 'reading' } };
+  // The Abyss deals from what you have read: the discard is shuffled onto the top of the deck as you step in.
+  const terminal = SCENES[layer[index].sceneId].terminal;
+  const remade = terminal && run.deck.discard.length >= 12;
+  const deckIn: DeckState = remade ? { draw: [...run.deck.draw, ...rng.shuffle(run.deck.discard)], discard: [] } : run.deck;
+  const first = dealSeat({ ...run, deck: deckIn }, rng, deckIn, SLOT_IDS[0]);
+  let next: RunState = { ...run, node: index, deck: first.deck, slots: [first.state], activeSlot: 0, freeRedrawUsed: false, echo: null, sceneSpent: { redraws: 0, whispers: 0 }, phase: { kind: 'reading' }, abyssRemade: remade || undefined };
   // A vow kept all the way down pays out as you step into the Abyss.
   if (SCENES[layer[index].sceneId].terminal && run.vow && !run.vow.broken && !run.vow.kept) {
     const reward = getVow(run.vow.id).reward;

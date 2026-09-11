@@ -100,6 +100,7 @@ function ReadingScreenInner() {
         <SceneArt id={scene.id} className="scene__art" />
         <p className="scene__place muted">{scene.place}</p>
         <p className="scene__prompt">{scene.prompt}</p>
+        {scene.terminal && run.abyssRemade && <p className="scene__remade muted small">It deals from what you have already read.</p>}
       </section>
       <RelicStrip relics={run.relics} />
       {run.vow && (

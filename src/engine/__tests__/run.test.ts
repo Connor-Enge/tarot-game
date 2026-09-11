@@ -215,3 +215,21 @@ describe('take back', () => {
     expect(new Set(all).size).toBe(78);
   });
 });
+
+describe('the Abyss deals from what you have read', () => {
+  it('shuffles the discard onto the top of the deck as you step in', async () => {
+    const { chooseNode, startRun } = await import('../run');
+    const { SLOT_IDS } = await import('../scenes');
+    let run = startRun(21);
+    const last = run.map.length - 1;
+    const read = run.deck.draw.slice(0, 20);
+    run = { ...run, layer: last, deck: { draw: run.deck.draw.slice(20), discard: read } };
+    const next = chooseNode(run, 0);
+    expect(next.abyssRemade).toBe(true);
+    for (const c of next.slots[0].candidates) expect(read).toContain(c.cardId);
+    // Too little read: the Abyss deals as any scene does.
+    const thin = chooseNode({ ...startRun(21), layer: last, deck: { draw: startRun(21).deck.draw.slice(4), discard: startRun(21).deck.draw.slice(0, 4) } }, 0);
+    expect(thin.abyssRemade).toBeUndefined();
+    void SLOT_IDS;
+  });
+});
