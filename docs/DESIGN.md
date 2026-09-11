@@ -45,6 +45,24 @@ Title ─► Scene prompt ─► Seat 1: 3 dealt, pick 1 ─► Seat 2 ─► Se
 
 ### The four seats
 
+**Laid as a mini cross** (owner's request, matching their guide book):
+seat 1, the Situation, sits in the centre; seat 2, the Challenge, above
+it; seat 3, the Hidden Insight, to the left; seat 4, the Guidance, to
+the right. They are dealt in that order. The positions are shown
+always (number and role); the seats' own names still wait for
+`seatsNamed`.
+
+**The reckoning** (also the owner's request: the story was too vague):
+when a reading resolves, each seat's omen line is followed by a plain
+sentence, "This seat wanted patience and wisdom, feared action. The
+Knight of Wands brought action, and lay reversed." with the seat's
+score in a chip, and the outcome line is followed by the tally: "the
+four seats −3, named readings +1: −2 in all, which reads as harm." The
+end screen's final spread carries the same lines. This names only the
+tags that mattered in that scene, which is the sanctioned post-mortem;
+a card's full meaning still waits for the Codex tier.
+
+
 Seats are shown as glyphs only until the first death names them.
 
 | Seat | Glyph | Role |

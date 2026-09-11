@@ -26,6 +26,19 @@ export const SLOTS: Record<SlotId, SlotDef> = {
   wake: { id: 'wake', glyph: '☾', name: 'The Wake', role: 'What follows in your wake.' },
 };
 
+/**
+ * The seats as positions in a Mini Cross spread, numbered in the order
+ * they are dealt: 1 the Situation (centre), 2 the Challenge (above it),
+ * 3 the Hidden Insight (left), 4 the Guidance (right). Positions are
+ * layout, not meaning, so they are always shown.
+ */
+export const SLOT_POSITION: Record<SlotId, { n: number; role: string; gloss: string }> = {
+  vessel: { n: 1, role: 'Situation', gloss: 'the main theme' },
+  threshold: { n: 2, role: 'Challenge', gloss: 'what blocks or influences you' },
+  hand: { n: 3, role: 'Hidden insight', gloss: 'what you may not notice' },
+  wake: { n: 4, role: 'Guidance', gloss: 'the best advice or direction' },
+};
+
 /** How strongly a scene rewards (or punishes) a tag in a given seat. */
 export type Affinity = Partial<Record<Tag, number>>;
 

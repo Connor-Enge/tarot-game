@@ -1893,3 +1893,35 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .takeback--hold { color: #d9c6ec; border-color: rgba(190,160,230,0.5); }
 .held-note { margin: 2px 0 0; color: #d9c6ec; animation: fade-in 400ms ease both; }
 .held-note__glyph { margin-right: 4px; }
+
+/* --- the mini cross: 2 above, then 3 · 1 · 4 ------------------------------- */
+.spread--cross {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas: '. two .' 'three one four';
+  row-gap: 10px;
+}
+.spread--cross > :nth-child(1 of .seat), .spread--cross > :nth-child(1 of .deal) { grid-area: one; }
+.spread--cross > :nth-child(2 of .seat), .spread--cross > :nth-child(2 of .deal) { grid-area: two; }
+.spread--cross > :nth-child(3 of .seat), .spread--cross > :nth-child(3 of .deal) { grid-area: three; }
+.spread--cross > :nth-child(4 of .seat), .spread--cross > :nth-child(4 of .deal) { grid-area: four; }
+.spread--cross > .abyss-rise, .spread--cross > .abyss-rings, .spread--cross > svg { grid-column: 1 / -1; grid-row: 1 / -1; }
+.spread--final.spread--cross .deal:nth-child(n) { transform: none; }
+.seat__pos { font-size: 0.62rem; color: var(--gold); letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; display: flex; align-items: center; gap: 5px; }
+.seat__pos-n { display: inline-grid; place-items: center; width: 16px; height: 16px; border-radius: 50%; border: 1px solid rgba(214,178,94,0.6); font-size: 0.6rem; color: var(--gold-2); }
+.seat--active .seat__pos { color: var(--gold-2); }
+
+/* --- the reckoning: what each seat wanted, what the card brought ------------- */
+.reckon { display: flex; gap: 8px; align-items: flex-start; margin-top: 4px; font-size: 0.82rem; font-style: normal; line-height: 1.35; color: var(--muted); }
+.reckon__score { flex: 0 0 auto; min-width: 34px; text-align: center; padding: 1px 6px; border-radius: 999px; border: 1px solid rgba(233,228,242,0.2); font-variant-numeric: tabular-nums; color: var(--ink); }
+.reckon--helped .reckon__score { color: var(--gold-2); border-color: rgba(214,178,94,0.6); background: rgba(214,178,94,0.1); }
+.reckon--hurt .reckon__score { color: #f0a09e; border-color: rgba(214,96,94,0.55); background: rgba(214,96,94,0.1); }
+.narration__omen .reckon { padding-left: 0; }
+.tally { display: block; margin-top: 6px; font-size: 0.85rem; font-weight: 400; color: var(--muted); text-shadow: none; }
+.reveal__reckon { margin: 4px 0 0; }
+
+/* the reckoning wraps under its omen line, indented past the seat number */
+.narration__omen { flex-wrap: wrap; }
+.narration__omen .reckon { flex: 1 0 100%; margin-left: 26px; }
+.narration__outcome { flex-wrap: wrap; }
+.narration__outcome .tally { flex: 1 0 100%; }
+.narration__line { flex: 1 1 0; min-width: 12ch; }

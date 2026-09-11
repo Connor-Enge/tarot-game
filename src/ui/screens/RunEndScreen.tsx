@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getCard, getDescent, getRelic, getVow, getWeather, KIND_GLYPH, SCENES, SIGILS, SLOT_IDS, SLOTS, type RunState } from '../../engine';
+import { getCard, getDescent, getRelic, getVow, getWeather, KIND_GLYPH, reckon, reckoningText, SCENES, SIGILS, SLOT_IDS, SLOT_POSITION, SLOTS, tallyText, type RunState } from '../../engine';
 import { shareText, useGame } from '../../store';
 import { Card } from '../components/Card';
 import { RelicArt } from '../art/relics';
@@ -55,6 +55,7 @@ function RunEndScreenInner() {
   if (run.phase.kind !== 'dead' && run.phase.kind !== 'ascended') return null;
   const dead = run.phase.kind === 'dead';
   const last = run.history[run.history.length - 1];
+  const lastReckoning = reckon(SCENES[last.sceneId], last.resolution, run.marks);
 
   const share = async () => {
     const text = shareText(run, mode, knowledge);
@@ -164,7 +165,7 @@ function RunEndScreenInner() {
       {tab === 'reveal' ? (
         <section className="reveal" key={replay}>
           <p className="muted small reveal__lead">
-            {dead ? 'What killed you, you now understand.' : 'What carried you, you now understand.'}
+            {dead ? 'What killed you, you now understand.' : 'What carried you, you now understand.'} {tallyText(last.resolution)}
             <button type="button" className="chip chip--inline" onClick={() => setReplay((n) => n + 1)}>
               read again
             </button>
@@ -181,7 +182,7 @@ function RunEndScreenInner() {
                 </div>
                 <div className="reveal__text">
                   <div className="reveal__seat">
-                    {SLOTS[id].glyph} {SLOTS[id].name}
+                    {SLOT_POSITION[id].n} · {SLOT_POSITION[id].role} · {SLOTS[id].glyph} {SLOTS[id].name}
                   </div>
                   <div className="reveal__name">
                     {card.name}
@@ -189,6 +190,15 @@ function RunEndScreenInner() {
                   </div>
                   {replay > 0 && <p className="narration__omen rise" style={{ animationDelay: `${500 + i * 900}ms` }}>{d.reversed ? card.omen.reversed : card.omen.upright}</p>}
                   <p className="reveal__meaning"><span className="reveal__fleuron" aria-hidden>❧</span>{d.reversed && tier >= 3 ? card.meaning.reversed : card.meaning.upright}</p>
+                  {(() => {
+                    const r = lastReckoning[i];
+                    return (
+                      <p className={`reckon reckon--${r.verdict} reveal__reckon`}>
+                        <span className="reckon__score">{r.score > 0 ? '+' : r.score < 0 ? '−' : ''}{Math.abs(r.score) % 1 === 0 ? Math.abs(r.score) : Math.abs(r.score).toFixed(1)}</span>
+                        <span className="reckon__text">{reckoningText(r, card.name)}</span>
+                      </p>
+                    );
+                  })()}
                 </div>
               </article>
             );

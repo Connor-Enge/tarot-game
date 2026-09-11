@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSettings } from '../../settings';
-import { activeSlotState, canTakeBack, canWhisperHere, currentScene, RITES, getCard, hasRelic, redrawCost, sceneNumber, scoreSlot, SLOT_IDS, SLOTS, totalScenes, whisperCost, whisperWords } from '../../engine';
+import { activeSlotState, canTakeBack, canWhisperHere, currentScene, RITES, SLOT_POSITION, getCard, hasRelic, redrawCost, sceneNumber, scoreSlot, SLOT_IDS, SLOTS, totalScenes, whisperCost, whisperWords } from '../../engine';
 
 /** Dev only: show the oracle's score on each candidate when the page is opened with ?oracle. */
 const ORACLE = import.meta.env.DEV && typeof location !== 'undefined' && location.search.includes('oracle');
@@ -120,7 +120,7 @@ function ReadingScreenInner() {
         </p>
       )}
 
-      <section className="spread" aria-label="the spread">
+      <section className="spread spread--cross" aria-label="the spread, laid as a mini cross">
         {scene.terminal && <AbyssRings />}
         {scene.terminal && run.abyssRemade && run.activeSlot === 0 && run.slots[0]?.chosen === null && (
           <div className="abyss-rise" aria-hidden key={`rise-${run.history.length}`}>
@@ -138,7 +138,7 @@ function ReadingScreenInner() {
           return (
             <div
               key={id}
-              className={`seat ${isActive ? 'seat--active' : ''} ${chosen ? 'seat--filled' : ''} ${isActive && dragOver ? 'seat--target' : ''} ${suitClass}`}
+              className={`seat seat--${id} ${isActive ? 'seat--active' : ''} ${chosen ? 'seat--filled' : ''} ${isActive && dragOver ? 'seat--target' : ''} ${suitClass}`}
               style={{ '--seat': i } as React.CSSProperties}
               role="group"
               aria-label={`${seatsNamed ? SLOTS[id].name : `seat ${i + 1}`}${isActive ? ', choosing' : chosen ? ', placed' : ', empty'}`}
@@ -149,6 +149,9 @@ function ReadingScreenInner() {
               <div className={`seat__card ${chosen ? 'flip-in' : ''}`} key={chosen ? chosen.cardId : 'empty'}>
                 <Card cardId={chosen?.cardId} reversed={chosen?.reversed} faceDown={!chosen} size="sm" mark={chosen ? run.marks[chosen.cardId] : undefined} />
                 {chosen && <span className="seat__seal" aria-hidden>{SLOTS[id].glyph}</span>}
+              </div>
+              <div className="seat__pos" title={SLOT_POSITION[id].gloss}>
+                <span className="seat__pos-n">{SLOT_POSITION[id].n}</span> {SLOT_POSITION[id].role}
               </div>
               {seatsNamed && <div className="seat__name">{SLOTS[id].name.replace(/^The /, '')}</div>}
             </div>

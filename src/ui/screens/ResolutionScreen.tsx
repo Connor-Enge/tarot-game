@@ -1,4 +1,4 @@
-import { currentScene, getCard, getRelic, isPeddlerTrade, SLOT_IDS, SLOTS, tradeText, type Trade } from '../../engine';
+import { currentScene, getCard, getRelic, isPeddlerTrade, reckon, reckoningText, SLOT_IDS, SLOT_POSITION, SLOTS, tallyText, tradeText, type Trade } from '../../engine';
 import { PeddlerArt, StrangerArt } from '../art/stranger';
 
 const TIER_GLYPH = { calamity: '✖', harm: '▽', neutral: '◇', boon: '△', triumph: '★' } as const;
@@ -50,6 +50,7 @@ function ResolutionScreenInner() {
   const scene = currentScene(run);
   const last = run.history[run.history.length - 1];
   const lastEntry = last;
+  const reckoning = reckon(scene, resolution, run.marks);
   const pace = readingSpeed === 'slow' ? 1.5 : readingSpeed === 'fast' ? 0.45 : 1;
   const step = Math.round((scene.terminal ? 900 : 550) * pace);
   // In a rest scene, something you have seen before surfaces as a dream.
@@ -70,7 +71,7 @@ function ResolutionScreenInner() {
         <Stats vitality={run.vitality} clarity={run.clarity} />
       </header>
 
-      <section className="spread spread--final">
+      <section className="spread spread--final spread--cross">
         <TierFlourish tier={resolution.tier} />
         {SLOT_IDS.map((id, i) => (
           <div className="deal laid" style={{ animationDelay: `${i * 80}ms` }} key={id}>
@@ -101,9 +102,19 @@ function ResolutionScreenInner() {
               style={{ animationDelay: `${400 + i * step}ms` }}
               onClick={seat ? () => openCodex(lastEntry.reading[SLOT_IDS[i]].cardId) : undefined}
             >
-              {seat && <span className="narration__seat">{seat}</span>}
+              {seat && <span className="narration__seat" title={SLOT_POSITION[SLOT_IDS[i]].role}>{SLOT_POSITION[SLOT_IDS[i]].n}</span>}
               {last && <span className="narration__tier">{TIER_GLYPH[resolution.tier]} </span>}
-              {line}
+              <span className="narration__line">{line}</span>
+              {seat && (() => {
+                const r = reckoning[i];
+                return (
+                  <span className={`reckon reckon--${r.verdict}`}>
+                    <span className="reckon__score">{r.score > 0 ? '+' : r.score < 0 ? '−' : ''}{Math.abs(r.score) % 1 === 0 ? Math.abs(r.score) : Math.abs(r.score).toFixed(1)}</span>
+                    <span className="reckon__text">{SLOT_POSITION[SLOT_IDS[i]].role}: {reckoningText(r, resolution.slots[i].card.name)}</span>
+                  </span>
+                );
+              })()}
+              {last && <span className="tally">{tallyText(resolution)}</span>}
             </p>
           );
         })}

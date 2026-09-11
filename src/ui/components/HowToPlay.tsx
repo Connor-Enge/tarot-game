@@ -53,6 +53,12 @@ export function HowToPlay({ onClose }: { onClose: () => void }) {
           <li>
             <span className="how__glyph" aria-hidden>⧖</span>
             <span>
+              <strong>The four seats are a mini cross.</strong> 1 the Situation in the centre, 2 the Challenge above it, 3 the Hidden Insight on the left, 4 the Guidance on the right. They are dealt in that order. When a reading resolves, each seat says what it wanted and what your card brought, and the tally shows how it added up.
+            </span>
+          </li>
+          <li>
+            <span className="how__glyph" aria-hidden>⧖</span>
+            <span>
               <strong>Some scenes keep a rite.</strong> A rule stated as you arrive: the Mirror reads every card the other way up, the Hush allows no whispers, the Tithe takes a drop at the door.
             </span>
           </li>

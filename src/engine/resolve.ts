@@ -342,3 +342,59 @@ export function resolveReading(scene: Scene, reading: Reading, marks: Marks = {}
 export function tierIndex(t: OutcomeTier): number {
   return TIERS.indexOf(t);
 }
+
+/**
+ * The reckoning: what each seat wanted, what the card brought, and what
+ * that came to. This is the plain-words post-mortem of a reading, so the
+ * story of a scene can be followed card by card. Only tags that mattered
+ * in this scene are named; the rest of a card stays its own.
+ */
+export interface SlotReckoning {
+  slot: SlotId;
+  score: number;
+  verdict: 'helped' | 'hurt' | 'neither';
+  /** What the seat rewarded here, strongest first. */
+  wanted: Tag[];
+  /** What the seat punished here. */
+  feared: Tag[];
+  /** Tags the card brought that the seat rewarded. */
+  met: Tag[];
+  /** Tags the card brought that the seat punished. */
+  against: Tag[];
+  reversed: boolean;
+  charged: boolean;
+}
+
+export function reckon(scene: Scene, resolution: Resolution, marks: Marks = {}): SlotReckoning[] {
+  return resolution.slots.map((s) => {
+    const aff = scene.affinity[s.slot];
+    const entries = Object.entries(aff) as [Tag, number][];
+    const wanted = entries.filter(([, w]) => w > 0).sort((a, b) => b[1] - a[1]).map(([t]) => t);
+    const feared = entries.filter(([, w]) => w < 0).sort((a, b) => a[1] - b[1]).map(([t]) => t);
+    const met = s.hits.filter((h) => h.weight > 0).map((h) => h.tag);
+    const against = s.hits.filter((h) => h.weight < 0).map((h) => h.tag);
+    const verdict = s.score >= 1 ? 'helped' : s.score <= -1 ? 'hurt' : 'neither';
+    return { slot: s.slot, score: s.score, verdict, wanted, feared, met, against, reversed: s.reversed, charged: marks[s.card.id] === 'charged' };
+  });
+}
+
+const list = (tags: readonly string[]) => (tags.length === 0 ? '' : tags.length === 1 ? tags[0] : `${tags.slice(0, -1).join(', ')} and ${tags[tags.length - 1]}`);
+
+/** One plain sentence per seat: what it wanted, what the card brought. */
+export function reckoningText(r: SlotReckoning, cardName: string): string {
+  const want = r.wanted.length ? `wanted ${list(r.wanted)}` : 'wanted nothing in particular';
+  const fear = r.feared.length ? `, feared ${list(r.feared)}` : '';
+  const brought = r.met.length && r.against.length ? `brought ${list(r.met)}, but also ${list(r.against)}` : r.met.length ? `brought ${list(r.met)}` : r.against.length ? `brought ${list(r.against)}` : 'brought none of it';
+  const extra = [r.reversed ? 'lay reversed' : '', r.charged ? 'was charged' : ''].filter(Boolean).join(' and ');
+  return `This seat ${want}${fear}. ${cardName} ${brought}${extra ? `, and ${extra}` : ''}.`;
+}
+
+/** The tally: fit, named readings, the total, and the tier it made. */
+export function tallyText(resolution: Resolution): string {
+  const fit = resolution.slots.reduce((a, s) => a + s.score, 0);
+  const named = resolution.total - fit;
+  const fmt = (n: number) => `${n >= 0 ? '+' : '−'}${Math.abs(n) % 1 === 0 ? Math.abs(n) : Math.abs(n).toFixed(1)}`;
+  const parts = [`The four seats ${fmt(fit)}`];
+  if (named !== 0) parts.push(`named readings ${fmt(named)}`);
+  return `${parts.join(', ')}: ${fmt(resolution.total)} in all, which reads as ${resolution.tier}.`;
+}
