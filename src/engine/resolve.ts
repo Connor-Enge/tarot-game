@@ -183,6 +183,75 @@ const COMBOS: Combo[] = [
     score: 1,
     note: 'The two thrones agreed.',
   },
+  {
+    id: 'magician-hand',
+    when: (r) => has(r, 'major-1', 'hand') && !r.hand.reversed,
+    score: 1,
+    note: 'The trick was yours, and it worked.',
+  },
+  {
+    id: 'fool-hand-reversed',
+    when: (r) => has(r, 'major-0', 'hand') && r.hand.reversed,
+    score: -1.5,
+    note: 'You stepped without looking, and the edge was there.',
+  },
+  {
+    id: 'hierophant-threshold',
+    when: (r) => has(r, 'major-5', 'threshold'),
+    score: 0.5,
+    note: 'The rule was older than the door.',
+  },
+  {
+    id: 'justice-wake',
+    when: (r) => has(r, 'major-11', 'wake') && !r.wake.reversed,
+    score: 1,
+    note: 'What you gave came back, weighed.',
+  },
+  {
+    id: 'star-into-fog',
+    when: (r) => has(r, 'major-17', 'vessel') && has(r, 'major-18', 'threshold'),
+    score: 1.5,
+    note: 'You carried a light into the fog, and it held.',
+  },
+  {
+    id: 'sun-and-moon',
+    when: (r) => has(r, 'major-19') && has(r, 'major-18'),
+    score: 1,
+    note: 'Day and night sat at the same table.',
+  },
+  {
+    id: 'world-wake',
+    when: (r) => has(r, 'major-21', 'wake') && !r.wake.reversed,
+    score: 1.5,
+    note: 'It closed, whole.',
+  },
+  {
+    id: 'ten-swords-hand',
+    when: (r) => has(r, 'swords-10', 'hand') && !r.hand.reversed,
+    score: -2,
+    note: 'You did the last thing that could be done, and it was the worst one.',
+  },
+  {
+    id: 'three-cups-wake',
+    when: (r) => has(r, 'cups-3', 'wake') && !r.wake.reversed,
+    score: 1,
+    note: 'There was singing after, and you were in it.',
+  },
+  {
+    id: 'knights-quarrel',
+    when: (r) => SLOT_IDS.filter((s) => getCard(r[s].cardId).arcana === 'minor' && getCard(r[s].cardId).number === 12).length >= 2,
+    score: -1,
+    note: 'The knights argued over who would go first.',
+  },
+  {
+    id: 'three-of-a-kind',
+    when: (r) => {
+      const nums = SLOT_IDS.map((s) => getCard(r[s].cardId)).filter((c) => c.arcana === 'minor').map((c) => c.number);
+      return nums.some((n) => nums.filter((m) => m === n).length >= 3);
+    },
+    score: 1,
+    note: 'Three of a kind, and the table noticed.',
+  },
 ];
 
 /** Names of every combo, for the Codex once discovered. */

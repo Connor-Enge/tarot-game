@@ -56,3 +56,19 @@ describe('more named readings', () => {
     expect(resolveReading(scene, { vessel: d('major-7'), threshold: d('cups-2'), hand: d('cups-3'), wake: d('cups-4') }, {}).comboIds).not.toContain('chariot-slipping');
   });
 });
+
+describe('named readings, second shelf', () => {
+  const d = (cardId: string, reversed = false) => ({ cardId, reversed });
+  const scene = SCENES.crossing;
+  const ids = (r: Parameters<typeof resolveReading>[1]) => resolveReading(scene, r, {}).comboIds;
+  it('names the new pairs and seats', () => {
+    expect(ids({ vessel: d('major-17'), threshold: d('major-18'), hand: d('major-1'), wake: d('major-21') })).toEqual(expect.arrayContaining(['star-into-fog', 'magician-hand', 'world-wake']));
+    expect(ids({ vessel: d('cups-2'), threshold: d('major-5'), hand: d('major-0', true), wake: d('major-11') })).toEqual(expect.arrayContaining(['hierophant-threshold', 'fool-hand-reversed', 'justice-wake']));
+    expect(ids({ vessel: d('major-19'), threshold: d('major-18'), hand: d('swords-10'), wake: d('cups-3') })).toEqual(expect.arrayContaining(['sun-and-moon', 'ten-swords-hand', 'three-cups-wake']));
+    expect(ids({ vessel: d('cups-12'), threshold: d('wands-12'), hand: d('swords-7'), wake: d('pentacles-7') })).toContain('knights-quarrel');
+    expect(ids({ vessel: d('cups-7'), threshold: d('wands-7'), hand: d('swords-7'), wake: d('major-3') })).toContain('three-of-a-kind');
+    // Orientation matters where it says so.
+    expect(ids({ vessel: d('cups-2'), threshold: d('cups-4'), hand: d('major-1', true), wake: d('major-21', true) })).not.toContain('magician-hand');
+    expect(ids({ vessel: d('cups-2'), threshold: d('cups-4'), hand: d('major-1', true), wake: d('major-21', true) })).not.toContain('world-wake');
+  });
+});

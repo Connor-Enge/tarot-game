@@ -633,9 +633,9 @@ identity, not power, which is the point.
   `engine/minorText.ts` (112 omen lines, 112 meanings). A test asserts every
   omen is distinct.
 - **Scenes**: 30 exist (29 plus the Abyss), which was the target; more are welcome. Latest: the mill, the drowned chapel, the hunt.
-- **Named readings**: 24. Each is a memorable line, never a definition.
+- **Named readings**: 34. Each is a memorable line, never a definition.
 - **Relics**: 10 boons, 6 curses. **Vows**: 7. **Weathers**: 9. **Trades**: 4. **Sigils**: 24.
-- **Combos**: 24 named readings exist. This is the richest vein for "the
+- **Combos**: 34 named readings exist. This is the richest vein for "the
   combined meaning" and should keep growing with named, memorable results.
 - **Art**: all 78 faces are procedural SVG (`src/ui/art/`). Majors are
   bespoke compositions; Minors use traditional pip layouts and court
