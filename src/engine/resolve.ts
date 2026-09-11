@@ -244,6 +244,27 @@ const COMBOS: Combo[] = [
     note: 'The knights argued over who would go first.',
   },
   {
+    id: 'four-upright',
+    when: (r) => SLOT_IDS.every((s) => !r[s].reversed),
+    score: 0.5,
+    note: 'Every card lay as it should.',
+  },
+  {
+    id: 'four-reversed',
+    when: (r) => SLOT_IDS.every((s) => r[s].reversed),
+    score: 2,
+    note: 'Every card lay wrong, and together they were right.',
+  },
+  {
+    id: 'one-suit',
+    when: (r) => {
+      const suits = SLOT_IDS.map((s) => getCard(r[s].cardId)).map((c) => (c.arcana === 'minor' ? c.suit : null));
+      return suits.every((x) => x !== null && x === suits[0]);
+    },
+    score: 1.5,
+    note: 'The whole reading spoke in one element.',
+  },
+  {
     id: 'three-of-a-kind',
     when: (r) => {
       const nums = SLOT_IDS.map((s) => getCard(r[s].cardId)).filter((c) => c.arcana === 'minor').map((c) => c.number);

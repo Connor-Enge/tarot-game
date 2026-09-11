@@ -72,3 +72,19 @@ describe('named readings, second shelf', () => {
     expect(ids({ vessel: d('cups-2'), threshold: d('cups-4'), hand: d('major-1', true), wake: d('major-21', true) })).not.toContain('world-wake');
   });
 });
+
+describe('named readings of tone', () => {
+  const r = (ids: string[], rev: boolean[]) => ({ vessel: { cardId: ids[0], reversed: rev[0] }, threshold: { cardId: ids[1], reversed: rev[1] }, wake: { cardId: ids[2], reversed: rev[2] }, hand: { cardId: ids[3], reversed: rev[3] } });
+  it('four upright, four reversed, and one suit are named', () => {
+    const up = resolveReading(SCENES.crossing, r(['wands-2', 'cups-3', 'swords-4', 'pentacles-5'], [false, false, false, false]));
+    expect(up.comboIds).toContain('four-upright');
+    expect(up.comboIds).not.toContain('one-suit');
+    const down = resolveReading(SCENES.crossing, r(['wands-2', 'cups-3', 'swords-4', 'pentacles-5'], [true, true, true, true]));
+    expect(down.comboIds).toContain('four-reversed');
+    const suit = resolveReading(SCENES.crossing, r(['cups-2', 'cups-3', 'cups-4', 'cups-5'], [false, true, false, false]));
+    expect(suit.comboIds).toContain('one-suit');
+    expect(suit.comboIds).not.toContain('four-upright');
+    const mixed = resolveReading(SCENES.crossing, r(['cups-2', 'major-0', 'cups-4', 'cups-5'], [false, false, false, false]));
+    expect(mixed.comboIds).not.toContain('one-suit');
+  });
+});
