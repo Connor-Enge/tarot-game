@@ -3,6 +3,7 @@ import { getCard, getDescent, getVow, getWeather, KIND_GLYPH, SCENES, SIGILS, SL
 import { shareText, useGame } from '../../store';
 import { Card } from '../components/Card';
 import { RelicArt } from '../art/relics';
+import { SigilToken } from '../art/sigil';
 import { RoadStrip } from '../art/road';
 import { EndArt } from '../art/scenes';
 import { renderSpreadImage } from '../art/render';
@@ -107,7 +108,7 @@ function RunEndScreenInner() {
             const sg = SIGILS.find((x) => x.id === id)!;
             return (
               <div key={id} className="sigil-banner__item">
-                <span className="sigil__glyph">{sg.glyph}</span>
+                <SigilToken id={sg.id} glyph={sg.glyph} earned className="sigil__token sigil__token--banner" />
                 <span>
                   <strong>{sg.name}</strong> <span className="muted">· {sg.text}</span>
                 </span>

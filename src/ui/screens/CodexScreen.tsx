@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { CARDS, COMBO_IDS, comboNote, getCard, getVow, KIND_GLYPH, SCENES, SIGILS, SLOT_IDS, SLOTS, type Tier } from '../../engine';
 import { SceneArt } from '../art/scenes';
+import { SigilToken } from '../art/sigil';
 
 type SuitFilter = 'all' | 'major' | 'wands' | 'cups' | 'swords' | 'pentacles';
 type TierFilter = 'all' | 'seen' | 'known' | 'unseen';
@@ -127,7 +128,7 @@ export function CodexScreen() {
             const has = sigils.has(sg.id);
             return (
               <div key={sg.id} className={`sigil ${has ? 'sigil--on' : ''}`} title={`${sg.name} — ${sg.text}`}>
-                <span className="sigil__glyph">{has ? sg.glyph : '·'}</span>
+                <SigilToken id={sg.id} glyph={sg.glyph} earned={has} className="sigil__token" />
                 <span className="sigil__name">{has ? sg.name : '???'}</span>
                 <span className="sigil__text">{sg.text}</span>
               </div>
