@@ -3,7 +3,7 @@ import { CARDS, setKnownCards, scoreSlot, currentScene, hasRelic } from './engin
 setKnownCards(CARDS.map((c) => c.id));
 import { sfx, startDrone, stopDrone } from './audio';
 import { clearRun, loadRun, saveRun } from './persist';
-import { hapticsEnabled } from './settings';
+import { hapticsEnabled, useSettings } from './settings';
 import {
   advance as advanceRun,
   chooseCandidate,
@@ -315,7 +315,7 @@ export const useGame = create<GameStore>((set, get) => ({
     // The Chosen descends with the deck picked in the Codex; it needs at least CHOSEN_MIN known cards.
     const chosen = d.id === 'chosen' ? chosenDeck(knowledge) : null;
     if (chosen && chosen.length < CHOSEN_MIN) return;
-    const config = { ...d.config, ...(chosen ? { deck: chosen } : {}), ...(depth ? depthConfig(depth) : {}), ...(first ? { majorsFirst: true } : {}), signature: knowledge.signature, keepsake: taken.keepsake };
+    const config = { ...d.config, ...(chosen ? { deck: chosen } : {}), ...(depth ? depthConfig(depth) : {}), ...(first ? { majorsFirst: true } : {}), signature: knowledge.signature, keepsake: taken.keepsake, seatTick: useSettings.getState().seatTick };
     set({ run: startRun(seed, config), mode: { kind: 'free', descent: d.id, depth }, knowledge: taken.knowledge, screen: 'run', lifted: null, earned: [], firstDescent: first });
   },
 
@@ -325,7 +325,7 @@ export const useGame = create<GameStore>((set, get) => ({
     saveKnowledge(knowledge);
     startDrone();
     const weather = dailyWeather(seed);
-    set({ run: startRun(seed, { ...weather.config, charged: [...(weather.config.charged ?? []), ...dailyCharges(knowledge, label, seed, weeklySeed().seed)] }), mode: { kind: 'daily', label, weather: weather.id }, knowledge, screen: 'run', lifted: null, earned: [], firstDescent: false });
+    set({ run: startRun(seed, { ...weather.config, charged: [...(weather.config.charged ?? []), ...dailyCharges(knowledge, label, seed, weeklySeed().seed)], seatTick: useSettings.getState().seatTick }), mode: { kind: 'daily', label, weather: weather.id }, knowledge, screen: 'run', lifted: null, earned: [], firstDescent: false });
   },
 
   newWeekly: () => {
@@ -335,7 +335,7 @@ export const useGame = create<GameStore>((set, get) => ({
     startDrone();
     // The week has weather too. The long road keeps its length and its two extra hearts on top of the weather's.
     const weather = weeklyWeather(seed);
-    const config = { ...WEEKLY_CONFIG, ...weather.config, actLayers: WEEKLY_CONFIG.actLayers, startingVitality: (weather.config.startingVitality ?? 10) + 2 };
+    const config = { ...WEEKLY_CONFIG, ...weather.config, actLayers: WEEKLY_CONFIG.actLayers, startingVitality: (weather.config.startingVitality ?? 10) + 2, seatTick: useSettings.getState().seatTick };
     set({ run: startRun(seed, config), mode: { kind: 'weekly', label, weather: weather.id }, knowledge, screen: 'run', lifted: null, earned: [], firstDescent: false });
   },
 

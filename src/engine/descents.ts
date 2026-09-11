@@ -32,6 +32,8 @@ export interface RunConfig {
   abyssStakes?: number;
   /** No surface: each Abyss opens onto a deeper map, and stakes climb by one each time. */
   endless?: boolean;
+  /** Every seat answers in Clarity: a seat that costs you takes one at once, one that serves you gives one back. */
+  seatTick?: boolean;
 }
 
 /**

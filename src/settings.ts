@@ -11,6 +11,8 @@ export interface Settings {
   bigCards: boolean;
   /** Narration reveal pace. */
   readingSpeed: 'slow' | 'normal' | 'fast';
+  /** Every seat answers in Clarity: a seat that costs you takes one at once, one that serves you gives one back. Off by default. */
+  seatTick: boolean;
   /** Keep the seats as glyphs even once their names are earned. */
   hideSeatNames: boolean;
   /** Player has seen the seat glyph hint on the title screen. */
@@ -19,8 +21,8 @@ export interface Settings {
 
 const KEY = 'arcana-descent.settings.v1';
 
-type Stored = { sound: boolean; reduceMotion: boolean; haptics: boolean; fixedTint: boolean; bigCards: boolean; readingSpeed: 'slow' | 'normal' | 'fast'; hideSeatNames: boolean };
-const DEFAULTS: Stored = { sound: true, reduceMotion: false, haptics: true, fixedTint: false, bigCards: false, readingSpeed: 'normal', hideSeatNames: false };
+type Stored = { sound: boolean; reduceMotion: boolean; haptics: boolean; fixedTint: boolean; bigCards: boolean; readingSpeed: 'slow' | 'normal' | 'fast'; hideSeatNames: boolean; seatTick: boolean };
+const DEFAULTS: Stored = { sound: true, reduceMotion: false, haptics: true, fixedTint: false, bigCards: false, readingSpeed: 'normal', hideSeatNames: false, seatTick: false };
 
 function load(): Stored {
   try {
@@ -43,10 +45,10 @@ export const useSettings = create<Settings>((set, get) => ({
   ...initial,
   set: (patch) => {
     set(patch);
-    const { sound, reduceMotion, haptics, fixedTint, bigCards, readingSpeed, hideSeatNames } = get();
+    const { sound, reduceMotion, haptics, fixedTint, bigCards, readingSpeed, hideSeatNames, seatTick } = get();
     setSoundEnabled(sound);
     try {
-      localStorage.setItem(KEY, JSON.stringify({ sound, reduceMotion, haptics, fixedTint, bigCards, readingSpeed, hideSeatNames }));
+      localStorage.setItem(KEY, JSON.stringify({ sound, reduceMotion, haptics, fixedTint, bigCards, readingSpeed, hideSeatNames, seatTick }));
     } catch {
       /* ignore */
     }

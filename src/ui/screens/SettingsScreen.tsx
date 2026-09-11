@@ -16,7 +16,7 @@ export function SettingsScreen() {
   const [pasted, setPasted] = useState('');
   const [note, setNote] = useState<string | null>(null);
   const newRun = useGame((s) => s.newRun);
-  const { sound, reduceMotion, haptics, fixedTint, bigCards, readingSpeed, hideSeatNames, set } = useSettings();
+  const { sound, reduceMotion, haptics, fixedTint, bigCards, readingSpeed, hideSeatNames, seatTick, set } = useSettings();
   const [confirmReset, setConfirmReset] = useState(false);
   const [seed, setSeed] = useState('');
   const [sealed, setSealed] = useState(false);
@@ -62,6 +62,11 @@ export function SettingsScreen() {
         <label className="toggle">
           <span>Larger cards in hand</span>
           <input type="checkbox" checked={bigCards} onChange={(e) => set({ bigCards: e.target.checked })} />
+          <span className="toggle__track" />
+        </label>
+        <label className="toggle">
+          <span>Every seat answers in Clarity <span className="muted small">· a seat that costs you takes ◈1 at once, one that serves you gives ◈1 back. From your next descent.</span></span>
+          <input type="checkbox" checked={seatTick} onChange={(e) => set({ seatTick: e.target.checked })} />
           <span className="toggle__track" />
         </label>
         <label className="toggle">

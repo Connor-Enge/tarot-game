@@ -2002,3 +2002,7 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .memory__line .reckon { font-size: 0.78rem; }
 .memory__tally { margin: 0; text-align: center; }
 .reduce-motion .memory__line { animation: none; }
+
+.sofar__tick { margin: 2px 0 0; font-weight: 600; }
+.sofar__tick--helped { color: var(--cla, #8fc3e0); }
+.sofar__tick--hurt { color: #f0a09e; }

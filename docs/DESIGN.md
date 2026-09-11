@@ -104,6 +104,13 @@ changes is that the fourth card is never a surprise: you watch the
 reading tip with each choice, and can redraw, whisper, turn or hold
 knowing exactly what the last seat needs.
 
+For readers who want the numbers to bite per card as well, Settings
+has "Every seat answers in Clarity" (`seatTick`, off by default, taken
+into the run's mods at the start of the next descent): a seat the card
+cost takes one Clarity the moment it lands, a seat it served gives one
+back, never below zero. The plate under the spread says so. The
+balance guard runs with it off.
+
 ### The 3-of-1 choice
 
 Each seat deals three face-up cards. Face-up matters: the player sees the

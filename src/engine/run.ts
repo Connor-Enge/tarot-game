@@ -1,6 +1,6 @@
 import { createDeck, discard, draw, REVERSED_CHANCE, type DeckState, type DrawnCard } from './deck';
 import type { RunConfig } from './descents';
-import { resolveReading, type Reading, type Resolution } from './resolve';
+import { resolveReading, scoreSlot, type Reading, type Resolution } from './resolve';
 import { createRng, type Rng } from './rng';
 import { getVow } from './vows';
 import { BOON_IDS, CURSE_IDS } from './relics';
@@ -103,7 +103,7 @@ export interface RunState {
   /** Counters for the scene in progress. */
   sceneSpent: { redraws: number; whispers: number; turns?: number };
   /** Depth modifiers carried by the run. */
-  mods: { extraNeutralCost: number; noEcho: boolean; abyssStakes?: number };
+  mods: { extraNeutralCost: number; noEcho: boolean; abyssStakes?: number; seatTick?: boolean };
   slots: SlotState[];
   activeSlot: number;
   phase: Phase;
@@ -126,6 +126,8 @@ export interface RunState {
   held?: DrawnCard | null;
   /** Holds made this run. */
   holds?: number;
+  /** Net Clarity moved by seat ticks this run, when the rule is on. */
+  ticks?: number;
   /** Set once the keepsake has been dealt and shown as yours. */
   keepsakeShown?: boolean;
   /** True once the Stranger has appeared this run. They come once. */
@@ -212,7 +214,7 @@ export function startRun(seed: number, config: RunConfig = {}): RunState {
     whispers: 0,
     actLayers,
     echo: null,
-    mods: { extraNeutralCost: config.extraNeutralCost ?? 0, noEcho: !!config.noEcho, abyssStakes: config.abyssStakes },
+    mods: { extraNeutralCost: config.extraNeutralCost ?? 0, noEcho: !!config.noEcho, abyssStakes: config.abyssStakes, seatTick: config.seatTick || undefined },
     sceneSpent: { redraws: 0, whispers: 0 },
     foretold: [],
     takeBacks: 1 + ((config.startingRelics ?? []).includes('thread') ? 1 : 0),
@@ -412,6 +414,9 @@ export function chooseCandidate(run: RunState, index: number): RunState {
   const rejected = slot.candidates.filter((_, i) => i !== index);
   let deck = discard(run.deck, rejected);
   const slots = run.slots.map((s, i) => (i === run.activeSlot ? { ...s, chosen: index } : s));
+  // The seat answers in Clarity, if the rule is on: one taken when the card costs, one given when it serves.
+  const tick = seatTick(run, slot.slot, slot.candidates[index]);
+  run = tick ? { ...run, clarity: clampClarity(run, Math.max(0, run.clarity + tick)), ticks: (run.ticks ?? 0) + tick } : run;
 
   const nextIndex = run.activeSlot + 1;
   if (nextIndex < SLOT_IDS.length) {
@@ -454,6 +459,13 @@ export function turnCandidate(run: RunState, index: number): RunState {
     i === run.activeSlot ? { ...s, candidates: s.candidates.map((c, j) => (j === index ? { ...c, reversed: !c.reversed } : c)) } : s,
   );
   return { ...run, slots, clarity: run.clarity - TURN_COST, sceneSpent: { ...run.sceneSpent, turns: (run.sceneSpent.turns ?? 0) + 1 } };
+}
+
+/** What a placed card does to Clarity at once under the seat-tick rule: +1 if it served the seat, −1 if it cost, 0 otherwise or when the rule is off. */
+export function seatTick(run: RunState, slot: SlotId, drawn: DrawnCard): number {
+  if (!run.mods.seatTick) return 0;
+  const score = scoreSlot(currentScene(run), slot, drawn, run.marks, hasRelic(run, 'ring') ? 2 : undefined).score;
+  return score >= 1 ? 1 : score <= -1 ? -1 : 0;
 }
 
 /** A hold keeps a face-up candidate back for the next seat: allowed once at a time, never at the Wake, and never the last card of a deal. */

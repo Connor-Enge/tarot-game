@@ -186,6 +186,11 @@ function ReadingScreenInner() {
             ))}
             <span className="sofar__pin" style={{ left: `${Math.max(2, Math.min(98, ((soFar.total - (THRESHOLDS.harm - 3)) / ((THRESHOLDS.triumph + 3) - (THRESHOLDS.harm - 3))) * 100))}%` }} aria-hidden />
           </div>
+          {run.mods.seatTick && lastPlaced.reckoning.verdict !== 'neither' && (
+            <p className={`sofar__tick center small ${lastPlaced.reckoning.verdict === 'hurt' ? 'sofar__tick--hurt' : 'sofar__tick--helped'}`}>
+              ◈ {lastPlaced.reckoning.verdict === 'hurt' ? '−1 taken at once' : '+1 given at once'}
+            </p>
+          )}
           <p className="sofar__tally muted small center">
             {soFar.placed} of 4 placed · {soFar.total > 0 ? '+' : soFar.total < 0 ? '−' : ''}{Math.abs(soFar.total) % 1 === 0 ? Math.abs(soFar.total) : Math.abs(soFar.total).toFixed(1)} so far · reads as <strong>{soFar.tier}</strong>{soFar.placed < 4 ? ' if nothing else moves it' : ''}
           </p>
