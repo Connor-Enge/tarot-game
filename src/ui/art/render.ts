@@ -23,6 +23,8 @@ export async function renderSpreadImage(opts: {
   outcome?: string;
   /** A small line under the footer: weather, vow. */
   notes?: string;
+  /** One stop per scene: the map glyph and how the reading went. Drawn as a road when present. */
+  stops?: { glyph: string; tier: 'calamity' | 'harm' | 'neutral' | 'boon' | 'triumph' }[];
 }): Promise<Blob | null> {
   const W = 1080;
   const H = 1350;
@@ -69,8 +71,9 @@ export async function renderSpreadImage(opts: {
     <text x="${W / 2}" y="290" font-size="28" text-anchor="middle" fill="#8d86a3" font-family="Georgia, serif">${esc(opts.subtitle)}</text>
     ${cards}
     ${opts.outcome ? wrapText(esc(opts.outcome), W / 2, cardY + cardH + 170, 30, 46, '#e9e4f2') : ''}
-    ${opts.road ? `<text x="${W / 2}" y="${H - 262}" font-size="30" letter-spacing="14" text-anchor="middle" fill="#8d86a3" font-family="Georgia, serif">${esc(opts.road)}</text>` : ''}
-    ${opts.journey ? `<text x="${W / 2}" y="${H - 215}" font-size="34" letter-spacing="12" text-anchor="middle" fill="#d6b25e" font-family="Georgia, serif">${esc(opts.journey)}</text>` : ''}
+    ${opts.stops && opts.stops.length ? roadSvg(opts.stops, W, H - 250, opts.title.includes('ended')) : ''}
+    ${!opts.stops && opts.road ? `<text x="${W / 2}" y="${H - 262}" font-size="30" letter-spacing="14" text-anchor="middle" fill="#8d86a3" font-family="Georgia, serif">${esc(opts.road)}</text>` : ''}
+    ${!opts.stops && opts.journey ? `<text x="${W / 2}" y="${H - 215}" font-size="34" letter-spacing="12" text-anchor="middle" fill="#d6b25e" font-family="Georgia, serif">${esc(opts.journey)}</text>` : ''}
     <text x="${W / 2}" y="${H - 150}" font-size="26" text-anchor="middle" fill="#8d86a3" font-family="Georgia, serif">${esc(opts.footer)}</text>
     ${opts.notes ? `<text x="${W / 2}" y="${H - 188}" font-size="24" text-anchor="middle" fill="#d6b25e" font-family="Georgia, serif">${esc(opts.notes)}</text>` : ''}
     <text x="${W / 2}" y="${H - 90}" font-size="30" letter-spacing="4" text-anchor="middle" fill="#d6b25e" font-family="Georgia, serif">ARCANA DESCENT</text>
@@ -155,4 +158,32 @@ async function svgToPng(svg: string, w: number, h: number): Promise<Blob | null>
   } finally {
     URL.revokeObjectURL(url);
   }
+}
+
+const TIER_COLOR = { calamity: '#d6605e', harm: '#e0a39a', neutral: '#8d86a3', boon: '#d6b25e', triumph: '#f3dc8a' } as const;
+
+/** The road as drawn on the journal, sized for the share image. */
+function roadSvg(stops: { glyph: string; tier: keyof typeof TIER_COLOR }[], W: number, cy: number, ended: boolean): string {
+  const n = stops.length;
+  const span = Math.min(760, 90 + n * 70);
+  const x0 = (W - span) / 2;
+  const pts = stops.map((st, i) => {
+    const t = n === 1 ? 0.5 : i / (n - 1);
+    return { x: x0 + t * span, y: cy + Math.sin(i * 1.9) * 16 + t * 10, st };
+  });
+  const d = pts.map((p, i) => (i === 0 ? `M${p.x} ${p.y}` : `Q${(pts[i - 1].x + p.x) / 2} ${pts[i - 1].y + 10} ${p.x} ${p.y}`)).join(' ');
+  const circles = pts
+    .map((p, i) => {
+      const last = i === n - 1;
+      const r = last ? 22 : 16;
+      const c = TIER_COLOR[p.st.tier];
+      return `<circle cx="${p.x}" cy="${p.y}" r="${r}" fill="#0b0a12" stroke="${c}" stroke-width="${last ? 3 : 2}" />
+        ${p.st.tier === 'triumph' ? `<circle cx="${p.x}" cy="${p.y}" r="${r + 10}" fill="${c}" opacity="0.15" />` : ''}
+        <text x="${p.x}" y="${p.y + 1}" font-size="${last ? 20 : 16}" text-anchor="middle" dominant-baseline="middle" fill="${c}" font-family="Georgia, serif">${p.st.glyph}</text>
+        ${last && ended ? `<text x="${p.x}" y="${p.y - 34}" font-size="20" text-anchor="middle" fill="#d6605e" font-family="Georgia, serif">✖</text>` : ''}`;
+    })
+    .join('');
+  return `<path d="${d}" fill="none" stroke="#d6b25e" stroke-width="3" opacity="0.5" />
+    <path d="${d}" fill="none" stroke="#1a1408" stroke-width="2" stroke-dasharray="3 9" opacity="0.7" />
+    ${circles}`;
 }

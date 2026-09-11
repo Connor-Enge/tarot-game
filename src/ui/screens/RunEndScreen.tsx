@@ -60,6 +60,7 @@ function RunEndScreenInner() {
         journey: run.history.map((h) => TIER_MARK[h.resolution.tier]).join(''),
         road: run.history.map((h) => KIND_GLYPH[SCENES[h.sceneId].kind]).join(''),
         outcome: last.resolution.narration.at(-1),
+        stops: run.history.map((h) => ({ glyph: KIND_GLYPH[SCENES[h.sceneId].kind], tier: h.resolution.tier })),
         notes: [
           mode.kind === 'daily' && mode.weather ? `${getWeather(mode.weather).glyph} ${getWeather(mode.weather).name}` : '',
           run.vow ? `${getVow(run.vow.id).glyph} ${getVow(run.vow.id).name} · ${run.vow.kept ? 'kept' : run.vow.broken ? 'broken' : 'held'}` : '',
