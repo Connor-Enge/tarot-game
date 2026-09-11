@@ -469,11 +469,13 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .screen--abyss .scene__prompt { color: var(--gold-2); letter-spacing: 0.03em; }
 .screen--abyss::after {
   content: ''; position: fixed; inset: 0; pointer-events: none; z-index: -1;
-  background: radial-gradient(120% 100% at 50% 110%, rgba(0,0,0,0.85), transparent 55%),
-              radial-gradient(60% 40% at 50% 0%, rgba(90,60,140,0.25), transparent 70%);
-  animation: abyss-breathe 6s ease-in-out infinite;
+  background:
+    radial-gradient(90% 55% at 50% 108%, rgba(96,44,140,0.55), rgba(40,10,60,0.25) 45%, transparent 70%),
+    radial-gradient(40% 18% at 50% 100%, rgba(214,178,94,0.22), transparent 70%),
+    linear-gradient(180deg, rgba(0,0,0,0.35), transparent 30%);
+  animation: abyss-breathe 7s ease-in-out infinite;
 }
-@keyframes abyss-breathe { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
+@keyframes abyss-breathe { 0%, 100% { opacity: 0.75; transform: scaleY(1); } 50% { opacity: 1; transform: scaleY(1.06); } }
 .screen--abyss .seat--active .seat__glyph { text-shadow: 0 0 18px rgba(214,178,94,0.9), 0 0 40px rgba(214,178,94,0.4); }
 .reduce-motion .screen--abyss::after { animation: none; }
 
