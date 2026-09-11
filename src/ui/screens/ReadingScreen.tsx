@@ -61,11 +61,6 @@ function ReadingScreenInner() {
       <RelicStrip relics={run.relics} />
 
       <section className="spread" aria-label="the spread">
-        {canTakeBack(run) && (
-          <button type="button" className="takeback" onClick={takeBack} title="Take back the last card, once per descent">
-            ↶ take back
-          </button>
-        )}
         {SLOT_IDS.map((id, i) => {
           const slot = run.slots[i];
           const chosen = slot && slot.chosen !== null ? slot.candidates[slot.chosen] : undefined;
@@ -122,6 +117,13 @@ function ReadingScreenInner() {
           );
         })}
       </section>
+      {canTakeBack(run) && (
+        <div className="takeback-row">
+          <button type="button" className="takeback" onClick={takeBack} title="Take back the last card, once per descent">
+            ↶ take back
+          </button>
+        </div>
+      )}
 
       {firstDescent && run.layer === 0 && (
         <p className="nudge muted small center" key={`${run.activeSlot}-${lifted === null}`}>

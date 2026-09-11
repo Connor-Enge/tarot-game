@@ -701,7 +701,7 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 /* --- take back / suit glyphs -------------------------------------------- */
 .spread { position: relative; }
 .takeback {
-  position: absolute; right: 0; top: -6px; z-index: 2;
+  position: static;
   font: inherit; font-size: 0.72rem; letter-spacing: 0.04em; color: var(--muted); cursor: pointer;
   background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 999px; padding: 4px 10px;
   animation: rise 300ms ease both;
@@ -862,3 +862,26 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .relic-chip { padding: 0; width: 34px; height: 34px; display: grid; place-items: center; }
 .relic-chip__art { width: 26px; height: 26px; display: block; }
 .curse__art { width: 22px; height: 22px; display: inline-block; vertical-align: -6px; margin-right: 2px; }
+
+/* --- seat seals lit by suit; card of the day turns ------------------------ */
+.seat--filled.seat--wands .seat__seal { color: #e0a068; text-shadow: 0 0 14px rgba(224,160,104,0.9); }
+.seat--filled.seat--cups .seat__seal { color: #8fc3e0; text-shadow: 0 0 14px rgba(143,195,224,0.9); }
+.seat--filled.seat--swords .seat__seal { color: #c8c9d8; text-shadow: 0 0 14px rgba(200,201,216,0.9); }
+.seat--filled.seat--pentacles .seat__seal { color: #a9c98a; text-shadow: 0 0 14px rgba(169,201,138,0.9); }
+.seat--filled .seat__card::after {
+  content: ''; position: absolute; inset: -6px; border-radius: 12px; pointer-events: none; z-index: -1;
+  background: radial-gradient(60% 60% at 50% 50%, var(--seat-suit, rgba(243,220,138,0.25)), transparent 70%);
+  opacity: 0; animation: fade-in 700ms ease 300ms both;
+}
+.seat--filled.seat--wands { --seat-suit: rgba(224,160,104,0.3); }
+.seat--filled.seat--cups { --seat-suit: rgba(143,195,224,0.3); }
+.seat--filled.seat--swords { --seat-suit: rgba(200,201,216,0.28); }
+.seat--filled.seat--pentacles { --seat-suit: rgba(169,201,138,0.3); }
+.seat__card { position: relative; }
+.today { background: none; border: none; padding: 6px 10px; font: inherit; color: inherit; cursor: pointer; border-radius: 12px; }
+.today:active { transform: scale(0.98); }
+.today__card .card { cursor: pointer; }
+.today__text { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left; max-width: 240px; }
+.today__omen { font-style: italic; font-size: 0.85rem; color: var(--ink); opacity: 0.85; }
+
+.takeback-row { display: flex; justify-content: flex-end; margin-top: -4px; }

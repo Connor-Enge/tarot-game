@@ -23,6 +23,7 @@ export function TitleScreen() {
   const maxDepth = maxDepthUnlocked(k.records?.standard?.returns ?? 0);
   const [lockedNote, setLockedNote] = useState<string | null>(null);
   const [fanDown, setFanDown] = useState(false);
+  const [todayOpen, setTodayOpen] = useState(false);
   // Foil shimmer follows device tilt where the browser allows it without a prompt, else the pointer.
   useEffect(() => {
     const root = document.documentElement;
@@ -191,10 +192,15 @@ export function TitleScreen() {
           <div className="muted small last__outcome">{k.last.outcome}</div>
         </div>
       )}
-      <div className="today" aria-label="card of the day">
-        <Card cardId={today} size="xs" />
-        <span className="muted small">Today's card · {getCard(today).name}</span>
-      </div>
+      <button type="button" className={`today ${todayOpen ? 'today--open' : ''}`} aria-label="card of the day, tap to turn it" onClick={() => setTodayOpen((o) => !o)}>
+        <span className="today__card">
+          <Card cardId={today} size="xs" faceDown={!todayOpen} />
+        </span>
+        <span className="today__text">
+          <span className="muted small">Today's card · {getCard(today).name}</span>
+          {todayOpen && <em className="today__omen rise">{getCard(today).omen.upright}</em>}
+        </span>
+      </button>
     </main>
   );
 }
