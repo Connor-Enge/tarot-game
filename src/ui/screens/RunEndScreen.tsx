@@ -163,6 +163,7 @@ function RunEndScreenInner() {
             <div className="summary__cell"><span className="summary__n">{run.history.filter((h) => h.resolution.tier === 'triumph' || h.resolution.tier === 'boon').length}</span><span className="muted small">good</span></div>
             <div className="summary__cell"><span className="summary__n">{run.history.filter((h) => h.resolution.tier === 'harm' || h.resolution.tier === 'calamity').length}</span><span className="muted small">bad</span></div>
             <div className="summary__cell"><span className="summary__n">{Object.values(run.marks).filter((m) => m === 'charged').length}</span><span className="muted small">charged</span></div>
+            {run.vow && <div className="summary__cell"><span className="summary__n">{run.vow.kept ? '✋' : run.vow.broken ? '✗' : '…'}</span><span className="muted small">{run.vow.kept ? 'vow kept' : run.vow.broken ? 'vow broken' : 'vow'}</span></div>}
             <div className="summary__cell"><span className="summary__n summary__relics">{run.relics.length ? run.relics.map((r) => <RelicArt key={r} id={r} className="summary__relic" />) : '—'}</span><span className="muted small">relics</span></div>
           </div>
           <p className="muted small center">

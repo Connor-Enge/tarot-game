@@ -6,6 +6,7 @@ import { activeSlotState, canTakeBack, currentScene, getCard, hasRelic, redrawCo
 const ORACLE = import.meta.env.DEV && typeof location !== 'undefined' && location.search.includes('oracle');
 import { useGame } from '../../store';
 import { Card } from '../components/Card';
+import { getVow } from '../../engine';
 import { AbyssRings } from '../art/flourish';
 import { SceneArt } from '../art/scenes';
 import { CodexDetail } from '../components/CodexDetail';
@@ -60,6 +61,11 @@ function ReadingScreenInner() {
         <p className="scene__prompt">{scene.prompt}</p>
       </section>
       <RelicStrip relics={run.relics} />
+      {run.vow && (
+        <p className={`vow-line center small ${run.vow.broken ? 'vow-line--broken' : run.vow.kept ? 'vow-line--kept' : ''}`} title={getVow(run.vow.id).text}>
+          {getVow(run.vow.id).glyph} {getVow(run.vow.id).name}{run.vow.kept ? ' · kept' : run.vow.broken ? ' · broken' : ''}
+        </p>
+      )}
 
       <section className="spread" aria-label="the spread">
         {scene.terminal && <AbyssRings />}

@@ -461,6 +461,17 @@ Every surface that can show text about a card, and what gates it:
 | Foretell | a scene's place line | costs Clarity; not a card |
 | Relics, sigils, descents, depths | rules | stated plainly, by design |
 
+## Vows
+
+Before the first scene the map offers two vows, chosen by seed without
+touching the run's rng. A vow is a stated constraint (never redraw, never
+rest, never a reversed card in the Hand, every Threshold a Major...). Break
+it once and it is gone for the run. Keep it to the Abyss and it pays out as
+you step in: 2 to 4 vitality, sometimes clarity. Keeping one earns the
+Sworn sigil. Vows are optional and cost nothing to refuse; they exist to
+give a run a shape the player chose, and to make some readings harder in a
+way the player can see coming.
+
 ## Balance
 
 `scripts/sim.ts` runs whole descents under three policies. Run it with

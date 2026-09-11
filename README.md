@@ -8,6 +8,7 @@ watching what they do and by dying with them on the table.
 See [docs/DESIGN.md](docs/DESIGN.md) for the design notes, every system, and
 the balance targets.
 
+
 ## Run it
 
 ```sh
@@ -32,6 +33,8 @@ Open `?gallery` on the dev server to see all 78 card faces at once.
 - **The Codex.** Meanings unlock by play and by death. Seat memory, witnessed
   omens, the Book of Omens, a constellation of every reading, Study mode,
   sigils, a Ledger, and search. Export it to another device.
+- **Vows.** Swear something before the first scene (never redraw, never rest,
+  never a reversed card in the Hand). Keep it to the Abyss and it pays out.
 - **Ways down.** Standard, Daily, Weekly, four unlockable descents, and five
   stacked Depths for veterans.
 - **Feel.** Procedural SVG art for all 78 cards, synthesized sound, haptics,

@@ -10,6 +10,7 @@ import {
   chooseNode as chooseNodeRun,
   chooseRelic as chooseRelicRun,
   cutDeck as cutDeckRun,
+  takeVow as takeVowRun,
   foretell as foretellRun,
   takeBack as takeBackRun,
   dailySeed,
@@ -41,6 +42,7 @@ import {
   noteRecord,
   KIND_GLYPH,
   getRelic,
+  getVow,
   SCENES,
   noteSigils,
   noteResolved,
@@ -109,6 +111,7 @@ interface GameStore {
   chooseNode: (index: number) => void;
   chooseRelic: (index: number) => void;
   cutDeck: (at: number) => void;
+  takeVow: (id: string) => void;
   foretell: (index: number) => void;
   takeBack: () => void;
   lift: (index: number | null) => void;
@@ -408,6 +411,15 @@ export const useGame = create<GameStore>((set, get) => ({
     sfx.redraw();
     set({ run: next });
   },
+  takeVow: (id) => {
+    const { run } = get();
+    if (!run) return;
+    const next = takeVowRun(run, id);
+    if (next === run) return;
+    buzz([10, 40, 20]);
+    sfx.place('major');
+    set({ run: next });
+  },
 
   chooseRelic: (index) => {
     const { run } = get();
@@ -444,6 +456,7 @@ export function shareText(run: RunState, mode: RunMode, knowledge?: Knowledge): 
   // Each scene as the map showed it, paired with how the reading went there.
   const tiers = run.history.map((h) => `${KIND_GLYPH[SCENES[h.sceneId].kind]}${tierGlyph[h.resolution.tier]}`).join(' ');
   const carried = run.relics.length ? `\nCarried: ${run.relics.map((r) => getRelic(r).name).join(', ')}` : '';
+  const vow = run.vow ? `\nVow: ${getVow(run.vow.id).name} · ${run.vow.kept ? 'kept' : run.vow.broken ? 'broken' : 'held so far'}` : '';
   const head =
     mode.kind === 'daily'
       ? `Arcana Descent · Daily ${mode.label}`
@@ -453,7 +466,7 @@ export function shareText(run: RunState, mode: RunMode, knowledge?: Knowledge): 
   const streak = mode.kind === 'daily' && knowledge?.daily && knowledge.daily.streak > 1 ? `\nStreak: ${knowledge.daily.streak} days` : '';
   const who = knowledge ? `${streak}\n— ${readerTitle(knowledge)}, ${Object.values(knowledge.cards).filter((c) => c.tier > 0).length} of 78 known` : '';
   const weekly = mode.kind === 'weekly' && knowledge?.records?.weekly ? `\nDeepest this week: ${Math.max(knowledge.records.weekly.bestDepth, run.history.length)} of ${run.map.length}` : '';
-  return `${head}\n${end}\n${tiers}\n${spread}${carried}${weekly}${who}`;
+  return `${head}\n${end}\n${tiers}\n${spread}${carried}${vow}${weekly}${who}`;
 }
 
 // Persist the run after every change so a closed tab can resume.

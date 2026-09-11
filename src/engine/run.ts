@@ -2,6 +2,7 @@ import { createDeck, discard, draw, REVERSED_CHANCE, type DeckState, type DrawnC
 import type { RunConfig } from './descents';
 import { resolveReading, type Reading, type Resolution } from './resolve';
 import { createRng, type Rng } from './rng';
+import { getVow } from './vows';
 import { BOON_IDS, CURSE_IDS } from './relics';
 import { ACT_LAYERS, actOfLayer, buildMap, SCENES, SLOT_IDS, type MapNode, type Scene, type SlotId } from './scenes';
 
@@ -77,6 +78,8 @@ export interface RunState {
   activeSlot: number;
   phase: Phase;
   history: HistoryEntry[];
+  /** A vow taken before the first scene, if any. `kept` is set on entering the Abyss unbroken. */
+  vow?: { id: string; broken: boolean; kept?: boolean };
 }
 
 function rngOf(run: RunState): Rng {
@@ -208,6 +211,17 @@ function dealSeat(run: RunState, rng: Rng, deck: DeckState, slot: SlotId): { dec
  * Cut the deck before the first scene: the top `at` cards go to the bottom.
  * A ritual with real consequence; the only hand the player gets on the shuffle.
  */
+/** A vow may be taken only before the first scene. */
+export function canTakeVow(run: RunState): boolean {
+  return run.phase.kind === 'map' && run.history.length === 0 && run.node === null && !run.vow;
+}
+
+export function takeVow(run: RunState, id: string): RunState {
+  if (!canTakeVow(run)) return run;
+  getVow(id);
+  return { ...run, vow: { id, broken: false } };
+}
+
 export function canCut(run: RunState): boolean {
   return run.phase.kind === 'map' && run.layer === 0 && run.history.length === 0 && !run.cut;
 }
@@ -273,10 +287,13 @@ export function chooseNode(run: RunState, index: number): RunState {
   if (!layer || index < 0 || index >= layer.length) return run;
   const rng = rngOf(run);
   const first = dealSeat(run, rng, run.deck, SLOT_IDS[0]);
-  return withRng(
-    { ...run, node: index, deck: first.deck, slots: [first.state], activeSlot: 0, freeRedrawUsed: false, echo: null, sceneSpent: { redraws: 0, whispers: 0 }, phase: { kind: 'reading' } },
-    rng,
-  );
+  let next: RunState = { ...run, node: index, deck: first.deck, slots: [first.state], activeSlot: 0, freeRedrawUsed: false, echo: null, sceneSpent: { redraws: 0, whispers: 0 }, phase: { kind: 'reading' } };
+  // A vow kept all the way down pays out as you step into the Abyss.
+  if (SCENES[layer[index].sceneId].terminal && run.vow && !run.vow.broken && !run.vow.kept) {
+    const reward = getVow(run.vow.id).reward;
+    next = { ...next, vow: { ...run.vow, kept: true }, vitality: next.vitality + (reward.vitality ?? 0), clarity: clampClarity(next, next.clarity + (reward.clarity ?? 0)) };
+  }
+  return withRng(next, rng);
 }
 
 export function activeSlotState(run: RunState): SlotState | undefined {
@@ -356,7 +373,9 @@ function resolve(run: RunState): RunState {
   for (const s of SLOT_IDS) revealed[s] = { ...reading[s], hidden: false };
   const played = SLOT_IDS.map((s) => revealed[s]);
   const deck = discard(run.deck, played);
-  const history = [...run.history, { sceneId: scene.id, reading: revealed, resolution, spent: { ...run.sceneSpent } }];
+  const entry: HistoryEntry = { sceneId: scene.id, reading: revealed, resolution, spent: { ...run.sceneSpent } };
+  const history = [...run.history, entry];
+  const vow = run.vow && !run.vow.broken && !getVow(run.vow.id).keeps(entry, baseScene) ? { ...run.vow, broken: true } : run.vow;
 
   const marks = { ...run.marks };
   if (resolution.tier === 'triumph') for (const c of played) marks[c.cardId] = 'charged';
@@ -384,7 +403,7 @@ function resolve(run: RunState): RunState {
   }
 
   const echo: DrawnCard | null = run.mods.noEcho ? null : { cardId: revealed.wake.cardId, reversed: revealed.wake.reversed };
-  const base = withRng({ ...run, deck, history, vitality, clarity, marks, relics, echo }, rng);
+  const base = withRng({ ...run, deck, history, vitality, clarity, marks, relics, echo, vow }, rng);
   if (vitality <= 0) return { ...base, vitality: 0, phase: { kind: 'dead', resolution } };
   if (scene.terminal) return { ...base, phase: { kind: 'ascended', resolution } };
   return { ...base, phase: { kind: 'resolved', resolution, offer, cursed, found } };

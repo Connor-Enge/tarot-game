@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, useState } from 'react';
-import { actOfLayer, canCut, currentAct, FORETELL_COST, KIND_GLYPH, SCENES, SLOT_IDS, visitedNodes } from '../../engine';
+import { actOfLayer, canCut, canTakeVow, currentAct, FORETELL_COST, getVow, KIND_GLYPH, SCENES, SLOT_IDS, visitedNodes, vowOffer } from '../../engine';
 import { SceneArt } from '../art/scenes';
 import { Card } from '../components/Card';
 
@@ -18,6 +18,7 @@ function MapScreenInner() {
   const run = useGame((s) => s.run)!;
   const chooseNode = useGame((s) => s.chooseNode);
   const cutDeck = useGame((s) => s.cutDeck);
+  const takeVow = useGame((s) => s.takeVow);
   const [cutAt, setCutAt] = useState<number | null>(null);
   const [peek, setPeek] = useState<number | null>(null); // history index
   const foretell = useGame((s) => s.foretell);
@@ -114,6 +115,30 @@ function MapScreenInner() {
             {foretelling ? 'Never mind' : `Foretell ◈${FORETELL_COST}`}
           </button>
         </div>
+      )}
+
+      {canTakeVow(run) && (
+        <section className="vows" aria-label="take a vow">
+          <p className="muted small center">Or swear something first. Keep it to the Abyss and it pays.</p>
+          <div className="vows__row">
+            {vowOffer(run.seed).map((id) => {
+              const v = getVow(id);
+              return (
+                <button key={id} type="button" className="vow" onClick={() => takeVow(id)}>
+                  <span className="vow__glyph">{v.glyph}</span>
+                  <span className="vow__name">{v.name}</span>
+                  <span className="vow__text">{v.text}</span>
+                  <span className="vow__reward">{[v.reward.vitality && `♥ +${v.reward.vitality}`, v.reward.clarity && `◈ +${v.reward.clarity}`].filter(Boolean).join(' · ')} at the Abyss</span>
+                </button>
+              );
+            })}
+          </div>
+        </section>
+      )}
+      {run.vow && (
+        <p className={`vow-line center small ${run.vow.broken ? 'vow-line--broken' : run.vow.kept ? 'vow-line--kept' : ''}`}>
+          {getVow(run.vow.id).glyph} {getVow(run.vow.id).name} · {run.vow.kept ? 'kept' : run.vow.broken ? 'broken' : getVow(run.vow.id).text}
+        </p>
       )}
 
       <section className="map" aria-label="the descent" ref={mapRef}>
