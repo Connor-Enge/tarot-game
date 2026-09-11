@@ -2,6 +2,7 @@ import { memo } from 'react';
 import { getCard, type Card } from '../../engine';
 import { MAJOR_ART } from './majors';
 import { minorArt } from './minors';
+import { majorMood, minorMood, MOOD_SKY } from './palette';
 import { GOLD_FLAT, INK, PALE } from './primitives';
 
 /**
@@ -62,6 +63,39 @@ export function ArtDefs() {
           <stop offset="0" stopColor="#8fa072" />
           <stop offset="1" stopColor="#e8ecd8" />
         </linearGradient>
+        {/* mood skies: colour as meaning, after the Waite-Smith convention */}
+        <linearGradient id="skyJoy" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#f0cf62" />
+          <stop offset="1" stopColor="#fbeec6" />
+        </linearGradient>
+        <linearGradient id="skySpirit" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#5d80bd" />
+          <stop offset="1" stopColor="#d3e2f2" />
+        </linearGradient>
+        <linearGradient id="skyGrey" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#7d8090" />
+          <stop offset="1" stopColor="#d9dadf" />
+        </linearGradient>
+        <linearGradient id="skyNight" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#0f0d20" />
+          <stop offset="1" stopColor="#3b3159" />
+        </linearGradient>
+        <linearGradient id="skyDawn" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#c8603c" />
+          <stop offset="1" stopColor="#f5cf9a" />
+        </linearGradient>
+        <linearGradient id="skyGrowth" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#7c9c66" />
+          <stop offset="1" stopColor="#e6ecd4" />
+        </linearGradient>
+        <linearGradient id="skyDusk" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#4d3f80" />
+          <stop offset="1" stopColor="#c9b8dc" />
+        </linearGradient>
+        <linearGradient id="skyStorm" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#3f4252" />
+          <stop offset="1" stopColor="#9a9eae" />
+        </linearGradient>
         <pattern id="veil" width="6" height="6" patternUnits="userSpaceOnUse">
           <circle cx="3" cy="3" r="1.2" fill="#c9a24a" opacity="0.5" />
         </pattern>
@@ -108,7 +142,6 @@ export function ArtDefs() {
 }
 
 const PAPER: Record<string, string> = { major: 'url(#paperMajor)', wands: 'url(#paperWands)', cups: 'url(#paperCups)', swords: 'url(#paperSwords)', pentacles: 'url(#paperPentacles)' };
-const SKY: Record<string, string> = { major: 'url(#artSkyMajor)', wands: 'url(#artSkyWands)', cups: 'url(#artSkyCups)', swords: 'url(#artSkySwords)', pentacles: 'url(#artSkyPentacles)' };
 const ROMAN = ['0', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX', 'XXI'];
 const RANK = ['', 'A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'P', 'Kn', 'Q', 'K'];
 
@@ -136,7 +169,7 @@ function CardArtInner({ cardId, className, texture = true }: { cardId: string; c
       <clipPath id={`clip-${card.id}`}>
         <rect x={10} y={18} width={80} height={112} rx={2} />
       </clipPath>
-      <rect x={10} y={18} width={80} height={112} rx={2} fill={SKY[kind]} />
+      <rect x={10} y={18} width={80} height={112} rx={2} fill={MOOD_SKY[card.arcana === 'major' ? majorMood(card.number) : minorMood(card.suit!, card.number)]} />
       <g clipPath={`url(#clip-${card.id})`}>
         <g transform="translate(10 18)">{art}</g>
       </g>

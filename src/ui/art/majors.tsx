@@ -12,7 +12,8 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <path d="M0 78 L34 78 Q40 80 40 88 L40 112 L0 112 Z" fill={INK} />
       <Figure x={28} y={78} h={38} arms="left-up" />
       <line x1={18} y1={44} x2={24} y2={62} stroke={INK} strokeWidth={1.2} />
-      <circle cx={17} cy={44} r={3} fill={GOLD} stroke={INK} strokeWidth={0.5} />
+      <circle cx={17} cy={44} r={3} fill={PALE} stroke={INK} strokeWidth={0.5} />
+      <circle cx={17} cy={44} r={1} fill={GOLD_FLAT} />
       <ellipse cx={12} cy={75} rx={4} ry={2.4} fill={PALE} stroke={INK} strokeWidth={0.6} />
       <circle cx={15.5} cy={72.5} r={1.8} fill={PALE} stroke={INK} strokeWidth={0.6} />
     </g>
@@ -20,14 +21,16 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
   1: () => (
     <g>
       <Infinity x={40} y={16} s={5} />
-      <Figure x={40} y={80} h={44} arms="left-up" />
+      <Figure x={40} y={80} h={44} arms="left-up" fill={BLOOD} />
       <line x1={26} y1={38} x2={26} y2={28} stroke={GOLD_FLAT} strokeWidth={1.4} />
       <rect x={14} y={82} width={52} height={5} fill={PALE} stroke={INK} strokeWidth={0.8} />
       <Wand x={22} y={76} s={5} />
       <Cup x={34} y={77} s={4.5} />
       <Sword x={47} y={76} s={5} />
       <Pentacle x={59} y={76} s={4.5} />
-      <path d="M0 96 q20 -8 40 0 t40 0 v16 h-80 z" fill={BLOOD} opacity={0.5} />
+      <path d="M0 96 q20 -8 40 0 t40 0 v16 h-80 z" fill="#5a7a3a" opacity={0.55} />
+      {[8, 20, 32].map((x) => <circle key={x} cx={x} cy={100 + (x % 3)} r={2} fill={BLOOD} stroke={INK} strokeWidth={0.3} />)}
+      {[50, 62, 74].map((x) => <path key={x} d={`M${x} 104 l-2 -5 l2 2 l2 -2 z`} fill={PALE} stroke={INK} strokeWidth={0.3} />)}
     </g>
   ),
   2: () => (
@@ -37,7 +40,7 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <rect x={16} y={6} width={48} height={70} fill="url(#veil)" opacity={0.8} />
       <Moon x={40} y={12} r={5} />
       <Throne x={40} y={92} w={26} h={20} fill={PALE} />
-      <Figure x={40} y={92} h={44} arms="hold" cloak crown />
+      <Figure x={40} y={92} h={44} arms="hold" fill="#3f6fa8" cloak crown />
       <path d="M32 96 q8 -6 16 0" fill="none" stroke={GOLD_FLAT} strokeWidth={1.4} />
       <Water y={100} rows={2} />
     </g>
@@ -49,7 +52,7 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       ))}
       <Tree x={12} y={70} h={24} fill={INK} />
       <Throne x={44} y={88} w={34} h={32} fill={PALE} />
-      <Figure x={44} y={88} h={44} arms="out" cloak crown />
+      <Figure x={44} y={88} h={44} arms="out" fill="#e9d9b6" cloak crown />
       <path d="M52 78 l4 -4 l4 4 l-4 6 z" fill={BLOOD} stroke={INK} strokeWidth={0.5} />
       <g stroke={GOLD_FLAT} strokeWidth={1} fill="none">
         {Array.from({ length: 12 }, (_, i) => (
@@ -86,7 +89,7 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <Pillar x={12} y={4} h={94} />
       <Pillar x={68} y={4} h={94} />
       <rect x={20} y={84} width={40} height={12} fill={PALE} stroke={INK} strokeWidth={0.8} />
-      <Figure x={40} y={84} h={50} arms="right-up" cloak />
+      <Figure x={40} y={84} h={50} arms="right-up" fill={BLOOD} cloak />
       {/* triple crown */}
       <path d="M34 36 h12 l-1 -4 h-10 z M35 32 h10 l-1 -4 h-8 z M36 28 h8 l-1 -4 h-6 z" fill={GOLD} stroke={INK} strokeWidth={0.5} />
       <circle cx={40} cy={22} r={1.6} fill={GOLD} stroke={INK} strokeWidth={0.4} />
@@ -188,7 +191,7 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       {/* the lantern's light, then the lantern, then the one who carries it */}
       <circle cx={60} cy={40} r={22} fill={GOLD_FLAT} opacity={0.12} />
       <circle cx={60} cy={40} r={11} fill={GOLD_FLAT} opacity={0.18} />
-      <Figure x={40} y={98} h={46} arms="right-up" fill={PALE} cloak />
+      <Figure x={40} y={98} h={46} arms="right-up" fill="#a9acb8" cloak />
       <line x1={28} y1={98} x2={28} y2={50} stroke={GOLD_FLAT} strokeWidth={1.6} />
       <circle cx={28} cy={49} r={2} fill={GOLD_FLAT} />
       <Lantern x={60} y={40} />
@@ -223,7 +226,7 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <Pillar x={70} y={4} h={94} />
       <rect x={16} y={4} width={48} height={90} fill="#5a2d7a" opacity={0.28} />
       <Throne x={40} y={92} w={30} h={30} fill={PALE} />
-      <Figure x={40} y={92} h={48} arms="right-up" cloak crown />
+      <Figure x={40} y={92} h={48} arms="right-up" fill={BLOOD} cloak crown />
       <Sword x={56} y={40} s={11} />
       {/* balance scales */}
       <g stroke={GOLD_FLAT} strokeWidth={1} fill="none">
@@ -264,7 +267,8 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <Horse x={40} y={100} fill={PALE} w={44} />
       <Figure x={38} y={82} h={34} arms="right-up" fill={INK} />
       <path d="M52 44 h18 v14 h-18 z" fill={INK} />
-      <Star x={61} y={51} r={4} points={5} fill={PALE} />
+      {[0, 1, 2, 3, 4].map((i) => { const a = (i / 5) * Math.PI * 2; return <circle key={i} cx={61 + Math.cos(a) * 2.6} cy={51 + Math.sin(a) * 2.6} r={1.8} fill={PALE} />; })}
+      <circle cx={61} cy={51} r={1.2} fill={PALE} />
       <line x1={52} y1={44} x2={52} y2={72} stroke={INK} strokeWidth={1.4} />
       <circle cx={38} cy={50} r={3.6} fill={PALE} stroke={INK} strokeWidth={0.6} />
       <path d="M36.5 49.5 h1 M39 49.5 h1 M37 52 h2" stroke={INK} strokeWidth={0.7} />

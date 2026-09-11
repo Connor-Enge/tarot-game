@@ -646,9 +646,23 @@ identity, not power, which is the point.
 - **Combos**: 34 named readings exist. This is the richest vein for "the
   combined meaning" and should keep growing with named, memorable results.
 - **Art**: all 78 faces are procedural SVG (`src/ui/art/`). Majors are
-  bespoke compositions; Minors use traditional pip layouts and court
-  silhouettes. Open `?gallery` in dev to see every face at once. Shared
-  gradients/filters live in one `<ArtDefs />` block at the app root.
+  bespoke compositions; the numbered Minors are scenes after the
+  Waite-Smith convention (every pip present, and a figure doing the thing:
+  the Two of Wands holds the globe on the battlement, the Five of
+  Pentacles passes the lit window in snow, the Eight of Cups walks away
+  under the moon); courts wear their suit's robe. Colour is meaning
+  (`palette.ts`): the sky over a scene says what kind of moment it is
+  before a figure is read. Yellow for illumination and success, blue for
+  spirit and calm water, grey for the liminal and the difficult, black for
+  the unknown, red for vitality and will, green for growth, violet for the
+  veiled and the royal, slate for grief in progress. Robes follow the
+  same code (the Magician in red, the High Priestess in blue, the Hermit
+  in grey; fire red, water blue, air grey-white, earth green for the
+  courts), and the small tokens match the reference deck where it
+  matters: the Fool's white rose, the white rose on Death's black banner,
+  roses and lilies in the Magician's garden. Open `?gallery` in dev to see
+  every face at once. Shared gradients/filters live in one `<ArtDefs />`
+  block at the app root.
 
 ## Open questions
 
