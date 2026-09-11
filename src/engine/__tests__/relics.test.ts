@@ -114,3 +114,20 @@ describe('scene relics', () => {
     expect(found).toBe(true);
   });
 });
+
+describe('thread, compass, ash', () => {
+  it('thread adds a take-back on pickup, compass makes foretelling free, ash dulls rest', async () => {
+    const { startRun, chooseRelic, foretell, foretellCost } = await import('../run');
+    const run = startRun(4, { startingRelics: ['thread'] });
+    expect(run.takeBacks).toBe(2);
+    const offered = { ...startRun(4), phase: { kind: 'relic' as const, offer: ['thread', 'coin'] } };
+    expect(chooseRelic(offered, 0).takeBacks).toBe(2);
+    const withCompass = startRun(4, { startingRelics: ['compass'], startingClarity: 0 });
+    expect(foretellCost(withCompass)).toBe(0);
+    const ft = foretell(withCompass, 0);
+    expect(ft.foretold).toHaveLength(1);
+    expect(ft.clarity).toBe(0);
+    const plain = startRun(4, { startingClarity: 0 });
+    expect(foretell(plain, 0).foretold).toHaveLength(0);
+  });
+});

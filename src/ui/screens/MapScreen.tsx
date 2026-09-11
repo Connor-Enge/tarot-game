@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { actOfLayer, canCut, canTakeVow, currentAct, FORETELL_COST, getVow, KIND_GLYPH, SCENES, SLOT_IDS, visitedNodes, vowOffer } from '../../engine';
+import { actOfLayer, canCut, canTakeVow, currentAct, foretellCost, getVow, KIND_GLYPH, SCENES, SLOT_IDS, visitedNodes, vowOffer } from '../../engine';
 import { ActBanner } from '../art/banners';
 import { VowArt } from '../art/relics';
 import { SceneArt } from '../art/scenes';
@@ -27,7 +27,7 @@ function MapScreenInner() {
   const [peek, setPeek] = useState<number | null>(null); // history index
   const foretell = useGame((s) => s.foretell);
   const [foretelling, setForetelling] = useState(false);
-  const canForetell = run.clarity >= FORETELL_COST;
+  const canForetell = run.clarity >= foretellCost(run);
   const cuttable = canCut(run);
   const visited = visitedNodes(run);
   const visitedIds = new Set(visited.map((n) => n.id));
@@ -169,7 +169,7 @@ function MapScreenInner() {
         <div className="map__prompt">
           <p className="scene__prompt center">{foretelling ? 'Which door?' : run.layer === 0 ? 'Choose where the descent begins.' : 'Choose the way down.'}</p>
           <button className={`btn btn--small ${foretelling ? 'btn--on' : ''}`} disabled={!canForetell && !foretelling} onClick={() => setForetelling((f) => !f)} title="Learn what waits behind one door">
-            {foretelling ? 'Never mind' : `Foretell ◈${FORETELL_COST}`}
+            {foretelling ? 'Never mind' : foretellCost(run) === 0 ? 'Foretell · free' : `Foretell ◈${foretellCost(run)}`}
           </button>
         </div>
       )}

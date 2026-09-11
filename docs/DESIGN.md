@@ -599,7 +599,7 @@ identity, not power, which is the point.
   omen is distinct.
 - **Scenes**: 24 exist (23 plus the Abyss). Aim for 30+ across three acts. Latest: wolves, the lighthouse, the tomb.
 - **Named readings**: 24. Each is a memorable line, never a definition.
-- **Vows**: 6. **Weathers**: 9. **Trades**: 3. **Sigils**: 18.
+- **Relics**: 10 boons, 6 curses. **Vows**: 6. **Weathers**: 9. **Trades**: 3. **Sigils**: 18.
 - **Combos**: 24 named readings exist. This is the richest vein for "the
   combined meaning" and should keep growing with named, memorable results.
 - **Art**: all 78 faces are procedural SVG (`src/ui/art/`). Majors are

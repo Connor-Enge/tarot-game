@@ -186,7 +186,7 @@ export function startRun(seed: number, config: RunConfig = {}): RunState {
     mods: { extraNeutralCost: config.extraNeutralCost ?? 0, noEcho: !!config.noEcho, abyssStakes: config.abyssStakes },
     sceneSpent: { redraws: 0, whispers: 0 },
     foretold: [],
-    takeBacks: 1,
+    takeBacks: 1 + ((config.startingRelics ?? []).includes('thread') ? 1 : 0),
     pendingDeal: null,
     slots: [],
     activeSlot: 0,
@@ -302,12 +302,23 @@ export function takeBack(run: RunState): RunState {
 }
 
 /** Spend Clarity to learn a node's place line before choosing it. */
+export function foretellCost(run: RunState): number {
+  return hasRelic(run, 'compass') ? 0 : FORETELL_COST;
+}
+
 export function foretell(run: RunState, index: number): RunState {
   if (run.phase.kind !== 'map') return run;
   const node = run.map[run.layer]?.[index];
   if (!node || run.foretold.includes(node.id)) return run;
-  if (run.clarity < FORETELL_COST) return run;
-  return { ...run, clarity: run.clarity - FORETELL_COST, foretold: [...run.foretold, node.id] };
+  const cost = foretellCost(run);
+  if (run.clarity < cost) return run;
+  return { ...run, clarity: run.clarity - cost, foretold: [...run.foretold, node.id] };
+}
+
+/** Some relics act the moment they are picked up. */
+function onGain(run: RunState, id: string): RunState {
+  if (id === 'thread') return { ...run, takeBacks: run.takeBacks + 1 };
+  return run;
 }
 
 /** Pick a node in the current layer and sit down to read. */
@@ -413,7 +424,7 @@ function resolve(run: RunState): RunState {
   const resolution = resolveReading(scene, reading, run.marks, {
     chargedBonus: hasRelic(run, 'ring') ? 2 : undefined,
     extraNeutralCost: (hasRelic(run, 'weight') ? 1 : 0) + run.mods.extraNeutralCost || undefined,
-    mendBonus: hasRelic(run, 'bread') ? 2 : undefined,
+    mendBonus: (hasRelic(run, 'bread') ? 2 : 0) - (hasRelic(run, 'ash') ? 1 : 0) || undefined,
   });
   const vitality = run.vitality + resolution.deltas.vitality;
   const clarity = clampClarity(run, run.clarity + resolution.deltas.clarity);
@@ -439,9 +450,11 @@ function resolve(run: RunState): RunState {
     if (pool.length) offer = pool.slice(0, 2);
   }
   let found: string | undefined;
+  let gained: RunState = run;
   if (resolution.tier === 'boon' && scene.relic && !relics.includes(scene.relic)) {
     found = scene.relic;
     relics = [...relics, found];
+    gained = onGain(run, found);
   }
   if (resolution.tier === 'calamity' && !scene.terminal) {
     const pool = CURSE_IDS.filter((id) => !relics.includes(id));
@@ -464,7 +477,7 @@ function resolve(run: RunState): RunState {
     if (curses.length && vitality > 4) options.push({ id: 'lift-curse', give: 3, curse: curses[0] });
     if (options.length) trade = rng.pick(options);
   }
-  const base = withRng({ ...run, deck, history, vitality, clarity, marks, relics, echo, vow, strangerMet: run.strangerMet || !!trade }, rng);
+  const base = withRng({ ...gained, deck, history, vitality, clarity, marks, relics, echo, vow, strangerMet: run.strangerMet || !!trade }, rng);
   if (vitality <= 0) return { ...base, vitality: 0, phase: { kind: 'dead', resolution } };
   if (scene.terminal) return { ...base, phase: { kind: 'ascended', resolution } };
   return { ...base, phase: { kind: 'resolved', resolution, offer, cursed, found, trade } };
@@ -481,7 +494,7 @@ export function acceptTrade(run: RunState): RunState {
       return { ...run, clarity: run.clarity - t.give, vitality: run.vitality + t.get, phase, traded: true };
     case 'swap-boon':
       if (!run.relics.includes(t.give)) return run;
-      return { ...run, relics: run.relics.map((id) => (id === t.give ? t.get : id)), phase, traded: true };
+      return { ...onGain(run, t.get), relics: run.relics.map((id) => (id === t.give ? t.get : id)), phase, traded: true };
     case 'lift-curse':
       if (run.vitality <= t.give) return run;
       return { ...run, vitality: run.vitality - t.give, relics: run.relics.filter((id) => id !== t.curse), phase, traded: true };
@@ -501,7 +514,7 @@ export function chooseRelic(run: RunState, index: number): RunState {
   if (run.phase.kind !== 'relic') return run;
   const id = run.phase.offer[index];
   if (!id) return run;
-  return { ...run, relics: [...run.relics, id], layer: run.layer + 1, node: null, slots: [], activeSlot: 0, phase: { kind: 'map' } };
+  return { ...onGain(run, id), relics: [...run.relics, id], layer: run.layer + 1, node: null, slots: [], activeSlot: 0, phase: { kind: 'map' } };
 }
 
 export function isOver(run: RunState): boolean {

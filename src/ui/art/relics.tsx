@@ -68,6 +68,30 @@ const ART: Record<string, () => ReactElement> = {
       <path d="M14 17 L17 21 M19 15 L22 20 M25 16 L27 20" stroke={GOLD_FLAT} strokeWidth={0.9} strokeLinecap="round" />
     </g>
   ),
+  thread: () => (
+    <g>
+      <path d="M8 24 C14 8 26 8 20 20 C14 32 26 32 32 16" fill="none" stroke="#d6605e" strokeWidth={1.6} strokeLinecap="round" />
+      <circle cx={8} cy={24} r={1.6} fill="#d6605e" />
+      <circle cx={32} cy={16} r={1.6} fill="#d6605e" />
+    </g>
+  ),
+  compass: () => (
+    <g>
+      <circle cx={20} cy={20} r={12} fill="none" stroke={GOLD_FLAT} strokeWidth={1.2} />
+      <path d="M20 10 L23 20 L20 30 L17 20 Z" fill={GOLD_FLAT} opacity={0.85} transform="rotate(28 20 20)" />
+      <path d="M10 20 L20 17 L30 20 L20 23 Z" fill={PALE} opacity={0.5} transform="rotate(28 20 20)" />
+      <circle cx={20} cy={20} r={1.5} fill={PALE} />
+    </g>
+  ),
+  ash: () => (
+    <g>
+      <path d="M10 30 Q20 24 30 30" fill="none" stroke={RED} strokeWidth={1.3} strokeLinecap="round" />
+      {[[14, 22], [20, 17], [26, 22], [18, 12], [23, 26]].map(([x, y], i) => (
+        <circle key={i} cx={x} cy={y} r={1.3 - (i % 2) * 0.4} fill={RED} opacity={0.7} />
+      ))}
+      <path d="M20 8 q-3 4 0 8 q3 -4 0 -8" fill={RED} opacity={0.35} />
+    </g>
+  ),
   fog: () => (
     <g>
       {[14, 20, 26].map((y, i) => (

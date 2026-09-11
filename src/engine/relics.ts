@@ -22,12 +22,15 @@ export const RELICS: Record<string, Relic> = {
   candle: { id: 'candle', kind: 'boon', name: 'Candle Stub', glyph: '🕯', text: 'Gain 1 Clarity each time you walk on.' },
   ring: { id: 'ring', kind: 'boon', name: 'Iron Ring', glyph: '○', text: 'Charged cards score +2 instead of +1.' },
   bread: { id: 'bread', kind: 'boon', name: 'Hard Bread', glyph: '▭', text: 'Rest mends 2 more.' },
+  thread: { id: 'thread', kind: 'boon', name: 'Red Thread', glyph: '∞', text: 'One more take-back this descent.' },
+  compass: { id: 'compass', kind: 'boon', name: 'Bent Compass', glyph: '✦', text: 'Foretelling costs nothing.' },
 
   fog: { id: 'fog', kind: 'curse', name: 'Fog', glyph: '≋', text: 'One card in every seat is dealt face down.' },
   splinter: { id: 'splinter', kind: 'curse', name: 'Splinter', glyph: '⟋', text: 'The Vessel always holds a reversed card.' },
   debt: { id: 'debt', kind: 'curse', name: 'Debt', glyph: '⊖', text: 'Clarity never rises above 2.' },
   weight: { id: 'weight', kind: 'curse', name: 'The Weight', glyph: '⏚', text: 'Neutral readings cost one more.' },
   hush: { id: 'hush', kind: 'curse', name: 'Hush', glyph: '⊘', text: 'Whispers cost 2.' },
+  ash: { id: 'ash', kind: 'curse', name: 'Ash', glyph: '⁂', text: 'Rest mends 1 less.' },
 };
 
 export const BOON_IDS = Object.values(RELICS).filter((r) => r.kind === 'boon').map((r) => r.id);
