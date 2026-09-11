@@ -38,5 +38,6 @@ describe('the reckoning', () => {
     expect(SLOT_POSITION.threshold.n).toBe(2);
     expect(SLOT_POSITION.wake.n).toBe(3);
     expect(SLOT_POSITION.hand.n).toBe(4);
+    for (const p of Object.values(SLOT_POSITION)) expect(p.question.endsWith('?')).toBe(true);
   });
 });

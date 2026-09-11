@@ -242,9 +242,17 @@ function ReadingScreenInner() {
         </div>
       )}
 
-      {firstDescent && run.layer === 0 && (
+      {(firstDescent || lifted === null) && (
         <p className="nudge muted small center" key={`${run.activeSlot}-${lifted === null}`}>
-          {lifted === null ? 'Lift one.' : run.activeSlot === SLOT_IDS.length - 1 ? 'Read.' : `Place it in the ${SLOTS[SLOT_IDS[run.activeSlot]].glyph}.`}
+          {lifted === null ? (
+            <>
+              <span className="hint__pos">{SLOT_POSITION[active.slot].n} · {SLOT_POSITION[active.slot].role}</span> {SLOT_POSITION[active.slot].question}
+            </>
+          ) : run.activeSlot === SLOT_IDS.length - 1 ? (
+            'Read.'
+          ) : (
+            `Place it as the ${SLOT_POSITION[active.slot].role.toLowerCase()}.`
+          )}
         </p>
       )}
 

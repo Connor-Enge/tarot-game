@@ -34,11 +34,11 @@ export const SLOTS: Record<SlotId, SlotDef> = {
  * follows unseen, is the Hidden Insight; the Hand, what you do, is the
  * Guidance. Positions are layout, not meaning, so they are always shown.
  */
-export const SLOT_POSITION: Record<SlotId, { n: number; role: string; gloss: string }> = {
-  vessel: { n: 1, role: 'Situation', gloss: 'the main theme' },
-  threshold: { n: 2, role: 'Challenge', gloss: 'what blocks or influences you' },
-  wake: { n: 3, role: 'Hidden insight', gloss: 'what you may not notice: what follows in your wake' },
-  hand: { n: 4, role: 'Guidance', gloss: 'the best advice or direction: what you do' },
+export const SLOT_POSITION: Record<SlotId, { n: number; role: string; gloss: string; question: string }> = {
+  vessel: { n: 1, role: 'Situation', gloss: 'the main theme', question: 'What is the situation?' },
+  threshold: { n: 2, role: 'Challenge', gloss: 'what blocks or influences you', question: 'What stands in the way?' },
+  wake: { n: 3, role: 'Hidden insight', gloss: 'what you may not notice: what follows in your wake', question: 'What might you be missing?' },
+  hand: { n: 4, role: 'Guidance', gloss: 'the best advice or direction: what you do', question: 'What is the best course?' },
 };
 
 /** How strongly a scene rewards (or punishes) a tag in a given seat. */

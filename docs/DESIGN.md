@@ -54,7 +54,11 @@ Guidance, because the scenes' affinities were already written that way:
 the Hand asks for courses of action, the Wake for what comes after. So
 `SLOT_IDS` deals vessel, threshold, wake, hand. The positions are shown
 always (number and role); the seats' own names still wait for
-`seatsNamed`.
+`seatsNamed`. Under the hand, before a card is lifted, the position
+asks its question ("What is the situation?", "What stands in the
+way?", "What might you be missing?", "What is the best course?"), and
+Study's seat question and the Codex's seat memory carry the position
+labels too.
 
 **The reckoning** (also the owner's request: the story was too vague):
 when a reading resolves, each seat's omen line is followed by plain

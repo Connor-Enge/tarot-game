@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { getCard, SCENES, SLOT_IDS, SLOTS, STUDY_KEEPSAKE_STREAK } from '../../engine';
+import { getCard, SCENES, SLOT_IDS, SLOTS, STUDY_KEEPSAKE_STREAK , SLOT_POSITION } from '../../engine';
 import { SceneArt } from '../art/scenes';
 import { useGame } from '../../store';
 import { StreakFlames } from '../art/flames';
@@ -107,6 +107,7 @@ export function Study() {
             return (
               <button key={id} type="button" className={`study__seat study__seat--${state}`} onClick={() => answerStudy(id)} disabled={picked !== null} aria-label={k.seatsNamed ? SLOTS[id].name : `seat ${SLOT_IDS.indexOf(id) + 1}`}>
                 <span className="seat__glyph">{SLOTS[id].glyph}</span>
+                <span className="study__seatpos">{SLOT_POSITION[id].n} · {SLOT_POSITION[id].role}</span>
                 {k.seatsNamed && <span className="study__seatname">{SLOTS[id].name.replace(/^The /, '')}</span>}
               </button>
             );

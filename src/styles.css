@@ -1936,3 +1936,7 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .lore__locked { margin-top: 8px; text-align: center; }
 .lore__kwlabel { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-right: 4px; }
 .codex__kw { line-height: 1.6; }
+
+/* the position's question under the hand, and its label in Study */
+.hint__pos { color: var(--gold); letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.72rem; margin-right: 6px; }
+.study__seatpos { display: block; font-size: 0.58rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gold); margin-top: 2px; }

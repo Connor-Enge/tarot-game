@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CARDS, getCard, getLore, SCENES, SLOT_IDS, SLOTS, witnessed, type Tier } from '../../engine';
+import { CARDS, getCard, getLore, SCENES, SLOT_IDS, SLOT_POSITION, SLOTS, witnessed, type Tier } from '../../engine';
 import { SceneArt } from '../art/scenes';
 import { useGame } from '../../store';
 import { Card } from './Card';
@@ -132,8 +132,8 @@ export function CodexDetail({ cardId, onClose }: { cardId: string; onClose: () =
         )}
         {best && (
           <div className="best-seat">
-            Sits well in <span className="seat__glyph">{SLOTS[best.seat].glyph}</span>
-            {k.seatsNamed ? ` ${SLOTS[best.seat].name}` : ''} <span className="muted small">· {best.n} reads</span>
+            Sits well as <span className="seat__glyph">{SLOTS[best.seat].glyph}</span> {SLOT_POSITION[best.seat].n} · {SLOT_POSITION[best.seat].role}
+            {k.seatsNamed ? ` (${SLOTS[best.seat].name})` : ''} <span className="muted small">· {best.n} reads</span>
           </div>
         )}
         {bonds.length > 0 && (
@@ -161,7 +161,7 @@ export function CodexDetail({ cardId, onClose }: { cardId: string; onClose: () =
                 const o = e.seatOutcomes?.[s] ?? { good: 0, bad: 0 };
                 const even = Math.max(0, n - o.good - o.bad);
                 return (
-                  <div key={s} className={`seatmap__cell ${n === 0 ? 'seatmap__cell--empty' : ''}`} title={k.seatsNamed ? SLOTS[s].name : undefined}>
+                  <div key={s} className={`seatmap__cell ${n === 0 ? 'seatmap__cell--empty' : ''}`} title={`${SLOT_POSITION[s].n} · ${SLOT_POSITION[s].role}${k.seatsNamed ? ` (${SLOTS[s].name})` : ''}`}>
                     <span className="seat__glyph">{SLOTS[s].glyph}</span>
                     <span className="seatmap__n">{n || '·'}</span>
                     {n > 0 && (
