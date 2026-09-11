@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSettings } from '../../settings';
 import { activeSlotState, canTakeBack, currentScene, getCard, hasRelic, redrawCost, sceneNumber, scoreSlot, SLOT_IDS, SLOTS, totalScenes, whisperCost, whisperWords } from '../../engine';
 
@@ -33,6 +33,34 @@ function ReadingScreenInner() {
   const openDeck = useGame((s) => s.openDeck);
   const [zoom, setZoom] = useState<{ cardId: string; reversed: boolean } | null>(null);
 
+  // Keys: 1-4 lift a candidate, Enter places it, R redraws, W whispers, T turns.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement | null;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      const st = useGame.getState();
+      const r = st.run;
+      if (!r || r.phase.kind !== 'reading' || st.codexOpen !== null) return;
+      const slot = r.slots[r.activeSlot];
+      if (!slot) return;
+      const key = e.key.toLowerCase();
+      if (/^[1-4]$/.test(key)) {
+        const i = Number(key) - 1;
+        if (i < slot.candidates.length) {
+          st.lift(st.lifted === i ? null : i);
+          e.preventDefault();
+        }
+      } else if (key === 'enter' && st.lifted !== null && !(t && t.tagName === 'BUTTON')) {
+        st.confirm();
+        e.preventDefault();
+      } else if (key === 'r') st.redraw();
+      else if (key === 'w') st.whisperLifted();
+      else if (key === 't') st.turnLifted();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
   const scene = currentScene(run);
   const active = activeSlotState(run);
   if (!active) return null;
