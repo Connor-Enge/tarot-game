@@ -15,9 +15,13 @@ import { DeckSheet } from '../components/DeckSheet';
 import { RelicStrip } from '../components/RelicStrip';
 import { Stats } from '../components/Stat';
 
+/** How far up (px) a card must be dragged to land in the seat. */
+const DRAG_TO_SEAT = 90;
+
 function ReadingScreenInner() {
   const run = useGame((s) => s.run)!;
   const lifted = useGame((s) => s.lifted);
+  const [dragOver, setDragOver] = useState(false);
   const lift = useGame((s) => s.lift);
   const confirm = useGame((s) => s.confirm);
   const redraw = useGame((s) => s.redraw);
@@ -108,7 +112,7 @@ function ReadingScreenInner() {
           return (
             <div
               key={id}
-              className={`seat ${isActive ? 'seat--active' : ''} ${chosen ? 'seat--filled' : ''} ${suitClass}`}
+              className={`seat ${isActive ? 'seat--active' : ''} ${chosen ? 'seat--filled' : ''} ${isActive && dragOver ? 'seat--target' : ''} ${suitClass}`}
               style={{ '--seat': i } as React.CSSProperties}
               role="group"
               aria-label={`${seatsNamed ? SLOTS[id].name : `seat ${i + 1}`}${isActive ? ', choosing' : chosen ? ', placed' : ', empty'}`}
@@ -150,6 +154,18 @@ function ReadingScreenInner() {
                 whisper={whispered ? kw : undefined}
                 onClick={() => lift(lifted === i ? null : i)}
                 onLongPress={c.hidden ? undefined : () => setZoom({ cardId: c.cardId, reversed: c.reversed })}
+                onDragMove={(_dx, dy) => {
+                  if (lifted !== i) lift(i);
+                  const over = dy < -DRAG_TO_SEAT;
+                  if (over !== dragOver) setDragOver(over);
+                }}
+                onDragEnd={(_dx, dy) => {
+                  setDragOver(false);
+                  if (dy < -DRAG_TO_SEAT) {
+                    lift(i);
+                    confirm();
+                  }
+                }}
               />
             </div>
           );

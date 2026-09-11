@@ -1263,3 +1263,11 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .well-layer__ring { transform-box: fill-box; transform-origin: center; animation: well-ring 6s ease-in-out infinite; }
 @keyframes well-ring { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
 .reduce-motion .well-layer__ring { animation: none; }
+
+/* --- drag a card up into its seat ------------------------------------------ */
+.card--dragging { transform: translate(var(--dx, 0px), var(--dy, 0px)) scale(1.1) rotate(calc(var(--dx, 0px) / 12px * 1deg)); z-index: 6; transition: none; touch-action: none; }
+.card--dragging .card__inner { box-shadow: 0 24px 40px rgba(0,0,0,0.7), 0 0 0 1.5px var(--gold-2); }
+.hand .card { transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1); touch-action: none; }
+.seat--target .seat__card .card { animation: none; transform: scale(1.08); }
+.seat--target .seat__card .card .card__inner { box-shadow: 0 0 0 2px var(--gold-2), 0 0 24px rgba(243,220,138,0.5); }
+.seat--target .seat__glyph { color: var(--gold-2); text-shadow: 0 0 18px rgba(243,220,138,0.9); }

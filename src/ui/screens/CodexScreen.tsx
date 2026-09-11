@@ -241,6 +241,11 @@ function buildLedger(k: ReturnType<typeof useGame.getState>['knowledge']): [stri
     const truest = vows.filter(([, v]) => v.kept > 0).sort((a, b) => b[1].kept - a[1].kept)[0];
     rows.push(['Vows', `${kept} kept · ${broken} broken${truest ? ` · truest ${getVow(truest[0]).name}` : ''}`]);
   }
+  const well = k.records?.well;
+  if (well && well.runs > 0) {
+    const abysses = (well.best?.road?.match(/◉/g) ?? []).length;
+    rows.push(['The Well', `${well.bestDepth} scenes down · ${abysses} ${abysses === 1 ? 'Abyss' : 'Abysses'} passed · ${well.runs} descent${well.runs === 1 ? '' : 's'}`]);
+  }
   return rows.length ? rows : null;
 }
 
