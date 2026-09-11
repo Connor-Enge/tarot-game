@@ -590,9 +590,12 @@ was read, not what was dealt. The Hush (the library) allows no whispers.
 The Tithe (the toll) takes a drop of vitality at the door, never the
 last one, and lights one Clarity for it. Moonlit (the hollow) deals the Wake one more. The Bare Table
 (the tomb) deals every seat one fewer. The Ember (the hearth) mends one
-even on a neutral reading. The Long Look (the Abyss itself) deals every
-seat one more and lifts the Fog, so the last reading is read with open
-eyes. Walking all seven earns the sigil Every Rite. Doors still show only the kind of place; the
+even on a neutral reading. The Long Look (the Abyss itself) lays the whole
+last hand bare: every seat is dealt at once, one more each, nothing
+face down, and the seats still to come show their cards beneath them
+while you place in order (`laidBare`; a hold still joins the next seat,
+and take-back keeps the laid seats). The last reading is planned with
+everything in view. Walking all seven earns the sigil Every Rite. Doors still show only the kind of place; the
 rite is learned by walking in, and remembered: the Codex keeps a rites
 shelf, one glyph each, silhouettes until walked (`ritesWalked` reads the
 omen log, so no new state). Once a rite has been walked, its glyph

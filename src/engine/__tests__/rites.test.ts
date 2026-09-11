@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { chooseCandidate, chooseNode, startRun, whisper, type RunState } from '../run';
+import { chooseCandidate, chooseNode, holdCandidate, startRun, whisper, type RunState } from '../run';
 import { RITES, ritesWalked, SCENES } from '../scenes';
 import { resolveReading } from '../resolve';
 
@@ -63,14 +63,32 @@ describe('rites', () => {
     }
     expect(found).toBe(true);
   });
-  it('the Long Look deals every seat one more, and lifts the fog', () => {
+  it('the Long Look lays every seat bare at once, one more each, with the fog lifted, and walks them in order', () => {
     let run = enter(9, 'abyss', { startingRelics: ['fog'] });
-    for (let i = 0; i < 4; i++) {
-      const seat = run.slots[run.activeSlot];
+    expect(run.laidBare).toBe(true);
+    expect(run.slots.length).toBe(4);
+    for (const seat of run.slots) {
       expect(seat.candidates.length).toBe(4);
       expect(seat.candidates.some((c) => c.hidden)).toBe(false);
-      if (i < 3) run = chooseCandidate(run, 0);
+      expect(seat.chosen).toBeNull();
     }
+    const dealtIds = run.slots.flatMap((s) => s.candidates.map((c) => c.cardId));
+    expect(new Set(dealtIds).size).toBe(16);
+    const before = run.slots[1].candidates.map((c) => c.cardId);
+    run = chooseCandidate(run, 0);
+    expect(run.activeSlot).toBe(1);
+    expect(run.slots[1].candidates.map((c) => c.cardId)).toEqual(before);
+    for (let i = 1; i < 4; i++) run = chooseCandidate(run, 0);
+    expect(run.phase.kind).not.toBe('reading');
+  });
+  it('a hold joins the next seat even when it was laid bare', () => {
+    let run = enter(10, 'abyss');
+    const held = run.slots[0].candidates[1];
+    run = holdCandidate(run, 1);
+    run = chooseCandidate(run, 0);
+    expect(run.slots[1].candidates.length).toBe(5);
+    expect(run.slots[1].candidates.at(-1)?.cardId).toBe(held.cardId);
+    expect(run.slots[1].candidates.at(-1)?.held).toBe(true);
   });
   it('rites walked are read from the omen log', () => {
     expect(ritesWalked(undefined)).toEqual([]);

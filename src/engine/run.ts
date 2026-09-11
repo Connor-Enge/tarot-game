@@ -128,6 +128,8 @@ export interface RunState {
   holds?: number;
   /** Net Clarity moved by seat ticks this run, when the rule is on. */
   ticks?: number;
+  /** This scene dealt every seat at once (the Long Look); seats are walked, not dealt, as you go. */
+  laidBare?: boolean;
   /** Set once the keepsake has been dealt and shown as yours. */
   keepsakeShown?: boolean;
   /** True once the Stranger has appeared this run. They come once. */
@@ -345,7 +347,7 @@ export function takeBack(run: RunState): RunState {
     const at = discard.lastIndexOf(c.cardId);
     if (at >= 0) discard.splice(at, 1);
   });
-  const slots = run.slots.slice(0, prevIndex + 1).map((s, i) => (i === prevIndex ? { ...s, chosen: null } : s));
+  const slots = (run.laidBare ? run.slots : run.slots.slice(0, prevIndex + 1)).map((s, i) => (i === prevIndex ? { ...s, chosen: null } : s));
   return {
     ...run,
     deck: { ...run.deck, discard },
@@ -387,10 +389,23 @@ export function chooseNode(run: RunState, index: number): RunState {
   const remade = terminal && run.deck.discard.length >= 12;
   const deckIn: DeckState = remade ? { draw: [...run.deck.draw, ...rng.shuffle(run.deck.discard)], discard: [] } : run.deck;
   const first = dealSeat({ ...run, node: index, deck: deckIn }, rng, deckIn, SLOT_IDS[0]);
+  // The Long Look lays the whole hand bare: every seat dealt now, walked in order.
+  const bare = SCENES[layer[index].sceneId].rite === 'look';
+  const laid = (() => {
+    if (!bare) return { deck: first.deck, states: [first.state] };
+    let deck = first.deck;
+    const states = [first.state];
+    for (let i = 1; i < SLOT_IDS.length; i++) {
+      const d = dealSeat({ ...run, node: index, deck, held: null, keepsakeShown: run.keepsakeShown || states.some((st) => st.candidates.some((c) => c.yours)) }, rng, deck, SLOT_IDS[i]);
+      deck = d.deck;
+      states.push(d.state);
+    }
+    return { deck, states };
+  })();
   // The Tithe: a drop of vitality at the door, and a light for it. It never kills; the reading may.
   const tithed = SCENES[layer[index].sceneId].rite === 'tithe';
   const tithe = tithed ? Math.min(1, Math.max(0, run.vitality - 1)) : 0;
-  let next: RunState = { ...run, node: index, vitality: run.vitality - tithe, clarity: tithed ? clampClarity(run, run.clarity + 1) : run.clarity, deck: first.deck, slots: [first.state], activeSlot: 0, freeRedrawUsed: false, echo: null, sceneSpent: { redraws: 0, whispers: 0 }, phase: { kind: 'reading' }, abyssRemade: remade || undefined, keepsakeShown: keepsakeShown(run, first.state) };
+  let next: RunState = { ...run, node: index, vitality: run.vitality - tithe, clarity: tithed ? clampClarity(run, run.clarity + 1) : run.clarity, deck: laid.deck, slots: laid.states, activeSlot: 0, freeRedrawUsed: false, echo: null, sceneSpent: { redraws: 0, whispers: 0 }, phase: { kind: 'reading' }, abyssRemade: remade || undefined, laidBare: bare || undefined, held: bare ? null : run.held, keepsakeShown: run.keepsakeShown || laid.states.some((st) => st.candidates.some((c) => c.yours)) || undefined };
   // A vow kept all the way down pays out as you step into the Abyss.
   if (SCENES[layer[index].sceneId].terminal && run.vow && !run.vow.broken && !run.vow.kept) {
     const reward = getVow(run.vow.id).reward;
@@ -419,6 +434,13 @@ export function chooseCandidate(run: RunState, index: number): RunState {
   run = tick ? { ...run, clarity: clampClarity(run, Math.max(0, run.clarity + tick)), ticks: (run.ticks ?? 0) + tick } : run;
 
   const nextIndex = run.activeSlot + 1;
+  if (nextIndex < SLOT_IDS.length && run.laidBare && run.slots[nextIndex]) {
+    // Laid bare: the next seat is already on the table. A held card joins it.
+    const seat = run.slots[nextIndex];
+    const joined = run.held ? { ...seat, candidates: [...seat.candidates, { ...run.held, hidden: false, held: true }] } : seat;
+    const walked = slots.map((s, i) => (i === nextIndex ? joined : s));
+    return withRng({ ...run, deck, slots: walked, activeSlot: nextIndex, pendingDeal: null, held: null }, rng);
+  }
   if (nextIndex < SLOT_IDS.length) {
     const next = dealSeat(run, rng, deck, SLOT_IDS[nextIndex]);
     deck = next.deck;

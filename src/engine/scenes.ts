@@ -56,7 +56,7 @@ export const RITES: Record<Rite, { name: string; glyph: string; text: string }> 
   moonlit: { name: 'Moonlit', glyph: '☾', text: 'The Wake deals one more.' },
   bare: { name: 'The Bare Table', glyph: '▭', text: 'Every seat deals one fewer.' },
   ember: { name: 'The Ember', glyph: '♨', text: 'Even a neutral reading mends one here.' },
-  look: { name: 'The Long Look', glyph: '◉', text: 'Every seat deals one more, and nothing is dealt face down.' },
+  look: { name: 'The Long Look', glyph: '◉', text: 'The whole last hand is laid bare: every seat dealt at once, one more each, nothing face down.' },
 };
 
 /** Rites the reader has walked: any scene carrying one that appears in the omen log. */

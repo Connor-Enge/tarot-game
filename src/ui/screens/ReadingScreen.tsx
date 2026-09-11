@@ -168,6 +168,13 @@ function ReadingScreenInner() {
                 </span>
               )}
               {seatsNamed && <div className="seat__name">{SLOTS[id].name.replace(/^The /, '')}</div>}
+              {run.laidBare && slot && !chosen && !isActive && (
+                <div className="seat__bare" aria-label={`${slot.candidates.length} cards waiting for this seat`}>
+                  {slot.candidates.map((c, j) => (
+                    <Card key={`${c.cardId}-${j}`} cardId={c.cardId} reversed={c.reversed} size="xs" />
+                  ))}
+                </div>
+              )}
             </div>
           );
         })}
