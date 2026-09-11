@@ -279,6 +279,48 @@ const ART: Record<string, () => ReactElement> = {
       ))}
     </g>
   ),
+  bell: () => (
+    <g>
+      <path d="M0 60 L0 50 L200 46 L200 60 Z" fill={DARK} />
+      <path d="M88 60 L90 10 L110 10 L112 60 Z" fill={DARK} />
+      <path d="M86 12 L100 2 L114 12 Z" fill={DARK} />
+      <rect x={94} y={16} width={12} height={12} fill="#050410" />
+      <line x1={100} y1={16} x2={100} y2={40} stroke={GOLD_FLAT} strokeWidth={0.7} opacity={0.85} />
+      <path d="M98 40 q2 3 4 0" fill="none" stroke={GOLD_FLAT} strokeWidth={0.7} opacity={0.85} />
+      {[1, 2, 3].map((i) => (
+        <path key={i} d={`M${100 - i * 9} ${22 - i * 3} a${i * 9} ${i * 9} 0 0 1 ${i * 18} 0`} fill="none" stroke={PALE} strokeWidth={0.4} opacity={0.3 - i * 0.07} />
+      ))}
+      <Tree x={30} y={50} h={20} fill={DARK} />
+      <Tree x={168} y={48} h={24} fill={DARK} />
+    </g>
+  ),
+  hearth: () => (
+    <g>
+      <path d="M0 60 L0 52 L200 50 L200 60 Z" fill={DARK} />
+      <path d="M62 60 V26 L100 8 L138 26 V60 Z" fill={DARK} />
+      <path d="M58 28 L100 6 L142 28" fill="none" stroke={DARK} strokeWidth={3} />
+      <rect x={92} y={38} width={16} height={22} fill="#050410" />
+      <rect x={94} y={40} width={12} height={20} fill={GOLD_FLAT} opacity={0.22} />
+      <Flame x={100} y={57} s={5} />
+      <rect x={70} y={34} width={9} height={9} fill={GOLD_FLAT} opacity={0.35} />
+      <rect x={121} y={34} width={9} height={9} fill={GOLD_FLAT} opacity={0.35} />
+      <rect x={118} y={12} width={5} height={10} fill={DARK} />
+      {[0, 1, 2].map((i) => (
+        <path key={i} d={`M${120 + i} 12 q-3 -6 ${i - 1} -10`} fill="none" stroke={HAZE} strokeWidth={1.2} opacity={0.6 - i * 0.15} />
+      ))}
+    </g>
+  ),
+  ice: () => (
+    <g>
+      <path d="M0 60 L0 34 L200 30 L200 60 Z" fill={PALE} opacity={0.16} />
+      <path d="M0 34 L200 30" fill="none" stroke={PALE} strokeWidth={0.6} opacity={0.5} />
+      <path d="M40 44 L58 50 L62 58 M120 36 L104 46 L100 60 M150 40 L166 44" fill="none" stroke={PALE} strokeWidth={0.5} opacity={0.5} />
+      <path d="M20 52 Q60 40 100 50 T180 48" fill="none" stroke={DARK} strokeWidth={5} opacity={0.55} strokeLinecap="round" />
+      <path d="M20 52 Q60 40 100 50 T180 48" fill="none" stroke={DARK} strokeWidth={2} opacity={0.8} strokeLinecap="round" />
+      <path d="M0 31 L28 14 L54 31 L86 18 L118 31 L150 22 L200 31 Z" fill={DARK} opacity={0.9} />
+      <Figure x={140} y={50} h={16} fill={DARK} cloak />
+    </g>
+  ),
   abyss: () => (
     <g>
       <rect x={0} y={0} width={200} height={60} fill="#060410" opacity={0.9} />
