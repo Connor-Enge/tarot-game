@@ -1,3 +1,4 @@
+import { CARDS } from './cards';
 import type { RunConfig } from './descents';
 
 /**
@@ -45,4 +46,9 @@ export function dailyWeather(seed: number): Weather {
 export function weeklyWeather(seed: number): Weather {
   const pool = WEATHERS.filter((w) => w.id !== 'long' && w.id !== 'short');
   return pool[((seed >>> 0) % 7919) % pool.length];
+}
+
+/** The card of the day, from the daily seed. It is charged in the Daily, so the title's card matters. */
+export function dayCard(seed: number): string {
+  return CARDS[(seed >>> 0) % CARDS.length].id;
 }

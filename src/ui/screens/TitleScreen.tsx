@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { canOfferInstall, useInstall } from '../../install';
 import { HowToPlay } from '../components/HowToPlay';
-import { CARDS, dailySeed, dailyStreakAlive, dailyWeather, daylight, moonName, moonPhase, weeklySeed, weeklyWeather, DEPTHS, DESCENTS, getCard, getDescent, maxDepthUnlocked } from '../../engine';
+import { CARDS, dailySeed, dailyStreakAlive, dailyWeather, dayCard, daylight, moonName, moonPhase, weeklySeed, weeklyWeather, DEPTHS, DESCENTS, getCard, getDescent, maxDepthUnlocked } from '../../engine';
 import { CardBack, type BackVariant } from '../art/CardArt';
 import { WeatherArt } from '../art/weather';
 import { StreakFlames } from '../art/flames';
@@ -55,7 +55,7 @@ export function TitleScreen() {
   const anyUnlocked = DESCENTS.some((d, i) => i > 0 && d.unlocked(k));
   const { today, todayLabel, weather, weekWeather } = useMemo(() => {
     const { seed, label } = dailySeed();
-    return { today: CARDS[seed % CARDS.length].id, todayLabel: label, weather: dailyWeather(seed), weekWeather: weeklyWeather(weeklySeed().seed) };
+    return { today: dayCard(seed), todayLabel: label, weather: dailyWeather(seed), weekWeather: weeklyWeather(weeklySeed().seed) };
   }, []);
   const streak = dailyStreakAlive(k, todayLabel);
   const inst = useInstall();
@@ -275,7 +275,7 @@ export function TitleScreen() {
           <Card cardId={today} size="xs" faceDown={!todayOpen} />
         </span>
         <span className="today__text">
-          <span className="muted small">Today's card · {getCard(today).name}</span>
+          <span className="muted small">Today's card · {getCard(today).name} · <span className="today__charged">charged in the Daily</span></span>
           {todayOpen && <em className="today__omen rise">{getCard(today).omen.upright}</em>}
         </span>
       </button>

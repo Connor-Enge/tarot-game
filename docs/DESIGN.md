@@ -474,7 +474,9 @@ Every surface that can show text about a card, and what gates it:
 
 ## Daily weather
 
-The daily seed also picks one of fourteen named conditions (Clear,
+The daily seed also picks the card of the day, shown on the title, and
+that card is charged in the Daily: upright when dealt, and a little
+stronger. The seed also picks one of fourteen named conditions (Clear,
 Reversed Winds, Thin Air, Lantern Light, Salted Road, Fog, Heavy Air,
 Still Water, The Long Road, The Short Road, Light Winds, Candlelit,
 Guttering, Black Tide). Everyone walking today's road walks in the same

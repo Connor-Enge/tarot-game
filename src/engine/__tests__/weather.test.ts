@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { dailySeed } from '../rng';
 import { startRun } from '../run';
-import { dailyWeather, weeklyWeather, WEATHERS } from '../weather';
+import { dailyWeather, dayCard, weeklyWeather, WEATHERS } from '../weather';
 
 describe('daily weather', () => {
   it('is stable for a seed and covers the list over a month', () => {
@@ -32,5 +32,15 @@ describe('weekly weather', () => {
     expect(WEATHERS.length).toBe(14);
     expect(new Set(WEATHERS.map((w) => w.id)).size).toBe(14);
     expect(new Set(WEATHERS.map((w) => w.name)).size).toBe(14);
+  });
+});
+
+describe('the card of the day', () => {
+  it('is stable for a seed and charged in a run that asks for it', () => {
+    const { seed } = dailySeed(new Date(Date.UTC(2026, 8, 11)));
+    expect(dayCard(seed)).toBe(dayCard(seed));
+    const run = startRun(seed, { charged: [dayCard(seed)] });
+    expect(run.marks[dayCard(seed)]).toBe('charged');
+    expect(Object.keys(startRun(seed).marks)).toHaveLength(0);
   });
 });

@@ -12,6 +12,8 @@ export interface RunConfig {
   reversedChance?: number;
   /** Relics held from the start. */
   startingRelics?: string[];
+  /** Cards charged from the start: upright when dealt, and a little stronger. The Daily charges the card of the day. */
+  charged?: readonly string[];
   /** A mastered card the reader has made their own: dealt, upright, into the first Vessel. */
   signature?: string;
   startingVitality?: number;

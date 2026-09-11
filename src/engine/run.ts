@@ -195,7 +195,7 @@ export function startRun(seed: number, config: RunConfig = {}): RunState {
     node: null,
     vitality: config.startingVitality ?? STARTING_VITALITY,
     clarity: config.startingClarity ?? STARTING_CLARITY,
-    marks: {},
+    marks: Object.fromEntries((config.charged ?? []).map((id) => [id, 'charged' as const])),
     relics: [...(config.startingRelics ?? [])],
     freeRedrawUsed: false,
     redraws: 0,
