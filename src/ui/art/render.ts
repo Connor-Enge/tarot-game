@@ -2,6 +2,8 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { getCard, SLOT_IDS, SLOTS, type DrawnCard } from '../../engine';
 import { ArtDefs, CardArt } from './CardArt';
+import { RelicArt } from './relics';
+import { SigilToken } from './sigil';
 import { Constellation } from '../components/Constellation';
 import type { Knowledge } from '../../engine';
 
@@ -25,6 +27,12 @@ export async function renderSpreadImage(opts: {
   notes?: string;
   /** One stop per scene: the map glyph and how the reading went. Drawn as a road when present. */
   stops?: { glyph: string; tier: 'calamity' | 'harm' | 'neutral' | 'boon' | 'triumph' }[];
+  /** The player's signature card, sealed with a star if it is on the table. */
+  signature?: string;
+  /** Relics carried at the end, drawn as tokens with their names. */
+  carried?: { id: string; name: string }[];
+  /** Sigils earned by this descent, drawn as medallions with their names. */
+  sigils?: { id: string; glyph: string; name: string }[];
 }): Promise<Blob | null> {
   const W = 1080;
   const H = 1350;
@@ -32,7 +40,13 @@ export async function renderSpreadImage(opts: {
   const cardH = 320;
   const gap = 36;
   const startX = (W - (cardW * 4 + gap * 3)) / 2;
-  const cardY = 420;
+  const cardY = 400;
+  const tokens = tokensSvg(opts.carried ?? [], opts.sigils ?? [], W, H - 322);
+  // With a token row the bottom block packs tighter.
+  const roadY = tokens ? H - 212 : H - 250;
+  const notesY = tokens ? H - 136 : H - 188;
+  const footerY = tokens ? H - 106 : H - 150;
+  const brandY = tokens ? H - 66 : H - 90;
 
   const defs = renderToStaticMarkup(createElement(ArtDefs)).replace(/<svg[^>]*>|<\/svg>/g, '');
   const cards = opts.cards
@@ -42,6 +56,13 @@ export async function renderSpreadImage(opts: {
       const rot = c.reversed ? `rotate(180 ${x + cardW / 2} ${cardY + cardH / 2})` : '';
       const glyph = SLOTS[SLOT_IDS[i]].glyph;
       const label = opts.seatsNamed ? SLOTS[SLOT_IDS[i]].name.toUpperCase() : '';
+      const seal = opts.signature === c.cardId
+        ? `<g transform="translate(${x + cardW - 6} ${cardY - 6})">
+            <circle r="22" fill="#0b0a12" stroke="#f3dc8a" stroke-width="2" />
+            <circle r="17" fill="none" stroke="#d6b25e" stroke-width="0.8" stroke-dasharray="2 3" />
+            <text y="2" font-size="24" text-anchor="middle" dominant-baseline="middle" fill="#f3dc8a" font-family="Georgia, serif">✦</text>
+          </g>`
+        : '';
       return `
         <text x="${x + cardW / 2}" y="${cardY - 40}" font-size="44" text-anchor="middle" fill="#d6b25e" font-family="Georgia, serif">${glyph}</text>
         <g transform="${rot}">
@@ -50,6 +71,7 @@ export async function renderSpreadImage(opts: {
             ${inner}
           </g>
         </g>
+        ${seal}
         <text x="${x + cardW / 2}" y="${cardY + cardH + 44}" font-size="18" letter-spacing="3" text-anchor="middle" fill="#8d86a3" font-family="Georgia, serif">${label}</text>
         <text x="${x + cardW / 2}" y="${cardY + cardH + 78}" font-size="22" text-anchor="middle" fill="#e9e4f2" font-family="Georgia, serif">${esc(getCard(c.cardId).name)}${c.reversed ? ' ↓' : ''}</text>`;
     })
@@ -66,17 +88,18 @@ export async function renderSpreadImage(opts: {
     <rect width="${W}" height="${H}" fill="url(#shareBg)" />
     <rect x="30" y="30" width="${W - 60}" height="${H - 60}" rx="18" fill="none" stroke="#c9a24a" stroke-width="2" opacity="0.6" />
     <rect x="42" y="42" width="${W - 84}" height="${H - 84}" rx="14" fill="none" stroke="#c9a24a" stroke-width="0.8" opacity="0.4" />
-    <text x="${W / 2}" y="150" font-size="34" letter-spacing="10" text-anchor="middle" fill="#d6b25e" font-family="Georgia, serif">◯ △ ☐ ☾</text>
-    <text x="${W / 2}" y="235" font-size="60" text-anchor="middle" fill="#e9e4f2" font-family="Georgia, serif">${esc(opts.title)}</text>
-    <text x="${W / 2}" y="290" font-size="28" text-anchor="middle" fill="#8d86a3" font-family="Georgia, serif">${esc(opts.subtitle)}</text>
+    <text x="${W / 2}" y="130" font-size="34" letter-spacing="10" text-anchor="middle" fill="#d6b25e" font-family="Georgia, serif">◯ △ ☐ ☾</text>
+    <text x="${W / 2}" y="215" font-size="60" text-anchor="middle" fill="#e9e4f2" font-family="Georgia, serif">${esc(opts.title)}</text>
+    <text x="${W / 2}" y="270" font-size="28" text-anchor="middle" fill="#8d86a3" font-family="Georgia, serif">${esc(opts.subtitle)}</text>
     ${cards}
     ${opts.outcome ? wrapText(esc(opts.outcome), W / 2, cardY + cardH + 170, 30, 46, '#e9e4f2') : ''}
-    ${opts.stops && opts.stops.length ? roadSvg(opts.stops, W, H - 250, opts.title.includes('ended')) : ''}
+    ${tokens}
+    ${opts.stops && opts.stops.length ? roadSvg(opts.stops, W, roadY, opts.title.includes('ended')) : ''}
     ${!opts.stops && opts.road ? `<text x="${W / 2}" y="${H - 262}" font-size="30" letter-spacing="14" text-anchor="middle" fill="#8d86a3" font-family="Georgia, serif">${esc(opts.road)}</text>` : ''}
     ${!opts.stops && opts.journey ? `<text x="${W / 2}" y="${H - 215}" font-size="34" letter-spacing="12" text-anchor="middle" fill="#d6b25e" font-family="Georgia, serif">${esc(opts.journey)}</text>` : ''}
-    <text x="${W / 2}" y="${H - 150}" font-size="26" text-anchor="middle" fill="#8d86a3" font-family="Georgia, serif">${esc(opts.footer)}</text>
-    ${opts.notes ? `<text x="${W / 2}" y="${H - 188}" font-size="24" text-anchor="middle" fill="#d6b25e" font-family="Georgia, serif">${esc(opts.notes)}</text>` : ''}
-    <text x="${W / 2}" y="${H - 90}" font-size="30" letter-spacing="4" text-anchor="middle" fill="#d6b25e" font-family="Georgia, serif">ARCANA DESCENT</text>
+    <text x="${W / 2}" y="${footerY}" font-size="26" text-anchor="middle" fill="#8d86a3" font-family="Georgia, serif">${esc(opts.footer)}</text>
+    ${opts.notes ? `<text x="${W / 2}" y="${notesY}" font-size="24" text-anchor="middle" fill="#d6b25e" font-family="Georgia, serif">${esc(opts.notes)}</text>` : ''}
+    <text x="${W / 2}" y="${brandY}" font-size="30" letter-spacing="4" text-anchor="middle" fill="#d6b25e" font-family="Georgia, serif">ARCANA DESCENT</text>
   </svg>`;
 
   const img = new Image();
@@ -99,6 +122,25 @@ export async function renderSpreadImage(opts: {
   } finally {
     URL.revokeObjectURL(url);
   }
+}
+
+/** Relics carried and sigils earned as a row of small tokens with names. */
+function tokensSvg(carried: { id: string; name: string }[], sigils: { id: string; glyph: string; name: string }[], W: number, y: number): string {
+  const items = [
+    ...carried.map((r) => ({ name: r.name, art: renderToStaticMarkup(createElement(RelicArt, { id: r.id })) })),
+    ...sigils.map((sg) => ({ name: sg.name, art: renderToStaticMarkup(createElement(SigilToken, { id: sg.id, glyph: sg.glyph, earned: true })) })),
+  ].slice(0, 6);
+  if (items.length === 0) return '';
+  const slot = Math.min(170, (W - 120) / items.length);
+  const x0 = (W - slot * items.length) / 2;
+  return items
+    .map((it, i) => {
+      const inner = it.art.match(/<svg[^>]*>([\s\S]*?)<\/svg>/)?.[1] ?? '';
+      const cx = x0 + slot * (i + 0.5);
+      return `<g transform="translate(${cx - 24} ${y - 24}) scale(1.2)">${inner}</g>
+        <text x="${cx}" y="${y + 44}" font-size="17" text-anchor="middle" fill="#8d86a3" font-family="Georgia, serif">${esc(it.name)}</text>`;
+    })
+    .join('');
 }
 
 function wrapText(text: string, x: number, y: number, size: number, maxChars: number, fill: string): string {

@@ -13,6 +13,8 @@ const SUIT_TINT = { wands: '#e0a068', cups: '#8fc3e0', swords: '#d8d9e8', pentac
 export function Constellation({ knowledge: k, live = [] }: { knowledge: Knowledge; live?: string[] }) {
   const liveSet = new Set(live);
   const [focus, setFocus] = useState<string | null>(null);
+  const [pass, setPass] = useState(0); // re-keys the road so it draws again
+  const liveIndex = new Map(live.map((id, i) => [id, i]));
   const pos = useMemo(() => {
     const out: Record<string, { x: number; y: number }> = {};
     const cx = 150;
@@ -58,6 +60,19 @@ export function Constellation({ knowledge: k, live = [] }: { knowledge: Knowledg
           const lit = !focus || key.includes(focus);
           return <line key={key} x1={pa.x} y1={pa.y} x2={pb.x} y2={pb.y} stroke="#d6b25e" strokeWidth={0.4 + (n / maxLink) * 1.2} opacity={lit ? 0.18 + (n / maxLink) * 0.5 : 0.04} />;
         })}
+        {live.length > 1 && (
+          <path
+            key={`road-${pass}`}
+            className="sky__road"
+            d={live.map((id, i) => `${i === 0 ? 'M' : 'L'}${pos[id]?.x ?? 150} ${pos[id]?.y ?? 150}`).join(' ')}
+            fill="none"
+            stroke="#8fc3e0"
+            strokeWidth={0.7}
+            strokeLinejoin="round"
+            pathLength={1}
+            style={{ animationDuration: `${Math.min(6, 0.3 * live.length)}s` }}
+          />
+        )}
         {CARDS.map((c) => {
           const e = k.cards[c.id];
           const tier = e?.tier ?? 0;
@@ -72,11 +87,20 @@ export function Constellation({ knowledge: k, live = [] }: { knowledge: Knowledg
               {seen && tier >= 2 && <circle cx={p.x} cy={p.y} r={r * 2.4} fill={suitTint} opacity={0.14} />}
               <circle cx={p.x} cy={p.y} r={r} fill={fill} className={tier >= 3 ? 'sky__star--mastered' : undefined} />
               {focus === c.id && <circle cx={p.x} cy={p.y} r={r + 3} fill="none" stroke="#f3dc8a" strokeWidth={0.8} />}
-              {liveSet.has(c.id) && <circle cx={p.x} cy={p.y} r={r + 4.5} fill="none" stroke="#8fc3e0" strokeWidth={0.9} className="sky__live" />}
+              {liveSet.has(c.id) && (
+                <g key={`live-${pass}`} className="sky__live-in" style={{ animationDelay: `${(liveIndex.get(c.id) ?? 0) * Math.min(300, 6000 / live.length)}ms` }}>
+                  <circle cx={p.x} cy={p.y} r={r + 4.5} fill="none" stroke="#8fc3e0" strokeWidth={0.9} className="sky__live" />
+                </g>
+              )}
             </g>
           );
         })}
       </svg>
+      {live.length > 1 && (
+        <button type="button" className="chip chip--inline sky__replay" onClick={() => setPass((n) => n + 1)}>
+          walk the last road again
+        </button>
+      )}
       <SkyShare k={k} />
       <p className="muted small center">
         {focus

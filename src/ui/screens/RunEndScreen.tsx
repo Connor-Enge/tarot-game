@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getCard, getDescent, getVow, getWeather, KIND_GLYPH, SCENES, SIGILS, SLOT_IDS, SLOTS } from '../../engine';
+import { getCard, getDescent, getRelic, getVow, getWeather, KIND_GLYPH, SCENES, SIGILS, SLOT_IDS, SLOTS } from '../../engine';
 import { shareText, useGame } from '../../store';
 import { Card } from '../components/Card';
 import { RelicArt } from '../art/relics';
@@ -85,6 +85,9 @@ function RunEndScreenInner() {
         road: run.history.map((h) => KIND_GLYPH[SCENES[h.sceneId].kind]).join(''),
         outcome: last.resolution.narration.at(-1),
         stops: run.history.map((h) => ({ glyph: KIND_GLYPH[SCENES[h.sceneId].kind], tier: h.resolution.tier })),
+        signature: run.signature,
+        carried: run.relics.map((r) => ({ id: r, name: getRelic(r).name })),
+        sigils: earned.map((id) => SIGILS.find((x) => x.id === id)!).filter(Boolean).map((sg) => ({ id: sg.id, glyph: sg.glyph, name: sg.name })),
         notes: [
           (mode.kind === 'daily' || mode.kind === 'weekly') && mode.weather ? `${getWeather(mode.weather).glyph} ${getWeather(mode.weather).name}` : '',
           run.vow ? `${getVow(run.vow.id).glyph} ${getVow(run.vow.id).name} · ${run.vow.kept ? 'kept' : run.vow.broken ? 'broken' : 'held'}` : '',

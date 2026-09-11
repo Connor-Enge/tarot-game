@@ -1209,3 +1209,11 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .road__ring { transform-box: fill-box; transform-origin: center; animation: ring-breathe 1.9s ease-in-out infinite; }
 @keyframes ring-breathe { 0%, 100% { transform: scale(0.85); opacity: 0.4; } 50% { transform: scale(1.1); opacity: 1; } }
 .road-block__hint { margin: 4px 0 0; display: flex; justify-content: center; align-items: center; gap: 6px; flex-wrap: wrap; }
+
+/* --- the last road, drawn across the sky ---------------------------------- */
+.sky__road { stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0.55; animation: road-draw 3s ease-out forwards; }
+@keyframes road-draw { to { stroke-dashoffset: 0; } }
+.sky__live-in { animation: fade-in 500ms ease both; }
+.sky__replay { align-self: center; }
+.reduce-motion .sky__road { animation: none; stroke-dashoffset: 0; }
+.reduce-motion .sky__live-in { animation: none; }
