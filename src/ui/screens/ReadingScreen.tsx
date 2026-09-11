@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSettings } from '../../settings';
-import { activeSlotState, canTakeBack, currentScene, getCard, hasRelic, redrawCost, sceneNumber, scoreSlot, SLOT_IDS, SLOTS, totalScenes, whisperCost, whisperWords } from '../../engine';
+import { activeSlotState, canTakeBack, canWhisperHere, currentScene, RITES, getCard, hasRelic, redrawCost, sceneNumber, scoreSlot, SLOT_IDS, SLOTS, totalScenes, whisperCost, whisperWords } from '../../engine';
 
 /** Dev only: show the oracle's score on each candidate when the page is opened with ?oracle. */
 const ORACLE = import.meta.env.DEV && typeof location !== 'undefined' && location.search.includes('oracle');
@@ -79,7 +79,8 @@ function ReadingScreenInner() {
   const rCost = redrawCost(run);
   const wCost = whisperCost(run);
   const canRedraw = run.clarity >= rCost;
-  const canWhisper = lifted !== null && run.clarity >= wCost && !active.whispered.includes(lifted) && !active.candidates[lifted]?.hidden;
+  const hushed = !canWhisperHere(run);
+  const canWhisper = !hushed && lifted !== null && run.clarity >= wCost && !active.whispered.includes(lifted) && !active.candidates[lifted]?.hidden;
   const bell = hasRelic(run, 'bell');
   // Re-key the hand when the candidates change so the deal animation replays.
   const handKey = active.candidates.map((c) => c.cardId).join('|');
@@ -102,6 +103,12 @@ function ReadingScreenInner() {
         <SceneArt id={scene.id} className="scene__art" />
         <p className="scene__place muted">{scene.place}</p>
         <p className="scene__prompt">{scene.prompt}</p>
+        {scene.rite && (
+          <p className={`scene__rite scene__rite--${scene.rite}`}>
+            <span className="scene__rite-glyph" aria-hidden>{RITES[scene.rite].glyph}</span>
+            <strong>{RITES[scene.rite].name}.</strong> {RITES[scene.rite].text}
+          </p>
+        )}
         {scene.terminal && run.abyssRemade && <p className="scene__remade muted small">It deals from what you have already read.</p>}
       </section>
       <RelicStrip relics={run.relics} />
@@ -238,7 +245,7 @@ function ReadingScreenInner() {
         <button className={`btn ${dragPull ? 'btn--pull' : ''}`} disabled={!canRedraw} onClick={redraw} title="Deal three new cards for this seat">
           Redraw {rCost === 0 ? '· free' : `◈${rCost}`}
         </button>
-        <button className="btn" disabled={!canWhisper} onClick={whisperLifted} title="Hear one word of the lifted card">
+        <button className="btn" disabled={!canWhisper} onClick={whisperLifted} title={hushed ? 'No whispers in this scene' : 'Hear one word of the lifted card'}>
           Whisper ◈{wCost}
         </button>
         <button className="btn btn--primary" disabled={lifted === null} onClick={confirm}>

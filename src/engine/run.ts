@@ -249,7 +249,9 @@ function dealSeat(run: RunState, rng: Rng, deck: DeckState, slot: SlotId): { dec
   if (run.pendingDeal) {
     return { deck, state: { slot, candidates: run.pendingDeal, chosen: null, whispered: [] } };
   }
-  let count = CANDIDATES_PER_SLOT;
+  const rite = currentScene(run).rite;
+  let count = rite === 'bare' ? CANDIDATES_PER_SLOT - 1 : CANDIDATES_PER_SLOT;
+  if (slot === 'wake' && rite === 'moonlit') count++;
   if (slot === 'threshold' && hasRelic(run, 'lens')) count++;
   if (slot === 'wake' && hasRelic(run, 'shard')) count++;
   if (slot === 'vessel' && hasRelic(run, 'lodestone')) count++;
@@ -374,8 +376,10 @@ export function chooseNode(run: RunState, index: number): RunState {
   const terminal = SCENES[layer[index].sceneId].terminal;
   const remade = terminal && run.deck.discard.length >= 12;
   const deckIn: DeckState = remade ? { draw: [...run.deck.draw, ...rng.shuffle(run.deck.discard)], discard: [] } : run.deck;
-  const first = dealSeat({ ...run, deck: deckIn }, rng, deckIn, SLOT_IDS[0]);
-  let next: RunState = { ...run, node: index, deck: first.deck, slots: [first.state], activeSlot: 0, freeRedrawUsed: false, echo: null, sceneSpent: { redraws: 0, whispers: 0 }, phase: { kind: 'reading' }, abyssRemade: remade || undefined, keepsakeShown: keepsakeShown(run, first.state) };
+  const first = dealSeat({ ...run, node: index, deck: deckIn }, rng, deckIn, SLOT_IDS[0]);
+  // The Tithe: a drop of vitality at the door. It never kills; the reading may.
+  const tithe = SCENES[layer[index].sceneId].rite === 'tithe' ? Math.min(1, Math.max(0, run.vitality - 1)) : 0;
+  let next: RunState = { ...run, node: index, vitality: run.vitality - tithe, deck: first.deck, slots: [first.state], activeSlot: 0, freeRedrawUsed: false, echo: null, sceneSpent: { redraws: 0, whispers: 0 }, phase: { kind: 'reading' }, abyssRemade: remade || undefined, keepsakeShown: keepsakeShown(run, first.state) };
   // A vow kept all the way down pays out as you step into the Abyss.
   if (SCENES[layer[index].sceneId].terminal && run.vow && !run.vow.broken && !run.vow.kept) {
     const reward = getVow(run.vow.id).reward;
@@ -444,8 +448,13 @@ export function turnCandidate(run: RunState, index: number): RunState {
 }
 
 /** Spend Clarity to hear one keyword of a candidate. The UI shows it; the Codex remembers it. */
+/** The Hush forbids whispers in its scene. */
+export function canWhisperHere(run: RunState): boolean {
+  return run.phase.kind === 'reading' && currentScene(run).rite !== 'hush';
+}
+
 export function whisper(run: RunState, index: number): RunState {
-  if (run.phase.kind !== 'reading') return run;
+  if (run.phase.kind !== 'reading' || !canWhisperHere(run)) return run;
   const cost = whisperCost(run);
   if (run.clarity < cost) return run;
   const slot = run.slots[run.activeSlot];
@@ -464,9 +473,11 @@ export function readingOf(run: RunState): Reading | null {
 }
 
 function resolve(run: RunState): RunState {
-  const reading = readingOf(run);
-  if (!reading) return run;
+  const dealt = readingOf(run);
+  if (!dealt) return run;
   const baseScene = currentScene(run);
+  // The Mirror: every card reads the other way up. What is recorded is what was read.
+  const reading = baseScene.rite === 'mirror' ? (Object.fromEntries(SLOT_IDS.map((s) => [s, { ...dealt[s], reversed: !dealt[s].reversed }])) as Reading) : dealt;
   const baseStakes = baseScene.terminal && run.mods.abyssStakes ? run.mods.abyssStakes : baseScene.stakes;
   const scene = { ...baseScene, stakes: baseStakes + (run.well ?? 0) };
   const read = resolveReading(scene, reading, run.marks, {

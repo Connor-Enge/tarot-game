@@ -491,6 +491,18 @@ Reversed Winds, a warm flicker for Candlelit, a rising dark for Black
 Tide. The Weekly has weather too, from the week's seed, on top of its
 longer road and its two extra hearts; road lengths are skipped for it.
 
+## Rites
+
+Five scenes keep a rite: a rule stated the moment you arrive, on a plate
+under the prompt, in plain words. The Mirror (the standing pool) reads
+every card the other way up, and what is recorded in the Codex is what
+was read, not what was dealt. The Hush (the library) allows no whispers.
+The Tithe (the toll) takes a drop of vitality at the door and never the
+last one. Moonlit (the hollow) deals the Wake one more. The Bare Table
+(the tomb) deals every seat one fewer. Doors still show only the kind of
+place; the rite is learned by walking in, and remembered. None of them
+touches a meaning.
+
 ## The Abyss deals from what you have read
 
 As you step into the Abyss, the discard pile is shuffled onto the top of
@@ -667,7 +679,7 @@ identity, not power, which is the point.
   omen is distinct.
 - **Scenes**: 30 exist (29 plus the Abyss), which was the target; more are welcome. Latest: the mill, the drowned chapel, the hunt.
 - **Named readings**: 34. Each is a memorable line, never a definition.
-- **Relics**: 12 boons, 8 curses. **Vows**: 7. **Weathers**: 14. **Trades**: 6. **Sigils**: 29.
+- **Relics**: 12 boons, 8 curses. **Vows**: 7. **Weathers**: 14. **Trades**: 6. **Sigils**: 29. **Rites**: 5.
 - **Combos**: 34 named readings exist. This is the richest vein for "the
   combined meaning" and should keep growing with named, memorable results.
 - **Art**: all 78 faces are procedural SVG (`src/ui/art/`). Majors are

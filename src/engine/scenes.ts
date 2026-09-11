@@ -29,6 +29,19 @@ export const SLOTS: Record<SlotId, SlotDef> = {
 /** How strongly a scene rewards (or punishes) a tag in a given seat. */
 export type Affinity = Partial<Record<Tag, number>>;
 
+/**
+ * Rites: a stated rule a scene carries. Shown the moment you arrive, in
+ * plain words, like every other rule. None of them touches a meaning.
+ */
+export type Rite = 'mirror' | 'hush' | 'tithe' | 'moonlit' | 'bare';
+export const RITES: Record<Rite, { name: string; glyph: string; text: string }> = {
+  mirror: { name: 'The Mirror', glyph: '⧖', text: 'What lands wrong reads right here, and what lands right reads wrong.' },
+  hush: { name: 'The Hush', glyph: '…', text: 'No whispers here. Redraw, turn, or trust your eye.' },
+  tithe: { name: 'The Tithe', glyph: '⚱', text: 'Stepping in costs a drop of vitality, however the reading goes.' },
+  moonlit: { name: 'Moonlit', glyph: '☾', text: 'The Wake deals one more.' },
+  bare: { name: 'The Bare Table', glyph: '▭', text: 'Every seat deals one fewer.' },
+};
+
 export interface Scene {
   id: string;
   /** Intentionally vague. The cards decide what actually happens. */
@@ -52,6 +65,8 @@ export interface Scene {
   mend?: number;
   /** A boon here hands you this relic, if you don't hold it. The outcome text names it. */
   relic?: string;
+  /** A stated rule this scene carries. See RITES. */
+  rite?: Rite;
 }
 
 export type OutcomeTier = 'calamity' | 'harm' | 'neutral' | 'boon' | 'triumph';
@@ -252,6 +267,7 @@ export const SCENES: Record<string, Scene> = {
   },
   mirror: {
     id: 'mirror',
+    rite: 'mirror',
     relic: 'shard',
     kind: 'mystery',
     hue: 300,
@@ -341,6 +357,7 @@ export const SCENES: Record<string, Scene> = {
   },
   library: {
     id: 'library',
+    rite: 'hush',
     relic: 'lens',
     kind: 'mystery',
     hue: 60,
@@ -433,6 +450,7 @@ export const SCENES: Record<string, Scene> = {
   },
   toll: {
     id: 'toll',
+    rite: 'tithe',
     kind: 'passage',
     hue: 35,
     minAct: 2,
@@ -477,6 +495,7 @@ export const SCENES: Record<string, Scene> = {
   },
   hollow: {
     id: 'hollow',
+    rite: 'moonlit',
     relic: 'bell',
     kind: 'mystery',
     hue: 120,
@@ -566,6 +585,7 @@ export const SCENES: Record<string, Scene> = {
   },
   tomb: {
     id: 'tomb',
+    rite: 'bare',
     kind: 'mystery',
     hue: 290,
     minAct: 2,

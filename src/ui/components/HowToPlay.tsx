@@ -50,6 +50,12 @@ export function HowToPlay({ onClose }: { onClose: () => void }) {
               <strong>Spend Clarity ◈ to see more.</strong> Redraw a seat, whisper one word of a card, or turn it over. Pull a card down to redraw.
             </span>
           </li>
+          <li>
+            <span className="how__glyph" aria-hidden>⧖</span>
+            <span>
+              <strong>Some scenes keep a rite.</strong> A rule stated as you arrive: the Mirror reads every card the other way up, the Hush allows no whispers, the Tithe takes a drop at the door.
+            </span>
+          </li>
           <li className="howto__step">
             <span className="howto__art howto__art--tiers" aria-hidden>
               <span className="tier--calamity">✖</span>
