@@ -99,6 +99,8 @@ export interface RunState {
   vow?: { id: string; broken: boolean; kept?: boolean };
   /** True once the Stranger's trade has been taken this run. */
   traded?: boolean;
+  /** True once the Stranger has appeared this run. They come once. */
+  strangerMet?: boolean;
 }
 
 function rngOf(run: RunState): Rng {
@@ -424,9 +426,9 @@ function resolve(run: RunState): RunState {
   const echo: DrawnCard | null = run.mods.noEcho ? null : { cardId: revealed.wake.cardId, reversed: revealed.wake.reversed };
   // At a rest that went well enough, someone is already sitting by the fire.
   let trade: Trade | undefined;
-  if (scene.kind === 'rest' && resolution.tier !== 'calamity' && resolution.tier !== 'harm') {
+  if (scene.kind === 'rest' && !run.strangerMet && resolution.tier !== 'calamity' && resolution.tier !== 'harm') {
     const options: Trade[] = [];
-    if (clarity >= 2) options.push({ id: 'clarity-for-vitality', give: 2, get: 3 });
+    if (clarity >= 4) options.push({ id: 'clarity-for-vitality', give: 4, get: 2 });
     const boons = relics.filter((id) => BOON_IDS.includes(id));
     const unheld = BOON_IDS.filter((id) => !relics.includes(id));
     if (boons.length && unheld.length) options.push({ id: 'swap-boon', give: rng.pick(boons), get: rng.pick(unheld) });
@@ -434,7 +436,7 @@ function resolve(run: RunState): RunState {
     if (curses.length && vitality > 4) options.push({ id: 'lift-curse', give: 3, curse: curses[0] });
     if (options.length) trade = rng.pick(options);
   }
-  const base = withRng({ ...run, deck, history, vitality, clarity, marks, relics, echo, vow }, rng);
+  const base = withRng({ ...run, deck, history, vitality, clarity, marks, relics, echo, vow, strangerMet: run.strangerMet || !!trade }, rng);
   if (vitality <= 0) return { ...base, vitality: 0, phase: { kind: 'dead', resolution } };
   if (scene.terminal) return { ...base, phase: { kind: 'ascended', resolution } };
   return { ...base, phase: { kind: 'resolved', resolution, offer, cursed, found, trade } };

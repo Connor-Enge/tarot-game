@@ -470,9 +470,9 @@ The title names it before you commit; share text carries it.
 
 ## The Stranger's trade
 
-At a rest scene that goes at least neutrally, someone is already sitting by
-the fire with one trade, drawn from what applies: two clarity for three
-vitality; a boon you hold for a boon you do not; three vitality to be rid
+Once per run, at the first rest scene that goes at least neutrally, someone is
+already sitting by the fire with one trade, drawn from what applies: four
+clarity for two vitality; a boon you hold for a boon you do not; three vitality to be rid
 of a curse. Take it or walk on. Taking one earns the Dealt With sigil. The
 trade never kills you and is never offered twice in a scene.
 
@@ -531,6 +531,22 @@ and the harm threshold is a total of -1.5. Re-run the sim after any change
 to scenes, thresholds, or deltas and keep the three numbers in roughly that
 shape: blind play should usually die, a half-learned deck should usually
 return, a fully learned deck should never lose.
+
+### Vows and trades
+
+`npx vite-node scripts/sim-vows.ts 1000` compares a policy with and without
+swearing the first offered vow and taking every trade. Both are opt-in
+lifts paid in clarity or constraint; the random policy overstates them
+because it never spends clarity.
+
+| Policy | plain | with vow | vows kept | with trades | both |
+|---|---|---|---|---|---|
+| random | 30% | 36% | 19% | 37% | 43% |
+| majors-only | 81% | 84% | 36% | 87% | 90% |
+| oracle | 100% | 100% | 49% | 100% | 100% |
+
+The Stranger appears once per run; the clarity trade asks four for two so
+a hoarder's spare clarity is not a free heal.
 
 ## Authoring a scene
 

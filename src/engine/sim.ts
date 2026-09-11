@@ -8,7 +8,8 @@ import type { RunConfig } from './descents';
 import { createRng, type Rng } from './rng';
 import { scoreSlot } from './resolve';
 import { SCENES, TIERS, type OutcomeTier } from './scenes';
-import { advance, chooseCandidate, chooseNode, chooseRelic, currentScene, isOver, startRun, type RunState } from './run';
+import { acceptTrade, advance, chooseCandidate, chooseNode, chooseRelic, currentScene, isOver, startRun, takeVow, type RunState } from './run';
+import { vowOffer } from './vows';
 
 export type Policy = (run: RunState, rng: Rng) => number;
 
@@ -68,27 +69,38 @@ export interface SimResult {
   tiers: Record<OutcomeTier, number>;
 }
 
-export function simulate(n: number, pick: Policy, node: NodePolicy = randomNode, seed = 1, config: RunConfig = {}): SimResult {
+export interface SimOptions {
+  /** Swear the first offered vow before the first scene. */
+  vow?: boolean;
+  /** Take every trade the Stranger offers. */
+  trade?: boolean;
+}
+
+export function simulate(n: number, pick: Policy, node: NodePolicy = randomNode, seed = 1, config: RunConfig = {}, opts: SimOptions = {}): SimResult & { vowsKept: number } {
   const rng = createRng(seed);
   let survived = 0;
   let scenes = 0;
   let vit = 0;
   const tiers = Object.fromEntries(TIERS.map((t) => [t, 0])) as Record<OutcomeTier, number>;
+  let vowsKept = 0;
   for (let i = 0; i < n; i++) {
     let run = startRun(rng.int(0xffffffff), config);
+    if (opts.vow) run = takeVow(run, vowOffer(run.seed)[0]);
     let guard = 0;
     while (!isOver(run) && guard++ < 60) {
       if (run.phase.kind === 'map') run = chooseNode(run, node(run, rng));
       while (run.phase.kind === 'reading') run = chooseCandidate(run, pick(run, rng));
+      if (run.phase.kind === 'resolved' && opts.trade && run.phase.trade) run = acceptTrade(run);
       if (run.phase.kind === 'resolved') run = advance(run);
       if (run.phase.kind === 'relic') run = chooseRelic(run, rng.int(run.phase.offer.length));
     }
     for (const h of run.history) tiers[h.resolution.tier]++;
     if (run.phase.kind === 'ascended') survived++;
+    if (run.vow?.kept) vowsKept++;
     scenes += run.history.length;
     vit += run.vitality;
   }
-  return { runs: n, survived, meanScenes: scenes / n, meanFinalVitality: vit / n, tiers };
+  return { runs: n, survived, meanScenes: scenes / n, meanFinalVitality: vit / n, tiers, vowsKept };
 }
 
 export function sceneSpread(): Record<string, { min: number; max: number }> {
