@@ -52,7 +52,7 @@ export function RunEndScreen() {
         footer: mode.kind === 'daily' ? `Daily ${mode.label}` : `${getDescent(mode.descent).name} · seed ${run.seed.toString(36)}`,
         seatsNamed: knowledge.seatsNamed,
         journey: run.history.map((h) => TIER_MARK[h.resolution.tier]).join(''),
-        outcome: run.phase.resolution.narration.at(-1),
+        outcome: last.resolution.narration.at(-1),
       });
       if (!blob) return;
       const file = new File([blob], 'arcana-descent.png', { type: 'image/png' });
