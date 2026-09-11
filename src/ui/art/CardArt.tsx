@@ -132,6 +132,10 @@ export function ArtDefs() {
           <stop offset="0" stopColor="#2b3a6a" />
           <stop offset="1" stopColor="#070a1a" />
         </radialGradient>
+        <radialGradient id="backGlow-chosen" cx="0.5" cy="0.45" r="0.65">
+          <stop offset="0" stopColor="#4a3a24" />
+          <stop offset="1" stopColor="#120c08" />
+        </radialGradient>
         <radialGradient id="backGlow-well" cx="0.5" cy="0.5" r="0.6">
           <stop offset="0" stopColor="#1a1a2e" />
           <stop offset="1" stopColor="#020208" />
@@ -190,7 +194,7 @@ function CardArtInner({ cardId, className, texture = true }: { cardId: string; c
   );
 }
 
-export type BackVariant = 'standard' | 'arcana' | 'inverted' | 'fogbound' | 'thin' | 'weekly' | 'well' | 'night';
+export type BackVariant = 'standard' | 'arcana' | 'inverted' | 'fogbound' | 'thin' | 'weekly' | 'well' | 'night' | 'chosen';
 
 function CardBackInner({ className, variant = 'standard' }: { className?: string; variant?: BackVariant }) {
   const glow = variant === 'standard' ? 'url(#backGlow)' : `url(#backGlow-${variant})`;
@@ -218,6 +222,15 @@ function CardBackInner({ className, variant = 'standard' }: { className?: string
           <circle cx={50} cy={26} r={6} fill={GOLD_FLAT} opacity={0.9} />
           <circle cx={53} cy={24.5} r={5.2} fill="url(#backGlow-night)" />
           {[[22, 40], [78, 44], [30, 128], [70, 124]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r={0.9} fill={GOLD_FLAT} opacity={0.7} />)}
+        </g>
+      )}
+      {variant === 'chosen' && (
+        <g opacity={0.9}>
+          {/* a quill, and the line it has written */}
+          <path d="M44 32 q6 -12 14 -14 q-2 8 -8 14 q-3 2 -6 0 z" fill={GOLD_FLAT} opacity={0.85} />
+          <path d="M44 32 l-4 4" stroke={GOLD_FLAT} strokeWidth={1} strokeLinecap="round" />
+          <path d="M30 136 q10 -3 20 0 t20 0" fill="none" stroke={GOLD_FLAT} strokeWidth={0.8} opacity={0.7} />
+          <path d="M34 140 h32" stroke={GOLD_FLAT} strokeWidth={0.4} opacity={0.5} strokeDasharray="2 2" />
         </g>
       )}
       {variant === 'well' && (

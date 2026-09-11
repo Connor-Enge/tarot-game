@@ -1878,3 +1878,12 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .codex__cell--unpickable { opacity: 0.3; }
 .codex__pick { position: absolute; top: -5px; right: -5px; width: 18px; height: 18px; border-radius: 50%; background: var(--gold-2); color: #1a1408; font-size: 0.7rem; display: grid; place-items: center; box-shadow: 0 2px 6px rgba(0,0,0,0.5); }
 .chosen__hint { margin: 0 0 6px; }
+
+/* a reversed card says so: a small mark on the corner, outside the face */
+.card__rev-mark {
+  position: absolute; top: -7px; left: -7px; width: 20px; height: 20px; border-radius: 50%;
+  display: grid; place-items: center; font-size: 0.8rem; line-height: 1;
+  background: #1a1420; color: #e0a39a; border: 1px solid rgba(214,96,94,0.6);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5); pointer-events: none; z-index: 2;
+}
+.card--dim .card__rev-mark { opacity: 0.5; }

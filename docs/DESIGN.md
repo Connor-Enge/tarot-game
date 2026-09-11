@@ -307,6 +307,10 @@ calamity). The same marks and words the map and the book use. The end
 screen presses a smaller one under the outcome, its rim reading
 "fallen" or "returned".
 
+**Reversed, marked**: a reversed card in the hand or the zoom carries a
+small red ⥯ on its corner, outside the face, so a reversal is never
+missed at a glance. The face itself still shows only name and art.
+
 **Larger cards** setting for the hand.
 
 **Robustness**: an error boundary catches any render failure and offers
@@ -548,7 +552,7 @@ forty cards, the Codex offers "Choose your deck": tap known cards in and
 out (`toggleChosen`, tier 1 or more only, and forgetting a card drops
 it from the deck). Thirty or more and The Chosen opens on the title,
 with the deck's size on the button. Cards land wrong more often there
-(0.35). It is the one place the game lets the reader stack the deck,
+(0.35). It has its own back, a quill over the line it has written. It is the one place the game lets the reader stack the deck,
 and it is gated behind knowing enough of it to stack it well.
 
 ## The Long Night

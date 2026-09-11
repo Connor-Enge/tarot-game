@@ -123,6 +123,7 @@ export function Card({ cardId, reversed = false, faceDown = false, size = 'md', 
         {wear > 0 && <div className="card__wear" aria-hidden />}
         {isSignature && !faceDown && <span className="card__sig" aria-hidden>✦</span>}
       </div>
+      {reversed && !faceDown && size === 'lg' && <span className="card__rev-mark" aria-hidden title="reversed">⥯</span>}
       {whisper && <div className="card__whisper">{whisper}</div>}
       {yours && !whisper && <div className="card__whisper card__whisper--yours">yours</div>}
       {echo && !whisper && !yours && <div className="card__whisper card__whisper--echo">echo</div>}
