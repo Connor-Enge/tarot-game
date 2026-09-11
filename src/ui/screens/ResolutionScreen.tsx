@@ -95,7 +95,11 @@ function ResolutionScreenInner() {
           <p className="dream rise" style={{ animationDelay: `${300 + resolution.narration.length * step}ms` }} onClick={() => openCodex(dream.cardId)}>
             <span className="dream__label muted small">You dream of something you have seen.</span>
             <span className="dream__line">
-              <Card cardId={dream.cardId} reversed={dream.reversed} size="xs" /> <em>{dream.line}</em>
+              <span className="dream__ghost" aria-hidden>
+                <Card cardId={dream.cardId} reversed={dream.reversed} size="xs" />
+                <span className="dream__wisp" />
+              </span>
+              <em>{dream.line}</em>
             </span>
           </p>
         )}

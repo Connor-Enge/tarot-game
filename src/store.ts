@@ -478,6 +478,7 @@ export function shareText(run: RunState, mode: RunMode, knowledge?: Knowledge): 
   const tiers = run.history.map((h) => `${KIND_GLYPH[SCENES[h.sceneId].kind]}${tierGlyph[h.resolution.tier]}`).join(' ');
   const carried = run.relics.length ? `\nCarried: ${run.relics.map((r) => getRelic(r).name).join(', ')}` : '';
   const vow = run.vow ? `\nVow: ${getVow(run.vow.id).name} · ${run.vow.kept ? 'kept' : run.vow.broken ? 'broken' : 'held so far'}` : '';
+  const dealt = run.traded ? '\nDealt with the Stranger.' : '';
   const head =
     mode.kind === 'daily'
       ? `Arcana Descent · Daily ${mode.label}${mode.weather ? ` · ${getWeather(mode.weather).name}` : ''}`
@@ -487,7 +488,7 @@ export function shareText(run: RunState, mode: RunMode, knowledge?: Knowledge): 
   const streak = mode.kind === 'daily' && knowledge?.daily && knowledge.daily.streak > 1 ? `\nStreak: ${knowledge.daily.streak} days` : '';
   const who = knowledge ? `${streak}\n— ${readerTitle(knowledge)}, ${Object.values(knowledge.cards).filter((c) => c.tier > 0).length} of 78 known` : '';
   const weekly = mode.kind === 'weekly' && knowledge?.records?.weekly ? `\nDeepest this week: ${Math.max(knowledge.records.weekly.bestDepth, run.history.length)} of ${run.map.length}` : '';
-  return `${head}\n${end}\n${tiers}\n${spread}${carried}${vow}${weekly}${who}`;
+  return `${head}\n${end}\n${tiers}\n${spread}${carried}${vow}${dealt}${weekly}${who}`;
 }
 
 // Persist the run after every change so a closed tab can resume.
