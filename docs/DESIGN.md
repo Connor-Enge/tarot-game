@@ -512,13 +512,13 @@ Across descents (`npx vite-node scripts/sim-all.ts 800`):
 
 | Descent | random | majors-only | oracle |
 |---------|--------|-------------|--------|
-| The Descent | 28% | 84% | 100% |
-| The Short Road | 45% | 85% | 100% |
-| Arcana Only | 41% | 100% | 100% |
-| The Inverted | 1% | 24% | 98% |
-| Fogbound | 28% | 80% | 100% |
-| Thin Blood | 8% | 68% | 100% |
-| Weekly | 28% | 85% | 100% |
+| The Descent | 26% | 82% | 100% |
+| The Short Road | 46% | 85% | 100% |
+| Arcana Only | 38% | 100% | 100% |
+| The Inverted | 1% | 21% | 98% |
+| Fogbound | 27% | 80% | 100% |
+| Thin Blood | 8% | 63% | 100% |
+| Weekly | 28% | 82% | 100% |
 
 Arcana Only was found at 94% for blind play (the majors are all dense,
 well-fitting cards) and tuned with 45% reversed, 8 vitality, and +1 neutral
@@ -571,7 +571,7 @@ a hoarder's spare clarity is not a free heal.
 - **Minor Arcana** meanings and omens are hand-authored in
   `engine/minorText.ts` (112 omen lines, 112 meanings). A test asserts every
   omen is distinct.
-- **Scenes**: 21 exist (20 plus the Abyss). Aim for 30+ across three acts. Latest: the ferry, the hollow, the feast.
+- **Scenes**: 24 exist (23 plus the Abyss). Aim for 30+ across three acts. Latest: wolves, the lighthouse, the tomb.
 - **Combos**: 5 exist. This is the richest vein for "the combined meaning"
   and should be grown deliberately with named, memorable results.
 - **Art**: all 78 faces are procedural SVG (`src/ui/art/`). Majors are

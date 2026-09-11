@@ -242,6 +242,43 @@ const ART: Record<string, () => ReactElement> = {
       <ellipse cx={100} cy={58} rx={70} ry={3} fill={HAZE} />
     </g>
   ),
+  wolves: () => (
+    <g>
+      {[10, 40, 150, 185].map((x, i) => <rect key={x} x={x} y={0} width={5 + (i % 2) * 2} height={60} fill={DARK} />)}
+      <path d="M0 50 Q100 40 200 50 V60 H0 Z" fill={PALE} opacity={0.35} />
+      {[62, 78, 96, 112, 130].map((x, i) => <ellipse key={x} cx={x} cy={52 + (i % 2) * 3} rx={2} ry={1.2} fill={DARK} opacity={0.6} />)}
+      {[70, 118].map((x) => (
+        <g key={x}>
+          <circle cx={x} cy={30} r={1.3} fill={GOLD_FLAT} />
+          <circle cx={x + 6} cy={30} r={1.3} fill={GOLD_FLAT} />
+        </g>
+      ))}
+      <path d="M92 46 L100 32 L108 46 Z" fill={DARK} opacity={0.5} />
+    </g>
+  ),
+  lighthouse: () => (
+    <g>
+      <path d="M0 60 L0 48 L60 44 L90 52 L140 46 L200 54 L200 60 Z" fill={DARK} />
+      <path d="M96 52 L94 18 L106 18 L104 52 Z" fill={DARK} />
+      <rect x={92} y={12} width={16} height={8} fill={PALE} opacity={0.7} />
+      <path d="M100 16 L200 0 L200 34 Z" fill={GOLD_FLAT} opacity={0.18} />
+      <circle cx={100} cy={16} r={3} fill={GOLD_FLAT} />
+      <ellipse cx={170} cy={20} rx={4} ry={2.5} fill={DARK} opacity={0.6} />
+    </g>
+  ),
+  tomb: () => (
+    <g>
+      <path d="M0 60 Q100 -10 200 60 Z" fill={DARK} />
+      <path d="M86 60 V36 a14 14 0 0 1 28 0 V60 Z" fill="#050410" />
+      <path d="M86 36 a14 14 0 0 1 28 0" fill="none" stroke={GOLD_FLAT} strokeWidth={0.8} opacity={0.7} />
+      <text x={100} y={30} fontSize={5} textAnchor="middle" fill={GOLD_FLAT} fontFamily="Georgia, serif" letterSpacing={1.5} opacity={0.85}>
+        Y O U
+      </text>
+      {[0, 1, 2].map((i) => (
+        <path key={i} d={`M${94 + i * 6} 58 q-4 -6 -2 -${12 + i * 3}`} fill="none" stroke={PALE} strokeWidth={0.5} opacity={0.35 - i * 0.08} />
+      ))}
+    </g>
+  ),
   abyss: () => (
     <g>
       <rect x={0} y={0} width={200} height={60} fill="#060410" opacity={0.9} />
