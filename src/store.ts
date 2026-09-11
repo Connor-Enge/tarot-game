@@ -43,6 +43,8 @@ import {
   KIND_GLYPH,
   getRelic,
   getVow,
+  dailyWeather,
+  getWeather,
   SCENES,
   noteSigils,
   noteVow,
@@ -61,7 +63,7 @@ import {
 } from './engine';
 
 export type Screen = 'title' | 'run' | 'codex' | 'settings';
-export type RunMode = { kind: 'free'; descent: string; depth?: number } | { kind: 'daily'; label: string } | { kind: 'weekly'; label: string };
+export type RunMode = { kind: 'free'; descent: string; depth?: number } | { kind: 'daily'; label: string; weather?: string } | { kind: 'weekly'; label: string };
 
 interface GameStore {
   screen: Screen;
@@ -280,7 +282,8 @@ export const useGame = create<GameStore>((set, get) => ({
     const knowledge = noteDaily(noteRunStarted(get().knowledge), label);
     saveKnowledge(knowledge);
     startDrone();
-    set({ run: startRun(seed), mode: { kind: 'daily', label }, knowledge, screen: 'run', lifted: null, earned: [], firstDescent: false });
+    const weather = dailyWeather(seed);
+    set({ run: startRun(seed, weather.config), mode: { kind: 'daily', label, weather: weather.id }, knowledge, screen: 'run', lifted: null, earned: [], firstDescent: false });
   },
 
   newWeekly: () => {
@@ -461,7 +464,7 @@ export function shareText(run: RunState, mode: RunMode, knowledge?: Knowledge): 
   const vow = run.vow ? `\nVow: ${getVow(run.vow.id).name} · ${run.vow.kept ? 'kept' : run.vow.broken ? 'broken' : 'held so far'}` : '';
   const head =
     mode.kind === 'daily'
-      ? `Arcana Descent · Daily ${mode.label}`
+      ? `Arcana Descent · Daily ${mode.label}${mode.weather ? ` · ${getWeather(mode.weather).name}` : ''}`
       : mode.kind === 'weekly'
         ? `Arcana Descent · Weekly ${mode.label}`
         : `Arcana Descent · ${getDescent(mode.descent).name}${mode.depth ? ` · Depth ${mode.depth}` : ''} · seed ${run.seed.toString(36)}`;

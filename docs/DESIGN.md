@@ -461,6 +461,13 @@ Every surface that can show text about a card, and what gates it:
 | Foretell | a scene's place line | costs Clarity; not a card |
 | Relics, sigils, descents, depths | rules | stated plainly, by design |
 
+## Daily weather
+
+The daily seed also picks one of nine named conditions (Clear, Reversed
+Winds, Thin Air, Lantern Light, Salted Road, Fog, Heavy Air, Still Water,
+The Long Road). Everyone walking today's road walks in the same weather.
+The title names it before you commit; share text carries it.
+
 ## Vows
 
 Before the first scene the map offers two vows, chosen by seed without

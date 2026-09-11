@@ -11,3 +11,4 @@ export * from './scenes';
 export * from './sigils';
 export * from './sky';
 export * from './vows';
+export * from './weather';

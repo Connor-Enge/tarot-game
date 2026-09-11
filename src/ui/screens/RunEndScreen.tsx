@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getCard, getDescent, KIND_GLYPH, SCENES, SIGILS, SLOT_IDS, SLOTS } from '../../engine';
+import { getCard, getDescent, getWeather, KIND_GLYPH, SCENES, SIGILS, SLOT_IDS, SLOTS } from '../../engine';
 import { shareText, useGame } from '../../store';
 import { Card } from '../components/Card';
 import { RelicArt } from '../art/relics';
@@ -95,7 +95,7 @@ function RunEndScreenInner() {
         );
       })()}
       {finest && <p className="finest center">Your finest descent yet.</p>}
-      {mode.kind === 'daily' && <p className="muted small center">Daily descent · {mode.label}</p>}
+      {mode.kind === 'daily' && <p className="muted small center">Daily descent · {mode.label}{mode.weather ? ` · ${getWeather(mode.weather).glyph} ${getWeather(mode.weather).name}` : ''}</p>}
       {mode.kind === 'weekly' && <p className="muted small center">Weekly descent · {mode.label}</p>}
       {earned.length > 0 && (
         <div className="sigil-banner rise" style={{ animationDelay: '900ms' }}>

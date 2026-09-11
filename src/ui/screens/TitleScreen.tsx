@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { CARDS, dailySeed, dailyStreakAlive, daylight, DEPTHS, DESCENTS, getCard, getDescent, maxDepthUnlocked } from '../../engine';
+import { CARDS, dailySeed, dailyStreakAlive, dailyWeather, daylight, DEPTHS, DESCENTS, getCard, getDescent, maxDepthUnlocked } from '../../engine';
 import { CardBack, type BackVariant } from '../art/CardArt';
 import { TitleSky } from '../art/sky';
 import { ReaderMark } from '../components/ReaderMark';
@@ -46,9 +46,9 @@ export function TitleScreen() {
   const light = daylight();
   const current = getDescent(descent);
   const anyUnlocked = DESCENTS.some((d, i) => i > 0 && d.unlocked(k));
-  const { today, todayLabel } = useMemo(() => {
+  const { today, todayLabel, weather } = useMemo(() => {
     const { seed, label } = dailySeed();
-    return { today: CARDS[seed % CARDS.length].id, todayLabel: label };
+    return { today: CARDS[seed % CARDS.length].id, todayLabel: label, weather: dailyWeather(seed) };
   }, []);
   const streak = dailyStreakAlive(k, todayLabel);
   // A different fan every visit, seeded off the run count so it feels alive but not random-noise.
@@ -163,13 +163,16 @@ export function TitleScreen() {
           {current.id === 'standard' ? 'Descend' : `Descend · ${current.name}`}
         </button>
         <div className="row">
-          <button className="btn" onClick={newDaily}>
-            Daily{streak > 1 ? ` · ${streak}` : ''}
+          <button className="btn" onClick={newDaily} title={`${weather.name}: ${weather.text}`}>
+            Daily{streak > 1 ? ` · ${streak}` : ''} <span className="weather__glyph">{weather.glyph}</span>
           </button>
           <button className="btn" onClick={newWeekly} title="A longer road, shared by everyone this week">
             Weekly
           </button>
         </div>
+        <p className="weather muted small center">
+          Today's weather · <span className="weather__name">{weather.glyph} {weather.name}</span> · {weather.text}
+        </p>
         <div className="row">
           <button className="btn btn--codex" onClick={() => goto('codex')}>
             Codex
