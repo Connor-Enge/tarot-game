@@ -1,4 +1,4 @@
-import { currentScene, getRelic, SLOT_IDS, SLOTS } from '../../engine';
+import { currentScene, getCard, getRelic, SLOT_IDS, SLOTS } from '../../engine';
 
 const TIER_GLYPH = { calamity: '✖', harm: '▽', neutral: '◇', boon: '△', triumph: '★' } as const;
 import { useGame } from '../../store';
@@ -11,6 +11,7 @@ function ResolutionScreenInner() {
   const advance = useGame((s) => s.advance);
   const codexOpen = useGame((s) => s.codexOpen);
   const openCodex = useGame((s) => s.openCodex);
+  const omenLog = useGame((s) => s.knowledge.omenLog);
   if (run.phase.kind !== 'resolved') return null;
   const { resolution, cursed, offer, found } = run.phase;
   const curse = cursed ? getRelic(cursed) : null;
@@ -19,6 +20,16 @@ function ResolutionScreenInner() {
   const last = run.history[run.history.length - 1];
   const lastEntry = last;
   const step = scene.terminal ? 900 : 550;
+  // In a rest scene, something you have seen before surfaces as a dream.
+  const dream = (() => {
+    if (scene.kind !== 'rest' || !omenLog || omenLog.length === 0) return null;
+    const own = new Set(SLOT_IDS.map((s) => lastEntry.reading[s].cardId));
+    const pool = omenLog.filter((e) => !own.has(e.cardId));
+    if (pool.length === 0) return null;
+    const e = pool[(run.seed + run.layer * 7) % pool.length];
+    const card = getCard(e.cardId);
+    return { cardId: e.cardId, reversed: e.reversed, line: e.reversed ? card.omen.reversed : card.omen.upright };
+  })();
 
   return (
     <main className={`screen screen--resolution tier--${resolution.tier} ${scene.terminal ? 'screen--abyss' : ''}`}>
@@ -52,6 +63,14 @@ function ResolutionScreenInner() {
             </p>
           );
         })}
+        {dream && (
+          <p className="dream rise" style={{ animationDelay: `${300 + resolution.narration.length * step}ms` }} onClick={() => openCodex(dream.cardId)}>
+            <span className="dream__label muted small">You dream of something you have seen.</span>
+            <span className="dream__line">
+              <Card cardId={dream.cardId} reversed={dream.reversed} size="xs" /> <em>{dream.line}</em>
+            </span>
+          </p>
+        )}
         {relic && (
           <p className="found rise" style={{ animationDelay: `${400 + resolution.narration.length * step}ms` }}>
             <span className="curse__glyph">{relic.glyph}</span> You keep it: <strong>{relic.name}</strong>. <span className="muted">{relic.text}</span>

@@ -1,11 +1,11 @@
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { currentAct, currentNode, SCENES } from './engine';
 import { useSettings } from './settings';
 import { useGame } from './store';
 import { ArtDefs } from './ui/art/CardArt';
 import { Ambient } from './ui/components/Ambient';
 import { Fader } from './ui/components/Fader';
-import { CodexScreen } from './ui/screens/CodexScreen';
+const CodexScreen = lazy(() => import('./ui/screens/CodexScreen').then((m) => ({ default: m.CodexScreen })));
 import { GalleryScreen } from './ui/screens/GalleryScreen';
 import { MapScreen } from './ui/screens/MapScreen';
 import { ReadingScreen } from './ui/screens/ReadingScreen';
@@ -49,7 +49,11 @@ export function App() {
     view = <GalleryScreen />;
     key = 'gallery';
   } else if (screen === 'codex') {
-    view = <CodexScreen />;
+    view = (
+      <Suspense fallback={<main className="screen"><p className="muted small center">Opening the Codex…</p></main>}>
+        <CodexScreen />
+      </Suspense>
+    );
     key = 'codex';
   } else if (screen === 'settings') {
     view = <SettingsScreen />;

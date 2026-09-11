@@ -331,8 +331,16 @@ base64 blob and bring one over on another device. Import replaces.
 ("A rope bridge over a black gorge") before choosing. It reveals a place,
 never a meaning, and gives Clarity a use between readings.
 
+**Dreams**: in a rest scene, the resolution surfaces one omen you have
+witnessed on some other card ("You dream of something you have seen").
+Tap it to open that card. Rest is where the deck comes back to you.
+
+**About** panel in Settings: the pillars, in four sentences. Weekly share
+text includes the deepest scene reached this week.
+
+Bundle: ~378 KB JS (~120 KB gzipped); the Codex screen is code-split.
+
 Queued:
-- A weekly leaderboard line in the share text (best depth this week).
 - Localization scaffolding for the card and scene text.
 
 ## Content debt

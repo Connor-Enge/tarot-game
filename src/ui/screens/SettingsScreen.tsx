@@ -108,6 +108,19 @@ export function SettingsScreen() {
           {note && <p className="muted small">{note}</p>}
         </div>
 
+        <details className="about">
+          <summary>About</summary>
+          <p>
+            <strong>Arcana Descent.</strong> Four seats, three cards each. No one will tell you what they mean.
+          </p>
+          <p className="muted small">
+            Meaning is earned, never explained. The reading is the action. Death teaches. Knowledge is the only progression.
+          </p>
+          <p className="muted small">
+            Every card face, card back and scene is drawn in code. Every sound is synthesized. Nothing is downloaded but the game itself.
+          </p>
+        </details>
+
         <div className="field field--danger">
           {!confirmReset ? (
             <button className="btn" onClick={() => setConfirmReset(true)}>

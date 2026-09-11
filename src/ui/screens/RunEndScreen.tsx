@@ -26,7 +26,7 @@ function RunEndScreenInner() {
   const last = run.history[run.history.length - 1];
 
   const share = async () => {
-    const text = shareText(run, mode);
+    const text = shareText(run, mode, knowledge);
     try {
       if (navigator.share) {
         await navigator.share({ text });
@@ -57,7 +57,7 @@ function RunEndScreenInner() {
       if (!blob) return;
       const file = new File([blob], 'arcana-descent.png', { type: 'image/png' });
       if (navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], text: shareText(run, mode) });
+        await navigator.share({ files: [file], text: shareText(run, mode, knowledge) });
         return;
       }
       setImageUrl(URL.createObjectURL(blob));

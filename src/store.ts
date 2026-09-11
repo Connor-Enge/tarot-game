@@ -345,7 +345,7 @@ export const useGame = create<GameStore>((set, get) => ({
 }));
 
 /** A shareable line for a finished run. Names the final spread; never the meanings. */
-export function shareText(run: RunState, mode: RunMode): string {
+export function shareText(run: RunState, mode: RunMode, knowledge?: Knowledge): string {
   const end = run.phase.kind === 'ascended' ? 'Returned from the Abyss' : run.phase.kind === 'dead' ? `Died at scene ${run.layer + 1}` : 'Still descending';
   const spread = finalSpread(run)
     .map((c) => `${getCard(c.cardId).name}${c.reversed ? ' (rev)' : ''}`)
@@ -357,7 +357,8 @@ export function shareText(run: RunState, mode: RunMode): string {
       : mode.kind === 'weekly'
         ? `Arcana Descent · Weekly ${mode.label}`
         : `Arcana Descent · ${getDescent(mode.descent).name}${mode.depth ? ` · Depth ${mode.depth}` : ''} · seed ${run.seed.toString(36)}`;
-  return `${head}\n${end}\n${tiers}\n${spread}`;
+  const weekly = mode.kind === 'weekly' && knowledge?.records?.weekly ? `\nDeepest this week: ${Math.max(knowledge.records.weekly.bestDepth, run.history.length)} of ${run.map.length}` : '';
+  return `${head}\n${end}\n${tiers}\n${spread}${weekly}`;
 }
 
 // Persist the run after every change so a closed tab can resume.
