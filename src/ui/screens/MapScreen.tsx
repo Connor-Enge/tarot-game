@@ -1,5 +1,9 @@
 import { useLayoutEffect, useRef, useState } from 'react';
-import { actOfLayer, canCut, currentAct, KIND_GLYPH, visitedNodes } from '../../engine';
+import { actOfLayer, canCut, currentAct, KIND_GLYPH, SCENES, SLOT_IDS, visitedNodes } from '../../engine';
+import { SceneArt } from '../art/scenes';
+import { Card } from '../components/Card';
+
+const TIER_MARK = { calamity: '✖', harm: '▽', neutral: '◇', boon: '△', triumph: '★' } as const;
 
 const ACT_NAMES = ['', 'The Shallows', 'The Deep', 'The Abyss'];
 import { useGame } from '../../store';
@@ -10,11 +14,12 @@ import { Stats } from '../components/Stat';
  * bottom. Nodes show only their kind glyph. Every node in a layer connects to
  * every node in the next.
  */
-export function MapScreen() {
+function MapScreenInner() {
   const run = useGame((s) => s.run)!;
   const chooseNode = useGame((s) => s.chooseNode);
   const cutDeck = useGame((s) => s.cutDeck);
   const [cutAt, setCutAt] = useState<number | null>(null);
+  const [peek, setPeek] = useState<number | null>(null); // history index
   const cuttable = canCut(run);
   const visited = visitedNodes(run);
   const visitedIds = new Set(visited.map((n) => n.id));
@@ -118,15 +123,16 @@ export function MapScreen() {
               {(li === 0 || actStart) && <div className="map__act">{ACT_NAMES[actOfLayer(li, run.actLayers)] ?? `Act ${actOfLayer(li, run.actLayers)}`}</div>}
               {layer.map((node, ni) => {
                 const wasHere = visitedIds.has(node.id);
+                const historyIndex = wasHere ? visited.findIndex((v) => v.id === node.id) : -1;
                 return (
                   <button
                     key={node.id}
                     type="button"
                     data-node={node.id}
                     className={`node node--${node.kind} ${wasHere ? 'node--visited' : ''} ${isCurrent ? 'node--choosable' : ''}`}
-                    disabled={!isCurrent}
-                    onClick={() => chooseNode(ni)}
-                    aria-label={`${node.kind} node`}
+                    disabled={!isCurrent && !wasHere}
+                    onClick={() => (isCurrent ? chooseNode(ni) : setPeek(historyIndex))}
+                    aria-label={wasHere ? `remember scene ${historyIndex + 1}` : `${node.kind} node`}
                   >
                     <span className="node__glyph">{KIND_GLYPH[node.kind]}</span>
                   </button>
@@ -136,10 +142,39 @@ export function MapScreen() {
           );
         })}
       </section>
+
+      {peek !== null && run.history[peek] && (
+        <div className="sheet" role="dialog" aria-label="a scene remembered" onClick={() => setPeek(null)}>
+          <div className="sheet__body" onClick={(ev) => ev.stopPropagation()}>
+            <SceneArt id={run.history[peek].sceneId} className="scene__art" />
+            <div className="sheet__title">
+              <span className="muted small">{peek + 1} · </span>
+              {SCENES[run.history[peek].sceneId].prompt}
+            </div>
+            <div className="journal__cards center-row">
+              {SLOT_IDS.map((sl) => (
+                <Card key={sl} cardId={run.history[peek].reading[sl].cardId} reversed={run.history[peek].reading[sl].reversed} size="xs" />
+              ))}
+            </div>
+            <p className={`narration__outcome tier--${run.history[peek].resolution.tier}`}>
+              {TIER_MARK[run.history[peek].resolution.tier]} {run.history[peek].resolution.narration.at(-1)}
+            </p>
+            <button className="btn" onClick={() => setPeek(null)}>
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
 
 function toRoman(n: number): string {
   return ['', 'I', 'II', 'III', 'IV'][n] ?? String(n);
+}
+
+/** Screens can linger for a crossfade after the run ends; render nothing without a run. */
+export function MapScreen() {
+  const run = useGame((s) => s.run);
+  return run ? <MapScreenInner /> : null;
 }

@@ -2,7 +2,7 @@ import { getRelic } from '../../engine';
 import { useGame } from '../../store';
 
 /** After a triumph: take one of two boons. Effects are stated plainly. */
-export function RelicScreen() {
+function RelicScreenInner() {
   const run = useGame((s) => s.run)!;
   const chooseRelic = useGame((s) => s.chooseRelic);
   if (run.phase.kind !== 'relic') return null;
@@ -24,4 +24,10 @@ export function RelicScreen() {
       </section>
     </main>
   );
+}
+
+/** Screens can linger for a crossfade after the run ends; render nothing without a run. */
+export function RelicScreen() {
+  const run = useGame((s) => s.run);
+  return run ? <RelicScreenInner /> : null;
 }

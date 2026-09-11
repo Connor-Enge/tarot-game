@@ -10,7 +10,7 @@ const TIER_MARK = { calamity: '✖', harm: '▽', neutral: '◇', boon: '△', t
  * Death or ascension. This is the ONE place meanings are handed to the player
  * unasked: the four cards on the table when it ended.
  */
-export function RunEndScreen() {
+function RunEndScreenInner() {
   const run = useGame((s) => s.run)!;
   const mode = useGame((s) => s.mode);
   const endRun = useGame((s) => s.endRun);
@@ -186,4 +186,10 @@ export function RunEndScreen() {
       </footer>
     </main>
   );
+}
+
+/** Screens can linger for a crossfade after the run ends; render nothing without a run. */
+export function RunEndScreen() {
+  const run = useGame((s) => s.run);
+  return run ? <RunEndScreenInner /> : null;
 }

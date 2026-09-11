@@ -5,7 +5,7 @@ import { useGame } from '../../store';
 import { Card } from '../components/Card';
 import { Stats } from '../components/Stat';
 
-export function ResolutionScreen() {
+function ResolutionScreenInner() {
   const run = useGame((s) => s.run)!;
   const advance = useGame((s) => s.advance);
   if (run.phase.kind !== 'resolved') return null;
@@ -69,3 +69,9 @@ export function ResolutionScreen() {
 }
 
 const fmt = (n: number) => (n > 0 ? `+${n}` : `${n}`);
+
+/** Screens can linger for a crossfade after the run ends; render nothing without a run. */
+export function ResolutionScreen() {
+  const run = useGame((s) => s.run);
+  return run ? <ResolutionScreenInner /> : null;
+}

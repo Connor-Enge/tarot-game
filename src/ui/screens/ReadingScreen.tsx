@@ -8,7 +8,7 @@ import { DeckSheet } from '../components/DeckSheet';
 import { RelicStrip } from '../components/RelicStrip';
 import { Stats } from '../components/Stat';
 
-export function ReadingScreen() {
+function ReadingScreenInner() {
   const run = useGame((s) => s.run)!;
   const lifted = useGame((s) => s.lifted);
   const lift = useGame((s) => s.lift);
@@ -59,7 +59,7 @@ export function ReadingScreen() {
           const chosen = slot && slot.chosen !== null ? slot.candidates[slot.chosen] : undefined;
           const isActive = i === run.activeSlot;
           return (
-            <div key={id} className={`seat ${isActive ? 'seat--active' : ''} ${chosen ? 'seat--filled' : ''}`}>
+            <div key={id} className={`seat ${isActive ? 'seat--active' : ''} ${chosen ? 'seat--filled' : ''}`} style={{ '--seat': i } as React.CSSProperties}>
               <div className="seat__glyph" title={seatsNamed ? SLOTS[id].role : undefined}>
                 {SLOTS[id].glyph}
               </div>
@@ -136,4 +136,10 @@ export function ReadingScreen() {
       )}
     </main>
   );
+}
+
+/** Screens can linger for a crossfade after the run ends; render nothing without a run. */
+export function ReadingScreen() {
+  const run = useGame((s) => s.run);
+  return run ? <ReadingScreenInner /> : null;
 }

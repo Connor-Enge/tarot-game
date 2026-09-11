@@ -36,6 +36,8 @@ export interface Knowledge {
   sigils?: string[];
   /** Cards that have sat in the same reading: "a|b" (sorted) -> count. */
   links?: Record<string, number>;
+  /** The final spread of the most recent run, for the title screen. */
+  last?: { cards: { cardId: string; reversed: boolean }[]; outcome: string; returned: boolean; when: number };
   /** Per-descent records. */
   records?: Record<string, { runs: number; returns: number; bestDepth: number; deepestReturn?: number }>;
   runs: number;
@@ -113,6 +115,10 @@ export function noteLinks(k: Knowledge, cardIds: string[]): Knowledge {
       links[key] = (links[key] ?? 0) + 1;
     }
   return { ...k, links };
+}
+
+export function noteLast(k: Knowledge, cards: { cardId: string; reversed: boolean }[], outcome: string, returned: boolean, when = Date.now()): Knowledge {
+  return { ...k, last: { cards: cards.map((c) => ({ cardId: c.cardId, reversed: c.reversed })), outcome, returned, when } };
 }
 
 export function noteCombos(k: Knowledge, ids: string[]): Knowledge {

@@ -174,6 +174,28 @@ const ART: Record<string, () => ReactElement> = {
       <circle cx={100} cy={34} r={24} fill={GOLD_FLAT} opacity={0.08} />
     </g>
   ),
+  orchard: () => (
+    <g>
+      {[24, 58, 92, 126, 160].map((x, i) => (
+        <g key={x}>
+          <Tree x={x} y={58} h={34 + (i % 2) * 6} fill={DARK} />
+          {[0, 1, 2].map((j) => (
+            <circle key={j} cx={x - 8 + j * 8} cy={40 + (j % 2) * 6} r={1.8} fill={GOLD_FLAT} opacity={0.85} />
+          ))}
+          <circle cx={x + 6} cy={57} r={1.6} fill={GOLD_FLAT} opacity={0.6} />
+        </g>
+      ))}
+    </g>
+  ),
+  toll: () => (
+    <g>
+      <path d="M0 60 L0 10 L60 30 L70 60 Z" fill={DARK} />
+      <path d="M200 60 L200 10 L140 30 L130 60 Z" fill={DARK} />
+      <Chain x={70} y={40} len={60} />
+      <Figure x={128} y={58} h={26} arms="hold" fill={DARK} cloak />
+      <ellipse cx={100} cy={57} rx={5} ry={2} fill={GOLD_FLAT} opacity={0.8} />
+    </g>
+  ),
   abyss: () => (
     <g>
       <rect x={0} y={0} width={200} height={60} fill="#060410" opacity={0.9} />
@@ -199,4 +221,3 @@ export function SceneArt({ id, className }: { id: string; className?: string }) 
 void Sun;
 void Water;
 void Pillar;
-void Chain;

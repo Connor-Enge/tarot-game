@@ -19,6 +19,7 @@ import {
   noteCombos,
   noteDeath,
   noteLinks,
+  noteLast,
   newSigils,
   noteRecord,
   noteSigils,
@@ -108,6 +109,7 @@ function learn(k: Knowledge, run: RunState, mode: RunMode): { knowledge: Knowled
     if (returned) next = noteAscension(next, finalSpread(run));
     else next = noteDeath(next, finalSpread(run));
     next = noteRecord(next, mode.kind === 'free' ? mode.descent : mode.kind, run.history.length, returned, mode.kind === 'free' ? (mode.depth ?? 0) : 0);
+    next = noteLast(next, finalSpread(run), last.resolution.narration.at(-1) ?? '', returned);
     earned = newSigils(run, next);
     next = noteSigils(next, earned);
   }

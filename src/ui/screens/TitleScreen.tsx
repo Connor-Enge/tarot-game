@@ -114,6 +114,17 @@ export function TitleScreen() {
         </div>
       </div>
       {k.runs === 0 ? <p className="muted small">The deck is unread.</p> : <ReaderMark knowledge={k} />}
+      {k.last && (
+        <div className="last" aria-label="your last reading">
+          <div className="muted small">{k.last.returned ? 'Last time, you came back.' : 'Last time, this ended you.'}</div>
+          <div className="last__cards">
+            {k.last.cards.map((c, i) => (
+              <Card key={`${c.cardId}-${i}`} cardId={c.cardId} reversed={c.reversed} size="xs" />
+            ))}
+          </div>
+          <div className="muted small last__outcome">{k.last.outcome}</div>
+        </div>
+      )}
       <div className="today" aria-label="card of the day">
         <Card cardId={today} size="xs" />
         <span className="muted small">Today's card · {getCard(today).name}</span>

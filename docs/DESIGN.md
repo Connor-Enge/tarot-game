@@ -282,9 +282,20 @@ star to see its bonds. Your readings, as a constellation.
 cups soft sine fifth, swords a sharp saw, pentacles low triangle, majors a
 two-note chord).
 
+**Memory of the road**: visited map nodes stay tappable and open a sheet
+with that scene's vignette, prompt, the four cards, and the outcome line.
+
+**Last reading**: the title screen remembers the final spread of the most
+recent run and whether it ended you or brought you back.
+
+**Idle spread**: empty seats drift gently; the active seat glyph breathes.
+
+Scenes: eighteen now (orchard, a rest scene in act one; the toll, a passage
+in act two).
+
 Queued:
-- Scene vignette on the map when a node is visited (memory of the road).
-- A "reading of the day" replay of a random past reading on the title.
+- A weekly leaderboard line in the share text (best depth this week).
+- Localization scaffolding for the card and scene text.
 
 ## Content debt
 
