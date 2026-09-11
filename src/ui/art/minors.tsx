@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 import type { Suit } from '../../engine';
-import { Cloud, Figure, GOLD_FLAT, Horse, INK, Mountains, PALE, SUIT_SYMBOL, Throne, Tree, Water } from './primitives';
+import { Cloud, Figure, Flame, GOLD_FLAT, Horse, INK, Mountains, PALE, Star, Sun, SUIT_SYMBOL, Throne, Tree, Water } from './primitives';
 
 /** Suit-specific ornament behind each Ace. */
 function AceFlourish({ suit }: { suit: Suit }) {
@@ -111,6 +111,43 @@ const RANK_MOTIF: Record<number, () => ReactElement> = {
   ),
 };
 
+/**
+ * Court dressing: what each suit's court carries around it. Wands under a
+ * hot sun with fire at their feet; Cups beside a fish and a shell; Swords
+ * under birds and wind; Pentacles among vines and a laden tree.
+ */
+const COURT_DRESSING: Record<Suit, () => ReactElement> = {
+  wands: () => (
+    <g>
+      <Sun x={14} y={16} r={6} rays={10} />
+      <Flame x={12} y={100} s={5} />
+      <Flame x={68} y={102} s={4} />
+    </g>
+  ),
+  cups: () => (
+    <g>
+      <path d="M8 90 q5 -4 10 0 q-5 4 -10 0 z M18 90 l4 -3 v6 z" fill={PALE} stroke={INK} strokeWidth={0.5} />
+      <path d="M62 104 a6 6 0 0 1 12 0 z" fill={PALE} stroke={INK} strokeWidth={0.5} />
+      <path d="M64 104 l4 -5 M68 104 l0 -6 M72 104 l-4 -5" stroke={INK} strokeWidth={0.4} />
+      <Star x={70} y={16} r={2.5} points={5} />
+    </g>
+  ),
+  swords: () => (
+    <g>
+      <path d="M8 16 l4 -3 l4 3 M18 22 l4 -3 l4 3 M60 12 l4 -3 l4 3" fill="none" stroke={INK} strokeWidth={0.8} strokeLinecap="round" />
+      <path d="M2 60 q8 -3 16 0 M60 70 q8 -3 16 0 M4 74 q6 -2 12 0" fill="none" stroke={PALE} strokeWidth={0.8} opacity={0.8} />
+    </g>
+  ),
+  pentacles: () => (
+    <g>
+      <Tree x={12} y={104} h={22} />
+      {[0, 1, 2].map((i) => <circle key={i} cx={8 + i * 4} cy={90 - (i % 2) * 4} r={1.3} fill={GOLD_FLAT} />)}
+      <path d="M62 104 q6 -14 14 -10 q-2 8 -8 10 M66 100 q8 -2 12 -8" fill="none" stroke={INK} strokeWidth={0.8} />
+      <path d="M70 96 q3 -5 7 -4 q-1 4 -7 4 z" fill={INK} opacity={0.6} />
+    </g>
+  ),
+};
+
 export function minorArt(suit: Suit, rank: number): ReactElement {
   const Sym = SUIT_SYMBOL[suit];
   const Scenery = SUIT_SCENERY[suit];
@@ -145,11 +182,13 @@ export function minorArt(suit: Suit, rank: number): ReactElement {
     );
   }
   // Court cards
+  const Dressing = COURT_DRESSING[suit];
   switch (rank) {
     case 11:
       return (
         <g>
           <Scenery />
+          <Dressing />
           <Figure x={34} y={98} h={48} arms="hold" />
           <Sym x={34} y={70} s={7} />
           <path d="M28 54 q6 2 12 0" fill="none" stroke={PALE} strokeWidth={0.8} />
@@ -159,6 +198,7 @@ export function minorArt(suit: Suit, rank: number): ReactElement {
       return (
         <g>
           <Scenery />
+          <Dressing />
           <Horse x={38} y={104} fill={PALE} w={52} />
           <Figure x={34} y={84} h={34} arms="right-up" />
           <Sym x={50} y={52} s={8} />
@@ -168,6 +208,7 @@ export function minorArt(suit: Suit, rank: number): ReactElement {
       return (
         <g>
           <Scenery />
+          <Dressing />
           <Throne x={40} y={98} w={32} h={38} fill={PALE} />
           <Figure x={40} y={98} h={50} arms="hold" cloak crown />
           <Sym x={40} y={76} s={7} />
@@ -177,6 +218,7 @@ export function minorArt(suit: Suit, rank: number): ReactElement {
       return (
         <g>
           <Scenery />
+          <Dressing />
           <Throne x={40} y={98} w={38} h={44} fill={INK} />
           <Figure x={40} y={98} h={52} arms="right-up" fill={PALE} crown />
           <Sym x={58} y={58} s={8} />
