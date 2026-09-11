@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { CARDS, COMBO_IDS, comboNote, getCard, getVow, KIND_GLYPH, SCENES, SIGILS, SLOT_IDS, SLOTS, type Tier } from '../../engine';
 import { SceneArt } from '../art/scenes';
 import { SigilToken } from '../art/sigil';
@@ -199,17 +199,43 @@ export function CodexScreen() {
 
       <section className="codex__grid">
         {shown.length === 0 && <p className="muted small">Nothing here yet.</p>}
-        {shown.map((c) => {
-          const e = k.cards[c.id];
-          const tier: Tier = e?.tier ?? 0;
-          const seen = !!e || !!k.dealt?.[c.id];
-          return (
-            <button key={c.id} type="button" className={`codex__cell codex__cell--t${tier} ${!e && seen ? 'codex__cell--dealt' : ''}`} onClick={() => seen && openCodex(c.id)} disabled={!seen} aria-label={seen ? c.name : 'unread card'}>
-              <Card cardId={c.id} size="xs" faceDown={!seen} />
-              {tier > 0 && <span className={`codex__dot codex__dot--t${tier}`} />}
-            </button>
-          );
-        })}
+        {(() => {
+          const cell = (c: (typeof shown)[number]) => {
+            const e = k.cards[c.id];
+            const tier: Tier = e?.tier ?? 0;
+            const seen = !!e || !!k.dealt?.[c.id];
+            return (
+              <button key={c.id} type="button" className={`codex__cell codex__cell--t${tier} ${!e && seen ? 'codex__cell--dealt' : ''}`} onClick={() => seen && openCodex(c.id)} disabled={!seen} aria-label={seen ? c.name : 'unread card'}>
+                <Card cardId={c.id} size="xs" faceDown={!seen} />
+                {tier > 0 && <span className={`codex__dot codex__dot--t${tier}`} />}
+              </button>
+            );
+          };
+          // In deck order with no filter, the grid reads as a catalogue: five groups, each under a ruled header.
+          if (sort !== 'deck' || suit !== 'all' || q) return shown.map(cell);
+          const GROUPS: { key: string; name: string; glyph: string; of: (c: (typeof shown)[number]) => boolean }[] = [
+            { key: 'major', name: 'Major Arcana', glyph: '✦', of: (c) => c.arcana === 'major' },
+            { key: 'wands', name: 'Wands', glyph: '⚚', of: (c) => c.suit === 'wands' },
+            { key: 'cups', name: 'Cups', glyph: '♆', of: (c) => c.suit === 'cups' },
+            { key: 'swords', name: 'Swords', glyph: '⚔', of: (c) => c.suit === 'swords' },
+            { key: 'pentacles', name: 'Pentacles', glyph: '⛤', of: (c) => c.suit === 'pentacles' },
+          ];
+          return GROUPS.map((g) => {
+            const cards = shown.filter(g.of);
+            if (cards.length === 0) return null;
+            const read = cards.filter((c) => k.cards[c.id]).length;
+            return (
+              <Fragment key={g.key}>
+                <div className={`codex__group codex__group--${g.key}`} role="heading" aria-level={3}>
+                  <span className="codex__group-glyph" aria-hidden>{g.glyph}</span>
+                  <span>{g.name}</span>
+                  <span className="codex__group-count">{read} / {cards.length}</span>
+                </div>
+                {cards.map(cell)}
+              </Fragment>
+            );
+          });
+        })()}
       </section>
 
       </>)}

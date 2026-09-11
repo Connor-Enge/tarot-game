@@ -1673,3 +1673,17 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .descent-chip--locked { opacity: 0.85; }
 .descent-chip__back--sealed { opacity: 0.22; filter: grayscale(0.8); }
 .descent-chip__lock { position: relative; z-index: 1; width: 15px; height: 19px; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.8)); opacity: 0.8; }
+
+/* --- the Codex grid as a catalogue: ruled suit headers ---------------------- */
+.codex__group {
+  grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; margin-top: 8px;
+  font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold);
+}
+.codex__group:first-child { margin-top: 0; }
+.codex__group::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(214,178,94,0.45), transparent); }
+.codex__group-glyph { font-size: 0.9rem; opacity: 0.9; }
+.codex__group-count { font-variant-numeric: tabular-nums; color: var(--muted); letter-spacing: 0.04em; }
+.codex__group--wands .codex__group-glyph { color: #e0a068; }
+.codex__group--cups .codex__group-glyph { color: #8fc3e0; }
+.codex__group--swords .codex__group-glyph { color: #d8d9e8; }
+.codex__group--pentacles .codex__group-glyph { color: #a9c98a; }
