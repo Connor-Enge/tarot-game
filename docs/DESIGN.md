@@ -2,7 +2,9 @@
 
 Contents: [Pitch](#the-pitch-in-one-breath) · [Pillars](#pillars) ·
 [Core loop](#core-loop) · [Knowledge](#knowledge-the-codex) ·
-[Systems, as built](#systems-as-built) · [Balance](#balance) ·
+[Systems, as built](#systems-as-built) · [Daily weather](#daily-weather) ·
+[Signature](#signature) · [Turn](#turn) · [The Stranger](#the-strangers-trade) ·
+[Vows](#vows) · [Balance](#balance) · [Authoring a scene](#authoring-a-scene) ·
 [Content debt](#content-debt) · [Open questions](#open-questions)
 
 Working title. A mobile-first roguelike built on one mechanic: **the four-seat spread**.
@@ -459,7 +461,12 @@ Every surface that can show text about a card, and what gates it:
 | Witnessed omens, the book, dreams, Study | omen lines | only orientations watched resolve |
 | Seat memory, Ledger, best seat | counts and outcomes | consequence, not meaning |
 | Foretell | a scene's place line | costs Clarity; not a card |
-| Relics, sigils, descents, depths | rules | stated plainly, by design |
+| Relics, sigils, descents, depths, vows, weather, trades | rules | stated plainly, by design |
+| Turn | flips orientation; shows nothing | costs Clarity; the player supplies the suspicion |
+| Signature | a card the player chose, sealed on its face | tier 3, the player's own knowledge |
+| Wear, places, the road, bonds | how often, where, beside what | consequence and history, never meaning |
+| Named-reading ribbon | the combo's note | consequence line, like an omen |
+| Dream (rest scenes) | a witnessed omen of another card | only omens already witnessed |
 
 ## Daily weather
 
@@ -587,6 +594,8 @@ a hoarder's spare clarity is not a free heal.
   `engine/minorText.ts` (112 omen lines, 112 meanings). A test asserts every
   omen is distinct.
 - **Scenes**: 24 exist (23 plus the Abyss). Aim for 30+ across three acts. Latest: wolves, the lighthouse, the tomb.
+- **Named readings**: 24. Each is a memorable line, never a definition.
+- **Vows**: 6. **Weathers**: 9. **Trades**: 3. **Sigils**: 18.
 - **Combos**: 24 named readings exist. This is the richest vein for "the
   combined meaning" and should keep growing with named, memorable results.
 - **Art**: all 78 faces are procedural SVG (`src/ui/art/`). Majors are

@@ -27,9 +27,19 @@ Open `?gallery` on the dev server to see all 78 card faces at once.
   dealt per seat, one chosen. Scored against the scene's hidden affinities
   plus named combos. Narration is four omens and an outcome, never a
   definition.
-- **The descent.** A layered map with two acts and the Abyss, eighteen
+- **The descent.** A layered map with two acts and the Abyss, twenty-four
   scenes with illustrated vignettes, relics found and inflicted, marks that
-  charge or scar cards, an echo that follows you, and a deck you can cut.
+  charge or scar cards, an echo that follows you, a deck you can cut, act
+  banners, and a walked road drawn with footprints.
+- **Twenty-four named readings.** Combinations across seats that earn a line
+  of their own on a gold ribbon: after the fall, a light.
+- **Daily weather.** Every Daily carries one of nine named conditions, drawn
+  on the backdrop as rain, haze, lantern light, or falling salt.
+- **A deck that ages.** Cards you read often pick up foxing and creases. The
+  title fan becomes your own most-read cards with your signature in the middle.
+- **Art everywhere.** Procedural SVG for all 78 faces (rank motifs behind the
+  pips, suit-dressed courts), scene vignettes, relic and vow tokens, sigil
+  medallions, tier flourishes, tonight's real moon on the title.
 - **The Codex.** Meanings unlock by play and by death. Seat memory, witnessed
   omens, the Book of Omens, a constellation of every reading, Study mode,
   sigils, a Ledger, and search. Export it to another device.
