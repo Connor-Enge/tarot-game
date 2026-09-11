@@ -50,11 +50,22 @@ export function CodexDetail({ cardId, onClose }: { cardId: string; onClose: () =
   return (
     <div className="sheet" role="dialog" aria-label={card.name} onClick={onClose}>
       <div className="sheet__body" onClick={(ev) => ev.stopPropagation()}>
-        <div className="sheet__card" title="Tap to turn the card">
+        <div className={`sheet__card sheet__card--${card.arcana === 'major' ? 'major' : card.suit}`} title="Tap to turn the card">
           <Card cardId={cardId} size="lg" reversed={flipped} onClick={() => setFlipped((f) => !f)} />
         </div>
         <div className="sheet__title">
-          {card.name} <span className="pill">{TIER_LABEL[tier]}</span>
+          {card.name}
+        </div>
+        <div className={`tierline tierline--${tier}`} aria-label={`${TIER_LABEL[tier]}`}>
+          <span className="tierline__rule" aria-hidden />
+          <span className="tierline__dots" aria-hidden>
+            {[1, 2, 3].map((t) => <i key={t} className={t <= tier ? 'tierline__dot tierline__dot--on' : 'tierline__dot'} />)}
+          </span>
+          <span className="tierline__label">{TIER_LABEL[tier]}</span>
+          <span className="tierline__dots" aria-hidden>
+            {[1, 2, 3].map((t) => <i key={t} className={t <= tier ? 'tierline__dot tierline__dot--on' : 'tierline__dot'} />)}
+          </span>
+          <span className="tierline__rule" aria-hidden />
         </div>
         {nothing && <p className="muted">{k.dealt?.[cardId] ? 'It has passed through your hands. You have not read it.' : 'You have not read this card yet.'}</p>}
         {flipped && tier < 3 && <p className="muted small">Turned. What it means this way, you have not earned.</p>}
@@ -72,10 +83,24 @@ export function CodexDetail({ cardId, onClose }: { cardId: string; onClose: () =
         )}
         {tier >= 3 && k.signature !== cardId && <p className="muted small center">A signature is dealt, upright, into the first Vessel of every free descent.</p>}
         {(witnessed(k, cardId, false) || witnessed(k, cardId, true)) && (
-          <div className="sheet__omens">
-            <div className="muted small">What you have seen it do</div>
-            {witnessed(k, cardId, false) && <p className="narration__omen">{card.omen.upright}</p>}
-            {witnessed(k, cardId, true) && <p className="narration__omen">{card.omen.reversed}</p>}
+          <div className="sheet__omens omens">
+            <span className="omens__fleuron omens__fleuron--tl" aria-hidden>❧</span>
+            <span className="omens__fleuron omens__fleuron--tr" aria-hidden>❧</span>
+            <span className="omens__fleuron omens__fleuron--bl" aria-hidden>❧</span>
+            <span className="omens__fleuron omens__fleuron--br" aria-hidden>❧</span>
+            <div className="omens__head muted small">What you have seen it do</div>
+            {witnessed(k, cardId, false) && (
+              <p className="omens__line">
+                <span className="omens__mark" aria-hidden>↑</span>
+                <em>{card.omen.upright}</em>
+              </p>
+            )}
+            {witnessed(k, cardId, true) && (
+              <p className="omens__line omens__line--rev">
+                <span className="omens__mark" aria-hidden>↓</span>
+                <em>{card.omen.reversed}</em>
+              </p>
+            )}
           </div>
         )}
         {best && (
