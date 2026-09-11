@@ -1798,3 +1798,32 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .node__rite--moonlit { color: #bfe6f5; border-color: rgba(120,190,220,0.6); }
 .node__rite--ember { color: #f0c27a; }
 .reduce-motion .node__rite { animation: none; }
+
+/* --- map art pass: kind-tinted doors, depth fog, the Abyss as a vortex ------- */
+.node--threat.node--choosable { border-color: rgba(240,160,158,0.8); box-shadow: 0 0 0 2px rgba(11,10,18,0.9), 0 0 0 3px rgba(240,160,158,0.28), 0 6px 14px rgba(0,0,0,0.5), 0 0 16px rgba(220,90,80,0.2); }
+.node--threat.node--choosable::before { background: radial-gradient(circle at 42% 36%, rgba(240,160,158,0.22), rgba(60,10,10,0.45) 72%); }
+.node--threat.node--choosable::after { border-color: rgba(240,160,158,0.8); }
+.node--rest.node--choosable { border-color: rgba(169,224,184,0.8); box-shadow: 0 0 0 2px rgba(11,10,18,0.9), 0 0 0 3px rgba(169,224,184,0.28), 0 6px 14px rgba(0,0,0,0.5), 0 0 16px rgba(90,180,120,0.2); }
+.node--rest.node--choosable::before { background: radial-gradient(circle at 42% 36%, rgba(169,224,184,0.22), rgba(10,40,20,0.45) 72%); }
+.node--rest.node--choosable::after { border-color: rgba(169,224,184,0.8); }
+.node--mystery.node--choosable { border-color: rgba(201,184,242,0.8); box-shadow: 0 0 0 2px rgba(11,10,18,0.9), 0 0 0 3px rgba(201,184,242,0.28), 0 6px 14px rgba(0,0,0,0.5), 0 0 16px rgba(140,100,220,0.22); }
+.node--mystery.node--choosable::before { background: radial-gradient(circle at 42% 36%, rgba(201,184,242,0.22), rgba(30,10,50,0.45) 72%); }
+.node--mystery.node--choosable::after { border-color: rgba(201,184,242,0.8); }
+.node--passage.node--choosable { color: var(--gold-2); }
+
+.map__layer--far .node { opacity: 0.7; filter: saturate(0.6); }
+.map__layer--deep .node { opacity: 0.45; filter: saturate(0.4) blur(0.5px); }
+.map__layer--far .map__act { opacity: 0.7; }
+
+.node--abyss { overflow: visible; }
+.node--abyss::after {
+  content: ''; position: absolute; inset: -7px; border-radius: 50%; pointer-events: none; z-index: -1;
+  background: conic-gradient(from 0deg, transparent 0 40%, rgba(214,178,94,0.35) 50%, transparent 60%, transparent 85%, rgba(140,100,220,0.3) 92%, transparent 100%);
+  -webkit-mask: radial-gradient(circle, transparent 58%, #000 60%, #000 100%);
+  mask: radial-gradient(circle, transparent 58%, #000 60%, #000 100%);
+  animation: abyss-vortex 14s linear infinite;
+}
+.node--abyss.node--choosable::after { animation-duration: 6s; border: none; inset: -9px; }
+@keyframes abyss-vortex { to { transform: rotate(360deg); } }
+.node--abyss .node__glyph { text-shadow: 0 0 10px rgba(214,178,94,0.5); }
+.reduce-motion .node--abyss::after { animation: none; }

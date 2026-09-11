@@ -125,7 +125,11 @@ Ideas queued:
 Each entry names the file that owns it. Together with *Core loop* and
 *Knowledge* above, this is the whole game.
 
-**The map** (`buildMap` in `scenes.ts`): two acts of four layers each, then
+**The map** (art pass: choosable doors are tinted by kind, red for
+threat, green for rest, violet for mystery, gold for passage; layers
+more than one ahead fade and desaturate, and the deepest blur a touch,
+so the road falls away into fog; the Abyss wears a slow-turning vortex
+ring that quickens when it is the door in front of you) (`buildMap` in `scenes.ts`): two acts of four layers each, then
 the Abyss. Every layer holds 2-3 nodes and every node connects to every node
 in the next layer. Nodes show only a *kind* glyph (threat ⚔, passage ⛩,
 mystery ✧, rest ♨, abyss ◉), never the scene. Scenes have a `minAct` so the

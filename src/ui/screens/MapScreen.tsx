@@ -266,7 +266,7 @@ function MapScreenInner() {
           const actStart = li > 0 && (cl === 0 || actHere !== actOfLayer(cl - 1, run.actLayers));
           const label = inWell && cl === 0 ? `The Well · ${toRoman(Math.floor(li / cycle) + 1)}` : ACT_NAMES[actHere] ?? `Act ${actHere}`;
           return (
-            <div key={li} className={`map__layer ${isCurrent ? 'map__layer--current' : ''} ${isPast ? 'map__layer--past' : ''} ${actStart ? 'map__layer--act' : ''}`}>
+            <div key={li} className={`map__layer ${isCurrent ? 'map__layer--current' : ''} ${isPast ? 'map__layer--past' : ''} ${actStart ? 'map__layer--act' : ''} ${li > run.layer + 1 ? 'map__layer--far' : ''} ${li > run.layer + 3 ? 'map__layer--deep' : ''}`}>
               {(li === 0 || actStart) && (
                 <div className="map__act">
                   <ActMark act={actHere} well={inWell && cl === 0} className="map__act-mark" />
