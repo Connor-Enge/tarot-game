@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { reckon, reckoningText, resolveReading, tallyText } from '../resolve';
+import { readingSoFar, reckon, reckoningText, resolveReading, tallyText } from '../resolve';
 import { SCENES, SLOT_POSITION } from '../scenes';
 
 describe('the reckoning', () => {
@@ -39,5 +39,25 @@ describe('the reckoning', () => {
     expect(SLOT_POSITION.wake.n).toBe(3);
     expect(SLOT_POSITION.hand.n).toBe(4);
     for (const p of Object.values(SLOT_POSITION)) expect(p.question.endsWith('?')).toBe(true);
+  });
+});
+
+describe('the reading so far', () => {
+  const scene = SCENES.crossing;
+  const cards = [{ slot: 'vessel' as const, drawn: { cardId: 'major-0', reversed: false } }, { slot: 'threshold' as const, drawn: { cardId: 'major-16', reversed: true } }, { slot: 'wake' as const, drawn: { cardId: 'cups-10', reversed: false } }, { slot: 'hand' as const, drawn: { cardId: 'wands-1', reversed: false } }];
+  it('scores each placed seat at once, and the running total matches the final fit', () => {
+    const none = readingSoFar(scene, []);
+    expect(none.placed).toBe(0);
+    expect(none.total).toBe(0);
+    expect(none.tier).toBe('neutral');
+    const two = readingSoFar(scene, cards.slice(0, 2));
+    expect(two.placed).toBe(2);
+    expect(two.seats[1].reckoning.reversed).toBe(true);
+    expect(two.seats[1].omen).toBe(two.seats[1].card.omen.reversed);
+    const all = readingSoFar(scene, cards);
+    const full = resolveReading(scene, { vessel: cards[0].drawn, threshold: cards[1].drawn, wake: cards[2].drawn, hand: cards[3].drawn });
+    const fit = full.slots.reduce((a, s) => a + s.score, 0);
+    expect(all.total).toBeCloseTo(fit);
+    for (let i = 0; i < 4; i++) expect(all.seats[i].score).toBe(full.slots[i].score);
   });
 });

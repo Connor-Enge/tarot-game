@@ -390,17 +390,43 @@ export interface SlotReckoning {
   charged: boolean;
 }
 
+/** The reckoning of one scored seat. */
+export function reckonSlot(scene: Scene, s: SlotResolution, marks: Marks = {}): SlotReckoning {
+  const aff = scene.affinity[s.slot];
+  const entries = Object.entries(aff) as [Tag, number][];
+  const wanted = entries.filter(([, w]) => w > 0).sort((a, b) => b[1] - a[1]).map(([t]) => t);
+  const feared = entries.filter(([, w]) => w < 0).sort((a, b) => a[1] - b[1]).map(([t]) => t);
+  const met = s.hits.filter((h) => h.weight > 0).map((h) => h.tag);
+  const against = s.hits.filter((h) => h.weight < 0).map((h) => h.tag);
+  const verdict = s.score >= 1 ? 'helped' : s.score <= -1 ? 'hurt' : 'neither';
+  return { slot: s.slot, score: s.score, verdict, wanted, feared, met, against, reversed: s.reversed, charged: marks[s.card.id] === 'charged' };
+}
+
 export function reckon(scene: Scene, resolution: Resolution, marks: Marks = {}): SlotReckoning[] {
-  return resolution.slots.map((s) => {
-    const aff = scene.affinity[s.slot];
-    const entries = Object.entries(aff) as [Tag, number][];
-    const wanted = entries.filter(([, w]) => w > 0).sort((a, b) => b[1] - a[1]).map(([t]) => t);
-    const feared = entries.filter(([, w]) => w < 0).sort((a, b) => a[1] - b[1]).map(([t]) => t);
-    const met = s.hits.filter((h) => h.weight > 0).map((h) => h.tag);
-    const against = s.hits.filter((h) => h.weight < 0).map((h) => h.tag);
-    const verdict = s.score >= 1 ? 'helped' : s.score <= -1 ? 'hurt' : 'neither';
-    return { slot: s.slot, score: s.score, verdict, wanted, feared, met, against, reversed: s.reversed, charged: marks[s.card.id] === 'charged' };
+  return resolution.slots.map((s) => reckonSlot(scene, s, marks));
+}
+
+/**
+ * The reading so far: the seats placed up to now, each scored and reckoned
+ * the moment it lands, with the running total and the tier it would read
+ * as if the rest changed nothing. Named readings settle only at the end,
+ * so the final tally can still move.
+ */
+export interface ReadingSoFar {
+  seats: { slot: SlotId; card: Card; score: number; reckoning: SlotReckoning; omen: string }[];
+  total: number;
+  tier: OutcomeTier;
+  /** How many of the four are placed. */
+  placed: number;
+}
+
+export function readingSoFar(scene: Scene, placed: { slot: SlotId; drawn: DrawnCard }[], marks: Marks = {}, chargedBonus = CHARGED_BONUS): ReadingSoFar {
+  const seats = placed.map(({ slot, drawn }) => {
+    const s = scoreSlot(scene, slot, drawn, marks, chargedBonus);
+    return { slot, card: s.card, score: s.score, reckoning: reckonSlot(scene, s, marks), omen: drawn.reversed ? s.card.omen.reversed : s.card.omen.upright };
   });
+  const total = seats.reduce((a, x) => a + x.score, 0);
+  return { seats, total, tier: tierFor(total), placed: seats.length };
 }
 
 const list = (tags: readonly string[]) => (tags.length === 0 ? '' : tags.length === 1 ? tags[0] : `${tags.slice(0, -1).join(', ')} and ${tags[tags.length - 1]}`);

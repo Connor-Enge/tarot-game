@@ -90,6 +90,20 @@ decides what the crossing really is by what they put in the Threshold, and
 what they do about it by what they put in the Hand. The reading doesn't
 predict the scene; it authors it.
 
+### Every card answers at once
+
+Owner's request: consequences should land on each placement, not only
+after all four. So the moment a card lands in a seat it is scored and
+reckoned (`readingSoFar`): the seat shows its score chip, a plate under
+the spread shows that card's omen line and its reckoning sentence, and
+a five-band meter (calamity to triumph) moves a pin to the running
+total with "reads as boon if nothing else moves it". Vitality and
+Clarity still settle when the fourth card lands, because the tier is a
+threshold on the whole, and named readings settle only then too. What
+changes is that the fourth card is never a surprise: you watch the
+reading tip with each choice, and can redraw, whisper, turn or hold
+knowing exactly what the last seat needs.
+
 ### The 3-of-1 choice
 
 Each seat deals three face-up cards. Face-up matters: the player sees the

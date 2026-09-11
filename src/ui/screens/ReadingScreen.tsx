@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSettings } from '../../settings';
-import { activeSlotState, canTakeBack, canWhisperHere, currentScene, RITES, SLOT_POSITION, getCard, hasRelic, redrawCost, sceneNumber, scoreSlot, SLOT_IDS, SLOTS, totalScenes, whisperCost, whisperWords } from '../../engine';
+import { activeSlotState, canTakeBack, canWhisperHere, currentScene, readingSoFar, reckoningText, RITES, SLOT_POSITION, THRESHOLDS, getCard, hasRelic, redrawCost, sceneNumber, scoreSlot, SLOT_IDS, SLOTS, totalScenes, whisperCost, whisperWords } from '../../engine';
 
 /** Dev only: show the oracle's score on each candidate when the page is opened with ?oracle. */
 const ORACLE = import.meta.env.DEV && typeof location !== 'undefined' && location.search.includes('oracle');
@@ -86,6 +86,15 @@ function ReadingScreenInner() {
   const bell = hasRelic(run, 'bell');
   // Re-key the hand when the candidates change so the deal animation replays.
   const handKey = active.candidates.map((c) => c.cardId).join('|');
+  // Every placed card answers at once: its score, its omen, and what the seat made of it.
+  const soFar = readingSoFar(
+    scene,
+    run.slots.filter((sl) => sl.chosen !== null).map((sl) => ({ slot: sl.slot, drawn: sl.candidates[sl.chosen!] })),
+    run.marks,
+    hasRelic(run, 'ring') ? 2 : undefined,
+  );
+  const lastPlaced = soFar.seats[soFar.seats.length - 1];
+  const soFarBySlot = Object.fromEntries(soFar.seats.map((x) => [x.slot, x]));
 
   return (
     <main className={`screen screen--reading ${scene.terminal ? 'screen--abyss' : ''}`}>
@@ -153,11 +162,35 @@ function ReadingScreenInner() {
               <div className="seat__pos" title={SLOT_POSITION[id].gloss}>
                 <span className="seat__pos-n">{SLOT_POSITION[id].n}</span> {SLOT_POSITION[id].role}
               </div>
+              {soFarBySlot[id] && (
+                <span className={`seat__score reckon__score reckon--${soFarBySlot[id].reckoning.verdict}`} key={`score-${soFarBySlot[id].card.id}`}>
+                  {soFarBySlot[id].score > 0 ? '+' : soFarBySlot[id].score < 0 ? '−' : ''}{Math.abs(soFarBySlot[id].score) % 1 === 0 ? Math.abs(soFarBySlot[id].score) : Math.abs(soFarBySlot[id].score).toFixed(1)}
+                </span>
+              )}
               {seatsNamed && <div className="seat__name">{SLOTS[id].name.replace(/^The /, '')}</div>}
             </div>
           );
         })}
       </section>
+      {lastPlaced && (
+        <div className={`sofar sofar--${soFar.tier}`} key={`sofar-${lastPlaced.card.id}-${soFar.placed}`} aria-live="polite">
+          <p className="sofar__answer">
+            <span className="sofar__omen">{lastPlaced.omen}</span>
+            <span className={`reckon reckon--${lastPlaced.reckoning.verdict} sofar__reckon`}>
+              <span className="reckon__text">{reckoningText(lastPlaced.reckoning, lastPlaced.card.name)}</span>
+            </span>
+          </p>
+          <div className="sofar__meter" role="img" aria-label={`reading so far: ${soFar.total > 0 ? '+' : ''}${soFar.total}, reads as ${soFar.tier}`}>
+            {(['calamity', 'harm', 'neutral', 'boon', 'triumph'] as const).map((t) => (
+              <span key={t} className={`sofar__band sofar__band--${t} ${soFar.tier === t ? 'sofar__band--on' : ''}`} />
+            ))}
+            <span className="sofar__pin" style={{ left: `${Math.max(2, Math.min(98, ((soFar.total - (THRESHOLDS.harm - 3)) / ((THRESHOLDS.triumph + 3) - (THRESHOLDS.harm - 3))) * 100))}%` }} aria-hidden />
+          </div>
+          <p className="sofar__tally muted small center">
+            {soFar.placed} of 4 placed · {soFar.total > 0 ? '+' : soFar.total < 0 ? '−' : ''}{Math.abs(soFar.total) % 1 === 0 ? Math.abs(soFar.total) : Math.abs(soFar.total).toFixed(1)} so far · reads as <strong>{soFar.tier}</strong>{soFar.placed < 4 ? ' if nothing else moves it' : ''}
+          </p>
+        </div>
+      )}
       {run.held && (
         <p className="held-note muted small center">
           <span className="held-note__glyph" aria-hidden>⌖</span> {getCard(run.held.cardId).name} held for the next seat

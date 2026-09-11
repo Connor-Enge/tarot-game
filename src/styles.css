@@ -1963,3 +1963,22 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .codex__combo-score { margin-left: auto; font-size: 0.75rem; padding: 1px 7px; border-radius: 999px; border: 1px solid rgba(214,178,94,0.5); color: var(--gold-2); font-variant-numeric: tabular-nums; }
 .codex__combo-score--ill { border-color: rgba(214,96,94,0.55); color: #f0a09e; }
 .codex__combo--ill em { color: #e0a39a; }
+
+/* --- every card answers at once: the seat's score, and the reading so far ------ */
+.seat__score { margin-top: 2px; font-size: 0.72rem; animation: stamp-in 500ms cubic-bezier(0.2, 0.9, 0.3, 1.2) both; }
+.sofar { margin: 6px 0 0; padding: 8px 12px 6px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(214,178,94,0.16); animation: fade-in 400ms ease both; }
+.sofar__answer { margin: 0 0 6px; display: flex; flex-direction: column; gap: 4px; }
+.sofar__omen { font-style: italic; color: var(--ink); }
+.sofar__reckon { font-size: 0.8rem; }
+.sofar__meter { position: relative; display: flex; gap: 2px; height: 8px; margin: 4px 0; }
+.sofar__band { flex: 1; border-radius: 4px; background: rgba(233,228,242,0.08); transition: background 300ms ease; }
+.sofar__band--on.sofar__band--calamity { background: var(--vit); }
+.sofar__band--on.sofar__band--harm { background: #b0453f; }
+.sofar__band--on.sofar__band--neutral { background: #8a8ea0; }
+.sofar__band--on.sofar__band--boon { background: var(--gold); }
+.sofar__band--on.sofar__band--triumph { background: var(--gold-2); box-shadow: 0 0 10px rgba(243,220,138,0.6); }
+.sofar__pin { position: absolute; top: -4px; width: 2px; height: 16px; background: #fff; border-radius: 1px; transform: translateX(-50%); transition: left 500ms cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: 0 0 6px rgba(255,255,255,0.7); }
+.sofar__tally { margin: 2px 0 0; }
+.sofar--calamity { border-color: rgba(214,96,94,0.35); }
+.sofar--triumph { border-color: rgba(243,220,138,0.45); }
+.reduce-motion .seat__score, .reduce-motion .sofar { animation: none; }
