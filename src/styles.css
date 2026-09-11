@@ -37,7 +37,7 @@ body {
   pointer-events: none;
 }
 .ambient { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-.view { position: relative; z-index: 1; min-height: 100%; animation: view-in 360ms ease both; }
+.view { position: relative; z-index: 1; min-height: 100%; animation: view-in 360ms ease; } /* no fill: a lingering transform would trap fixed sheets inside the view */
 .view--out { position: absolute; inset: 0; z-index: 0; animation: view-out 260ms ease both; pointer-events: none; }
 @keyframes view-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 @keyframes view-out { from { opacity: 1; } to { opacity: 0; } }
@@ -1191,3 +1191,21 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .sky__live { animation: live-ring 2.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
 @keyframes live-ring { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
 .reduce-motion .sky__live { animation: none; opacity: 0.8; }
+
+/* --- memory sheet: paging along the road ----------------------------------- */
+.sheet__nav { display: grid; grid-template-columns: 44px 1fr 44px; gap: 8px; align-items: center; }
+.sheet__nav .btn--small { padding: 8px 0; font-size: 1.2rem; line-height: 1; }
+.memory__where { position: absolute; left: 10px; bottom: 6px; opacity: 0.8; }
+.memory__cards { gap: 8px; }
+.memory__seat { display: inline-flex; flex-direction: column; align-items: center; gap: 2px; animation: rise 420ms cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.memory__glyph { font-size: 0.7rem; color: var(--gold); opacity: 0.8; }
+.memory__named { font-style: italic; color: var(--gold-2); margin: -4px 0 0; }
+.sheet__body--telling { animation: rise 320ms cubic-bezier(0.2, 0.8, 0.2, 1) both, memory-glow 1.9s ease-in-out both; }
+@keyframes memory-glow { 0%, 100% { box-shadow: 0 -6px 30px rgba(214,178,94,0); } 40% { box-shadow: 0 -6px 30px rgba(214,178,94,0.25); } }
+.road--pick .road__stop { cursor: pointer; }
+.road--pick .road__stop:focus-visible { outline: none; }
+.road--pick .road__stop:focus-visible circle:first-of-type { stroke: var(--gold-2); }
+.road__stop--on circle { filter: drop-shadow(0 0 4px rgba(243,220,138,0.6)); }
+.road__ring { transform-box: fill-box; transform-origin: center; animation: ring-breathe 1.9s ease-in-out infinite; }
+@keyframes ring-breathe { 0%, 100% { transform: scale(0.85); opacity: 0.4; } 50% { transform: scale(1.1); opacity: 1; } }
+.road-block__hint { margin: 4px 0 0; display: flex; justify-content: center; align-items: center; gap: 6px; flex-wrap: wrap; }

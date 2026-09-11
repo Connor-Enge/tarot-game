@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getCard, getDescent, getVow, getWeather, KIND_GLYPH, SCENES, SIGILS, SLOT_IDS, SLOTS } from '../../engine';
 import { shareText, useGame } from '../../store';
 import { Card } from '../components/Card';
@@ -7,6 +7,9 @@ import { SigilToken } from '../art/sigil';
 import { RoadStrip } from '../art/road';
 import { EndArt } from '../art/scenes';
 import { renderSpreadImage } from '../art/render';
+import { MemorySheet } from '../components/Memory';
+import { useSettings } from '../../settings';
+import { sfx } from '../../audio';
 
 const TIER_MARK = { calamity: '✖', harm: '▽', neutral: '◇', boon: '△', triumph: '★' } as const;
 
@@ -27,6 +30,27 @@ function RunEndScreenInner() {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [replay, setReplay] = useState(0);
   const [busy, setBusy] = useState(false);
+  const [peek, setPeek] = useState<number | null>(null);
+  const [telling, setTelling] = useState(false);
+  const readingSpeed = useSettings((s) => s.readingSpeed);
+  const scenes = run.history.length;
+  // Retelling walks the road one stop at a time and stops at the end.
+  useEffect(() => {
+    if (!telling) return;
+    const pace = readingSpeed === 'slow' ? 1.6 : readingSpeed === 'fast' ? 0.6 : 1;
+    const t = window.setTimeout(() => {
+      setPeek((p) => {
+        const next = (p ?? -1) + 1;
+        if (next >= scenes) {
+          setTelling(false);
+          return p;
+        }
+        sfx.page();
+        return next;
+      });
+    }, peek === null ? 200 : 1900 * pace);
+    return () => window.clearTimeout(t);
+  }, [telling, peek, scenes, readingSpeed]);
   if (run.phase.kind !== 'dead' && run.phase.kind !== 'ascended') return null;
   const dead = run.phase.kind === 'dead';
   const last = run.history[run.history.length - 1];
@@ -163,7 +187,15 @@ function RunEndScreenInner() {
         </section>
       ) : (
         <section className="journal">
-          <div className="rise"><RoadStrip run={run} /></div>
+          <div className="rise road-block">
+            <RoadStrip run={run} onPick={(i) => { setTelling(false); setPeek(i); }} active={peek} />
+            <p className="muted small center road-block__hint">
+              Tap a stop to remember it, or
+              <button type="button" className="chip chip--inline" onClick={() => { setPeek(null); setTelling(true); }}>
+                retell the road
+              </button>
+            </p>
+          </div>
           <div className="summary rise">
             <div className="summary__cell"><span className="summary__n">{run.history.length}</span><span className="muted small">scenes</span></div>
             <div className="summary__cell"><span className="summary__n">{run.history.filter((h) => h.resolution.tier === 'triumph' || h.resolution.tier === 'boon').length}</span><span className="muted small">good</span></div>
@@ -198,6 +230,15 @@ function RunEndScreenInner() {
         </section>
       )}
 
+      {peek !== null && run.history[peek] && (
+        <MemorySheet
+          run={run}
+          index={peek}
+          telling={telling}
+          onClose={() => { setTelling(false); setPeek(null); }}
+          onStep={(i) => { setTelling(false); setPeek(Math.max(0, Math.min(scenes - 1, i))); }}
+        />
+      )}
       {imageUrl && (
         <div className="sheet" onClick={() => setImageUrl(null)} role="dialog" aria-label="share image">
           <div className="sheet__body" onClick={(ev) => ev.stopPropagation()}>

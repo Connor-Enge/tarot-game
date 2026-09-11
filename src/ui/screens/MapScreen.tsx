@@ -1,10 +1,9 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { actOfLayer, canCut, canTakeVow, currentAct, foretellCost, getVow, KIND_GLYPH, SCENES, SLOT_IDS, visitedNodes, vowOffer } from '../../engine';
+import { actOfLayer, canCut, canTakeVow, currentAct, foretellCost, getVow, KIND_GLYPH, SCENES, visitedNodes, vowOffer } from '../../engine';
 import { ActBanner } from '../art/banners';
 import { RoadStrip } from '../art/road';
 import { VowArt } from '../art/relics';
-import { SceneArt } from '../art/scenes';
-import { Card } from '../components/Card';
+import { MemorySheet } from '../components/Memory';
 
 const TIER_MARK = { calamity: '✖', harm: '▽', neutral: '◇', boon: '△', triumph: '★' } as const;
 
@@ -272,28 +271,7 @@ function MapScreenInner() {
       </section>
 
       {peek !== null && run.history[peek] && (
-        <div className="sheet" role="dialog" aria-label="a scene remembered" onClick={() => setPeek(null)}>
-          <div className={`sheet__body sheet__body--${run.history[peek].resolution.tier}`} onClick={(ev) => ev.stopPropagation()}>
-            <div className="memory__art" style={{ '--book-hue': SCENES[run.history[peek].sceneId].hue } as React.CSSProperties}>
-              <SceneArt id={run.history[peek].sceneId} className="scene__art" />
-            </div>
-            <div className="sheet__title">
-              <span className="muted small">{peek + 1} · </span>
-              {SCENES[run.history[peek].sceneId].prompt}
-            </div>
-            <div className="journal__cards center-row">
-              {SLOT_IDS.map((sl) => (
-                <Card key={sl} cardId={run.history[peek].reading[sl].cardId} reversed={run.history[peek].reading[sl].reversed} size="xs" />
-              ))}
-            </div>
-            <p className={`narration__outcome tier--${run.history[peek].resolution.tier}`}>
-              {TIER_MARK[run.history[peek].resolution.tier]} {run.history[peek].resolution.narration.at(-1)}
-            </p>
-            <button className="btn" onClick={() => setPeek(null)}>
-              Close
-            </button>
-          </div>
-        </div>
+        <MemorySheet run={run} index={peek} onClose={() => setPeek(null)} onStep={(i) => setPeek(Math.max(0, Math.min(run.history.length - 1, i)))} />
       )}
     </main>
   );
