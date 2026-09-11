@@ -1406,3 +1406,8 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .study__place--wrong { border-color: var(--vit); filter: saturate(0.4); }
 .study__place--dim { opacity: 0.35; }
 .study__place .study__stamp { inset: auto 6px auto auto; top: 4px; font-size: 1.6rem; }
+
+/* Map act dividers: a small mark for the act on either side of the label. */
+.map__act-mark { width: 30px; height: 12px; flex: 0 0 auto; opacity: 0.85; }
+.map__act-mark--end { transform: scaleX(-1); }
+.map__act::before, .map__act::after { flex: 0 1 34px; }

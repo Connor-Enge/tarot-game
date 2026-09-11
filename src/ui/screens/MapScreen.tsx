@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { actOfLayer, canCut, canTakeVow, currentAct, cycleLength, foretellCost, getVow, KIND_GLYPH, SCENES, visitedNodes, vowOffer, wellTurn } from '../../engine';
-import { ActBanner } from '../art/banners';
+import { ActBanner, ActMark } from '../art/banners';
 import { RoadStrip } from '../art/road';
 import { VowArt } from '../art/relics';
 import { MemorySheet } from '../components/Memory';
@@ -263,7 +263,13 @@ function MapScreenInner() {
           const label = inWell && cl === 0 ? `The Well · ${toRoman(Math.floor(li / cycle) + 1)}` : ACT_NAMES[actHere] ?? `Act ${actHere}`;
           return (
             <div key={li} className={`map__layer ${isCurrent ? 'map__layer--current' : ''} ${isPast ? 'map__layer--past' : ''} ${actStart ? 'map__layer--act' : ''}`}>
-              {(li === 0 || actStart) && <div className="map__act">{label}</div>}
+              {(li === 0 || actStart) && (
+                <div className="map__act">
+                  <ActMark act={actHere} well={inWell && cl === 0} className="map__act-mark" />
+                  <span>{label}</span>
+                  <ActMark act={actHere} well={inWell && cl === 0} className="map__act-mark map__act-mark--end" />
+                </div>
+              )}
               {layer.map((node, ni) => {
                 const wasHere = visitedIds.has(node.id);
                 const historyIndex = wasHere ? visited.findIndex((v) => v.id === node.id) : -1;
