@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { getRelic } from '../../engine';
+import { RelicArt } from '../art/relics';
 
 /** Small glyph row of held relics. Tap to read. */
 export function RelicStrip({ relics }: { relics: string[] }) {
@@ -13,7 +14,7 @@ export function RelicStrip({ relics }: { relics: string[] }) {
           const r = getRelic(id);
           return (
             <button key={id} type="button" className={`relic-chip relic-chip--${r.kind} ${open === id ? 'relic-chip--on' : ''}`} onClick={() => setOpen(open === id ? null : id)} aria-label={r.name}>
-              {r.glyph}
+              <RelicArt id={id} className="relic-chip__art" />
             </button>
           );
         })}

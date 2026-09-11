@@ -1,9 +1,24 @@
-import { CARDS, SCENES } from '../../engine';
+import { CARDS, RELICS, SCENES } from '../../engine';
+import { RelicArt } from '../art/relics';
 import { SceneArt } from '../art/scenes';
 import { Card } from '../components/Card';
 
 /** Dev aid: every card face at once. Open with `?gallery`; `?gallery=scenes` shows every vignette instead. */
 export function GalleryScreen() {
+  if (location.search.includes('gallery=relics')) {
+    return (
+      <main className="screen" style={{ maxWidth: 'none' }}>
+        <div className="relic-strip__row" data-relics style={{ gap: 14 }}>
+          {Object.values(RELICS).map((r) => (
+            <figure key={r.id} style={{ margin: 0, textAlign: 'center' }}>
+              <span className={`relic-chip relic-chip--${r.kind}`} style={{ width: 56, height: 56 }}><RelicArt id={r.id} className="relic__art" /></span>
+              <figcaption className="muted small">{r.name}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </main>
+    );
+  }
   const scenes = location.search.includes('gallery=scenes');
   if (scenes) {
     return (

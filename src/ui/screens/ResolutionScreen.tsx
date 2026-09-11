@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useSettings } from '../../settings';
 import { useGame } from '../../store';
 import { TierFlourish } from '../art/flourish';
+import { RelicArt } from '../art/relics';
 import { Card } from '../components/Card';
 import { CodexDetail } from '../components/CodexDetail';
 import { Stats } from '../components/Stat';
@@ -80,12 +81,12 @@ function ResolutionScreenInner() {
         )}
         {relic && (
           <p className="found rise" style={{ animationDelay: `${400 + resolution.narration.length * step}ms` }}>
-            <span className="curse__glyph">{relic.glyph}</span> You keep it: <strong>{relic.name}</strong>. <span className="muted">{relic.text}</span>
+            <RelicArt id={found!} className="curse__art" /> You keep it: <strong>{relic.name}</strong>. <span className="muted">{relic.text}</span>
           </p>
         )}
         {curse && (
           <p className="curse rise" style={{ animationDelay: `${400 + resolution.narration.length * step}ms` }}>
-            <span className="curse__glyph">{curse.glyph}</span> <strong>{curse.name}</strong> follows you now. <span className="muted">{curse.text}</span>
+            <RelicArt id={cursed!} className="curse__art" /> <strong>{curse.name}</strong> follows you now. <span className="muted">{curse.text}</span>
           </p>
         )}
         <p className="deltas rise" style={{ animationDelay: `${400 + resolution.narration.length * step}ms` }}>
