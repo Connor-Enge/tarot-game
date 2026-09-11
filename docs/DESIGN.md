@@ -426,6 +426,10 @@ line arrives as a toast. The Codex "unseen" filter lists cards never dealt.
 button carries a progress ring of cards known. Daily share text notes a
 streak of two days or more.
 
+**Road on the share image**: a row of kind glyphs for the scenes visited
+sits above the tier glyphs. Codex sorts: deck order, most read, newest
+seen. Settings shows the bytes the game keeps on the device.
+
 ### Pillar sweep: where text reaches the screen
 
 Every surface that can show text about a card, and what gates it:

@@ -126,6 +126,18 @@ export function SettingsScreen() {
           {note && <p className="muted small">{note}</p>}
         </div>
 
+        <div className="muted small">
+          {(() => {
+            try {
+              let bytes = 0;
+              for (const key of ['arcana-descent.knowledge.v1', 'arcana-descent.run.v1', 'arcana-descent.settings.v1']) bytes += (localStorage.getItem(key) ?? '').length;
+              return `On this device: ${(bytes / 1024).toFixed(1)} KB of Codex, run and settings.`;
+            } catch {
+              return 'Storage is unavailable on this device; nothing will be remembered.';
+            }
+          })()}
+        </div>
+
         <details className="about">
           <summary>About</summary>
           <p>

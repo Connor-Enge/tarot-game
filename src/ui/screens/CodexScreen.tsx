@@ -24,7 +24,10 @@ export function CodexScreen() {
   const [tf, setTf] = useState<TierFilter>('all');
   const [view, setView] = useState<'cards' | 'sky' | 'book' | 'study'>('cards');
   const [q, setQ] = useState('');
-  const shown = CARDS.filter((c) => {
+  const [sort, setSort] = useState<'deck' | 'read' | 'seen'>('deck');
+  const lastSeen = new Map<string, number>();
+  (k.omenLog ?? []).forEach((e, i) => lastSeen.set(e.cardId, i));
+  const shownUnsorted = CARDS.filter((c) => {
     if (q && !c.name.toLowerCase().includes(q.toLowerCase())) return false;
     if (suit === 'major' && c.arcana !== 'major') return false;
     if (suit !== 'all' && suit !== 'major' && c.suit !== suit) return false;
@@ -34,6 +37,12 @@ export function CodexScreen() {
     if (tf === 'known' && (e?.tier ?? 0) < 2) return false;
     return true;
   });
+  const shown =
+    sort === 'deck'
+      ? shownUnsorted
+      : sort === 'read'
+        ? shownUnsorted.slice().sort((a, b) => (k.cards[b.id]?.resolved ?? 0) - (k.cards[a.id]?.resolved ?? 0))
+        : shownUnsorted.slice().sort((a, b) => (lastSeen.get(b.id) ?? -1) - (lastSeen.get(a.id) ?? -1));
   const ledger = buildLedger(k);
 
   return (
@@ -130,6 +139,13 @@ export function CodexScreen() {
           {(Object.keys(SUIT_LABEL) as SuitFilter[]).map((f) => (
             <button key={f} type="button" className={`chip ${suit === f ? 'chip--on' : ''}`} onClick={() => setSuit(f)}>
               {SUIT_LABEL[f]}
+            </button>
+          ))}
+        </div>
+        <div className="filters__row">
+          {([['deck', 'deck order'], ['read', 'most read'], ['seen', 'newest']] as const).map(([v, label]) => (
+            <button key={v} type="button" className={`chip ${sort === v ? 'chip--on' : ''}`} onClick={() => setSort(v)}>
+              {label}
             </button>
           ))}
         </div>

@@ -17,6 +17,8 @@ export async function renderSpreadImage(opts: {
   seatsNamed: boolean;
   /** One glyph per scene, in order. */
   journey?: string;
+  /** Kind glyph per scene visited, in order. */
+  road?: string;
   /** The last outcome line. */
   outcome?: string;
 }): Promise<Blob | null> {
@@ -65,6 +67,7 @@ export async function renderSpreadImage(opts: {
     <text x="${W / 2}" y="290" font-size="28" text-anchor="middle" fill="#8d86a3" font-family="Georgia, serif">${esc(opts.subtitle)}</text>
     ${cards}
     ${opts.outcome ? wrapText(esc(opts.outcome), W / 2, cardY + cardH + 170, 30, 46, '#e9e4f2') : ''}
+    ${opts.road ? `<text x="${W / 2}" y="${H - 262}" font-size="30" letter-spacing="14" text-anchor="middle" fill="#8d86a3" font-family="Georgia, serif">${esc(opts.road)}</text>` : ''}
     ${opts.journey ? `<text x="${W / 2}" y="${H - 215}" font-size="34" letter-spacing="12" text-anchor="middle" fill="#d6b25e" font-family="Georgia, serif">${esc(opts.journey)}</text>` : ''}
     <text x="${W / 2}" y="${H - 150}" font-size="26" text-anchor="middle" fill="#8d86a3" font-family="Georgia, serif">${esc(opts.footer)}</text>
     <text x="${W / 2}" y="${H - 90}" font-size="30" letter-spacing="4" text-anchor="middle" fill="#d6b25e" font-family="Georgia, serif">ARCANA DESCENT</text>

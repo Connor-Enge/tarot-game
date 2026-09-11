@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getCard, getDescent, getRelic, SCENES, SIGILS, SLOT_IDS, SLOTS } from '../../engine';
+import { getCard, getDescent, getRelic, KIND_GLYPH, SCENES, SIGILS, SLOT_IDS, SLOTS } from '../../engine';
 import { shareText, useGame } from '../../store';
 import { Card } from '../components/Card';
 import { EndArt } from '../art/scenes';
@@ -54,6 +54,7 @@ function RunEndScreenInner() {
         footer: mode.kind === 'daily' ? `Daily ${mode.label}` : mode.kind === 'weekly' ? `Weekly ${mode.label}` : `${getDescent(mode.descent).name} · seed ${run.seed.toString(36)}`,
         seatsNamed: knowledge.seatsNamed,
         journey: run.history.map((h) => TIER_MARK[h.resolution.tier]).join(''),
+        road: run.history.map((h) => KIND_GLYPH[SCENES[h.sceneId].kind]).join(''),
         outcome: last.resolution.narration.at(-1),
       });
       if (!blob) return;
