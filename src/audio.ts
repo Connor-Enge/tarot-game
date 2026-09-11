@@ -152,6 +152,11 @@ export const sfx = {
     tone(82.5, 3.0, 'triangle', 0.03, 0.3);
     noise(1.2, 0.05, 0.2, 200);
   },
+  /** Going under: a slow fall of three tones and water closing over. */
+  under: () => {
+    [130, 98, 65].forEach((f, i) => tone(f, 1.8, 'sine', 0.07, i * 0.45));
+    noise(1.6, 0.05, 0.9, 260);
+  },
   death: () => {
     noise(0.8, 0.1, 0, 300);
     [110, 98, 87].forEach((f, i) => tone(f, 1.6, 'triangle', 0.07, i * 0.5));

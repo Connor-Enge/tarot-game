@@ -142,7 +142,14 @@ function ResolutionScreenInner() {
 
       {codexOpen && <CodexDetail cardId={codexOpen} onClose={() => openCodex(null)} />}
       <footer className="actions">
-        <button className="btn btn--primary rise" style={{ animationDelay: `${600 + resolution.narration.length * step}ms` }} onClick={advance}>
+        <button
+          className="btn btn--primary rise"
+          style={{ animationDelay: `${600 + resolution.narration.length * step}ms` }}
+          onClick={() => {
+            if (scene.terminal && run.well !== undefined) sfx.under();
+            advance();
+          }}
+        >
           {offer ? 'Look closer' : scene.terminal && run.well !== undefined ? 'Go under' : resolution.tier === 'calamity' ? 'Crawl on' : 'Walk on'}
         </button>
       </footer>

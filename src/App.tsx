@@ -5,6 +5,7 @@ import { useSettings } from './settings';
 import { useGame } from './store';
 import { ArtDefs } from './ui/art/CardArt';
 import { Ambient } from './ui/components/Ambient';
+import { WellRings } from './ui/art/well';
 import { Fader } from './ui/components/Fader';
 const CodexScreen = lazy(() => import('./ui/screens/CodexScreen').then((m) => ({ default: m.CodexScreen })));
 import { GalleryScreen } from './ui/screens/GalleryScreen';
@@ -114,6 +115,7 @@ export function App() {
       <ArtDefs />
       <Ambient />
       {weather && <div className={`weather-layer weather-layer--${weather}`} aria-hidden />}
+      {screen === 'run' && run && run.well !== undefined && <WellRings turn={run.well + 1} />}
       {toast && (
         <div
           className={`toast ${toast.sticky ? 'toast--sticky' : ''}`}

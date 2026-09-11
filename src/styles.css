@@ -1257,3 +1257,9 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 /* --- the well: going under ------------------------------------------------- */
 .under { text-align: center; color: var(--text); font-style: italic; padding: 8px 12px; border-top: 1px solid rgba(214,178,94,0.25); border-bottom: 1px solid rgba(214,178,94,0.25); }
 .under__mark { color: var(--gold-2); font-style: normal; }
+
+/* --- the well closing in ----------------------------------------------------- */
+.well-layer { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; animation: fade-in 1600ms ease both; }
+.well-layer__ring { transform-box: fill-box; transform-origin: center; animation: well-ring 6s ease-in-out infinite; }
+@keyframes well-ring { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+.reduce-motion .well-layer__ring { animation: none; }

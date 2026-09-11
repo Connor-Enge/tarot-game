@@ -77,7 +77,7 @@ function RunEndScreenInner() {
       const cards = SLOT_IDS.map((s) => last.reading[s]);
       const blob = await renderSpreadImage({
         cards,
-        title: dead ? 'The reading ended you.' : 'You read it true.',
+        title: run.well !== undefined ? 'The Well kept you.' : dead ? 'The reading ended you.' : 'You read it true.',
         subtitle: run.phase.kind === 'dead' ? `Scene ${run.history.length} · ${SCENES[last.sceneId].prompt}` : SCENES[last.sceneId].prompt,
         footer: mode.kind === 'daily' ? `Daily ${mode.label}` : mode.kind === 'weekly' ? `Weekly ${mode.label}` : `${getDescent(mode.descent).name} · seed ${run.seed.toString(36)}`,
         seatsNamed: knowledge.seatsNamed,
@@ -91,6 +91,7 @@ function RunEndScreenInner() {
         notes: [
           (mode.kind === 'daily' || mode.kind === 'weekly') && mode.weather ? `${getWeather(mode.weather).glyph} ${getWeather(mode.weather).name}` : '',
           run.vow ? `${getVow(run.vow.id).glyph} ${getVow(run.vow.id).name} · ${run.vow.kept ? 'kept' : run.vow.broken ? 'broken' : 'held'}` : '',
+          run.well !== undefined ? `⨀ The Well · ${run.well} ${run.well === 1 ? 'Abyss' : 'Abysses'} passed` : '',
         ].filter(Boolean).join('   ·   ') || undefined,
       });
       if (!blob) return;
@@ -110,7 +111,7 @@ function RunEndScreenInner() {
   return (
     <main className={`screen screen--end ${dead ? 'screen--dead' : 'screen--ascended'}`}>
       <EndArt kind={dead ? 'dead' : 'ascended'} className="scene__art end__art" />
-      <h2>{dead ? 'The reading ended you.' : 'You read it true.'}</h2>
+      <h2>{run.well !== undefined ? 'The Well kept you.' : dead ? 'The reading ended you.' : 'You read it true.'}</h2>
       <p className="narration__outcome">
         {run.phase.resolution.narration.at(-1)}
         {dead && !['harm', 'calamity'].includes(run.phase.resolution.tier) && (
