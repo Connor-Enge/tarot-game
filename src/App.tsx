@@ -110,7 +110,15 @@ export function App() {
       <ArtDefs />
       <Ambient />
       {toast && (
-        <div className="toast" key={toast.id} role="status">
+        <div
+          className={`toast ${toast.sticky ? 'toast--sticky' : ''}`}
+          key={toast.id}
+          role="status"
+          onClick={() => {
+            toast.onTap?.();
+            useGame.getState().dismissToast();
+          }}
+        >
           <span className="sigil__glyph">{toast.glyph}</span> {toast.text}
         </div>
       )}

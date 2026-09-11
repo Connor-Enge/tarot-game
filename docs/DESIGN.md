@@ -430,6 +430,12 @@ streak of two days or more.
 sits above the tier glyphs. Codex sorts: deck order, most read, newest
 seen. Settings shows the bytes the game keeps on the device.
 
+**Node size**: map nodes grow with the scene's stakes (42, 48, 54 px; the
+Abyss largest). A wordless hint that some doors cost more.
+
+**Updates**: when the service worker installs a newer build behind a live
+page, a sticky toast offers a reload.
+
 ### Pillar sweep: where text reaches the screen
 
 Every surface that can show text about a card, and what gates it:

@@ -81,9 +81,10 @@ interface GameStore {
   answerStudy: (cardId: string) => void;
   /** A return this session: the title and map glow warm until the next run ends. */
   afterglow: boolean;
-  /** A brief banner. */
-  toast: { glyph: string; text: string; id: number } | null;
-  showToast: (glyph: string, text: string) => void;
+  /** A brief banner. Sticky toasts stay until tapped. */
+  toast: { glyph: string; text: string; id: number; sticky?: boolean; onTap?: () => void } | null;
+  showToast: (glyph: string, text: string, opts?: { sticky?: boolean; onTap?: () => void }) => void;
+  dismissToast: () => void;
   resetRecordsOnly: () => void;
   /** Discard viewer open. */
   deckOpen: boolean;
@@ -174,13 +175,16 @@ export const useGame = create<GameStore>((set, get) => ({
   firstDescent: false,
   afterglow: false,
   toast: null,
-  showToast: (glyph, text) => {
+  showToast: (glyph, text, opts) => {
     const id = Date.now();
-    set({ toast: { glyph, text, id } });
-    setTimeout(() => {
-      if (get().toast?.id === id) set({ toast: null });
-    }, 3200);
+    set({ toast: { glyph, text, id, sticky: opts?.sticky, onTap: opts?.onTap } });
+    if (!opts?.sticky) {
+      setTimeout(() => {
+        if (get().toast?.id === id) set({ toast: null });
+      }, 3200);
+    }
   },
+  dismissToast: () => set({ toast: null }),
   resetRecordsOnly: () => {
     const k = resetRecords(get().knowledge);
     saveKnowledge(k);

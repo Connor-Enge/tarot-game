@@ -137,7 +137,7 @@ function MapScreenInner() {
                     key={node.id}
                     type="button"
                     data-node={node.id}
-                    className={`node node--${node.kind} ${wasHere ? 'node--visited' : ''} ${isCurrent ? 'node--choosable' : ''}`}
+                    className={`node node--${node.kind} node--stakes-${SCENES[node.sceneId].stakes} ${wasHere ? 'node--visited' : ''} ${isCurrent ? 'node--choosable' : ''}`}
                     disabled={!isCurrent && !wasHere}
                     onClick={() => {
                       if (isCurrent && foretelling) {

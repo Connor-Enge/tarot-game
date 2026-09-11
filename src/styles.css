@@ -770,3 +770,10 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 
 .btn--codex { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
 .ring { width: 20px; height: 20px; }
+
+/* --- node stakes / sticky toast ------------------------------------------- */
+.node--stakes-1 { width: 42px; height: 42px; font-size: 1.05rem; }
+.node--stakes-2 { width: 48px; height: 48px; font-size: 1.2rem; }
+.node--stakes-3 { width: 54px; height: 54px; font-size: 1.35rem; }
+.node--abyss { width: 60px; height: 60px; font-size: 1.5rem; }
+.toast--sticky { animation: rise 300ms ease both; cursor: pointer; border-color: var(--gold-2); }

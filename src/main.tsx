@@ -13,7 +13,22 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 );
 
 if (import.meta.env.PROD && 'serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  window.addEventListener('load', async () => {
+    try {
+      const reg = await navigator.serviceWorker.register('/sw.js');
+      reg.addEventListener('updatefound', () => {
+        const fresh = reg.installing;
+        if (!fresh) return;
+        fresh.addEventListener('statechange', () => {
+          if (fresh.state === 'installed' && navigator.serviceWorker.controller) {
+            void import('./store').then(({ useGame }) =>
+              useGame.getState().showToast('✦', 'A newer reading is ready. Tap to reload.', { sticky: true, onTap: () => location.reload() }),
+            );
+          }
+        });
+      });
+    } catch {
+      /* no service worker */
+    }
   });
 }
