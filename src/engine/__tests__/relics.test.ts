@@ -91,3 +91,26 @@ describe('relics', () => {
     }
   });
 });
+
+describe('scene relics', () => {
+  it('a boon in a relic scene hands over that relic once', async () => {
+    const { SCENES } = await import('../scenes');
+    const withRelic = Object.values(SCENES).filter((s) => s.relic);
+    expect(withRelic.length).toBeGreaterThanOrEqual(6);
+    let found = false;
+    for (let seed = 1; seed < 1500 && !found; seed++) {
+      let run = startRun(seed);
+      const idx = run.map[0].findIndex((n) => SCENES[n.sceneId].relic);
+      if (idx < 0) continue;
+      run = chooseNode(run, idx);
+      for (let i = 0; i < SLOT_IDS.length; i++) run = chooseCandidate(run, 0);
+      if (run.phase.kind === 'resolved' && run.phase.resolution.tier === 'boon') {
+        found = true;
+        const scene = SCENES[run.map[0][idx].sceneId];
+        expect(run.phase.found).toBe(scene.relic);
+        expect(run.relics).toContain(scene.relic);
+      }
+    }
+    expect(found).toBe(true);
+  });
+});

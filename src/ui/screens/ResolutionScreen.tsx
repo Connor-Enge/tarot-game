@@ -9,8 +9,9 @@ export function ResolutionScreen() {
   const run = useGame((s) => s.run)!;
   const advance = useGame((s) => s.advance);
   if (run.phase.kind !== 'resolved') return null;
-  const { resolution, cursed, offer } = run.phase;
+  const { resolution, cursed, offer, found } = run.phase;
   const curse = cursed ? getRelic(cursed) : null;
+  const relic = found ? getRelic(found) : null;
   const scene = currentScene(run);
   const last = run.history[run.history.length - 1];
   const step = scene.terminal ? 900 : 550;
@@ -42,6 +43,11 @@ export function ResolutionScreen() {
             </p>
           );
         })}
+        {relic && (
+          <p className="found rise" style={{ animationDelay: `${400 + resolution.narration.length * step}ms` }}>
+            <span className="curse__glyph">{relic.glyph}</span> You keep it: <strong>{relic.name}</strong>. <span className="muted">{relic.text}</span>
+          </p>
+        )}
         {curse && (
           <p className="curse rise" style={{ animationDelay: `${400 + resolution.narration.length * step}ms` }}>
             <span className="curse__glyph">{curse.glyph}</span> <strong>{curse.name}</strong> follows you now. <span className="muted">{curse.text}</span>

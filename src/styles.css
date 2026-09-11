@@ -389,6 +389,7 @@ em { color: var(--gold); font-style: normal; }
 .relic-chip--on { background: rgba(255,255,255,0.14); }
 .relic-strip__text { font-size: 0.85rem; text-align: center; }
 .curse { color: #f0a09e; }
+.found { color: var(--gold-2); }
 .curse__glyph { font-size: 1.1rem; }
 
 /* --- descents ------------------------------------------------------------ */

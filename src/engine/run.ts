@@ -25,7 +25,7 @@ export interface SlotState {
 export type Phase =
   | { kind: 'map' }                 // choosing the next node
   | { kind: 'reading' }             // choosing cards, seat by seat
-  | { kind: 'resolved'; resolution: Resolution; offer?: string[]; cursed?: string }
+  | { kind: 'resolved'; resolution: Resolution; offer?: string[]; cursed?: string; found?: string }
   | { kind: 'relic'; offer: string[] }
   | { kind: 'dead'; resolution: Resolution }
   | { kind: 'ascended'; resolution: Resolution };
@@ -269,6 +269,11 @@ function resolve(run: RunState): RunState {
     const pool = rng.shuffle(BOON_IDS.filter((id) => !relics.includes(id)));
     if (pool.length) offer = pool.slice(0, 2);
   }
+  let found: string | undefined;
+  if (resolution.tier === 'boon' && scene.relic && !relics.includes(scene.relic)) {
+    found = scene.relic;
+    relics = [...relics, found];
+  }
   if (resolution.tier === 'calamity' && !scene.terminal) {
     const pool = CURSE_IDS.filter((id) => !relics.includes(id));
     if (pool.length) {
@@ -280,7 +285,7 @@ function resolve(run: RunState): RunState {
   const base = withRng({ ...run, deck, history, vitality, clarity, marks, relics }, rng);
   if (vitality <= 0) return { ...base, vitality: 0, phase: { kind: 'dead', resolution } };
   if (scene.terminal) return { ...base, phase: { kind: 'ascended', resolution } };
-  return { ...base, phase: { kind: 'resolved', resolution, offer, cursed } };
+  return { ...base, phase: { kind: 'resolved', resolution, offer, cursed, found } };
 }
 
 /** After reading the resolution, take the offered relic (if any) or walk on to the map. */

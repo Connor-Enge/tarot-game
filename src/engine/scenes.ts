@@ -50,6 +50,8 @@ export interface Scene {
   minAct: number;
   /** Multiplier on positive vitality. Rest scenes mend more. */
   mend?: number;
+  /** A boon here hands you this relic, if you don't hold it. The outcome text names it. */
+  relic?: string;
 }
 
 export type OutcomeTier = 'calamity' | 'harm' | 'neutral' | 'boon' | 'triumph';
@@ -68,6 +70,7 @@ export const KIND_GLYPH: Record<SceneKind, string> = {
 export const SCENES: Record<string, Scene> = {
   crossing: {
     id: 'crossing',
+    relic: 'coin',
     kind: 'passage',
     hue: 210,
     minAct: 1,
@@ -90,6 +93,7 @@ export const SCENES: Record<string, Scene> = {
   },
   stranger: {
     id: 'stranger',
+    relic: 'bell',
     kind: 'mystery',
     hue: 30,
     minAct: 1,
@@ -156,6 +160,7 @@ export const SCENES: Record<string, Scene> = {
   },
   well: {
     id: 'well',
+    relic: 'bread',
     kind: 'mystery',
     hue: 190,
     minAct: 1,
@@ -178,6 +183,7 @@ export const SCENES: Record<string, Scene> = {
   },
   ruin: {
     id: 'ruin',
+    relic: 'ring',
     kind: 'threat',
     hue: 40,
     minAct: 1,
@@ -223,6 +229,7 @@ export const SCENES: Record<string, Scene> = {
   },
   market: {
     id: 'market',
+    relic: 'salt',
     kind: 'mystery',
     hue: 45,
     minAct: 1,
@@ -245,6 +252,7 @@ export const SCENES: Record<string, Scene> = {
   },
   mirror: {
     id: 'mirror',
+    relic: 'shard',
     kind: 'mystery',
     hue: 300,
     minAct: 1,
@@ -333,6 +341,7 @@ export const SCENES: Record<string, Scene> = {
   },
   library: {
     id: 'library',
+    relic: 'lens',
     kind: 'mystery',
     hue: 60,
     minAct: 2,
@@ -377,6 +386,7 @@ export const SCENES: Record<string, Scene> = {
   },
   shrine: {
     id: 'shrine',
+    relic: 'candle',
     kind: 'rest',
     hue: 160,
     minAct: 2,

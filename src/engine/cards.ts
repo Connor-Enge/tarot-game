@@ -13,6 +13,8 @@
  * suit x rank templates for now (see docs/DESIGN.md "Content debt").
  */
 
+import { MINOR_TEXT } from './minorText';
+
 export type Suit = 'wands' | 'cups' | 'swords' | 'pentacles';
 
 export type Tag =
@@ -225,6 +227,7 @@ function buildMajor(d: MajorDef): Card {
 
 function buildMinor(s: SuitDef, r: RankDef): Card {
   const name = `${r.name} of ${s.suit[0].toUpperCase()}${s.suit.slice(1)}`;
+  const text = MINOR_TEXT[s.suit]?.[r.n];
   return {
     id: `${s.suit}-${r.n}`,
     name,
@@ -233,11 +236,10 @@ function buildMinor(s: SuitDef, r: RankDef): Card {
     suit: s.suit,
     tags: { upright: uniq([s.element, ...s.tags, ...r.up]), reversed: uniq([s.element, ...r.rev]) },
     keywords: { upright: r.kwUp, reversed: r.kwRev },
-    meaning: {
-      upright: `In the realm of ${s.domain}: ${r.theme}.`,
-      reversed: `In the realm of ${s.domain}: ${r.themeRev}.`,
-    },
-    omen: { upright: r.oUp, reversed: r.oRev },
+    meaning: text
+      ? { upright: text.m[0], reversed: text.m[1] }
+      : { upright: `In the realm of ${s.domain}: ${r.theme}.`, reversed: `In the realm of ${s.domain}: ${r.themeRev}.` },
+    omen: text ? { upright: text.o[0], reversed: text.o[1] } : { upright: r.oUp, reversed: r.oRev },
   };
 }
 

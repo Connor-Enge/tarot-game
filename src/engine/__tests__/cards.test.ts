@@ -26,3 +26,12 @@ describe('deck data', () => {
     expect(() => getCard('nope')).toThrow();
   });
 });
+
+describe('minor arcana text', () => {
+  it('every minor has a distinct authored omen and meaning', () => {
+    const minors = CARDS.filter((c) => c.arcana === 'minor');
+    const omens = new Set(minors.flatMap((c) => [c.omen.upright, c.omen.reversed]));
+    expect(omens.size).toBe(minors.length * 2);
+    for (const c of minors) expect(c.meaning.upright.startsWith('In the realm of')).toBe(false);
+  });
+});

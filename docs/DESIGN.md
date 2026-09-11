@@ -232,14 +232,20 @@ Ledger aggregates play: most read card, kindest and cruelest (net good minus
 bad over at least three reads), most often on the table at death, busiest
 seat. All of it is consequence.
 
+**Scene relics**: eight scenes name a relic (`scene.relic`). A boon there
+hands it over if you don't hold it, and the resolution says "You keep it".
+The crossing's satchel is the Second Coin; the stranger's gift is the Small
+Bell; the library holds the Cracked Lens.
+
 Queued:
-- Scene-specific relic flavor (the satchel on the bridge is a real relic).
+- A "cut the deck" gesture at the start of a run.
+- Reversed-orientation toggle in the Codex.
 
 ## Content debt
 
-- **Minor Arcana** meanings and omens are templated from suit × rank. Each
-  needs an authored pass; the Ace of Cups and Ace of Swords should not share
-  an omen.
+- **Minor Arcana** meanings and omens are hand-authored in
+  `engine/minorText.ts` (112 omen lines, 112 meanings). A test asserts every
+  omen is distinct.
 - **Scenes**: 8 exist. Aim for 30+ across three acts.
 - **Combos**: 5 exist. This is the richest vein for "the combined meaning"
   and should be grown deliberately with named, memorable results.
