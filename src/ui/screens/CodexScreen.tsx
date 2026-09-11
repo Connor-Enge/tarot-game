@@ -12,6 +12,7 @@ import { CodexDetail } from '../components/CodexDetail';
 import { Constellation } from '../components/Constellation';
 import { Almanac } from '../components/Almanac';
 import { Backs } from '../components/Backs';
+import { ColourKey } from '../components/ColourKey';
 import { Study } from '../components/Study';
 
 /** Everything the player has earned the right to know. Nothing else. */
@@ -104,6 +105,7 @@ export function CodexScreen() {
         })}
       </div>
       <Backs knowledge={k} />
+      <ColourKey />
       <div className="legend" aria-label="tiers">
         <span><i className="codex__dot--t1" /> glimpsed</span>
         <span><i className="codex__dot--t2" /> known</span>

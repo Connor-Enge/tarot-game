@@ -1556,3 +1556,13 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .trade__chip--get { border-color: rgba(214,178,94,0.55); color: var(--gold-2); }
 .trade__arrow { color: var(--gold); opacity: 0.7; }
 .trade .btn--small { align-self: flex-start; }
+
+/* --- the sky code, stated ---------------------------------------------------- */
+.skykey { display: flex; flex-direction: column; gap: 6px; }
+.skykey__row { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; }
+.skykey__swatch { background: none; border: none; padding: 0; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; font: inherit; color: var(--muted); transition: transform 200ms ease; }
+.skykey__sky { width: 100%; max-width: 34px; height: auto; border-radius: 3px; box-shadow: 0 3px 8px rgba(0,0,0,0.45), 0 0 0 1px rgba(214,178,94,0.25); }
+.skykey__name { font-size: 0.62rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.skykey__swatch--pick { transform: translateY(-4px); color: var(--gold-2); }
+.skykey__swatch--pick .skykey__sky { box-shadow: 0 6px 14px rgba(0,0,0,0.6), 0 0 0 1.5px var(--gold-2); }
+.skykey__cap { margin: 0; min-height: 2.4em; }
