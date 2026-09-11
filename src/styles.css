@@ -152,7 +152,7 @@ em { color: var(--gold); font-style: normal; }
 .seat--active, .seat--filled { opacity: 1; }
 .seat--active .seat__glyph { color: var(--gold); text-shadow: 0 0 12px rgba(214,178,94,0.6); }
 .seat__glyph { font-size: 1.2rem; color: var(--muted); transition: color 300ms; }
-.seat__name { font-size: 0.65rem; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+.seat__name { font-size: 0.6rem; color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap; }
 
 /* --- hand ---------------------------------------------------------------- */
 .hand {

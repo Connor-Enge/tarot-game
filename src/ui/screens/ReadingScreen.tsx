@@ -55,7 +55,7 @@ export function ReadingScreen() {
               <div className={chosen ? 'flip-in' : undefined} key={chosen ? chosen.cardId : 'empty'}>
                 <Card cardId={chosen?.cardId} reversed={chosen?.reversed} faceDown={!chosen} size="sm" mark={chosen ? run.marks[chosen.cardId] : undefined} />
               </div>
-              {seatsNamed && <div className="seat__name">{SLOTS[id].name}</div>}
+              {seatsNamed && <div className="seat__name">{SLOTS[id].name.replace(/^The /, '')}</div>}
             </div>
           );
         })}
