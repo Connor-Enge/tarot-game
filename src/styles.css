@@ -1626,3 +1626,37 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .week__road { display: block; width: 100%; max-width: 360px; margin: 0 auto; height: auto; }
 .week__cap { margin: 0; }
 .today__week { color: var(--gold); opacity: 0.85; }
+
+/* --- map nodes: engraved discs in a stone bezel ---------------------------- */
+.node {
+  border-color: rgba(214,178,94,0.22);
+  background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(0,0,0,0.25));
+  box-shadow: 0 0 0 2px rgba(11,10,18,0.9), 0 0 0 3px rgba(214,178,94,0.12), 0 5px 12px rgba(0,0,0,0.5);
+}
+.node::before {
+  content: ''; position: absolute; inset: 3px; border-radius: 50%; z-index: -1; pointer-events: none;
+  background: radial-gradient(circle at 42% 36%, rgba(255,255,255,0.07), rgba(0,0,0,0.38) 72%);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.65), inset 0 -1px 0 rgba(255,255,255,0.05);
+}
+.node--choosable {
+  border-color: var(--gold);
+  background: linear-gradient(180deg, rgba(214,178,94,0.16), rgba(214,178,94,0.04));
+  box-shadow: 0 0 0 2px rgba(11,10,18,0.9), 0 0 0 3px rgba(214,178,94,0.3), 0 6px 14px rgba(0,0,0,0.5), 0 0 16px rgba(214,178,94,0.18);
+}
+.node--choosable::before {
+  background: radial-gradient(circle at 42% 36%, rgba(243,220,138,0.2), rgba(0,0,0,0.3) 72%);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.5), inset 0 0 8px rgba(214,178,94,0.25);
+}
+.node--visited {
+  background: linear-gradient(180deg, var(--gold-2), var(--gold));
+  box-shadow: 0 0 0 2px rgba(11,10,18,0.9), 0 0 0 3px rgba(214,178,94,0.5), 0 5px 12px rgba(0,0,0,0.5);
+}
+.node--visited::before {
+  background:
+    repeating-conic-gradient(from 0deg, transparent 0 27deg, rgba(60,40,10,0.18) 27deg 30deg),
+    radial-gradient(circle at 42% 36%, rgba(255,255,255,0.3), transparent 60%);
+  box-shadow: inset 0 1px 2px rgba(60,40,10,0.35);
+}
+.node--passed { box-shadow: none; background: rgba(255,255,255,0.02); }
+.node--passed::before { display: none; }
+.node--abyss::before { background: radial-gradient(circle at 50% 50%, rgba(0,0,0,0.6), rgba(0,0,0,0.2) 40%, rgba(214,178,94,0.1) 41%, rgba(0,0,0,0.3) 46%, rgba(0,0,0,0.2) 70%); }
