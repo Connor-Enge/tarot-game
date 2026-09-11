@@ -1,4 +1,5 @@
-import { currentScene, getCard, getRelic, SLOT_IDS, SLOTS } from '../../engine';
+import { currentScene, getCard, getRelic, SLOT_IDS, SLOTS, tradeText } from '../../engine';
+import { StrangerArt } from '../art/stranger';
 
 const TIER_GLYPH = { calamity: '✖', harm: '▽', neutral: '◇', boon: '△', triumph: '★' } as const;
 import { useState } from 'react';
@@ -13,13 +14,14 @@ import { Stats } from '../components/Stat';
 function ResolutionScreenInner() {
   const run = useGame((s) => s.run)!;
   const advance = useGame((s) => s.advance);
+  const acceptTrade = useGame((s) => s.acceptTrade);
   const codexOpen = useGame((s) => s.codexOpen);
   const openCodex = useGame((s) => s.openCodex);
   const omenLog = useGame((s) => s.knowledge.omenLog);
   const readingSpeed = useSettings((s) => s.readingSpeed);
   const [revealAll, setRevealAll] = useState(false);
   if (run.phase.kind !== 'resolved') return null;
-  const { resolution, cursed, offer, found } = run.phase;
+  const { resolution, cursed, offer, found, trade, traded } = run.phase;
   const curse = cursed ? getRelic(cursed) : null;
   const relic = found ? getRelic(found) : null;
   const scene = currentScene(run);
@@ -89,6 +91,21 @@ function ResolutionScreenInner() {
             <RelicArt id={cursed!} className="curse__art" /> <strong>{curse.name}</strong> follows you now. <span className="muted">{curse.text}</span>
           </p>
         )}
+        {trade && (
+          <div className="trade rise" style={{ animationDelay: `${500 + resolution.narration.length * step}ms` }}>
+            <StrangerArt className="trade__art" />
+            <div className="trade__body">
+              <p className="trade__lead">Someone is already sitting by the fire. They have a trade.</p>
+              <p className="trade__text">
+                {tradeText(trade)}
+                {trade.id === 'swap-boon' && <span className="muted"> {getRelic(trade.give).name} for {getRelic(trade.get).name}: {getRelic(trade.get).text}</span>}
+                {trade.id === 'lift-curse' && <span className="muted"> {getRelic(trade.curse).name} would leave you.</span>}
+              </p>
+              <button type="button" className="btn btn--small" onClick={acceptTrade}>Take it</button>
+            </div>
+          </div>
+        )}
+        {traded && <p className="trade__done muted small rise">You shake on it. They do not look up.</p>}
         <p className="deltas rise" style={{ animationDelay: `${400 + resolution.narration.length * step}ms` }}>
           {resolution.deltas.vitality !== 0 && <span className="stat--vit">♥ {fmt(resolution.deltas.vitality)}</span>}
           {resolution.deltas.clarity !== 0 && <span className="stat--cla">◈ {fmt(resolution.deltas.clarity)}</span>}

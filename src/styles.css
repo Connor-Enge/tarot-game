@@ -1037,3 +1037,11 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .flame { transform-origin: 50% 100%; animation: flame-lick 1.1s ease-in-out infinite; }
 @keyframes flame-lick { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.14) translateY(-0.4px); } }
 .reduce-motion .flame { animation: none; }
+
+/* --- the stranger's trade --------------------------------------------------- */
+.trade { display: flex; gap: 12px; align-items: flex-start; padding: 12px; border-radius: 14px; background: rgba(214,178,94,0.06); border: 1px solid rgba(214,178,94,0.3); margin: 4px 0; }
+.trade__art { width: 56px; height: 56px; flex: 0 0 56px; }
+.trade__body { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+.trade__lead { margin: 0; color: var(--muted); font-size: 0.85rem; }
+.trade__text { margin: 0; font-size: 0.98rem; }
+.trade__done { text-align: center; margin: 0; }

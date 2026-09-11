@@ -26,10 +26,27 @@ export interface SlotState {
 export type Phase =
   | { kind: 'map' }                 // choosing the next node
   | { kind: 'reading' }             // choosing cards, seat by seat
-  | { kind: 'resolved'; resolution: Resolution; offer?: string[]; cursed?: string; found?: string }
+  | { kind: 'resolved'; resolution: Resolution; offer?: string[]; cursed?: string; found?: string; trade?: Trade; traded?: boolean }
   | { kind: 'relic'; offer: string[] }
   | { kind: 'dead'; resolution: Resolution }
   | { kind: 'ascended'; resolution: Resolution };
+
+/**
+ * The Stranger's trade: offered once at a rest scene that went at least
+ * neutrally. Stated plainly, like every rule. Take it or walk on.
+ */
+export type Trade =
+  | { id: 'clarity-for-vitality'; give: number; get: number }
+  | { id: 'swap-boon'; give: string; get: string }
+  | { id: 'lift-curse'; give: number; curse: string };
+
+export function tradeText(t: Trade): string {
+  switch (t.id) {
+    case 'clarity-for-vitality': return `Give ◈${t.give} for ♥${t.get}.`;
+    case 'swap-boon': return `Give up what you carry for something else of theirs.`;
+    case 'lift-curse': return `Give ♥${t.give} and be rid of what follows you.`;
+  }
+}
 
 export interface HistoryEntry {
   sceneId: string;
@@ -80,6 +97,8 @@ export interface RunState {
   history: HistoryEntry[];
   /** A vow taken before the first scene, if any. `kept` is set on entering the Abyss unbroken. */
   vow?: { id: string; broken: boolean; kept?: boolean };
+  /** True once the Stranger's trade has been taken this run. */
+  traded?: boolean;
 }
 
 function rngOf(run: RunState): Rng {
@@ -403,10 +422,40 @@ function resolve(run: RunState): RunState {
   }
 
   const echo: DrawnCard | null = run.mods.noEcho ? null : { cardId: revealed.wake.cardId, reversed: revealed.wake.reversed };
+  // At a rest that went well enough, someone is already sitting by the fire.
+  let trade: Trade | undefined;
+  if (scene.kind === 'rest' && resolution.tier !== 'calamity' && resolution.tier !== 'harm') {
+    const options: Trade[] = [];
+    if (clarity >= 2) options.push({ id: 'clarity-for-vitality', give: 2, get: 3 });
+    const boons = relics.filter((id) => BOON_IDS.includes(id));
+    const unheld = BOON_IDS.filter((id) => !relics.includes(id));
+    if (boons.length && unheld.length) options.push({ id: 'swap-boon', give: rng.pick(boons), get: rng.pick(unheld) });
+    const curses = relics.filter((id) => CURSE_IDS.includes(id));
+    if (curses.length && vitality > 4) options.push({ id: 'lift-curse', give: 3, curse: curses[0] });
+    if (options.length) trade = rng.pick(options);
+  }
   const base = withRng({ ...run, deck, history, vitality, clarity, marks, relics, echo, vow }, rng);
   if (vitality <= 0) return { ...base, vitality: 0, phase: { kind: 'dead', resolution } };
   if (scene.terminal) return { ...base, phase: { kind: 'ascended', resolution } };
-  return { ...base, phase: { kind: 'resolved', resolution, offer, cursed, found } };
+  return { ...base, phase: { kind: 'resolved', resolution, offer, cursed, found, trade } };
+}
+
+/** Take the Stranger's trade. Once; the offer is gone after. */
+export function acceptTrade(run: RunState): RunState {
+  if (run.phase.kind !== 'resolved' || !run.phase.trade) return run;
+  const t = run.phase.trade;
+  const phase = { ...run.phase, trade: undefined, traded: true };
+  switch (t.id) {
+    case 'clarity-for-vitality':
+      if (run.clarity < t.give) return run;
+      return { ...run, clarity: run.clarity - t.give, vitality: run.vitality + t.get, phase, traded: true };
+    case 'swap-boon':
+      if (!run.relics.includes(t.give)) return run;
+      return { ...run, relics: run.relics.map((id) => (id === t.give ? t.get : id)), phase, traded: true };
+    case 'lift-curse':
+      if (run.vitality <= t.give) return run;
+      return { ...run, vitality: run.vitality - t.give, relics: run.relics.filter((id) => id !== t.curse), phase, traded: true };
+  }
 }
 
 /** After reading the resolution, take the offered relic (if any) or walk on to the map. */

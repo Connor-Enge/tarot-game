@@ -27,6 +27,7 @@ export const SIGILS: Sigil[] = [
   { id: 'clean-return', glyph: '★', name: 'Unscathed', text: 'Return without a single harm or calamity.', when: (r) => ascended(r) && r.history.every((h) => h.resolution.tier !== 'harm' && h.resolution.tier !== 'calamity') },
   { id: 'five-triumphs', glyph: '✦', name: 'Read Aloud', text: 'Triumph five times in one descent.', when: (r) => r.history.filter((h) => h.resolution.tier === 'triumph').length >= 5 },
   { id: 'three-relics', glyph: '◎', name: 'Pockets', text: 'Hold three boons at once.', when: (r) => r.relics.filter((id) => !['fog', 'splinter', 'debt', 'weight', 'hush'].includes(id)).length >= 3 },
+  { id: 'traded', glyph: '☌', name: 'Dealt With', text: 'Take the Stranger\'s trade.', when: (r) => r.history.length > 0 && !!r.traded },
   { id: 'vow-kept', glyph: '✋', name: 'Sworn', text: 'Keep a vow all the way to the Abyss.', when: (r) => !!r.vow?.kept },
   { id: 'cursed-return', glyph: '⊘', name: 'Carried It Anyway', text: 'Return while cursed.', when: (r) => ascended(r) && r.relics.some((id) => ['fog', 'splinter', 'debt', 'weight', 'hush'].includes(id)) },
   { id: 'majors-glimpsed', glyph: '☾', name: 'Twenty-Two', text: 'Glimpse every Major Arcana.', when: (_r, k) => Array.from({ length: 22 }, (_, i) => `major-${i}`).every((id) => (k.cards[id]?.tier ?? 0) >= 1) },

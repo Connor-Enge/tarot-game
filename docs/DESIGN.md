@@ -468,6 +468,14 @@ Winds, Thin Air, Lantern Light, Salted Road, Fog, Heavy Air, Still Water,
 The Long Road). Everyone walking today's road walks in the same weather.
 The title names it before you commit; share text carries it.
 
+## The Stranger's trade
+
+At a rest scene that goes at least neutrally, someone is already sitting by
+the fire with one trade, drawn from what applies: two clarity for three
+vitality; a boon you hold for a boon you do not; three vitality to be rid
+of a curse. Take it or walk on. Taking one earns the Dealt With sigil. The
+trade never kills you and is never offered twice in a scene.
+
 ## Vows
 
 Before the first scene the map offers two vows, chosen by seed without

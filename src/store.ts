@@ -11,6 +11,7 @@ import {
   chooseRelic as chooseRelicRun,
   cutDeck as cutDeckRun,
   takeVow as takeVowRun,
+  acceptTrade as acceptTradeRun,
   foretell as foretellRun,
   takeBack as takeBackRun,
   dailySeed,
@@ -122,6 +123,7 @@ interface GameStore {
   redraw: () => void;
   whisperLifted: () => void;
   advance: () => void;
+  acceptTrade: () => void;
   endRun: () => void;
   openCodex: (cardId: string | null) => void;
   resetCodex: () => void;
@@ -380,6 +382,15 @@ export const useGame = create<GameStore>((set, get) => ({
     set({ run: next, knowledge: learned });
   },
 
+  acceptTrade: () => {
+    const { run } = get();
+    if (!run) return;
+    const next = acceptTradeRun(run);
+    if (next === run) return;
+    buzz([10, 30, 10]);
+    sfx.place('pentacles');
+    set({ run: next });
+  },
   advance: () => {
     const { run } = get();
     if (!run) return;
