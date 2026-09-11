@@ -1389,3 +1389,5 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .input { border: 1px solid rgba(214,178,94,0.22); }
 .input:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 2px rgba(214,178,94,0.2); }
 .about summary { color: var(--gold); letter-spacing: 0.08em; cursor: pointer; }
+.deck-pill { display: inline-flex; align-items: center; gap: 4px; border-color: rgba(214,178,94,0.25); }
+.deck-pill__stack { width: 22px; height: 18px; }

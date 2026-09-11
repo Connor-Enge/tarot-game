@@ -6,6 +6,7 @@ import { activeSlotState, canTakeBack, currentScene, getCard, hasRelic, redrawCo
 const ORACLE = import.meta.env.DEV && typeof location !== 'undefined' && location.search.includes('oracle');
 import { buzz, useGame } from '../../store';
 import { Card } from '../components/Card';
+import { DeckStack } from '../art/deck';
 import { canTurn, getVow, TURN_COST } from '../../engine';
 import { AbyssRings } from '../art/flourish';
 import { VowArt } from '../art/relics';
@@ -87,7 +88,8 @@ function ReadingScreenInner() {
         <span className="muted small">
           {sceneNumber(run)} / {totalScenes(run)}
           <button type="button" className="deck-pill" onClick={() => openDeck(true)} aria-label="deck and discard" title="What has gone by">
-            ▤ {run.deck.draw.length}
+            <DeckStack remaining={run.deck.draw.length} total={run.deck.draw.length + run.deck.discard.length} className="deck-pill__stack" />
+            {run.deck.draw.length}
           </button>
         </span>
         <Stats vitality={run.vitality} clarity={run.clarity} />
