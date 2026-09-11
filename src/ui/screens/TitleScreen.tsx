@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { canOfferInstall, useInstall } from '../../install';
 import { CARDS, dailySeed, dailyStreakAlive, dailyWeather, daylight, weeklySeed, weeklyWeather, DEPTHS, DESCENTS, getCard, getDescent, maxDepthUnlocked } from '../../engine';
 import { CardBack, type BackVariant } from '../art/CardArt';
 import { StreakFlames } from '../art/flames';
@@ -52,6 +53,9 @@ export function TitleScreen() {
     return { today: CARDS[seed % CARDS.length].id, todayLabel: label, weather: dailyWeather(seed), weekWeather: weeklyWeather(weeklySeed().seed) };
   }, []);
   const streak = dailyStreakAlive(k, todayLabel);
+  const inst = useInstall();
+  const [iosHint, setIosHint] = useState(false);
+  const offerInstall = k.runs >= 1 && canOfferInstall(inst);
   // A different fan every visit, seeded off the run count so it feels alive but not random-noise.
   // The fan is your deck once you have one: signature in the middle, your most-read cards around it.
   const fan = useMemo(() => {
@@ -208,6 +212,23 @@ export function TitleScreen() {
         </div>
       </div>
       {k.runs === 0 ? <p className="muted small">The deck is unread.</p> : <ReaderMark knowledge={k} />}
+      {offerInstall && (
+        <div className="keep rise" role="note">
+          <p className="keep__lead">Keep the deck close. It works without a signal once it is on your home screen.</p>
+          {iosHint ? (
+            <p className="keep__hint">In Safari, tap <span className="keep__key">Share</span> below, then <span className="keep__key">Add to Home Screen</span>.</p>
+          ) : (
+            <div className="row keep__row">
+              <button type="button" className="btn btn--small" onClick={() => (inst.deferred ? void inst.install() : setIosHint(true))}>
+                Add to home screen
+              </button>
+              <button type="button" className="btn btn--small btn--ghost" onClick={inst.dismiss}>
+                Not now
+              </button>
+            </div>
+          )}
+        </div>
+      )}
       {Object.keys(k.dealt ?? {}).length >= CARDS.length / 2 && Object.keys(k.dealt ?? {}).length < CARDS.length && (
         <p className="muted small">{CARDS.length - Object.keys(k.dealt ?? {}).length} cards have never been dealt to you.</p>
       )}

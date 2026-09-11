@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { SCENES, SLOT_IDS, SLOTS, type RunState } from '../../engine';
 import { SceneArt } from '../art/scenes';
 import { Card } from './Card';
+import { sfx } from '../../audio';
 
 const TIER_MARK = { calamity: '✖', harm: '▽', neutral: '◇', boon: '△', triumph: '★' } as const;
 
@@ -25,12 +26,13 @@ export function MemorySheet({
 }) {
   const h = run.history[index];
   const n = run.history.length;
+  const step = onStep ? (i: number) => { sfx.page(); onStep(i); } : undefined;
   useEffect(() => {
     const onKey = (ev: KeyboardEvent) => {
       if (ev.key === 'Escape') onClose();
       if (!onStep) return;
-      if (ev.key === 'ArrowLeft' && index > 0) onStep(index - 1);
-      if (ev.key === 'ArrowRight' && index < n - 1) onStep(index + 1);
+      if (ev.key === 'ArrowLeft' && index > 0) step?.(index - 1);
+      if (ev.key === 'ArrowRight' && index < n - 1) step?.(index + 1);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -65,7 +67,7 @@ export function MemorySheet({
         )}
         <div className="sheet__nav">
           {onStep ? (
-            <button type="button" className="btn btn--small" onClick={() => onStep(index - 1)} disabled={index === 0} aria-label="earlier scene">
+            <button type="button" className="btn btn--small" onClick={() => step?.(index - 1)} disabled={index === 0} aria-label="earlier scene">
               ‹
             </button>
           ) : <span />}
@@ -73,7 +75,7 @@ export function MemorySheet({
             Close
           </button>
           {onStep ? (
-            <button type="button" className="btn btn--small" onClick={() => onStep(index + 1)} disabled={index >= n - 1} aria-label="later scene">
+            <button type="button" className="btn btn--small" onClick={() => step?.(index + 1)} disabled={index >= n - 1} aria-label="later scene">
               ›
             </button>
           ) : <span />}

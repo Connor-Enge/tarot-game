@@ -1245,3 +1245,11 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .alm__day--pick { outline: 2px solid var(--gold-2); outline-offset: 1px; }
 .alm__weather { position: absolute; right: 2px; bottom: 0; font-size: 0.55rem; opacity: 0.85; }
 .alm__foot { margin: 0; }
+
+/* --- keep it: add to home screen ------------------------------------------ */
+.keep { display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; border-radius: 14px; border: 1px dashed rgba(214,178,94,0.35); background: rgba(214,178,94,0.05); text-align: center; }
+.keep__lead { font-size: 0.85rem; color: var(--muted); }
+.keep__hint { font-size: 0.85rem; color: var(--text); }
+.keep__key { color: var(--gold-2); border: 1px solid rgba(214,178,94,0.4); border-radius: 6px; padding: 0 6px; }
+.keep__row { justify-content: center; }
+.keep .btn--ghost { color: var(--muted); }
