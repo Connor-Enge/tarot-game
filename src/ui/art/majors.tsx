@@ -10,8 +10,11 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
     <g>
       <Sun x={64} y={16} r={8} face />
       <Mountains y={66} opacity={0.35} />
+      <path d="M8 74 l6 -8 l6 8 M32 66 l6 -10 l6 10 M56 68 l6 -8 l6 8" fill={PALE} opacity={0.5} />
       <path d="M0 74 Q30 70 46 82 L46 112 L0 112 Z" fill="#c9c9c9" opacity={0.25} />
       <Cliff x={0} y={80} w={44} drop={32} />
+      <path d="M40 84 q-2 10 2 24 M44 88 q-1 8 1 20" fill="none" stroke={INK} strokeWidth={0.4} opacity={0.5} />
+      <path d="M36 82 l8 4 v26 h-8 z" fill="url(#crosshatch)" opacity={0.4} />
       {/* the walker: fine clothes, a feather in the cap, eyes on the sky */}
       {(() => { const hd = hands(28, 80, 54, 'raise-left'); return (
         <g>
@@ -20,6 +23,10 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
         </g>
       ); })()}
       <Person x={28} y={80} h={54} pose="raise-left" robe="#e9d9b6" inner="#b8462f" hair="#8a5a3a" />
+      {/* a pattern of leaves and small suns on the tunic */}
+      {[[20, 56], [23, 66], [19, 74], [34, 60], [36, 70], [33, 76]].map(([x, y], i) => (
+        i % 2 ? <circle key={i} cx={x} cy={y} r={0.9} fill={GOLD_FLAT} stroke={INK} strokeWidth={0.2} /> : <path key={i} d={`M${x} ${y} q-2 -2 -1 -4 q2 1 1 4 z`} fill={LEAF} stroke={INK} strokeWidth={0.2} />
+      ))}
       {(() => { const hd = hands(28, 80, 54, 'raise-left'); return (
         <g>
           {/* the bundle hangs behind, a white rose in the near hand */}
@@ -35,7 +42,9 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       {/* the little white dog, up on its hind legs */}
       <g>
         <path d="M14 78 q3 -8 9 -6 q3 1 3 5 l-1 3 q-4 2 -8 0 z" fill={PALE} stroke={INK} strokeWidth={0.6} />
+        <path d="M18 76 q3 -3 6 -1" fill="none" stroke={INK} strokeWidth={0.3} opacity={0.5} />
         <circle cx={24} cy={70} r={2.6} fill={PALE} stroke={INK} strokeWidth={0.6} />
+        <path d="M22 72.4 q2 1 4 0" fill="none" stroke={BLOOD} strokeWidth={0.7} />
         <path d="M22 68 l-1.5 -3 l2.5 1.5 M25.5 68 l1.5 -3 l-2.5 1.5" fill="none" stroke={INK} strokeWidth={0.6} />
         <circle cx={25} cy={70} r={0.4} fill={INK} />
         <path d="M15 79 q-3 -3 -1 -6" fill="none" stroke={INK} strokeWidth={0.7} strokeLinecap="round" />
@@ -90,11 +99,16 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
     <g>
       <Pillar x={8} y={4} h={94} dark />
       <Pillar x={72} y={4} h={94} />
+      {/* lotus capitals on the pillars */}
+      <path d="M2 6 q3 -5 6 -1 q3 -4 6 1 v1 h-12 z" fill={INK} stroke={PALE} strokeWidth={0.4} />
+      <path d="M66 6 q3 -5 6 -1 q3 -4 6 1 v1 h-12 z" fill={PALE} stroke={INK} strokeWidth={0.4} />
       <text x={12} y={30} fontSize={7} fill={PALE} fontFamily="Georgia, serif" textAnchor="middle">B</text>
       <text x={76} y={30} fontSize={7} fill={INK} fontWeight="bold" fontFamily="Georgia, serif" textAnchor="middle">J</text>
       {/* the veil, hung with pomegranates and palms */}
       <rect x={16} y={4} width={48} height={74} fill="#e8e0c4" opacity={0.9} />
       <rect x={16} y={4} width={48} height={74} fill="url(#hatch)" opacity={0.5} />
+      <path d={Array.from({ length: 12 }, (_, i) => `M${16 + i * 4} 78 l2 3 l2 -3`).join(' ')} fill="none" stroke={INK} strokeWidth={0.4} opacity={0.6} />
+      <path d="M16 6 h48" stroke={GOLD_FLAT} strokeWidth={0.8} />
       {[[24, 12], [40, 10], [56, 12], [20, 28], [36, 26], [52, 28], [28, 44], [44, 42], [60, 44], [24, 60], [40, 58], [56, 60]].map(([x, y], i) => <Pomegranate key={i} x={x} y={y} r={2.3} />)}
       {[[32, 18], [48, 18], [32, 52], [48, 52]].map(([x, y], i) => <path key={i} d={`M${x} ${y + 4} q-3 -6 0 -9 q3 3 0 9 M${x} ${y + 4} q-5 -3 -6 -7 M${x} ${y + 4} q5 -3 6 -7`} fill="none" stroke={LEAF} strokeWidth={0.5} />)}
       {/* the throne, the priestess, the scroll on her knee */}
@@ -114,6 +128,7 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <rect x={34} y={70} width={13} height={5} rx={1} fill={PALE} stroke={INK} strokeWidth={0.5} />
       <text x={40.5} y={73.8} fontSize={3.4} fill={INK} fontFamily="Georgia, serif" textAnchor="middle" letterSpacing={0.4}>TORA</text>
       <path d="M32 96 q8 -7 16 0 q-8 -3 -16 0 z" fill={GOLD} stroke={INK} strokeWidth={0.5} />
+      <path d="M36 94.5 q1 -1 2 0 M42 94.5 q1 -1 2 0" fill="none" stroke={INK} strokeWidth={0.35} />
       <Water y={101} rows={2} />
     </g>
   ),
