@@ -685,6 +685,42 @@ last reading remembers its scene and can be laid on the Table in one tap.
 The deck sheet tallies what remains to draw by suit and the majors: the
 deck is 78 and the discard is open, so this is counting, not divination.
 
+## The ask
+
+The problem it answers: the game was not fun to play. Simulated over
+four hundred runs, a reader choosing at random resolved 61% of readings
+as neutral (lose a heart, "It changed little") and survived 41% of the
+time; a reader who knew every affinity survived every run. The gap is
+the space the game means the player to learn into, but nothing at the
+table let them start: the seat asked "What is the situation?", the three
+cards showed a name and a picture, and the room's wants were hidden until
+the reckoning said, too late, "The situation called for patience and
+order." Both halves of the choice were hidden, so the first hundred
+choices were coin flips, and the modal result was a flat zero.
+
+The fix keeps the pillar and moves the line: the mystery is the deck,
+not the rules, and a scene's wants are rules. So the seat now states its
+ask before any card lands (`seatAsk`, `askText`): "The situation calls
+for *truth* and *order*, and cannot bear *fear*", on a plate above the
+hand, in the position's own terms, with the tags set as chips. The
+reckoning's sentence after the card lands is the same sentence in the
+past tense. Nothing about any card is said. The choice becomes a
+deduction: the seat wants order, the Emperor sits on a throne between
+two rams, does he bring it? The player reasons from the face, from the
+name, and from memory.
+
+Memory is the second half (`noteBrought`, `broughtTags`,
+`CardKnowledge.brought`): when a seat rewards or punishes a card for a
+tag, the Codex keeps that tag by orientation, and from then on the card
+wears it as a small chip above its face whenever it is in hand, gold if
+the seat being filled wants it and red if the seat fears it. This is
+consequence, not meaning: only tags a seat has actually taken the card
+for are kept, so a card learns its words one scene at a time, and a
+card's reversed side is a separate memory. The Codex sheet lists them
+under "What seats have taken it for". The Lamp still earns its cost: it
+answers for tags the Codex has not yet seen. Foretell still shows a
+door's strongest want before the door is chosen.
+
 ## The road not taken
 
 Every remembered scene keeps the cards passed over in each seat, as they

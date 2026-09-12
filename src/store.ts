@@ -66,6 +66,7 @@ import {
   chosenDeck,
   CHOSEN_MIN,
   noteResolved,
+  noteBrought,
   noteRunStarted,
   noteWhisper,
   randomSeed,
@@ -184,6 +185,9 @@ function learn(k: Knowledge, run: RunState, mode: RunMode): { knowledge: Knowled
     if (s.chosen !== null) {
       const c = s.candidates[s.chosen];
       next = noteResolved(next, c.cardId, s.slot, c.reversed, outcome);
+      // What the seat rewarded or punished it for, the Codex now remembers.
+      const hit = last.resolution.slots.find((x) => x.slot === s.slot);
+      if (hit) next = noteBrought(next, c.cardId, c.reversed, hit.hits.map((h) => h.tag));
     }
   }
   next = noteCombos(next, last.resolution.comboIds);

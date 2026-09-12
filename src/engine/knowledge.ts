@@ -1,4 +1,5 @@
 import { SLOT_IDS, type OutcomeTier, type SlotId } from './scenes';
+import type { Tag } from './cards';
 
 /**
  * The Codex: what the player has *earned the right to know* about each card.
@@ -23,6 +24,8 @@ export interface CardKnowledge {
   seatOutcomes?: Partial<Record<SlotId, { good: number; bad: number }>>;
   /** Times this card was on the table when the player died. */
   deathsWith?: number;
+  /** Tags this card has been seen to bring, by orientation: what a seat rewarded or punished it for. Consequence, not meaning. */
+  brought?: { upright?: Tag[]; reversed?: Tag[] };
 }
 
 export interface Knowledge {
@@ -102,6 +105,26 @@ export function noteResolved(k: Knowledge, cardId: string, seat: SlotId, reverse
   let next: CardKnowledge = { ...e, resolved, witnessed, seatOutcomes, seats: { ...e.seats, [seat]: (e.seats[seat] ?? 0) + 1 } };
   if (resolved >= RESOLVES_TO_GLIMPSE) next = raise(next, 1);
   return { ...k, cards: { ...k.cards, [cardId]: next } };
+}
+
+/**
+ * The card was seen to bring these tags: a seat rewarded or punished it for
+ * them, and the reckoning said so. The Codex keeps them, by orientation, so
+ * the next time the card is in hand the reader remembers what it did.
+ */
+export function noteBrought(k: Knowledge, cardId: string, reversed: boolean, tags: readonly Tag[]): Knowledge {
+  if (tags.length === 0) return k;
+  const e = entry(k, cardId);
+  const key = reversed ? 'reversed' : 'upright';
+  const had = e.brought?.[key] ?? [];
+  const merged = Array.from(new Set([...had, ...tags]));
+  if (merged.length === had.length) return k;
+  return { ...k, cards: { ...k.cards, [cardId]: { ...e, brought: { ...e.brought, [key]: merged } } } };
+}
+
+/** What the Codex has seen this card bring, this way up. */
+export function broughtTags(k: Knowledge, cardId: string, reversed: boolean): Tag[] {
+  return k.cards[cardId]?.brought?.[reversed ? 'reversed' : 'upright'] ?? [];
 }
 
 /** A correct recall in Study counts toward glimpsing the card, like a whisper. */

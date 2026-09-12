@@ -21,6 +21,8 @@ interface Props {
   held?: boolean;
   /** Knows a card already on the table. */
   kin?: boolean;
+  /** What the Codex has seen this card bring, and how each sits with the seat being filled. Memory, never meaning. */
+  tags?: { tag: string; fit: 'want' | 'fear' | 'none' }[];
   /** Re-runs the enter animation when this changes. */
   animKey?: string | number;
   delay?: number;
@@ -37,7 +39,7 @@ interface Props {
 }
 
 /** Card faces show name and art only. Meaning lives in the Codex. */
-export function Card({ cardId, reversed = false, faceDown = false, size = 'md', lifted, dim, mark, whisper, whisperKnown, yours, held, kin, animKey, delay = 0, onClick, onLongPress, echo, hiddenSuit, onDragMove, onDragEnd }: Props) {
+export function Card({ cardId, reversed = false, faceDown = false, size = 'md', lifted, dim, mark, whisper, whisperKnown, yours, held, kin, tags, animKey, delay = 0, onClick, onLongPress, echo, hiddenSuit, onDragMove, onDragEnd }: Props) {
   const mode = useGame((s) => s.mode);
   const variant: BackVariant = mode.kind === 'weekly' ? 'weekly' : mode.kind === 'free' && mode.descent !== 'standard' && mode.descent !== 'short' ? (mode.descent as BackVariant) : 'standard';
   const timer = useRef<number | null>(null);
@@ -134,6 +136,13 @@ export function Card({ cardId, reversed = false, faceDown = false, size = 'md', 
         {isSignature && !faceDown && <span className="card__sig" aria-hidden>✦</span>}
       </div>
       {reversed && !faceDown && size === 'lg' && <span className="card__rev-mark" aria-hidden title="reversed">⥯</span>}
+      {tags && tags.length > 0 && !faceDown && (
+        <span className="card__tags" aria-label={`seen to bring ${tags.map((t) => t.tag).join(', ')}`}>
+          {tags.map((t) => (
+            <span key={t.tag} className={`card__tag card__tag--${t.fit}`}>{t.tag}</span>
+          ))}
+        </span>
+      )}
       {whisper && <div className={`card__whisper ${whisperKnown ? 'card__whisper--known' : ''}`}>{whisper}</div>}
       {yours && !whisper && <div className="card__whisper card__whisper--yours">yours</div>}
       {held && !whisper && !yours && <div className="card__whisper card__whisper--held">held</div>}

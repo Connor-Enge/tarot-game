@@ -544,6 +544,44 @@ const OPENER: Record<SlotId, (want: string, fear: string) => string> = {
   hand: (want, fear) => `The best course was ${want}${fear ? `, and the worst ${fear}` : ''}.`,
 };
 
+/**
+ * The ask: what a seat wants and fears in this scene, before any card is
+ * placed. Rules are stated plainly; the mystery is the deck, not the room.
+ * The player reads what the seat calls for and reasons from the card's face
+ * and memory whether it brings that. Strongest first.
+ */
+export interface SeatAsk {
+  slot: SlotId;
+  wanted: Tag[];
+  feared: Tag[];
+}
+
+export function seatAsk(scene: Scene, slot: SlotId): SeatAsk {
+  const entries = Object.entries(scene.affinity[slot]) as [Tag, number][];
+  const wanted = entries.filter(([, w]) => w > 0).sort((a, b) => b[1] - a[1]).map(([t]) => t);
+  const feared = entries.filter(([, w]) => w < 0).sort((a, b) => a[1] - b[1]).map(([t]) => t);
+  return { slot, wanted, feared };
+}
+
+/** The ask in the position's own terms, present tense: the reckoning's opener before the card lands. */
+const ASK_OPENER: Record<SlotId, (want: string, fear: string) => string> = {
+  vessel: (want, fear) => `The situation calls for ${want}${fear ? `, and cannot bear ${fear}` : ''}.`,
+  threshold: (want, fear) => `What stands in the way answers to ${want}${fear ? `, and turns worse with ${fear}` : ''}.`,
+  wake: (want, fear) => `What you might miss here is ${want}${fear ? `; ${fear} would blind you` : ''}.`,
+  hand: (want, fear) => `The best course is ${want}${fear ? `, and the worst ${fear}` : ''}.`,
+};
+
+export function askText(ask: SeatAsk): string {
+  const want = ask.wanted.length ? list(ask.wanted) : 'nothing in particular';
+  const fear = ask.feared.length ? list(ask.feared) : '';
+  return ASK_OPENER[ask.slot](want, fear);
+}
+
+/** How a tag sits with a seat's ask: it serves, it costs, or it is nothing to this seat. */
+export function tagFit(ask: SeatAsk, tag: Tag): 'want' | 'fear' | 'none' {
+  return ask.wanted.includes(tag) ? 'want' : ask.feared.includes(tag) ? 'fear' : 'none';
+}
+
 /** Two plain sentences per seat, in the position's own terms: what it asked for, and what the card brought. */
 export function reckoningText(r: SlotReckoning, cardName: string): string {
   const want = r.wanted.length ? list(r.wanted) : 'nothing in particular';

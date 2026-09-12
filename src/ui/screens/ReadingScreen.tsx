@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSettings } from '../../settings';
-import { activeSlotState, canLamp, canTakeBack, canWhisperHere, kinshipAmong, KIN_BONUS, lampCost, lampVerdicts, namedWithinReach, currentScene, readingSoFar, reckoningText, RITES, SLOT_POSITION, THRESHOLDS, getCard, hasRelic, redrawCost, sceneNumber, scoreSlot, SLOT_IDS, SLOTS, totalScenes, whisperCost, whisperWords } from '../../engine';
+import { activeSlotState, askText, broughtTags, canLamp, canTakeBack, canWhisperHere, kinshipAmong, seatAsk, tagFit, type SlotId, type Tag, KIN_BONUS, lampCost, lampVerdicts, namedWithinReach, currentScene, readingSoFar, reckoningText, RITES, SLOT_POSITION, THRESHOLDS, getCard, hasRelic, redrawCost, sceneNumber, scoreSlot, SLOT_IDS, SLOTS, totalScenes, whisperCost, whisperWords } from '../../engine';
 
 /** Dev only: show the oracle's score on each candidate when the page is opened with ?oracle. */
 const ORACLE = import.meta.env.DEV && typeof location !== 'undefined' && location.search.includes('oracle');
@@ -126,6 +126,15 @@ function ReadingScreenInner() {
     ? namedWithinReach(Object.fromEntries(soFar.seats.map((x) => [x.slot, { cardId: x.card.id, reversed: x.reckoning.reversed }])), knownCombos ?? [])
     : [];
   const soFarBySlot = Object.fromEntries(soFar.seats.map((x) => [x.slot, x]));
+  // The ask: what this seat calls for and cannot bear, said before any card lands.
+  const ask = seatAsk(scene, active.slot);
+  const knowledge = useGame((s) => s.knowledge);
+  // What the Codex has seen each card in hand bring, this way up, and how that sits with the ask.
+  const chipsFor = (cardId: string, reversed: boolean) =>
+    broughtTags(knowledge, cardId, reversed)
+      .map((tag) => ({ tag, fit: tagFit(ask, tag) }))
+      .sort((a, b) => ORDER[a.fit] - ORDER[b.fit])
+      .slice(0, 5);
 
   return (
     <main className={`screen screen--reading ${scene.terminal ? 'screen--abyss' : ''} ${soFar.placed > 0 && !calmRoom ? `reading--${soFar.tier}` : ''}`}>
@@ -257,6 +266,10 @@ function ReadingScreenInner() {
       </div>
 
       <div className="reading__right">
+      <p className="ask" key={`ask-${active.slot}`} aria-label={askText(ask)}>
+        <span className="hint__pos">{SLOT_POSITION[active.slot].n} · {SLOT_POSITION[active.slot].role}</span>
+        <AskLine slot={active.slot} wanted={ask.wanted} feared={ask.feared} />
+      </p>
       <section ref={handRef} className={`hand ${active.candidates.length > 3 ? 'hand--four' : ''} ${dragPull ? 'hand--pull' : ''} ${lampOn ? 'hand--lit' : ''}`} aria-label={`candidates for ${seatsNamed ? SLOTS[active.slot].name : `seat ${run.activeSlot + 1}`}: choose one`} key={handKey}>
         {active.candidates.map((c, i) => {
           const card = getCard(c.cardId);
@@ -291,6 +304,7 @@ function ReadingScreenInner() {
                 yours={c.yours}
                 held={c.held}
                 kin={!c.hidden && kinHere(c.cardId)}
+                tags={c.hidden ? undefined : chipsFor(c.cardId, c.reversed)}
                 onClick={() => lift(lifted === i ? null : i)}
                 onLongPress={c.hidden ? undefined : () => setZoom({ cardId: c.cardId, reversed: c.reversed })}
                 onDragMove={(_dx, dy) => {
@@ -390,6 +404,47 @@ function ReadingScreenInner() {
         </div>
       )}
     </main>
+  );
+}
+
+const ORDER = { want: 0, fear: 1, none: 2 } as const;
+
+/** The ask's opener per position, with the tags set as chips so they can be matched against a card at a glance. */
+const ASK_PARTS: Record<SlotId, { pre: string; fearPre: string; fearPost: string }> = {
+  vessel: { pre: 'The situation calls for ', fearPre: ', and cannot bear ', fearPost: '' },
+  threshold: { pre: 'What stands in the way answers to ', fearPre: ', and turns worse with ', fearPost: '' },
+  wake: { pre: 'What you might miss here is ', fearPre: '; ', fearPost: ' would blind you' },
+  hand: { pre: 'The best course is ', fearPre: ', and the worst ', fearPost: '' },
+};
+
+function TagList({ tags, fit }: { tags: readonly Tag[]; fit: 'want' | 'fear' }) {
+  return (
+    <>
+      {tags.map((t, i) => (
+        <span key={t}>
+          {i > 0 && (i === tags.length - 1 ? ' and ' : ', ')}
+          <em className={`ask__tag ask__tag--${fit}`}>{t}</em>
+        </span>
+      ))}
+    </>
+  );
+}
+
+function AskLine({ slot, wanted, feared }: { slot: SlotId; wanted: readonly Tag[]; feared: readonly Tag[] }) {
+  const parts = ASK_PARTS[slot];
+  return (
+    <span className="ask__text">
+      {parts.pre}
+      {wanted.length ? <TagList tags={wanted} fit="want" /> : 'nothing in particular'}
+      {feared.length > 0 && (
+        <>
+          {parts.fearPre}
+          <TagList tags={feared} fit="fear" />
+          {parts.fearPost}
+        </>
+      )}
+      .
+    </span>
   );
 }
 

@@ -61,3 +61,34 @@ describe('the reading so far', () => {
     for (let i = 0; i < 4; i++) expect(all.seats[i].score).toBe(full.slots[i].score);
   });
 });
+
+describe('the ask', () => {
+  it('names what a seat wants and fears, strongest first, before any card lands', async () => {
+    const { askText, seatAsk, tagFit } = await import('../resolve');
+    const scene = SCENES.beast;
+    const hand = seatAsk(scene, 'hand');
+    expect(hand.wanted[0]).toBe('power');
+    expect(hand.feared[0]).toBe('chaos');
+    expect(askText(hand).startsWith('The best course is power')).toBe(true);
+    expect(askText(hand)).toContain('and the worst chaos');
+    expect(askText(seatAsk(scene, 'vessel')).startsWith('The situation calls for')).toBe(true);
+    expect(askText(seatAsk(scene, 'threshold')).startsWith('What stands in the way answers to')).toBe(true);
+    expect(askText(seatAsk(scene, 'wake')).startsWith('What you might miss here is')).toBe(true);
+    expect(tagFit(hand, 'power')).toBe('want');
+    expect(tagFit(hand, 'chaos')).toBe('fear');
+    expect(tagFit(hand, 'wealth')).toBe('none');
+  });
+  it('agrees with the reckoning after the card lands', async () => {
+    const { seatAsk } = await import('../resolve');
+    const reading = { vessel: { cardId: 'major-0', reversed: false }, threshold: { cardId: 'major-16', reversed: true }, hand: { cardId: 'wands-1', reversed: false }, wake: { cardId: 'cups-10', reversed: false } };
+    for (const scene of Object.values(SCENES)) {
+      const res = resolveReading(scene, reading);
+      const r = reckon(scene, res);
+      for (const x of r) {
+        const ask = seatAsk(scene, x.slot);
+        expect(ask.wanted).toEqual(x.wanted);
+        expect(ask.feared).toEqual(x.feared);
+      }
+    }
+  });
+});

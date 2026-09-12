@@ -37,7 +37,7 @@ export function HowToPlay({ onClose }: { onClose: () => void }) {
               ))}
             </span>
             <span>
-              <strong>Fill four seats.</strong> For each, you are dealt three cards. Lift one and place it, or drag it up into the seat. Nobody tells you what a card means.
+              <strong>Fill four seats.</strong> Each seat says what it calls for and what it cannot bear. For each, you are dealt three cards. Lift one and place it, or drag it up into the seat. Nobody tells you what a card brings; the Codex remembers what seats have taken it for before, and shows it on the card.
             </span>
           </li>
           <li className="howto__step">

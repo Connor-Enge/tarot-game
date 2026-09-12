@@ -326,3 +326,20 @@ describe('places read', () => {
     expect(places[1].seats.wake[0].tier).toBe('triumph');
   });
 });
+
+describe('what a card was seen to bring', () => {
+  it('remembers witnessed tags by orientation and never duplicates them', async () => {
+    const { broughtTags, noteBrought } = await import('../knowledge');
+    let k = emptyKnowledge();
+    expect(broughtTags(k, 'major-4', false)).toEqual([]);
+    k = noteBrought(k, 'major-4', false, ['order']);
+    k = noteBrought(k, 'major-4', false, ['order', 'power']);
+    expect(broughtTags(k, 'major-4', false)).toEqual(['order', 'power']);
+    expect(broughtTags(k, 'major-4', true)).toEqual([]);
+    k = noteBrought(k, 'major-4', true, ['binding']);
+    expect(broughtTags(k, 'major-4', true)).toEqual(['binding']);
+    const same = noteBrought(k, 'major-4', true, ['binding']);
+    expect(same).toBe(k);
+    expect(noteBrought(k, 'major-4', false, [])).toBe(k);
+  });
+});

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { bestSeat, BOND_MIN, CARDS, getCard, getLore, SCENES, SLOT_IDS, SLOT_POSITION, SLOTS, witnessed, type Tier } from '../../engine';
+import { bestSeat, BOND_MIN, broughtTags, CARDS, getCard, getLore, SCENES, SLOT_IDS, SLOT_POSITION, SLOTS, witnessed, type Tier } from '../../engine';
 import { SceneArt } from '../art/scenes';
 import { useGame } from '../../store';
 import { Card } from './Card';
@@ -115,6 +115,23 @@ export function CodexDetail({ cardId, onClose }: { cardId: string; onClose: () =
               <p className="omens__line omens__line--rev">
                 <span className="omens__mark" aria-hidden>↓</span>
                 <em>{card.omen.reversed}</em>
+              </p>
+            )}
+          </div>
+        )}
+        {(broughtTags(k, cardId, false).length > 0 || broughtTags(k, cardId, true).length > 0) && (
+          <div className="brought">
+            <div className="muted small">What seats have taken it for</div>
+            {broughtTags(k, cardId, false).length > 0 && (
+              <p className="brought__line">
+                <span className="omens__mark" aria-hidden>↑</span>
+                {broughtTags(k, cardId, false).map((t) => <span key={t} className="card__tag card__tag--none brought__tag">{t}</span>)}
+              </p>
+            )}
+            {broughtTags(k, cardId, true).length > 0 && (
+              <p className="brought__line brought__line--rev">
+                <span className="omens__mark" aria-hidden>↓</span>
+                {broughtTags(k, cardId, true).map((t) => <span key={t} className="card__tag card__tag--none brought__tag">{t}</span>)}
               </p>
             )}
           </div>
