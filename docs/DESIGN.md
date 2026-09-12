@@ -264,6 +264,12 @@ the Codex. They change nothing about play.
 **Records**: per-descent runs, returns, and deepest scene, shown under the
 descent picker on the title screen.
 
+**First visit**: until the first descent has been walked, the title
+shows one road: the title, the how-to, Descend, the Codex and settings.
+The descent row, Daily, Weekly, the weather sky and its forecast wait
+behind a single line saying they open after the first. A new player
+has one thing to do, and does it.
+
 **First descent**: the player's very first run puts twelve shuffled Major
 Arcana on top of the deck (`majorsFirst`), so the first scene is read with
 the iconic cards, and shows three wordless nudges ("Lift one." / "Place it

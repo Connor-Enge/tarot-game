@@ -106,7 +106,7 @@ export function TitleScreen() {
         </button>
       </div>
       {howTo && <HowToPlay onClose={() => setHowTo(false)} />}
-      {anyUnlocked && (
+      {anyUnlocked && k.runs > 0 && (
         <div className="descents">
           <div className="descents__row">
             {DESCENTS.map((d) => {
@@ -229,6 +229,9 @@ export function TitleScreen() {
         <button className="btn btn--primary" onClick={() => newRun()} disabled={current.id === 'chosen' && chosenDeck(k).length < CHOSEN_MIN}>
           {current.id === 'standard' ? 'Descend' : current.id === 'chosen' ? `Descend · your ${chosenDeck(k).length}` : `Descend · ${current.name}`}
         </button>
+        {k.runs === 0 && <p className="muted small center first-note">One road for now. The daily and weekly roads, and the other descents, open after your first.</p>}
+        {k.runs > 0 && (
+        <>
         <div className="row">
           <button className="btn" onClick={newDaily} title={`${weather.name}: ${weather.text}`}>
             Daily{streak > 1 ? ` · ${streak}` : ''} {streak > 1 && <StreakFlames n={streak} className="btn__flames" />}<span className="weather__glyph">{weather.glyph}</span>
@@ -245,6 +248,8 @@ export function TitleScreen() {
           <br />
           Tonight · <span className="weather__name">☾ {moonName(moonPhase())}</span> · {LIGHT_WORDS[light]}
         </p>
+        </>
+        )}
         <div className="row">
           <button className="btn btn--codex" onClick={() => goto('codex')}>
             Codex
@@ -322,7 +327,7 @@ export function TitleScreen() {
           {todayOpen && <span className="today__flare" aria-hidden />}
         </span>
         <span className="today__text">
-          <span className="muted small">Today's card · {getCard(today).name} · <span className="today__charged">charged in the Daily</span></span>
+          <span className="muted small">Today's card · {getCard(today).name}{k.runs > 0 && <> · <span className="today__charged">charged in the Daily</span></>}</span>
           {streak >= STREAK_FOR_WEEK_CARD ? (
             <span className="muted small today__week">{streak} days running · the week's card, {getCard(dayCard(weeklySeed().seed)).name}, is charged too</span>
           ) : streak >= 3 ? (
