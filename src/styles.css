@@ -2202,3 +2202,9 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .deck-tally__row--pentacles .deck-tally__bar > span { background: #a9c98a; }
 .deck-tally__n { color: var(--muted); font-variant-numeric: tabular-nums; min-width: 2ch; text-align: right; }
 .last__table { margin-top: 6px; }
+
+/* --- kinship: two cards that know each other ------------------------------- */
+.kin { margin: 4px 0 0; font-size: 0.9rem; color: var(--ink); text-align: center; }
+.kin__mark { color: #bfe6f5; text-shadow: 0 0 8px rgba(160,210,240,0.6); margin-right: 3px; }
+.kin__score { display: inline-block; margin-left: 4px; padding: 0 6px; border-radius: 999px; border: 1px solid rgba(160,210,240,0.5); color: #bfe6f5; font-size: 0.78rem; }
+.kin--sofar { font-size: 0.82rem; }

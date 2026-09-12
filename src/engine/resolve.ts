@@ -21,6 +21,8 @@ export interface Resolution {
   tier: OutcomeTier;
   deltas: { vitality: number; clarity: number };
   narration: string[];
+  /** Pairs on the table that know each other, and what they added. */
+  kinship?: { pairs: [string, string][]; score: number };
 }
 
 /**
@@ -377,6 +379,20 @@ export interface ResolveOptions {
   mendBonus?: number;
   /** Added to every named reading that lifts the total (Wax Seal). */
   namedBonus?: number;
+  /** Pairs that know each other, as sorted 'a|b' keys. Each pair on the table lifts the reading. */
+  kin?: readonly string[];
+}
+
+export const KIN_BONUS = 0.5;
+
+/** Which of the given pairs are both on the table. */
+export function kinshipAmong(cardIds: readonly string[], kin: readonly string[] | undefined): { pairs: [string, string][]; score: number } {
+  if (!kin || kin.length === 0) return { pairs: [], score: 0 };
+  const ids = Array.from(new Set(cardIds)).sort();
+  const pairs: [string, string][] = [];
+  for (let i = 0; i < ids.length; i++)
+    for (let j = i + 1; j < ids.length; j++) if (kin.includes(`${ids[i]}|${ids[j]}`)) pairs.push([ids[i], ids[j]]);
+  return { pairs, score: pairs.length * KIN_BONUS };
 }
 
 export function scoreSlot(scene: Scene, slot: SlotId, drawn: DrawnCard, marks: Marks = {}, chargedBonus = CHARGED_BONUS): SlotResolution {
@@ -433,6 +449,8 @@ export function resolveReading(scene: Scene, reading: Reading, marks: Marks = {}
       comboIds.push(c.id);
     }
   }
+  const kinship = kinshipAmong(SLOT_IDS.map((s) => reading[s].cardId), opts.kin);
+  if (kinship.pairs.length) total += kinship.score;
   const tier = tierFor(total);
   const base = BASE_DELTAS[tier];
   const mend = scene.mend ? scene.mend + (opts.mendBonus ?? 0) : undefined;
@@ -446,7 +464,7 @@ export function resolveReading(scene: Scene, reading: Reading, marks: Marks = {}
     ...comboNotes,
     scene.outcomes[tier],
   ];
-  return { slots, comboIds, comboNotes, total, tier, deltas, narration };
+  return { slots, comboIds, comboNotes, total, tier, deltas, narration, kinship: kinship.pairs.length ? kinship : undefined };
 }
 
 export function tierIndex(t: OutcomeTier): number {
@@ -537,9 +555,11 @@ export function reckoningText(r: SlotReckoning, cardName: string): string {
 /** The tally: fit, named readings, the total, and the tier it made. */
 export function tallyText(resolution: Resolution): string {
   const fit = resolution.slots.reduce((a, s) => a + s.score, 0);
-  const named = resolution.total - fit;
+  const kin = resolution.kinship?.score ?? 0;
+  const named = resolution.total - fit - kin;
   const fmt = (n: number) => `${n >= 0 ? '+' : '−'}${Math.abs(n) % 1 === 0 ? Math.abs(n) : Math.abs(n).toFixed(1)}`;
   const parts = [`The four seats ${fmt(fit)}`];
   if (named !== 0) parts.push(`named readings ${fmt(named)}`);
+  if (kin !== 0) parts.push(`kinship ${fmt(kin)}`);
   return `${parts.join(', ')}: ${fmt(resolution.total)} in all, which reads as ${resolution.tier}.`;
 }

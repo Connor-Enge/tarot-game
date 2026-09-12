@@ -135,3 +135,31 @@ describe('named readings within reach', () => {
     expect(namedWithinReach(full, ['star-hand'])).toEqual([]);
   });
 });
+
+describe('kinship', () => {
+  it('lifts a reading by half a point per pair on the table that knows each other, and the tally names it', async () => {
+    const { resolveReading, kinshipAmong, tallyText, KIN_BONUS } = await import('../resolve');
+    const { SCENES } = await import('../scenes');
+    const scene = Object.values(SCENES).find((s) => !s.terminal)!;
+    const up = (cardId: string) => ({ cardId, reversed: false });
+    const reading = { vessel: up('major-0'), threshold: up('cups-2'), wake: up('major-19'), hand: up('wands-5') };
+    const plain = resolveReading(scene, reading, {});
+    const kin = resolveReading(scene, reading, {}, { kin: ['major-0|major-19', 'cups-2|wands-5', 'major-0|swords-3'] });
+    expect(kin.kinship?.pairs).toEqual([['cups-2', 'wands-5'], ['major-0', 'major-19']]);
+    expect(kin.total).toBeCloseTo(plain.total + 2 * KIN_BONUS);
+    expect(tallyText(kin)).toContain('kinship +1');
+    expect(plain.kinship).toBeUndefined();
+    expect(kinshipAmong(['major-0'], ['major-0|major-19']).pairs).toEqual([]);
+  });
+  it('rides into a run from its config and out through resolve', async () => {
+    const { startRun, chooseNode, chooseCandidate } = await import('../run');
+    let run = chooseNode(startRun(8, { kin: ['a|b'] }), 0);
+    expect(run.kin).toEqual(['a|b']);
+    const ids = run.slots[0].candidates.map((c) => c.cardId);
+    // Make the first two seats' first cards kin, then play them.
+    run = { ...run, kin: [] };
+    for (let i = 0; i < 4; i++) run = chooseCandidate(run, 0);
+    expect(run.phase.kind).toBe('resolved');
+    expect(ids.length).toBeGreaterThan(0);
+  });
+});

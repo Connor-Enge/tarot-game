@@ -34,6 +34,8 @@ export interface RunConfig {
   endless?: boolean;
   /** Every seat answers in Clarity: a seat that costs you takes one at once, one that serves you gives one back. */
   seatTick?: boolean;
+  /** Pairs the reader's Codex knows to have been read together often: kin, as sorted 'a|b' keys. */
+  kin?: string[];
 }
 
 /**

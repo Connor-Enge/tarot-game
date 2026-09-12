@@ -131,6 +131,8 @@ export interface RunState {
   tradeTaken?: Trade['id'];
   /** A keepsake from Study, carried charged into this descent. */
   keepsake?: string;
+  /** Pairs that know each other, fixed for the descent. */
+  kin?: string[];
   /** A candidate held back for the next seat, if any. */
   held?: DrawnCard | null;
   /** Holds made this run. */
@@ -219,6 +221,7 @@ export function startRun(seed: number, config: RunConfig = {}): RunState {
     clarity: config.startingClarity ?? STARTING_CLARITY,
     marks: Object.fromEntries([...(config.charged ?? []), ...(config.keepsake ? [config.keepsake] : [])].map((id) => [id, 'charged' as const])),
     keepsake: config.keepsake && deck.draw.includes(config.keepsake) ? config.keepsake : undefined,
+    kin: config.kin && config.kin.length ? config.kin : undefined,
     relics: [...(config.startingRelics ?? [])],
     freeRedrawUsed: false,
     redraws: 0,
@@ -593,6 +596,7 @@ function resolve(run: RunState): RunState {
     extraNeutralCost: (hasRelic(run, 'weight') ? 1 : 0) + run.mods.extraNeutralCost || undefined,
     mendBonus: (hasRelic(run, 'bread') ? 2 : 0) - (hasRelic(run, 'ash') ? 1 : 0) || undefined,
     namedBonus: hasRelic(run, 'wax') ? 0.5 : undefined,
+    kin: run.kin,
   });
   // The Well's toll: every reading below the first Abyss costs one vitality per Abyss passed, however it went.
   const toll = run.well ?? 0;

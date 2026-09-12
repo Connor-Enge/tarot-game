@@ -1,4 +1,4 @@
-import type { Knowledge } from './knowledge';
+import { bondedPairs, type Knowledge } from './knowledge';
 import { readingSoFar, resolveReading, tierFor, comboNote, comboScore, type Reading, type ReadingSoFar } from './resolve';
 import { SCENES, SLOT_IDS, type OutcomeTier, type Scene, type SlotId } from './scenes';
 
@@ -48,7 +48,7 @@ export function layTable(scene: Scene, lay: TableLay, k: Knowledge): TableReadin
   const so = readingSoFar(scene, placed, {});
   if (placed.length < SLOT_IDS.length) return so;
   const reading = Object.fromEntries(placed.map((p) => [p.slot, p.drawn])) as Reading;
-  const res = resolveReading(scene, reading, {});
+  const res = resolveReading(scene, reading, {}, { kin: bondedPairs(k) });
   const found = new Set(k.combos ?? []);
   const named = res.comboIds.filter((id) => found.has(id)).map((id) => ({ id, note: comboNote(id) ?? '', score: comboScore(id) }));
   const hidden = res.comboIds.filter((id) => !found.has(id));

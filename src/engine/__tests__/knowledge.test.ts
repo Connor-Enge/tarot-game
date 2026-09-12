@@ -291,3 +291,14 @@ describe('the last reading remembers its scene', () => {
     expect(noteLast(emptyKnowledge(), [], 'x', false).last?.scene).toBeUndefined();
   });
 });
+
+describe('kin', () => {
+  it('names a pair once it has been read together three times', async () => {
+    const { emptyKnowledge, noteLinks, bondedPairs, BOND_MIN } = await import('../knowledge');
+    let k = emptyKnowledge();
+    for (let i = 0; i < BOND_MIN - 1; i++) k = noteLinks(k, ['major-0', 'major-19', 'cups-2', 'wands-5']);
+    expect(bondedPairs(k)).toEqual([]);
+    k = noteLinks(k, ['major-0', 'major-19', 'swords-3', 'pentacles-9']);
+    expect(bondedPairs(k)).toEqual(['major-0|major-19']);
+  });
+});

@@ -641,6 +641,19 @@ Wax Seal, a boon for the named readings, adds half a point to every one
 that lifts the total. Engine:
 `LAMP_COST`, `canLamp`, `lightLamp`, `lampVerdicts`; `SlotState.lit`.
 
+## Kinship
+
+The sky already remembers which cards have been read together. Once two
+cards have shared a table three times, they know each other, and from the
+next descent on, whenever both land in one reading, they lift it by half a
+point: "The Fool and the Sun know each other. +0.5." The pairs are fixed
+when a descent begins (`RunConfig.kin`, from `bondedPairs`), so a run
+cannot grow its own kin mid-way; the Table reads with the Codex's current
+pairs. The reading plate shows kin the moment both are down. This turns a
+record the player already had into a reason to keep old company on the
+table. Engine: `KIN_BONUS`, `kinshipAmong`, `Resolution.kinship`; the
+tally names it.
+
 ## The Table
 
 A practice spread in the Codex. The player picks a scene they have read at,

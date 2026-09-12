@@ -1,4 +1,4 @@
-import { comboScore, currentScene, getCard, getRelic, isPeddlerTrade, reckon, reckoningText, SLOT_IDS, SLOT_POSITION, SLOTS, tallyText, tradeText, type Trade } from '../../engine';
+import { comboScore, currentScene, getCard, getRelic, isPeddlerTrade, KIN_BONUS, reckon, reckoningText, SLOT_IDS, SLOT_POSITION, SLOTS, tallyText, tradeText, type Trade } from '../../engine';
 import { PeddlerArt, StrangerArt } from '../art/stranger';
 
 const TIER_GLYPH = { calamity: '✖', harm: '▽', neutral: '◇', boon: '△', triumph: '★' } as const;
@@ -123,6 +123,11 @@ function ResolutionScreenInner() {
             </p>
           );
         })}
+        {resolution.kinship && resolution.kinship.pairs.map(([a, b], i) => (
+          <p key={`${a}|${b}`} className="kin rise" style={{ animationDelay: `${400 + (resolution.narration.length + i) * step}ms` }}>
+            <span className="kin__mark" aria-hidden>✶</span> {getCard(a).name} and {getCard(b).name} know each other. <span className="kin__score">+{KIN_BONUS}</span>
+          </p>
+        ))}
         {dream && (
           <p className="dream rise" style={{ animationDelay: `${300 + resolution.narration.length * step}ms` }} onClick={() => openCodex(dream.cardId)}>
             <span className="dream__label muted small">You dream of something you have seen.</span>

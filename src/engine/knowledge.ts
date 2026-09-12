@@ -152,6 +152,14 @@ export function noteLinks(k: Knowledge, cardIds: string[]): Knowledge {
   return { ...k, links };
 }
 
+/** Readings together before two cards are said to know each other. */
+export const BOND_MIN = 3;
+
+/** Pairs the Codex has seen read together often enough to know each other, as sorted 'a|b' keys. */
+export function bondedPairs(k: Knowledge): string[] {
+  return Object.entries(k.links ?? {}).filter(([, n]) => n >= BOND_MIN).map(([key]) => key).sort();
+}
+
 export function noteDealt(k: Knowledge, cardIds: string[]): Knowledge {
   const fresh = cardIds.filter((id) => !k.dealt?.[id]);
   if (fresh.length === 0) return k;

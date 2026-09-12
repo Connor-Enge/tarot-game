@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSettings } from '../../settings';
-import { activeSlotState, canLamp, canTakeBack, canWhisperHere, lampCost, lampVerdicts, namedWithinReach, currentScene, readingSoFar, reckoningText, RITES, SLOT_POSITION, THRESHOLDS, getCard, hasRelic, redrawCost, sceneNumber, scoreSlot, SLOT_IDS, SLOTS, totalScenes, whisperCost, whisperWords } from '../../engine';
+import { activeSlotState, canLamp, canTakeBack, canWhisperHere, kinshipAmong, KIN_BONUS, lampCost, lampVerdicts, namedWithinReach, currentScene, readingSoFar, reckoningText, RITES, SLOT_POSITION, THRESHOLDS, getCard, hasRelic, redrawCost, sceneNumber, scoreSlot, SLOT_IDS, SLOTS, totalScenes, whisperCost, whisperWords } from '../../engine';
 
 /** Dev only: show the oracle's score on each candidate when the page is opened with ?oracle. */
 const ORACLE = import.meta.env.DEV && typeof location !== 'undefined' && location.search.includes('oracle');
@@ -99,6 +99,7 @@ function ReadingScreenInner() {
   );
   const lastPlaced = soFar.seats[soFar.seats.length - 1];
   const knownCombos = useGame((s) => s.knowledge.combos);
+  const kinSoFar = kinshipAmong(soFar.seats.map((x) => x.card.id), run.kin);
   const withinReach = soFar.placed === SLOT_IDS.length - 1
     ? namedWithinReach(Object.fromEntries(soFar.seats.map((x) => [x.slot, { cardId: x.card.id, reversed: x.reckoning.reversed }])), knownCombos ?? [])
     : [];
@@ -206,6 +207,11 @@ function ReadingScreenInner() {
               ◈ {lastPlaced.reckoning.verdict === 'hurt' ? '−1 taken at once' : '+1 given at once'}
             </p>
           )}
+          {kinSoFar.pairs.map(([a, b]) => (
+            <p key={`${a}|${b}`} className="kin kin--sofar center small">
+              <span className="kin__mark" aria-hidden>✶</span> {getCard(a).name} and {getCard(b).name} know each other. <span className="kin__score">+{KIN_BONUS}</span>
+            </p>
+          ))}
           {withinReach.length > 0 && (
             <p className="sofar__reach center small">
               {withinReach.slice(0, 2).map((w) => (
