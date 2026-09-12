@@ -187,25 +187,41 @@ function Row({ suit, xs, y, s, angle }: { suit: Suit; xs: number[]; y: number; s
 const WANDS: Record<number, () => ReactElement> = {
   2: () => (
     <g>
-      <Water y={60} rows={2} />
-      <Mountains y={62} opacity={0.25} />
+      {/* from the battlement he looks out over the bay to the far hills, the world in his hand */}
+      <Mountains y={56} opacity={0.22} />
+      <Water y={62} rows={2} />
+      <path d="M0 74 q12 -4 24 0 v38 h-24 z" fill={GREEN} opacity={0.35} />
       <rect x={0} y={72} width={80} height={40} fill={STONE} />
+      <rect x={0} y={72} width={80} height={40} fill="url(#hatch)" opacity={0.35} />
       {[0, 16, 32, 48, 64].map((x) => <rect key={x} x={x} y={66} width={8} height={7} fill={STONE} />)}
+      <path d="M0 73 h80 M0 84 h80 M0 96 h80 M12 84 v12 M40 73 v11 M60 84 v12 M26 96 v10 M52 96 v10" stroke={INK} strokeWidth={0.35} opacity={0.4} />
       <Row suit="wands" xs={[70]} y={80} s={11} />
-      <Person x={30} y={100} h={48} pose="raise-left" robe={ROBE.wands} />
-      <circle cx={14} cy={58} r={4} fill="url(#skySpirit)" stroke={INK} strokeWidth={0.6} />
-      <path d="M10 58 h8 M14 54 v8" stroke={INK} strokeWidth={0.4} />
+      <path d="M8 62 l2 -3 l2 3 z M20 60 l2 -3 l2 3 z" fill={PALE} stroke={INK} strokeWidth={0.3} />
+      <Person x={30} y={100} h={48} pose="raise-left" robe={ROBE.wands} inner={ROBE_PALE.wands} hair="#3a2a1e" />
+      <circle cx={13} cy={57} r={4.2} fill="url(#skySpirit)" stroke={INK} strokeWidth={0.6} />
+      <path d="M8.8 57 h8.4 M13 52.8 v8.4 M9.5 54.5 q3.5 1.5 7 0 M9.5 59.5 q3.5 -1.5 7 0" fill="none" stroke={INK} strokeWidth={0.4} />
       <Row suit="wands" xs={[44]} y={82} s={11} />
+      <path d="M4 100 q4 -6 8 0 q-4 -2 -8 0 z M12 102 q4 -6 8 0 q-4 -2 -8 0 z" fill={BLOOD} stroke={INK} strokeWidth={0.3} opacity={0.8} />
+      <path d="M4 100 q2 3 8 0 M12 102 q2 3 8 0" fill="none" stroke={LEAF} strokeWidth={0.6} />
     </g>
   ),
   3: () => (
     <g>
-      <Sun x={64} y={16} r={7} rays={10} />
+      <Sun x={62} y={14} r={7} rays={10} />
+      {/* from the headland he watches his three ships cross the golden sea */}
+      <Mountains y={44} opacity={0.15} />
+      <path d="M0 48 h80 v22 h-80 z" fill={GOLD_FLAT} opacity={0.2} />
       <Water y={52} rows={3} />
-      {[16, 34, 56].map((x, i) => <path key={x} d={`M${x} ${50 + i} l2 -5 l2 5 z`} fill={PALE} stroke={INK} strokeWidth={0.4} />)}
-      <Ground y={78} fill="#8a6a3a" />
+      {[16, 34, 56].map((x, i) => (
+        <g key={x}>
+          <path d={`M${x} ${52 + i} l2 -6 l2 6 z`} fill={PALE} stroke={INK} strokeWidth={0.4} />
+          <path d={`M${x - 1.5} ${52 + i} h7 l-1.5 2 h-4 z`} fill={INK} opacity={0.7} />
+        </g>
+      ))}
+      <path d="M0 78 q20 -8 40 -2 t40 -4 v40 h-80 z" fill="#8a6a3a" />
+      <path d="M0 78 q20 -8 40 -2 t40 -4 v6 q-20 -2 -40 4 t-40 2 z" fill="url(#hatch)" opacity={0.4} />
       <Row suit="wands" xs={[18, 62]} y={86} s={11} />
-      <Person x={40} y={104} h={52} pose="raise-right" robe={ROBE.wands} />
+      <Person x={40} y={104} h={52} pose="raise-right" robe={ROBE.wands} inner={ROBE_PALE.wands} hair="#3a2a1e" />
       <Row suit="wands" xs={[52]} y={80} s={11} />
     </g>
   ),
