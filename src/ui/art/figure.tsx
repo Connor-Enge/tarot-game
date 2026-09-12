@@ -22,9 +22,13 @@ export function Head({ x, y, r = 5, hair = '#3a2a1e', face = true, turn = 0 }: P
       {hair !== 'none' && <path d={`M${x - r} ${y} a${r} ${r} 0 0 1 ${r * 2} 0 q${-r * 0.2} ${r * 0.35} ${-r * 0.7} ${r * 0.25} q${-r * 0.6} ${-r * 0.3} ${-r * 1.3} ${r * 0.1} Z`} fill={hair} stroke={INK} strokeWidth={0.35} />}
       {face && (
         <g>
+          {/* brows, eyes, the line of the nose, a mouth; a touch of shadow under the jaw */}
+          <path d={`M${x - r * 0.55 + turn} ${y - r * 0.2} q${r * 0.2} ${-r * 0.16} ${r * 0.4} 0 M${x + r * 0.15 + turn} ${y - r * 0.2} q${r * 0.2} ${-r * 0.16} ${r * 0.4} 0`} fill="none" stroke={SKIN_INK} strokeWidth={0.3} opacity={0.8} />
           <circle cx={x - r * 0.35 + turn} cy={y + r * 0.05} r={r * 0.09} fill={INK} />
           <circle cx={x + r * 0.35 + turn} cy={y + r * 0.05} r={r * 0.09} fill={INK} />
+          <path d={`M${x + turn} ${y} q${r * 0.12} ${r * 0.2} 0 ${r * 0.3}`} fill="none" stroke={SKIN_INK} strokeWidth={0.28} opacity={0.8} />
           <path d={`M${x - r * 0.25 + turn} ${y + r * 0.5} q${r * 0.25} ${r * 0.22} ${r * 0.5} 0`} fill="none" stroke={SKIN_INK} strokeWidth={0.35} />
+          <path d={`M${x - r * 0.6} ${y + r * 0.7} q${r * 0.6} ${r * 0.35} ${r * 1.2} 0`} fill="none" stroke={SKIN_INK} strokeWidth={0.25} opacity={0.35} />
         </g>
       )}
     </g>
