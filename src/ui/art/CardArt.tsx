@@ -230,8 +230,13 @@ function CardBackInner({ className, variant = 'standard' }: { className?: string
     <svg viewBox="0 0 100 160" className={className} xmlns="http://www.w3.org/2000/svg">
       <rect x={0} y={0} width={100} height={160} rx={6} fill={glow} />
       <rect x={4} y={4} width={92} height={152} rx={4} fill="url(#backLattice)" />
-      <rect x={4} y={4} width={92} height={152} rx={4} fill="none" stroke={GOLD_FLAT} strokeWidth={1.2} />
+      {/* the same rail and corners as the face, so front and back are one deck */}
+      <rect x={2.5} y={2.5} width={95} height={155} rx={4.5} fill="none" stroke={GOLD} strokeWidth={1.8} />
+      <rect x={4.6} y={4.6} width={90.8} height={150.8} rx={3.5} fill="none" stroke={GOLD_FLAT} strokeWidth={0.3} opacity={0.6} />
       <rect x={8} y={8} width={84} height={144} rx={3} fill="none" stroke={GOLD_FLAT} strokeWidth={0.4} opacity={0.6} />
+      {[[8.5, 8.5], [91.5, 8.5], [8.5, 151.5], [91.5, 151.5]].map(([x, y], i) => (
+        <path key={i} d={`M${x} ${y - 3.2} q2.2 0 2.2 2.2 q1 -1 2.2 1 q-1.2 1 -2.2 1 q0 2.2 -2.2 2.2 q0 -2.2 -2.2 -2.2 q-1.2 0 -2.2 -1 q1 -2 2.2 -1 q2.2 0 2.2 -2.2 z`} fill={GOLD} stroke={GOLD_FLAT} strokeWidth={0.3} />
+      ))}
       <circle cx={50} cy={80} r={26} fill={glow} stroke={GOLD_FLAT} strokeWidth={0.8} />
       <circle cx={50} cy={80} r={22} fill="none" stroke={GOLD_FLAT} strokeWidth={0.4} strokeDasharray="1 2" />
       {Array.from({ length: 8 }, (_, i) => {
