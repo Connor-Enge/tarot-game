@@ -4,7 +4,7 @@
 const pw = await import(process.env.PLAYWRIGHT_PATH ?? 'playwright');
 const { chromium } = pw;
 const out = process.argv[2] ?? '.';
-const base = process.env.BASE_URL ?? '${base}';
+const base = process.env.BASE_URL ?? 'http://localhost:4173/';
 const b = await chromium.launch();
 const page = await b.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true });
 const errors = []; page.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
