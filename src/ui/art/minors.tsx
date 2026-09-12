@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 import type { Suit } from '../../engine';
 import { ROBE, ROBE_PALE } from './palette';
 import { BLOOD, Cloud, Flame, GOLD, GOLD_FLAT, Horse, INK, Moon, Mountains, PALE, Star, Sun, SUIT_SYMBOL, Cup as CupSym, Pentacle as PentSym, Sword as SwordSym, Throne, Tree, Water } from './primitives';
-import { Person, Rose, hands, LEAF, SKIN, SKIN_INK, type Pose } from './figure';
+import { Grass, Person, Rose, hands, LEAF, SKIN, SKIN_INK, type Pose } from './figure';
 
 
 /**
@@ -1031,7 +1031,21 @@ function Court({ suit, rank }: { suit: Suit; rank: number }): ReactElement {
         <Dressing />
         {suit === 'swords' && [10, 24, 56, 70].map((x, i) => <path key={x} d={`M${x} ${40 + i * 6} q6 -2 12 0`} fill="none" stroke={PALE} strokeWidth={0.9} opacity={0.8} />)}
         {suit === 'pentacles' && <Ground y={96} fill={GREEN} opacity={0.5} />}
+        {/* each page's ground: a tuft of salamanders' flame, a shore, a windy ridge, a ploughed field */}
+        {suit === 'wands' && <Ground y={98} fill="#d9a36a" opacity={0.35} />}
+        {suit === 'wands' && [[52, 106], [62, 102]].map(([x, y], i) => <path key={i} d={`M${x} ${y} q3 -2 6 0 q2 1 3 -1`} fill="none" stroke="#8a5a22" strokeWidth={1} strokeLinecap="round" />)}
+        {suit === 'cups' && <Ground y={100} fill="#e9d9b6" opacity={0.6} />}
+        {suit === 'cups' && [[54, 105], [62, 103], [70, 106]].map(([x, y], i) => <ellipse key={i} cx={x} cy={y} rx={2} ry={1} fill={STONE} stroke={INK} strokeWidth={0.3} />)}
+        {suit === 'swords' && <Ground y={100} fill={STONE} opacity={0.35} />}
+        {suit === 'swords' && <Grass x={54} y={100} w={20} n={6} color={PALE} />}
+        {suit === 'pentacles' && <path d="M40 104 q20 -2 40 0 M44 108 q18 -2 36 0" fill="none" stroke={INK} strokeWidth={0.4} opacity={0.3} />}
+        {suit === 'pentacles' && <Grass x={52} y={100} w={22} n={6} />}
+        {/* a satchel at the hip, a cloak pinned at the shoulder */}
+        <path d="M22 58 L14 96 H36 L34 58 Z" fill={pale} stroke={INK} strokeWidth={0.4} opacity={0.9} />
         <Person x={34} y={98} h={48} pose={pose} robe={robe} inner={pale} hair={hair} belt={GOLD_FLAT} />
+        <circle cx={26} cy={60} r={1.4} fill={GOLD_FLAT} stroke={INK} strokeWidth={0.3} />
+        <path d="M40 78 q3 0 4 3 v6 h-8 v-6 q1 -3 4 -3 z" fill="#5a3a22" stroke={INK} strokeWidth={0.4} />
+        <path d="M36 82 h8" stroke={GOLD_FLAT} strokeWidth={0.5} />
         {/* the cap and its feather */}
         <path d="M29 53 q5 -6 10 0 l0.5 1.5 q-5.5 -2 -11 0 z" fill={INK} opacity={0.8} />
         <path d="M38 52 q4 -8 9 -7 q-3 2 -6 7" fill={PALE} stroke={INK} strokeWidth={0.4} />
