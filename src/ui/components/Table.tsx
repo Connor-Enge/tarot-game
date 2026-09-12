@@ -116,8 +116,8 @@ export function Table() {
               )}
               {cur && (
                 <div className="table__seatbtns">
-                  <button type="button" className="chip chip--tiny" onClick={() => turn(id)} aria-label={cur.reversed ? 'set upright' : 'turn reversed'}>{cur.reversed ? '↑ upright' : '⥯ turn'}</button>
-                  <button type="button" className="chip chip--tiny" onClick={() => clear(id)} aria-label="take the card back">× take</button>
+                  <button type="button" className="chip chip--tiny" onClick={() => turn(id)} aria-label={cur.reversed ? 'set upright' : 'turn reversed'}>{cur.reversed ? '↑' : '⥯'}<span className="chip__label"> {cur.reversed ? 'upright' : 'turn'}</span></button>
+                  <button type="button" className="chip chip--tiny" onClick={() => clear(id)} aria-label="take the card back">×<span className="chip__label"> take</span></button>
                 </div>
               )}
             </div>

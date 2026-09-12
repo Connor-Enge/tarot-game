@@ -2219,3 +2219,17 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .screen--reading .actions .btn { padding-left: 3px; padding-right: 3px; font-size: 0.8rem; letter-spacing: -0.01em; }
 .screen--reading .actions .btn--icon { flex: 0 0 40px; }
 @media (max-width: 360px) { .screen--reading .actions .btn { font-size: 0.78rem; } }
+
+/* --- narrow phones: nothing may widen the page --------------------------------- */
+.hand--lit::before { left: 0; right: 0; }
+/* decorative overflow (seals stamping in, flourishes) must never widen the page */
+.screen { overflow-x: clip; }
+.table__seatbtns { flex-wrap: wrap; justify-content: center; max-width: 100%; }
+@media (max-width: 400px) {
+  .table__spread .chip__label { display: none; }
+  .table__seatbtns .chip--tiny { padding: 2px 6px; }
+}
+.table__spread { align-self: stretch; width: auto; max-width: 380px; margin: 0 auto; box-sizing: border-box; }
+.spread--cross { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.spread--cross .seat { min-width: 0; }
+@media (max-width: 400px) { .spread--cross .seat__pos { font-size: 0.56rem; letter-spacing: 0.03em; } }
