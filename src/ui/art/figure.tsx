@@ -107,9 +107,13 @@ export function Person({ x, y, h = 50, pose = 'stand', robe = PALE, inner, hair 
       {/* near arm, over the robe */}
       <path d={arm(R, p.rElbow, p.r)} fill="none" stroke={INK} strokeWidth={r * 0.7 + 0.7} strokeLinecap="round" opacity={0.35} />
       <path d={arm(R, p.rElbow, p.r)} fill="none" stroke={robe} strokeWidth={r * 0.7} strokeLinecap="round" />
-      {/* hands */}
+      {/* hands: a palm with a thumb turned in toward the body, and a crease */}
+      <circle cx={p.l.x + hand * 0.55} cy={p.l.y - hand * 0.45} r={hand * 0.42} fill={SKIN} stroke={SKIN_INK} strokeWidth={0.3} />
       <circle cx={p.l.x} cy={p.l.y} r={hand} fill={SKIN} stroke={SKIN_INK} strokeWidth={0.35} />
+      <path d={`M${p.l.x - hand * 0.4} ${p.l.y + hand * 0.2} q${hand * 0.4} ${hand * 0.3} ${hand * 0.8} 0`} fill="none" stroke={SKIN_INK} strokeWidth={0.25} opacity={0.6} />
+      <circle cx={p.r.x - hand * 0.55} cy={p.r.y - hand * 0.45} r={hand * 0.42} fill={SKIN} stroke={SKIN_INK} strokeWidth={0.3} />
       <circle cx={p.r.x} cy={p.r.y} r={hand} fill={SKIN} stroke={SKIN_INK} strokeWidth={0.35} />
+      <path d={`M${p.r.x - hand * 0.4} ${p.r.y + hand * 0.2} q${hand * 0.4} ${hand * 0.3} ${hand * 0.8} 0`} fill="none" stroke={SKIN_INK} strokeWidth={0.25} opacity={0.6} />
       <Head x={x} y={headY} r={r} hair={hair} face={face} />
       {crown && <path d={`M${x - r} ${headY - r * 0.55} l0 ${-r * 1.2} l${r * 0.5} ${r * 0.65} l${r * 0.5} ${-r * 1.05} l${r * 0.5} ${r * 1.05} l${r * 0.5} ${-r * 0.65} l0 ${r * 1.2} Z`} fill={GOLD} stroke={INK} strokeWidth={0.4} />}
     </g>
