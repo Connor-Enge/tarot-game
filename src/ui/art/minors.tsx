@@ -1093,9 +1093,17 @@ function Court({ suit, rank }: { suit: Suit; rank: number }): ReactElement {
         {suit === 'wands' && (
           <g>
             <Sym x={40} y={74} s={7} />
-            <circle cx={64} cy={60} r={4} fill={GOLD_FLAT} stroke={INK} strokeWidth={0.5} />
-            <circle cx={64} cy={60} r={1.6} fill={INK} />
-            <line x1={64} y1={64} x2={64} y2={80} stroke={GREEN} strokeWidth={1.2} />
+            {/* the sunflower in her other hand, lions carved at the arms of her throne */}
+            {Array.from({ length: 10 }, (_, k) => { const a = (k / 10) * Math.PI * 2; return <ellipse key={k} cx={64 + Math.cos(a) * 4.6} cy={60 + Math.sin(a) * 4.6} rx={1.6} ry={1} fill={GOLD} stroke={INK} strokeWidth={0.3} transform={`rotate(${(a * 180) / Math.PI} ${64 + Math.cos(a) * 4.6} ${60 + Math.sin(a) * 4.6})`} />; })}
+            <circle cx={64} cy={60} r={2.4} fill="#5a3a22" stroke={INK} strokeWidth={0.4} />
+            <line x1={64} y1={65} x2={64} y2={80} stroke={LEAF} strokeWidth={1.2} />
+            <path d="M64 72 q-4 -1 -5 2 q3 1 5 -2" fill={LEAF} stroke={INK} strokeWidth={0.3} />
+            {[21, 59].map((x) => (
+              <g key={x}>
+                <circle cx={x} cy={79} r={2.4} fill={GOLD_FLAT} stroke={INK} strokeWidth={0.4} />
+                {Array.from({ length: 7 }, (_, i) => { const a = (i / 7) * Math.PI * 2; return <line key={i} x1={x + Math.cos(a) * 2.4} y1={79 + Math.sin(a) * 2.4} x2={x + Math.cos(a) * 3.6} y2={79 + Math.sin(a) * 3.6} stroke="#8a5a22" strokeWidth={0.9} strokeLinecap="round" />; })}
+              </g>
+            ))}
             {/* the black cat sits square, tail curled about its feet, eyes on us */}
             <path d="M12 106 q-1 -8 4 -10 q5 2 4 10 z" fill={INK} />
             <path d="M20 105 q6 -2 4 -7" fill="none" stroke={INK} strokeWidth={1.6} strokeLinecap="round" />
@@ -1122,8 +1130,19 @@ function Court({ suit, rank }: { suit: Suit; rank: number }): ReactElement {
         )}
         {suit === 'swords' && (
           <g>
-            {(() => { const hd = hands(40, 98, 50, 'raise-right'); return <Sym x={hd.r.x - 1} y={hd.r.y + 4} s={12} />; })()}
+            {(() => { const hd = hands(40, 98, 50, 'raise-right'); return (
+              <g>
+                <Sym x={hd.r.x - 1} y={hd.r.y + 4} s={12} />
+                <path d={`M${hd.r.x - 2} ${hd.r.y + 2} q-3 4 -2 8`} fill="none" stroke={GOLD_FLAT} strokeWidth={0.7} />
+                <path d={`M${hd.r.x - 4} ${hd.r.y + 10} l-1 3 M${hd.r.x - 4} ${hd.r.y + 10} l1 3 M${hd.r.x - 4} ${hd.r.y + 10} l0 3.5`} stroke={GOLD_FLAT} strokeWidth={0.5} />
+              </g>
+            ); })()}
             {[8, 14, 20].map((y) => <path key={y} d={`M4 ${y} q8 -3 16 0`} fill="none" stroke={PALE} strokeWidth={0.9} opacity={0.8} />)}
+            {/* butterflies carved on the throne's crown, a bird crossing above */}
+            {[[30, 48], [50, 48]].map(([x, y], i) => (
+              <path key={i} d={`M${x} ${y} q-3 -4 -4 -1 q1 3 4 1 q3 -4 4 -1 q-1 3 -4 1 M${x} ${y} q-3 3 -3 1 q0 -1 3 -1 q3 3 3 1 q0 -1 -3 -1`} fill="none" stroke={INK} strokeWidth={0.4} opacity={0.7} />
+            ))}
+            <path d="M58 14 q3 -3 6 0 M64 14 q3 -3 6 0" fill="none" stroke={INK} strokeWidth={0.7} strokeLinecap="round" />
           </g>
         )}
         {suit === 'pentacles' && (
@@ -1161,7 +1180,28 @@ function Court({ suit, rank }: { suit: Suit; rank: number }): ReactElement {
           {suit === 'swords' ? <Sym x={hd.r.x - 1} y={hd.r.y + 4} s={12} /> : <Sym x={hd.r.x} y={hd.r.y + (suit === 'wands' ? 6 : 2)} s={8} />}
         </g>
       ); })()}
-      {suit === 'wands' && [18, 62].map((x) => <path key={x} d={`M${x} 90 q4 -6 8 0 q-4 4 -8 0 z`} fill={GOLD_FLAT} stroke={INK} strokeWidth={0.4} />)}
+      {suit === 'wands' && (
+        <g>
+          {/* lions carved on the throne's back, a salamander at either foot biting its tail, a live one at his boot */}
+          {[24, 56].map((x) => (
+            <g key={x}>
+              <circle cx={x} cy={44} r={3.2} fill={GOLD_FLAT} stroke={INK} strokeWidth={0.4} />
+              {Array.from({ length: 8 }, (_, i) => { const a = (i / 8) * Math.PI * 2; return <line key={i} x1={x + Math.cos(a) * 3.2} y1={44 + Math.sin(a) * 3.2} x2={x + Math.cos(a) * 4.8} y2={44 + Math.sin(a) * 4.8} stroke="#8a5a22" strokeWidth={1.1} strokeLinecap="round" />; })}
+              <circle cx={x - 1.1} cy={43.5} r={0.4} fill={INK} />
+              <circle cx={x + 1.1} cy={43.5} r={0.4} fill={INK} />
+            </g>
+          ))}
+          {[18, 62].map((x) => (
+            <g key={x}>
+              <circle cx={x + 4} cy={90} r={4} fill="none" stroke={GOLD_FLAT} strokeWidth={1.4} />
+              <circle cx={x + 7.5} cy={88} r={1.2} fill={GOLD_FLAT} stroke={INK} strokeWidth={0.3} />
+              <path d={`M${x + 1} ${92} l-1.5 1.5 M${x + 7} ${93} l1.5 1.5`} stroke={GOLD_FLAT} strokeWidth={0.6} />
+            </g>
+          ))}
+          <path d="M44 107 q4 -3 8 0 q3 1 5 -1" fill="none" stroke="#8a5a22" strokeWidth={1.4} strokeLinecap="round" />
+          <circle cx={57.5} cy={105.6} r={1} fill="#8a5a22" />
+        </g>
+      )}
       {suit === 'cups' && (
         <g>
           {/* a fish leaps from the sea at his left hand; a ship rides the swell at his right; a fish amulet at his throat */}
