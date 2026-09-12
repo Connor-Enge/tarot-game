@@ -325,13 +325,18 @@ const WANDS: Record<number, () => ReactElement> = {
   ),
   10: () => (
     <g>
+      {/* bent under ten staves, he carries them toward the town; the road, the furrows, the walls ahead */}
+      <Mountains y={70} opacity={0.12} />
+      <path d="M58 82 h20 v-12 h-20 z M60 70 v-4 h3 v4 M66 70 v-6 h4 v6 M74 70 v-4 h3 v4 M62 82 v-6 h4 v6" fill={STONE} opacity={0.7} />
+      <path d="M56 82 h24" stroke={INK} strokeWidth={0.5} opacity={0.5} />
       <Ground y={92} fill="#8a6a3a" />
-      {[62, 70, 76].map((x, i) => <rect key={x} x={x} y={70 - i * 4} width={6} height={22 + i * 4} fill={STONE} opacity={0.8} />)}
-      <g transform="rotate(28 34 96)">
-        <Person x={34} y={100} h={42} pose="up" robe={ROBE.wands} />
+      <path d="M0 98 q40 -3 80 0 M0 104 q40 -3 80 0" fill="none" stroke={INK} strokeWidth={0.4} opacity={0.3} />
+      <g transform="rotate(26 34 100)">
+        <Person x={34} y={102} h={44} pose="up" robe={ROBE.wands} inner={ROBE_PALE.wands} hair="#3a2a1e" face={false} />
       </g>
       <g transform="rotate(18 34 70)">
-        <Row suit="wands" xs={[22, 26, 30, 34, 38, 42, 46, 50, 54, 58]} y={68} s={11} />
+        <Row suit="wands" xs={[20, 24, 28, 32, 36, 40, 44, 48, 52, 56]} y={68} s={11} />
+        <path d="M18 74 h40 M18 80 h40" stroke={INK} strokeWidth={0.5} opacity={0.4} />
       </g>
     </g>
   ),
