@@ -431,7 +431,11 @@ service worker precaching them. Cards suppress the iOS touch callout so a
 long press magnifies instead of selecting.
 
 **Reading pace**: slow, normal, fast, in Settings. Tapping the narration
-shows all of it at once.
+shows all of it at once. Since every card answers as it lands, the four
+seat lines on the resolution screen have already been read, so they
+arrive together in a quick cascade and the staggered reveal is spent
+on what is new: the named readings, the outcome, the deltas, the seal.
+A plain reading reaches its button about two seconds sooner.
 
 Localization was considered and deferred: all authored text already lives
 in three data files (`cards.ts`, `minorText.ts`, `scenes.ts`) plus relics

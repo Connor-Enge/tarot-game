@@ -27,7 +27,7 @@ function ResolutionScreenInner() {
   const narrationLen = run.phase.kind === 'resolved' ? run.phase.resolution.narration.length : 0;
   useEffect(() => {
     if (!hasTrade) return;
-    const t = window.setTimeout(() => sfx.stranger(), 500 + narrationLen * 400);
+    const t = window.setTimeout(() => sfx.stranger(), 500 + Math.max(0, narrationLen - SLOT_IDS.length) * 400);
     return () => window.clearTimeout(t);
   }, [hasTrade, narrationLen]);
   // The seal's thud lands when the seal does; tapping to reveal all brings it forward.
@@ -37,7 +37,7 @@ function ResolutionScreenInner() {
   useEffect(() => {
     if (!sealTier || sealPlayed.current) return;
     const paceNow = readingSpeed === 'slow' ? 1.5 : readingSpeed === 'fast' ? 0.45 : 1;
-    const delay = revealAll ? 150 : 700 + narrationLen * Math.round((sealTerminal ? 900 : 550) * paceNow);
+    const delay = revealAll ? 150 : 700 + Math.max(0, narrationLen - SLOT_IDS.length) * Math.round((sealTerminal ? 900 : 550) * paceNow);
     const t = window.setTimeout(() => {
       sealPlayed.current = true;
       sfx.seal(sealTier);
@@ -54,6 +54,10 @@ function ResolutionScreenInner() {
   const reckoning = reckon(scene, resolution, run.marks);
   const pace = readingSpeed === 'slow' ? 1.5 : readingSpeed === 'fast' ? 0.45 : 1;
   const step = Math.round((scene.terminal ? 900 : 550) * pace);
+  // The four seat lines were read as each card landed, so they arrive together; the reveal is spent on what is new.
+  const fresh = Math.max(0, resolution.narration.length - SLOT_IDS.length);
+  const at = (i: number) => (i < SLOT_IDS.length ? 100 + i * 80 : 400 + (i - SLOT_IDS.length) * step);
+  const tail = 400 + fresh * step;
   // In a rest scene, something you have seen before surfaces as a dream.
   const dream = (() => {
     if (scene.kind !== 'rest' || !omenLog || omenLog.length === 0) return null;
@@ -77,7 +81,7 @@ function ResolutionScreenInner() {
         {SLOT_IDS.map((id, i) => (
           <div className="deal laid" style={{ animationDelay: `${i * 80}ms` }} key={id}>
             <Card cardId={last.reading[id].cardId} reversed={last.reading[id].reversed} size="sm" mark={run.marks[last.reading[id].cardId]} />
-            <span className="laid__pulse" style={{ animationDelay: `${400 + i * step}ms` }} aria-hidden />
+            <span className="laid__pulse" style={{ animationDelay: `${at(i)}ms` }} aria-hidden />
           </div>
         ))}
       </section>
@@ -93,7 +97,7 @@ function ResolutionScreenInner() {
             const suit = id === 'one-suit' ? getCard(lastEntry.reading.vessel.cardId).suit : undefined;
             const tone = id === 'four-upright' ? 'narration__named--upright' : id === 'four-reversed' ? 'narration__named--reversed' : suit ? `narration__named--${suit}` : score < 0 ? 'narration__named--ill' : '';
             return (
-              <p key={i} className={`narration__named rise ${tone}`} style={{ animationDelay: `${400 + i * step}ms` }}>
+              <p key={i} className={`narration__named rise ${tone}`} style={{ animationDelay: `${at(i)}ms` }}>
                 <span className="narration__named-mark" aria-hidden>♪</span>
                 <span className="narration__named-text">{line}</span>
                 <span className="narration__named-mark" aria-hidden>♪</span>
@@ -104,7 +108,7 @@ function ResolutionScreenInner() {
             <p
               key={i}
               className={`rise ${last ? 'narration__outcome' : 'narration__omen'} ${seat ? 'narration__omen--tap' : ''}`}
-              style={{ animationDelay: `${400 + i * step}ms` }}
+              style={{ animationDelay: `${at(i)}ms` }}
               onClick={seat ? () => openCodex(resolution.slots[i].card.id) : undefined}
             >
               {seat && <span className="narration__seat" title={SLOT_POSITION[resolution.slots[i].slot].role}>{SLOT_POSITION[resolution.slots[i].slot].n}</span>}
@@ -124,12 +128,12 @@ function ResolutionScreenInner() {
           );
         })}
         {resolution.kinship && resolution.kinship.pairs.map(([a, b], i) => (
-          <p key={`${a}|${b}`} className="kin rise" style={{ animationDelay: `${400 + (resolution.narration.length + i) * step}ms` }}>
+          <p key={`${a}|${b}`} className="kin rise" style={{ animationDelay: `${tail + i * step}ms` }}>
             <span className="kin__mark" aria-hidden>✶</span> {getCard(a).name} and {getCard(b).name} know each other. <span className="kin__score">+{run.mods.kinBonus ?? KIN_BONUS}</span>
           </p>
         ))}
         {dream && (
-          <p className="dream rise" style={{ animationDelay: `${300 + resolution.narration.length * step}ms` }} onClick={() => openCodex(dream.cardId)}>
+          <p className="dream rise" style={{ animationDelay: `${tail - 100}ms` }} onClick={() => openCodex(dream.cardId)}>
             <span className="dream__label muted small">You dream of something you have seen.</span>
             <span className="dream__line">
               <span className="dream__ghost" aria-hidden>
@@ -141,17 +145,17 @@ function ResolutionScreenInner() {
           </p>
         )}
         {relic && (
-          <p className="found rise" style={{ animationDelay: `${400 + resolution.narration.length * step}ms` }}>
+          <p className="found rise" style={{ animationDelay: `${tail}ms` }}>
             <RelicArt id={found!} className="curse__art" /> You keep it: <strong>{relic.name}</strong>. <span className="muted">{relic.text}</span>
           </p>
         )}
         {curse && (
-          <p className="curse rise" style={{ animationDelay: `${400 + resolution.narration.length * step}ms` }}>
+          <p className="curse rise" style={{ animationDelay: `${tail}ms` }}>
             <RelicArt id={cursed!} className="curse__art" /> <strong>{curse.name}</strong> follows you now. <span className="muted">{curse.text}</span>
           </p>
         )}
         {trade && (
-          <div className={`trade rise alive ${isPeddlerTrade(trade) ? 'trade--peddler' : 'trade--stranger'}`} style={{ animationDelay: `${500 + resolution.narration.length * step}ms` }}>
+          <div className={`trade rise alive ${isPeddlerTrade(trade) ? 'trade--peddler' : 'trade--stranger'}`} style={{ animationDelay: `${tail + 100}ms` }}>
             <span className="trade__socket">{isPeddlerTrade(trade) ? <PeddlerArt className="trade__art" /> : <StrangerArt className="trade__art" />}</span>
             <div className="trade__body">
               <p className="trade__lead">{isPeddlerTrade(trade) ? 'A peddler has laid a cloth on the nearest stall. They have a price.' : 'Someone is already sitting by the fire. They have a trade.'}</p>
@@ -173,16 +177,16 @@ function ResolutionScreenInner() {
         )}
         {traded && <p className="trade__done muted small rise">{scene.id === 'market' ? 'You pay. The cloth is rolled before you have turned away.' : 'You shake on it. They do not look up.'}</p>}
         {scene.terminal && run.well !== undefined && (
-          <p className="under rise" style={{ animationDelay: `${300 + resolution.narration.length * step}ms` }}>
+          <p className="under rise" style={{ animationDelay: `${tail - 100}ms` }}>
             <span className="under__mark" aria-hidden>⨀</span> There is no surface here. The dark opens again beneath you, and you take one breath before it. <span className="stat--vit">♥ +2</span> From here every reading costs <span className="stat--vit">♥ {(run.well ?? 0) + 1}</span> more, however it goes.
           </p>
         )}
-        <p className="deltas rise" style={{ animationDelay: `${400 + resolution.narration.length * step}ms` }}>
+        <p className="deltas rise" style={{ animationDelay: `${tail}ms` }}>
           {resolution.deltas.vitality !== 0 && <span className="stat--vit">♥ {fmt(resolution.deltas.vitality)}</span>}
           {resolution.deltas.clarity !== 0 && <span className="stat--cla">◈ {fmt(resolution.deltas.clarity)}</span>}
         </p>
-        <Road scene={scene} entry={lastEntry} marks={run.marks} delay={500 + resolution.narration.length * step} />
-        <div className={`verdict-wrap verdict-wrap--${resolution.tier}`} style={{ animationDelay: revealAll ? '0ms' : `${700 + resolution.narration.length * step}ms` }} aria-hidden>
+        <Road scene={scene} entry={lastEntry} marks={run.marks} delay={tail + 100} />
+        <div className={`verdict-wrap verdict-wrap--${resolution.tier}`} style={{ animationDelay: revealAll ? '0ms' : `${tail + 300}ms` }} aria-hidden>
           <VerdictSeal tier={resolution.tier} />
         </div>
       </section>
@@ -191,7 +195,7 @@ function ResolutionScreenInner() {
       <footer className="actions">
         <button
           className="btn btn--primary rise"
-          style={{ animationDelay: `${600 + resolution.narration.length * step}ms` }}
+          style={{ animationDelay: `${tail + 200}ms` }}
           onClick={() => {
             if (scene.terminal && run.well !== undefined) sfx.under();
             advance();
