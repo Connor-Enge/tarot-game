@@ -1,8 +1,12 @@
 import type { ReactElement } from 'react';
 import type { Suit } from '../../engine';
 import { ROBE, ROBE_PALE } from './palette';
-import { BLOOD, Cloud, Figure, Flame, GOLD, GOLD_FLAT, Horse, INK, Moon, Mountains, PALE, Star, Sun, SUIT_SYMBOL, Throne, Tree, Water } from './primitives';
-import { Person, hands } from './figure';
+import { BLOOD, Cloud, Flame, GOLD, GOLD_FLAT, Horse, INK, Moon, Mountains, PALE, Star, Sun, SUIT_SYMBOL, Throne, Tree, Water } from './primitives';
+import { Person, hands, type Pose } from './figure';
+import type { Arms } from './primitives';
+
+/** The old silhouette's arm names, mapped onto the drawn figure's poses. */
+const POSE_OF: Record<Arms, Pose> = { down: 'stand', up: 'up', raised: 'up', out: 'out', 'left-up': 'raise-left', 'right-up': 'raise-right', hold: 'hold' };
 
 /**
  * The numbered Minors are scenes, after the Waite-Smith convention: every
@@ -160,7 +164,7 @@ const WANDS: Record<number, () => ReactElement> = {
       <rect x={0} y={72} width={80} height={40} fill={STONE} />
       {[0, 16, 32, 48, 64].map((x) => <rect key={x} x={x} y={66} width={8} height={7} fill={STONE} />)}
       <Row suit="wands" xs={[70]} y={80} s={11} />
-      <Figure x={30} y={100} h={48} arms="left-up" fill={ROBE.wands} />
+      <Person x={30} y={100} h={48} pose="raise-left" robe={ROBE.wands} />
       <circle cx={14} cy={58} r={4} fill="url(#skySpirit)" stroke={INK} strokeWidth={0.6} />
       <path d="M10 58 h8 M14 54 v8" stroke={INK} strokeWidth={0.4} />
       <Row suit="wands" xs={[44]} y={82} s={11} />
@@ -173,7 +177,7 @@ const WANDS: Record<number, () => ReactElement> = {
       {[16, 34, 56].map((x, i) => <path key={x} d={`M${x} ${50 + i} l2 -5 l2 5 z`} fill={PALE} stroke={INK} strokeWidth={0.4} />)}
       <Ground y={78} fill="#8a6a3a" />
       <Row suit="wands" xs={[18, 62]} y={86} s={11} />
-      <Figure x={40} y={104} h={52} arms="right-up" fill={ROBE.wands} cloak />
+      <Person x={40} y={104} h={52} pose="raise-right" robe={ROBE.wands} />
       <Row suit="wands" xs={[52]} y={80} s={11} />
     </g>
   ),
@@ -183,8 +187,8 @@ const WANDS: Record<number, () => ReactElement> = {
       <Row suit="wands" xs={[14, 30, 50, 66]} y={70} s={12} />
       <path d="M14 46 q26 16 52 0" fill="none" stroke={GREEN} strokeWidth={3} />
       {[20, 32, 44, 56].map((x, i) => <circle key={x} cx={x} cy={52 + Math.sin(i * 1.2) * 2} r={2} fill={BLOOD} stroke={INK} strokeWidth={0.3} />)}
-      <Figure x={32} y={104} h={26} arms="up" fill={ROBE_PALE.wands} />
-      <Figure x={48} y={104} h={26} arms="up" fill={ROBE.wands} />
+      <Person x={32} y={104} h={26} pose="up" robe={ROBE_PALE.wands} />
+      <Person x={48} y={104} h={26} pose="up" robe={ROBE.wands} />
       <Ground y={100} fill={GOLD_FLAT} opacity={0.5} />
     </g>
   ),
@@ -192,7 +196,7 @@ const WANDS: Record<number, () => ReactElement> = {
     <g>
       <Ground y={92} fill="#9aa27a" />
       {[[12, 100, 'right-up'], [28, 96, 'up'], [44, 102, 'left-up'], [60, 96, 'right-up'], [72, 104, 'up']].map(([x, y, a], i) => (
-        <Figure key={i} x={x as number} y={y as number} h={30} arms={a as 'up'} fill={i % 2 ? ROBE.wands : ROBE_PALE.wands} />
+        <Person key={i} x={x as number} y={y as number} h={30} pose={POSE_OF[a as Arms]} robe={i % 2 ? ROBE.wands : ROBE_PALE.wands} />
       ))}
       <Row suit="wands" xs={[10, 30, 46, 62, 74]} y={62} s={9} angle={-20} />
     </g>
@@ -200,10 +204,10 @@ const WANDS: Record<number, () => ReactElement> = {
   6: () => (
     <g>
       <Ground y={96} fill={GOLD_FLAT} opacity={0.5} />
-      {[8, 70, 16].map((x, i) => <Figure key={i} x={x} y={104 - i} h={22} arms="up" fill={INK} />)}
+      {[8, 70, 16].map((x, i) => <Person key={i} x={x} y={104 - i} h={22} pose="up" robe={INK} />)}
       <Row suit="wands" xs={[8, 70, 16, 64]} y={60} s={9} />
       <Horse x={40} y={102} fill={PALE} w={48} />
-      <Figure x={36} y={84} h={34} arms="right-up" fill={ROBE.wands} />
+      <Person x={36} y={84} h={34} pose="raise-right" robe={ROBE.wands} />
       <Row suit="wands" xs={[52]} y={52} s={10} />
       <ellipse cx={52} cy={44} rx={5} ry={3} fill="none" stroke={GREEN} strokeWidth={1.6} />
       <ellipse cx={36} cy={49} rx={5} ry={2.4} fill="none" stroke={GREEN} strokeWidth={1.4} />
@@ -213,7 +217,7 @@ const WANDS: Record<number, () => ReactElement> = {
     <g>
       <Row suit="wands" xs={[8, 20, 32, 46, 58, 70]} y={92} s={10} />
       <path d="M0 78 Q40 60 80 78 L80 112 L0 112 Z" fill={GREEN} opacity={0.7} />
-      <Figure x={40} y={80} h={40} arms="hold" fill={ROBE.wands} />
+      <Person x={40} y={80} h={40} pose="hold" robe={ROBE.wands} />
       <Row suit="wands" xs={[52]} y={58} s={11} angle={20} />
     </g>
   ),
@@ -233,7 +237,7 @@ const WANDS: Record<number, () => ReactElement> = {
     <g>
       <Row suit="wands" xs={[8, 18, 28, 38, 48, 58, 68, 76]} y={70} s={12} />
       <Ground y={96} fill={STONE} opacity={0.6} />
-      <Figure x={30} y={104} h={44} arms="hold" fill={ROBE.wands} />
+      <Person x={30} y={104} h={44} pose="hold" robe={ROBE.wands} />
       <rect x={26} y={62} width={8} height={2.4} fill={PALE} />
       <Row suit="wands" xs={[42]} y={90} s={12} />
     </g>
@@ -243,7 +247,7 @@ const WANDS: Record<number, () => ReactElement> = {
       <Ground y={92} fill="#8a6a3a" />
       {[62, 70, 76].map((x, i) => <rect key={x} x={x} y={70 - i * 4} width={6} height={22 + i * 4} fill={STONE} opacity={0.8} />)}
       <g transform="rotate(28 34 96)">
-        <Figure x={34} y={100} h={42} arms="raised" fill={ROBE.wands} />
+        <Person x={34} y={100} h={42} pose="up" robe={ROBE.wands} />
       </g>
       <g transform="rotate(18 34 70)">
         <Row suit="wands" xs={[22, 26, 30, 34, 38, 42, 46, 50, 54, 58]} y={68} s={11} />
@@ -258,8 +262,8 @@ const CUPS: Record<number, () => ReactElement> = {
   2: () => (
     <g>
       <Ground y={94} fill={GREEN} opacity={0.6} />
-      <Figure x={26} y={102} h={44} arms="right-up" fill={ROBE.cups} />
-      <Figure x={54} y={102} h={44} arms="left-up" fill={ROBE_PALE.cups} />
+      <Person x={26} y={102} h={44} pose="raise-right" robe={ROBE.cups} />
+      <Person x={54} y={102} h={44} pose="raise-left" robe={ROBE_PALE.cups} />
       <Row suit="cups" xs={[30, 50]} y={70} s={7} />
       <path d="M40 46 v-18 M36 30 q4 -4 8 0 M36 24 q4 -4 8 0" fill="none" stroke={GOLD_FLAT} strokeWidth={1.2} />
       <path d="M34 22 q6 -8 12 0" fill="none" stroke={BLOOD} strokeWidth={1.8} />
@@ -269,7 +273,7 @@ const CUPS: Record<number, () => ReactElement> = {
     <g>
       <Ground y={96} fill={GOLD_FLAT} opacity={0.5} />
       {[[22, 'right-up'], [40, 'up'], [58, 'left-up']].map(([x, a], i) => (
-        <Figure key={i} x={x as number} y={104} h={42} arms={a as 'up'} fill={[ROBE.cups, ROBE_PALE.cups, '#e9d9b6'][i]} />
+        <Person key={i} x={x as number} y={104} h={42} pose={POSE_OF[a as Arms]} robe={[ROBE.cups, ROBE_PALE.cups, '#e9d9b6'][i]} />
       ))}
       <Row suit="cups" xs={[18, 40, 62]} y={52} s={7} />
       {[10, 30, 50, 70].map((x) => <ellipse key={x} cx={x} cy={102} rx={4} ry={2.5} fill="#d98a3c" stroke={INK} strokeWidth={0.4} />)}
@@ -279,7 +283,7 @@ const CUPS: Record<number, () => ReactElement> = {
     <g>
       <Ground y={92} fill={GREEN} opacity={0.6} />
       <Tree x={22} y={92} h={56} />
-      <Figure x={24} y={98} h={30} arms="hold" fill={ROBE.cups} />
+      <Person x={24} y={98} h={30} pose="hold" robe={ROBE.cups} />
       <Row suit="cups" xs={[40, 54, 68]} y={100} s={6.5} />
       <Cloud x={46} y={54} w={26} />
       <path d="M54 52 q8 -4 16 0 q-6 4 -16 0 z" fill={PALE} stroke={INK} strokeWidth={0.5} />
@@ -292,7 +296,7 @@ const CUPS: Record<number, () => ReactElement> = {
       <path d="M46 70 q10 -10 22 0" fill="none" stroke={STONE} strokeWidth={2.4} />
       <rect x={62} y={40} width={12} height={22} fill={STONE} opacity={0.7} />
       <Ground y={92} fill={STONE} opacity={0.5} />
-      <Figure x={30} y={104} h={48} arms="down" fill={INK} cloak />
+      <Person x={30} y={104} h={48} pose="stand" robe={INK} />
       <Row suit="cups" xs={[8, 18, 44]} y={104} s={6} angle={70} />
       <Row suit="cups" xs={[56, 68]} y={102} s={6} />
       {[10, 20].map((x) => <path key={x} d={`M${x} 106 q6 2 10 6`} fill="none" stroke={BLOOD} strokeWidth={1} />)}
@@ -303,8 +307,8 @@ const CUPS: Record<number, () => ReactElement> = {
       <rect x={0} y={44} width={80} height={68} fill={GOLD_FLAT} opacity={0.25} />
       <rect x={54} y={30} width={26} height={40} fill={PALE} stroke={INK} strokeWidth={0.6} />
       <path d="M54 30 l13 -10 l13 10 z" fill={BLOOD} stroke={INK} strokeWidth={0.5} />
-      <Figure x={30} y={104} h={34} arms="right-up" fill={ROBE.cups} />
-      <Figure x={50} y={104} h={24} arms="left-up" fill={ROBE_PALE.cups} />
+      <Person x={30} y={104} h={34} pose="raise-right" robe={ROBE.cups} />
+      <Person x={50} y={104} h={24} pose="raise-left" robe={ROBE_PALE.cups} />
       <Row suit="cups" xs={[42]} y={76} s={6} />
       <Row suit="cups" xs={[10, 22, 66, 74, 12]} y={98} s={5.5} />
       {[42, 10, 22, 66, 74, 12].map((x, i) => <path key={i} d={`M${x} ${i === 0 ? 70 : 92} l-2 -3 l2 -1 l2 1 z`} fill={PALE} stroke={INK} strokeWidth={0.3} />)}
@@ -327,7 +331,7 @@ const CUPS: Record<number, () => ReactElement> = {
         </g>
       ))}
       <Ground y={100} fill={INK} opacity={0.7} />
-      <Figure x={40} y={104} h={34} arms="raised" fill={INK} />
+      <Person x={40} y={104} h={34} pose="up" robe={INK} />
     </g>
   ),
   8: () => (
@@ -338,7 +342,7 @@ const CUPS: Record<number, () => ReactElement> = {
       <Ground y={92} fill="#3b3159" opacity={0.8} />
       <Row suit="cups" xs={[12, 22, 32, 42, 52]} y={104} s={5.5} />
       <Row suit="cups" xs={[17, 27, 37]} y={94} s={5.5} />
-      <Figure x={64} y={78} h={30} arms="hold" fill={BLOOD} cloak />
+      <Person x={64} y={78} h={30} pose="hold" robe={BLOOD} />
       <path d="M64 78 q6 -14 4 -30" fill="none" stroke={GOLD_FLAT} strokeWidth={1} opacity={0.5} />
     </g>
   ),
@@ -347,7 +351,7 @@ const CUPS: Record<number, () => ReactElement> = {
       <path d="M8 44 q32 -14 64 0 v14 h-64 z" fill={ROBE_PALE.cups} stroke={INK} strokeWidth={0.6} />
       <Row suit="cups" xs={[12, 20, 28, 36, 44, 52, 60, 68, 76]} y={46} s={5} />
       <rect x={28} y={84} width={24} height={14} fill="#8a6a3a" stroke={INK} strokeWidth={0.6} />
-      <Figure x={40} y={90} h={40} arms="hold" fill={ROBE.cups} />
+      <Person x={40} y={90} h={40} pose="hold" robe={ROBE.cups} />
       <path d="M31 72 q9 4 18 0" fill="none" stroke={PALE} strokeWidth={1.6} strokeLinecap="round" />
       <Ground y={98} fill={GOLD_FLAT} opacity={0.5} />
     </g>
@@ -358,10 +362,10 @@ const CUPS: Record<number, () => ReactElement> = {
       <Row suit="cups" xs={[8, 18, 28, 38, 48, 58, 68, 78, 24, 56]} y={26} s={5} />
       <Ground y={92} fill={GREEN} opacity={0.6} />
       <path d="M52 92 v-14 h16 v14 z M50 78 l10 -8 l10 8 z" fill={PALE} stroke={INK} strokeWidth={0.5} />
-      <Figure x={22} y={104} h={40} arms="up" fill={ROBE.cups} />
-      <Figure x={36} y={104} h={40} arms="up" fill={ROBE_PALE.cups} />
-      <Figure x={54} y={106} h={20} arms="right-up" fill={INK} />
-      <Figure x={66} y={106} h={20} arms="left-up" fill={INK} />
+      <Person x={22} y={104} h={40} pose="up" robe={ROBE.cups} />
+      <Person x={36} y={104} h={40} pose="up" robe={ROBE_PALE.cups} />
+      <Person x={54} y={106} h={20} pose="raise-right" robe={INK} />
+      <Person x={66} y={106} h={20} pose="raise-left" robe={INK} />
     </g>
   ),
 };
@@ -375,7 +379,7 @@ const SWORDS: Record<number, () => ReactElement> = {
       <Water y={60} rows={3} />
       {[12, 30, 50].map((x, i) => <ellipse key={x} cx={x} cy={64 + i * 2} rx={5} ry={2} fill={STONE} />)}
       <rect x={20} y={90} width={40} height={12} fill={STONE} opacity={0.8} />
-      <Figure x={40} y={96} h={44} arms="hold" fill={ROBE_PALE.swords} />
+      <Person x={40} y={96} h={44} pose="hold" robe={ROBE_PALE.swords} />
       <rect x={35} y={58} width={10} height={2.4} fill={INK} />
       <Row suit="swords" xs={[30]} y={62} s={13} angle={-35} />
       <Row suit="swords" xs={[50]} y={62} s={13} angle={35} />
@@ -412,9 +416,9 @@ const SWORDS: Record<number, () => ReactElement> = {
       <Cloud x={50} y={14} w={34} />
       <Water y={62} rows={2} />
       <Ground y={84} fill={GREEN} opacity={0.5} />
-      <Figure x={16} y={74} h={22} arms="down" fill={INK} />
-      <Figure x={34} y={72} h={18} arms="down" fill={INK} />
-      <Figure x={60} y={104} h={44} arms="left-up" fill={ROBE.swords} />
+      <Person x={16} y={74} h={22} pose="stand" robe={INK} />
+      <Person x={34} y={72} h={18} pose="stand" robe={INK} />
+      <Person x={60} y={104} h={44} pose="raise-left" robe={ROBE.swords} />
       <Row suit="swords" xs={[68, 74, 78]} y={66} s={11} angle={-15} />
       <Row suit="swords" xs={[14, 30]} y={104} s={10} angle={80} />
     </g>
@@ -425,9 +429,9 @@ const SWORDS: Record<number, () => ReactElement> = {
       <Mountains y={48} opacity={0.3} />
       <path d="M6 96 q34 14 68 0 v-8 h-68 z" fill="#8a6a3a" stroke={INK} strokeWidth={0.6} />
       <Row suit="swords" xs={[14, 20, 26, 32, 38, 44]} y={80} s={9} />
-      <Figure x={30} y={90} h={22} arms="hold" fill={ROBE_PALE.swords} cloak />
-      <Figure x={42} y={90} h={14} arms="hold" fill={ROBE_PALE.swords} />
-      <Figure x={64} y={92} h={36} arms="hold" fill={INK} />
+      <Person x={30} y={90} h={22} pose="hold" robe={ROBE_PALE.swords} />
+      <Person x={42} y={90} h={14} pose="hold" robe={ROBE_PALE.swords} />
+      <Person x={64} y={92} h={36} pose="hold" robe={INK} />
       <line x1={70} y1={52} x2={70} y2={104} stroke={INK} strokeWidth={1.2} />
     </g>
   ),
@@ -437,7 +441,7 @@ const SWORDS: Record<number, () => ReactElement> = {
       {[8, 30, 56].map((x, i) => <path key={x} d={`M${x} 92 l10 -22 l10 22 z`} fill={[PALE, BLOOD, GOLD_FLAT][i]} stroke={INK} strokeWidth={0.5} opacity={0.85} />)}
       <Row suit="swords" xs={[60, 68]} y={100} s={9} />
       <g transform="rotate(-12 26 104)">
-        <Figure x={26} y={104} h={40} arms="hold" fill={ROBE.swords} />
+        <Person x={26} y={104} h={40} pose="hold" robe={ROBE.swords} />
       </g>
       <Row suit="swords" xs={[12, 17, 22, 27, 32]} y={76} s={10} angle={-30} />
     </g>
@@ -448,7 +452,7 @@ const SWORDS: Record<number, () => ReactElement> = {
       <rect x={58} y={20} width={18} height={30} fill={STONE} opacity={0.6} />
       <Ground y={100} fill={STONE} opacity={0.6} />
       <Row suit="swords" xs={[8, 18, 28, 52, 62, 72, 13, 67]} y={78} s={12} />
-      <Figure x={40} y={102} h={44} arms="hold" fill={ROBE.swords} cloak />
+      <Person x={40} y={102} h={44} pose="hold" robe={ROBE.swords} />
       {[70, 76, 82].map((y) => <path key={y} d={`M32 ${y} q8 3 16 0`} fill="none" stroke={PALE} strokeWidth={1.4} />)}
       <rect x={35} y={64} width={10} height={2.4} fill={INK} />
     </g>
@@ -460,7 +464,7 @@ const SWORDS: Record<number, () => ReactElement> = {
       {[14, 22, 30, 38, 46, 54, 62, 70, 78].map((y) => <rect key={y} x={4} y={y} width={72} height={2} fill={PALE} opacity={0.75} />)}
       <rect x={6} y={84} width={68} height={22} fill={PALE} stroke={INK} strokeWidth={0.6} />
       {[[12, 90], [30, 90], [48, 90], [66, 90], [21, 98], [39, 98], [57, 98]].map(([x, y], i) => <path key={i} d={`M${x} ${y} l3 -3 l3 3 l-3 3 z`} fill={[BLOOD, '#6ab7d6', GOLD_FLAT][i % 3]} />)}
-      <Figure x={40} y={86} h={34} arms="raised" fill={PALE} />
+      <Person x={40} y={86} h={34} pose="up" robe={PALE} />
       <path d="M33 60 q7 -6 14 0" fill="none" stroke={INK} strokeWidth={1.4} />
     </g>
   ),
@@ -485,7 +489,7 @@ const PENTACLES: Record<number, () => ReactElement> = {
       <Water y={70} rows={3} />
       {[12, 60].map((x, i) => <path key={x} d={`M${x} ${70 + i * 4} l6 -8 l6 8 z M${x - 2} ${70 + i * 4} h16 l-3 4 h-10 z`} fill={PALE} stroke={INK} strokeWidth={0.4} />)}
       <Ground y={96} fill={GOLD_FLAT} opacity={0.5} />
-      <Figure x={40} y={104} h={48} arms="out" fill={ROBE.pentacles} />
+      <Person x={40} y={104} h={48} pose="out" robe={ROBE.pentacles} />
       <path d="M26 72 c0 -14 28 -14 28 0 c0 14 -28 14 -28 0" fill="none" stroke={GREEN} strokeWidth={2.2} />
       <Row suit="pentacles" xs={[26, 54]} y={72} s={6} />
     </g>
@@ -496,9 +500,9 @@ const PENTACLES: Record<number, () => ReactElement> = {
       <path d="M14 112 V46 q26 -30 52 0 V112" fill="none" stroke={INK} strokeWidth={2} />
       <Row suit="pentacles" xs={[40, 30, 50]} y={30} s={6} />
       <rect x={20} y={88} width={14} height={16} fill="#8a6a3a" stroke={INK} strokeWidth={0.6} />
-      <Figure x={27} y={92} h={34} arms="right-up" fill={ROBE.pentacles} />
-      <Figure x={56} y={106} h={38} arms="hold" fill={INK} cloak />
-      <Figure x={68} y={106} h={36} arms="hold" fill={PALE} cloak />
+      <Person x={27} y={92} h={34} pose="raise-right" robe={ROBE.pentacles} />
+      <Person x={56} y={106} h={38} pose="hold" robe={INK} />
+      <Person x={68} y={106} h={36} pose="hold" robe={PALE} />
       <rect x={52} y={80} width={14} height={8} fill={PALE} stroke={INK} strokeWidth={0.5} />
     </g>
   ),
@@ -507,7 +511,7 @@ const PENTACLES: Record<number, () => ReactElement> = {
       {[4, 18, 32, 50, 64].map((x, i) => <rect key={x} x={x} y={40 - (i % 2) * 8} width={10} height={40} fill={STONE} opacity={0.5} />)}
       <Ground y={88} fill={STONE} opacity={0.5} />
       <rect x={26} y={86} width={28} height={12} fill="#8a6a3a" stroke={INK} strokeWidth={0.6} />
-      <Figure x={40} y={92} h={44} arms="hold" fill={ROBE.pentacles} crown />
+      <Person x={40} y={92} h={44} pose="hold" robe={ROBE.pentacles} crown />
       <Row suit="pentacles" xs={[40]} y={74} s={7} />
       <Row suit="pentacles" xs={[40]} y={44} s={5} />
       <Row suit="pentacles" xs={[30, 50]} y={100} s={5.5} />
@@ -521,18 +525,18 @@ const PENTACLES: Record<number, () => ReactElement> = {
       <path d="M48 42 h18 v18 h-18 z" fill={GOLD_FLAT} opacity={0.75} />
       {Array.from({ length: 24 }, (_, i) => <circle key={i} cx={(i * 13) % 80} cy={(i * 29) % 100} r={0.9} fill={SNOW} opacity={0.8} />)}
       <Ground y={96} fill={SNOW} opacity={0.85} />
-      <Figure x={14} y={104} h={38} arms="hold" fill={INK} cloak />
+      <Person x={14} y={104} h={38} pose="hold" robe={INK} />
       <line x1={22} y1={104} x2={22} y2={76} stroke={INK} strokeWidth={1.4} />
-      <Figure x={30} y={104} h={30} arms="down" fill={BLOOD} cloak />
+      <Person x={30} y={104} h={30} pose="stand" robe={BLOOD} />
     </g>
   ),
   6: () => (
     <g>
       <Ground y={96} fill={GOLD_FLAT} opacity={0.5} />
-      <Figure x={40} y={100} h={50} arms="out" fill={ROBE.pentacles} />
+      <Person x={40} y={100} h={50} pose="out" robe={ROBE.pentacles} />
       <path d="M26 66 l-3 0 l0 6 M26 66 l3 0 l0 6 M22 72 h8" fill="none" stroke={GOLD_FLAT} strokeWidth={1} />
-      <Figure x={12} y={106} h={22} arms="raised" fill={INK} cloak />
-      <Figure x={68} y={106} h={22} arms="raised" fill={INK} cloak />
+      <Person x={12} y={106} h={22} pose="up" robe={INK} />
+      <Person x={68} y={106} h={22} pose="up" robe={INK} />
       <Row suit="pentacles" xs={[10, 24, 40, 56, 70, 40]} y={22} s={5} />
       <path d="M52 68 q6 6 10 14" fill="none" stroke={GOLD_FLAT} strokeWidth={0.8} strokeDasharray="1 2" />
     </g>
@@ -542,7 +546,7 @@ const PENTACLES: Record<number, () => ReactElement> = {
       <Ground y={92} fill={GREEN} opacity={0.65} />
       <path d="M52 92 q4 -30 -2 -60 M50 40 q10 4 16 -4 M50 56 q10 6 18 0 M50 74 q10 6 16 -2" fill="none" stroke={GREEN} strokeWidth={1.6} />
       <Row suit="pentacles" xs={[62, 56, 68, 60, 66, 54, 64]} y={34} s={5} />
-      <Figure x={24} y={102} h={46} arms="hold" fill={ROBE.pentacles} />
+      <Person x={24} y={102} h={46} pose="hold" robe={ROBE.pentacles} />
       <line x1={34} y1={102} x2={34} y2={62} stroke="#8a6a3a" strokeWidth={1.6} />
     </g>
   ),
@@ -553,7 +557,7 @@ const PENTACLES: Record<number, () => ReactElement> = {
       <Row suit="pentacles" xs={[64, 64, 64, 64, 64, 64]} y={20} s={0} />
       {[18, 32, 46, 60, 74, 88].map((y) => <Row key={y} suit="pentacles" xs={[64]} y={y} s={5} />)}
       <rect x={14} y={84} width={26} height={14} fill="#8a6a3a" stroke={INK} strokeWidth={0.6} />
-      <Figure x={22} y={92} h={40} arms="right-up" fill={ROBE.pentacles} />
+      <Person x={22} y={92} h={40} pose="raise-right" robe={ROBE.pentacles} />
       <Row suit="pentacles" xs={[36]} y={82} s={5} />
       <Row suit="pentacles" xs={[10]} y={104} s={5} />
     </g>
@@ -564,7 +568,7 @@ const PENTACLES: Record<number, () => ReactElement> = {
       {[6, 18, 62, 74].map((x) => <path key={x} d={`M${x} 90 v-40 q4 -6 8 0 v40`} fill={GREEN} opacity={0.6} />)}
       <Row suit="pentacles" xs={[8, 20, 64, 76, 10, 18, 66, 74, 40]} y={58} s={4.5} />
       {[12, 24, 60, 72].map((x, i) => <circle key={x} cx={x} cy={44 + (i % 2) * 8} r={2.4} fill="#7a3fa0" opacity={0.8} />)}
-      <Figure x={40} y={100} h={50} arms="left-up" fill={ROBE.pentacles} cloak />
+      <Person x={40} y={100} h={50} pose="raise-left" robe={ROBE.pentacles} />
       <path d="M22 54 l-4 -4 l6 1 l1 5 z" fill={INK} />
     </g>
   ),
@@ -574,9 +578,9 @@ const PENTACLES: Record<number, () => ReactElement> = {
       <rect x={20} y={40} width={40} height={72} fill={PALE} opacity={0.3} />
       <Row suit="pentacles" xs={[14, 14, 14, 14]} y={20} s={0} />
       {[[14, 30], [26, 24], [14, 46], [26, 40], [14, 62], [26, 56], [14, 78], [26, 72], [20, 92], [20, 104]].map(([x, y], i) => <Row key={i} suit="pentacles" xs={[x]} y={y} s={4.4} />)}
-      <Figure x={62} y={104} h={40} arms="hold" fill={ROBE_PALE.pentacles} cloak />
-      <Figure x={44} y={106} h={34} arms="hold" fill={ROBE.pentacles} />
-      <Figure x={54} y={106} h={16} arms="up" fill={INK} />
+      <Person x={62} y={104} h={40} pose="hold" robe={ROBE_PALE.pentacles} />
+      <Person x={44} y={106} h={34} pose="hold" robe={ROBE.pentacles} />
+      <Person x={54} y={106} h={16} pose="up" robe={INK} />
       <ellipse cx={68} cy={104} rx={6} ry={2.6} fill={INK} />
       <ellipse cx={40} cy={106} rx={5} ry={2.2} fill={PALE} stroke={INK} strokeWidth={0.5} />
     </g>
