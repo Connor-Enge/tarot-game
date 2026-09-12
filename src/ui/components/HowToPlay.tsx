@@ -62,6 +62,12 @@ export function HowToPlay({ onClose }: { onClose: () => void }) {
               <strong>Some scenes keep a rite.</strong> A rule stated as you arrive: the Mirror reads every card the other way up, the Hush allows no whispers, the Tithe takes a drop at the door.
             </span>
           </li>
+          <li>
+            <span className="how__glyph" aria-hidden>✶</span>
+            <span>
+              <strong>Cards keep company.</strong> Two cards read together three times know each other, and from then on both at one table lift the reading. After a scene, the road not taken shows what the cards you passed over would have done, and the Table in the Codex lets you lay any scene again for nothing.
+            </span>
+          </li>
           <li className="howto__step">
             <span className="howto__art howto__art--tiers" aria-hidden>
               <span className="tier--calamity">✖</span>

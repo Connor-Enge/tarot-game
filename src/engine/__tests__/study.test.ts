@@ -17,3 +17,21 @@ describe('seat questions', () => {
     expect(seatQuestion(emptyKnowledge(), createRng(1), () => 'omen')).toBeNull();
   });
 });
+
+describe('the kin question', () => {
+  it('asks which card a bonded card knows, with two strangers for company', async () => {
+    const { emptyKnowledge, noteLinks, kinQuestion, BOND_MIN } = await import('../knowledge');
+    const { createRng } = await import('../rng');
+    let k = emptyKnowledge();
+    for (let i = 0; i < BOND_MIN; i++) k = noteLinks(k, ['major-0', 'major-19']);
+    for (const id of ['major-0', 'major-19', 'cups-2', 'wands-5', 'swords-3']) k.cards[id] = { tier: 1, resolved: 1, seats: {} } as never;
+    const q = kinQuestion(k, createRng(3))!;
+    expect(q).not.toBeNull();
+    expect(['major-0', 'major-19']).toContain(q.cardId);
+    expect(q.kin).toEqual([q.cardId === 'major-0' ? 'major-19' : 'major-0']);
+    expect(q.choices).toHaveLength(3);
+    expect(q.choices.filter((c) => q.kin.includes(c))).toHaveLength(1);
+    expect(q.choices.every((c) => c !== q.cardId)).toBe(true);
+    expect(kinQuestion(emptyKnowledge(), createRng(3))).toBeNull();
+  });
+});

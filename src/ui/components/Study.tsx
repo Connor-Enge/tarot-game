@@ -86,6 +86,39 @@ export function Study() {
       </section>
     );
   }
+  if ('kind' in q && q.kind === 'kin') {
+    const right = picked !== null && q.kin.includes(picked);
+    return (
+      <section className="study">
+        {filterRow}
+        <StudyMeta streak={streak} stats={stats} />
+        <div className="study__cardwrap study__seatcard">
+          <Card cardId={q.cardId} size="lg" />
+        </div>
+        <p className="muted small center"><span className="kin__mark" aria-hidden>✶</span> Which of these does {getCard(q.cardId).name} know?</p>
+        <div className="study__choices">
+          {q.choices.map((id, i) => {
+            const state = picked ? (q.kin.includes(id) ? 'right' : id === picked ? 'wrong' : 'dim') : '';
+            return (
+              <div key={`${q.cardId}-${id}`} className={`study__choice study__choice--${state} deal`} style={{ animationDelay: `${i * 110}ms` }}>
+                <div className={`study__cardwrap ${picked && q.kin.includes(id) ? 'alive' : ''}`}>
+                  <Card cardId={id} size="lg" onClick={() => answerStudy(id)} />
+                  {picked && q.kin.includes(id) && <span className="study__stamp" aria-hidden>✶</span>}
+                  {picked && id === picked && !q.kin.includes(id) && <span className="study__stamp study__stamp--wrong" aria-hidden>✖</span>}
+                </div>
+                {picked && q.kin.includes(id) && <div className="study__label">{getCard(id).name}</div>}
+              </div>
+            );
+          })}
+        </div>
+        {picked && (
+          <button className="btn btn--primary" onClick={askStudy}>
+            {right ? 'Again' : 'Another'}
+          </button>
+        )}
+      </section>
+    );
+  }
   if ('kind' in q) {
     const right = picked !== null && q.seats.includes(picked as never);
     return (

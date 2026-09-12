@@ -289,6 +289,32 @@ export function placeQuestion(
   return { kind: 'place', omen: cardOmen(e.cardId, e.reversed), cardId: e.cardId, reversed: e.reversed, scenes, choices };
 }
 
+/** Which card does this one know? The answer is any card bonded to it; the others are cards it has never shared a table with, or barely. */
+export function kinQuestion(
+  k: Knowledge,
+  rng: { int(max: number): number; shuffle<T>(arr: readonly T[]): T[] },
+  filter: (cardId: string) => boolean = () => true,
+): { kind: 'kin'; cardId: string; kin: string[]; choices: string[] } | null {
+  const pairs = bondedPairs(k);
+  if (pairs.length === 0) return null;
+  const byCard = new Map<string, string[]>();
+  for (const key of pairs) {
+    const [a, b] = key.split('|');
+    byCard.set(a, [...(byCard.get(a) ?? []), b]);
+    byCard.set(b, [...(byCard.get(b) ?? []), a]);
+  }
+  const subjects = Array.from(byCard.keys()).filter(filter);
+  if (subjects.length === 0) return null;
+  const cardId = subjects[rng.int(subjects.length)];
+  const kin = byCard.get(cardId)!;
+  // Wrong answers: cards the reader has read that this one does not know.
+  const strangers = Object.keys(k.cards).filter((id) => id !== cardId && !kin.includes(id) && (k.cards[id]?.tier ?? 0) >= 1);
+  const others = rng.shuffle(strangers).slice(0, 2);
+  if (others.length < 2) return null;
+  const choices = rng.shuffle([kin[rng.int(kin.length)], ...others]);
+  return { kind: 'kin', cardId, kin, choices };
+}
+
 export function studyQuestion(
   k: Knowledge,
   rng: { int(max: number): number; shuffle<T>(arr: readonly T[]): T[] },
