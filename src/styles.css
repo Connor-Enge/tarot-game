@@ -2250,3 +2250,22 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .challenge__mark { margin-right: 4px; }
 .challenge__row { display: flex; gap: 8px; align-items: center; margin-top: 2px; }
 .card__whisper--known { background: linear-gradient(160deg, rgba(233,228,242,0.85), rgba(180,172,200,0.8)); color: #1a1830; opacity: 0.92; }
+
+/* --- places read: a shelf of vignettes in the book ---------------------------- */
+.placebook { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+.placebook__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.placebook__tile { display: flex; flex-direction: column; align-items: stretch; gap: 3px; padding: 0 0 5px; border: 1px solid rgba(214,178,94,0.18); border-radius: 10px; background: hsl(var(--book-hue, 260) 28% 13%); color: var(--muted); cursor: pointer; overflow: hidden; font: inherit; text-align: center; }
+.placebook__tile:active { transform: scale(0.98); }
+.placebook__art { width: 100%; height: auto; display: block; }
+.placebook__name { font-size: 0.6rem; line-height: 1.2; padding: 0 4px; color: var(--ink); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.placebook__meta { font-size: 0.66rem; }
+.placebook__mark { color: var(--muted); }
+.placebook__tile.tier--triumph .placebook__mark, .placebook__tile.tier--boon .placebook__mark { color: var(--gold-2); }
+.placebook__tile.tier--calamity .placebook__mark, .placebook__tile.tier--harm .placebook__mark { color: #e0a39a; }
+.placebook__seats { display: flex; flex-direction: column; gap: 6px; width: 100%; text-align: left; }
+.placebook__seathead { display: flex; align-items: center; gap: 4px; }
+.placebook__cards { display: flex; gap: 6px; flex-wrap: wrap; padding: 2px 0 0 4px; }
+.placebook__card { position: relative; padding: 0; border: none; background: none; cursor: pointer; }
+.placebook__cardmark { position: absolute; right: -4px; bottom: -4px; font-size: 0.62rem; color: var(--muted); background: #0b0a12; border-radius: 50%; width: 14px; height: 14px; display: grid; place-items: center; }
+.placebook__card.tier--triumph .placebook__cardmark, .placebook__card.tier--boon .placebook__cardmark { color: var(--gold-2); }
+.placebook__card.tier--calamity .placebook__cardmark, .placebook__card.tier--harm .placebook__cardmark { color: #e0a39a; }

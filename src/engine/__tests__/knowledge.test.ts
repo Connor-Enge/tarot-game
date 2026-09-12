@@ -302,3 +302,27 @@ describe('kin', () => {
     expect(bondedPairs(k)).toEqual(['major-0|major-19']);
   });
 });
+
+describe('places read', () => {
+  it('gathers visits, best and worst, and the cards laid in each seat', async () => {
+    const { emptyKnowledge, placesRead } = await import('../knowledge');
+    const k = emptyKnowledge();
+    k.omenLog = [
+      { run: 1, scene: 'bell', seat: 'vessel', cardId: 'major-0', reversed: false, tier: 'boon' },
+      { run: 1, scene: 'bell', seat: 'hand', cardId: 'cups-2', reversed: true, tier: 'boon' },
+      { run: 2, scene: 'bell', seat: 'vessel', cardId: 'major-0', reversed: false, tier: 'harm' },
+      { run: 2, scene: 'bell', seat: 'hand', cardId: 'wands-5', reversed: false, tier: 'harm' },
+      { run: 2, scene: 'crossing', seat: 'wake', cardId: 'major-19', reversed: false, tier: 'triumph' },
+    ];
+    const places = placesRead(k);
+    expect(places.map((p) => p.scene)).toEqual(['bell', 'crossing']);
+    const bell = places[0];
+    expect(bell.visits).toBe(2);
+    expect(bell.best).toBe('boon');
+    expect(bell.worst).toBe('harm');
+    expect(bell.tiers).toEqual({ boon: 1, harm: 1 });
+    expect(bell.seats.vessel).toEqual([{ cardId: 'major-0', reversed: false, tier: 'harm' }]);
+    expect(bell.seats.hand.map((c) => c.cardId)).toEqual(['cups-2', 'wands-5']);
+    expect(places[1].seats.wake[0].tier).toBe('triumph');
+  });
+});

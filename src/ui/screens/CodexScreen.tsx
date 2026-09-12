@@ -17,6 +17,7 @@ import { ColourKey } from '../components/ColourKey';
 import { Rites } from '../components/Rites';
 import { Study } from '../components/Study';
 import { Table } from '../components/Table';
+import { Places } from '../components/Places';
 
 /** Everything the player has earned the right to know. Nothing else. */
 export function CodexScreen() {
@@ -95,6 +96,7 @@ export function CodexScreen() {
       {view === 'book' && (<>
         <WeekRoad knowledge={k} />
         <Almanac knowledge={k} />
+        <Places knowledge={k} />
         <OmenBook onOpen={openCodex} />
       </>)}
       {view === 'cards' && (<>

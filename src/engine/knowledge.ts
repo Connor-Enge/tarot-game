@@ -152,6 +152,46 @@ export function noteLinks(k: Knowledge, cardIds: string[]): Knowledge {
   return { ...k, links };
 }
 
+/** A place the reader has read at, gathered from the omen log: how often, how it went, what was laid in each seat. */
+export interface PlaceRead {
+  scene: string;
+  visits: number;
+  best: OutcomeTier;
+  worst: OutcomeTier;
+  tiers: Partial<Record<OutcomeTier, number>>;
+  /** Cards laid in each seat here, most recent last, distinct. */
+  seats: Record<SlotId, { cardId: string; reversed: boolean; tier: OutcomeTier }[]>;
+}
+
+const TIER_RANK: Record<string, number> = { calamity: 0, harm: 1, neutral: 2, boon: 3, triumph: 4 };
+
+export function placesRead(k: Knowledge): PlaceRead[] {
+  const out = new Map<string, PlaceRead>();
+  const seenVisit = new Set<string>();
+  for (const e of k.omenLog ?? []) {
+    const tier = e.tier as OutcomeTier;
+    if (!(tier in TIER_RANK)) continue;
+    let p = out.get(e.scene);
+    if (!p) {
+      p = { scene: e.scene, visits: 0, best: tier, worst: tier, tiers: {}, seats: { vessel: [], threshold: [], wake: [], hand: [] } };
+      out.set(e.scene, p);
+    }
+    const visitKey = `${e.run}:${e.scene}`;
+    if (!seenVisit.has(visitKey)) {
+      seenVisit.add(visitKey);
+      p.visits += 1;
+      p.tiers[tier] = (p.tiers[tier] ?? 0) + 1;
+      if (TIER_RANK[tier] > TIER_RANK[p.best]) p.best = tier;
+      if (TIER_RANK[tier] < TIER_RANK[p.worst]) p.worst = tier;
+    }
+    const row = p.seats[e.seat];
+    const i = row.findIndex((x) => x.cardId === e.cardId && x.reversed === e.reversed);
+    if (i >= 0) row.splice(i, 1);
+    row.push({ cardId: e.cardId, reversed: e.reversed, tier });
+  }
+  return Array.from(out.values()).sort((a, b) => b.visits - a.visits || a.scene.localeCompare(b.scene));
+}
+
 /** Readings together before two cards are said to know each other. */
 export const BOND_MIN = 3;
 

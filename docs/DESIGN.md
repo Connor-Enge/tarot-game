@@ -715,6 +715,15 @@ The address is cleaned as soon as the offer is read. Dailies and weeklies
 are already shared by date, so they carry no link. Engine:
 `engine/challenge.ts` (`parseChallenge`, `challengeLink`).
 
+## Places
+
+The Codex book keeps a shelf of every scene the reader has read at, one
+vignette each with how often and how well it went. A place opens to what
+was laid in each seat there, most recent first, each card marked with how
+that reading ended, and a step to the Table with that scene set. Only
+what happened is shown; the scene's wants stay its own. Engine:
+`placesRead` in `engine/knowledge.ts`.
+
 ## The chronicle
 
 The run-end journal opens with the descent told straight through: one
