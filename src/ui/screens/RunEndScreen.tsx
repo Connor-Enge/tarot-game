@@ -89,6 +89,7 @@ function RunEndScreenInner() {
         scores: SLOT_IDS.map((s) => last.resolution.slots.find((x) => x.slot === s)?.score ?? 0),
         positions: SLOT_IDS.map((s) => SLOT_POSITION[s].n),
         tally: tallyText(last.resolution),
+        hand: (() => { const g = handGrade(runHand(run.history, run.marks, hasRelic(run, 'ring') ? 2 : undefined)); return g ? `${g.name} · ${g.line}` : undefined; })(),
         stops: run.history.map((h) => ({ glyph: KIND_GLYPH[SCENES[h.sceneId].kind], tier: h.resolution.tier })),
         signature: run.signature,
         carried: run.relics.map((r) => ({ id: r, name: getRelic(r).name })),

@@ -633,7 +633,9 @@ whisper gives a word of the card and leaves the seat to be guessed, the
 lamp gives the seat's answer and leaves the card unexplained. Nothing new
 is said about any card; only what this seat, in this scene, would make of
 it. The score is never shown, so a +1 and a +4 look alike under the lamp
-and the choice between two served seats is still the player's. Engine:
+and the choice between two served seats is still the player's. One scene
+keeps the Dark, a rite where no lamp burns: the hollow under the hill.
+Lamplighter marks a return with one scene lit in all four seats. Engine:
 `LAMP_COST`, `canLamp`, `lightLamp`, `lampVerdicts`; `SlotState.lit`.
 
 ## The Table
@@ -869,7 +871,7 @@ identity, not power, which is the point.
   omen is distinct.
 - **Scenes**: 30 exist (29 plus the Abyss), which was the target; more are welcome. Latest: the mill, the drowned chapel, the hunt.
 - **Named readings**: 34. Each is a memorable line, never a definition.
-- **Relics**: 12 boons, 8 curses. **Vows**: 7. **Weathers**: 14. **Trades**: 6. **Sigils**: 33. **Rites**: 7.
+- **Relics**: 12 boons, 8 curses. **Vows**: 7. **Weathers**: 14. **Trades**: 6. **Sigils**: 34. **Rites**: 8.
 - **Combos**: 37 named readings exist (three of them readings of tone: four upright, four reversed, one suit). Their banners are coloured by what they are: pale gold for four upright, violet for four reversed, the suit's colour for one suit, and a dark red ribbon for any named reading that drags the total down. This is the richest vein for "the
   combined meaning" and should keep growing with named, memorable results.
 - **Art**: all 78 faces are procedural SVG (`src/ui/art/`). Majors are

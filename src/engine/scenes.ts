@@ -48,7 +48,7 @@ export type Affinity = Partial<Record<Tag, number>>;
  * Rites: a stated rule a scene carries. Shown the moment you arrive, in
  * plain words, like every other rule. None of them touches a meaning.
  */
-export type Rite = 'mirror' | 'hush' | 'tithe' | 'moonlit' | 'bare' | 'ember' | 'look';
+export type Rite = 'mirror' | 'hush' | 'tithe' | 'moonlit' | 'bare' | 'ember' | 'look' | 'dark';
 export const RITES: Record<Rite, { name: string; glyph: string; text: string }> = {
   mirror: { name: 'The Mirror', glyph: '⧖', text: 'What lands wrong reads right here, and what lands right reads wrong.' },
   hush: { name: 'The Hush', glyph: '…', text: 'No whispers here. Redraw, turn, or trust your eye.' },
@@ -57,6 +57,7 @@ export const RITES: Record<Rite, { name: string; glyph: string; text: string }> 
   bare: { name: 'The Bare Table', glyph: '▭', text: 'Every seat deals one fewer.' },
   ember: { name: 'The Ember', glyph: '♨', text: 'Even a neutral reading mends one here.' },
   look: { name: 'The Long Look', glyph: '◉', text: 'The whole last hand is laid bare: every seat dealt at once, one more each, nothing face down.' },
+  dark: { name: 'The Dark', glyph: '●', text: 'No lamp burns here. What a card would do in its seat, you judge unlit.' },
 };
 
 /** Rites the reader has walked: any scene carrying one that appears in the omen log. */
@@ -244,6 +245,7 @@ export const SCENES: Record<string, Scene> = {
   },
   rest: {
     id: 'rest',
+    rite: 'dark',
     kind: 'rest',
     hue: 120,
     minAct: 1,

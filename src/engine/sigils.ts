@@ -48,6 +48,7 @@ export const SIGILS: Sigil[] = [
   { id: 'well-worn', glyph: '❂', name: 'Well Worn', text: 'Read one card twenty-five times.', when: (_r, k) => Object.values(k.cards).some((c) => c.resolved >= 25) },
   { id: 'every-rite', glyph: '⧖', name: 'Every Rite', text: 'Walk every rite a scene can keep.', when: (_r, k) => ritesWalked(k.omenLog).length === Object.keys(RITES).length },
   { id: 'sure-hand', glyph: '☞', name: 'Sure Hand', text: 'Return having played the best card the hand held, in every seat, all the way down.', when: (r) => ascended(r) && r.history.length > 0 && r.history.every((h) => { const road = roadNotTaken(SCENES[h.sceneId], h, r.marks); return !!road && road.regret === 0 && road.seats.every((s) => s.passed.length > 0); }) },
+  { id: 'lamplighter', glyph: '☼', name: 'Lamplighter', text: 'Return having lit the lamp over every seat of one scene.', when: (r) => ascended(r) && r.history.some((h) => (h.lit?.length ?? 0) >= SLOT_IDS.length) },
   { id: 'steady-hand', glyph: '✍', name: 'Steady Hand', text: 'Play the best card in the hand a hundred times.', when: (_r, k) => (k.hand?.best ?? 0) >= 100 },
   { id: 'answered', glyph: '◈', name: 'Answered in Clarity', text: 'Return with every seat answering in Clarity.', when: (r) => ascended(r) && !!r.mods.seatTick },
   ...(['wands', 'cups', 'swords', 'pentacles'] as const).map((suit) => {

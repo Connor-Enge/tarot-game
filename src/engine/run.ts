@@ -72,6 +72,8 @@ export interface HistoryEntry {
   spent?: { redraws: number; whispers: number };
   /** The cards passed over in each seat, as they would have been read. */
   passed?: Partial<Record<SlotId, DrawnCard[]>>;
+  /** Seats the lamp was lit over. */
+  lit?: SlotId[];
 }
 
 export interface RunState {
@@ -522,6 +524,7 @@ export function holdCandidate(run: RunState, index: number): RunState {
 /** The Lamp: once per seat, for Clarity, see what each card in the hand would do in this seat. */
 export function canLamp(run: RunState): boolean {
   if (run.phase.kind !== 'reading' || run.clarity < LAMP_COST) return false;
+  if (currentScene(run).rite === 'dark') return false;
   const slot = run.slots[run.activeSlot];
   return !!slot && slot.chosen === null && !slot.lit && slot.candidates.some((c) => !c.hidden);
 }
@@ -600,7 +603,8 @@ function resolve(run: RunState): RunState {
       .filter((_, j) => j !== s.chosen)
       .map((c) => ({ ...c, hidden: false, reversed: baseScene.rite === 'mirror' ? !c.reversed : c.reversed }));
   }
-  const entry: HistoryEntry = { sceneId: scene.id, reading: revealed, resolution, spent: { ...run.sceneSpent }, passed };
+  const lit = run.slots.filter((s) => s.lit).map((s) => s.slot);
+  const entry: HistoryEntry = { sceneId: scene.id, reading: revealed, resolution, spent: { ...run.sceneSpent }, passed, lit: lit.length ? lit : undefined };
   const history = [...run.history, entry];
   const vow = run.vow && !run.vow.broken && !getVow(run.vow.id).keeps(entry, baseScene) ? { ...run.vow, broken: true } : run.vow;
 

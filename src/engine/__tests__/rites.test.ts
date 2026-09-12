@@ -103,3 +103,21 @@ describe('rites', () => {
     for (const c of Object.values(entry.reading)) expect(c.reversed).toBe(false);
   });
 });
+
+describe('the Dark', () => {
+  it('lets no lamp burn in its scene, and the lit seats of other scenes are remembered', async () => {
+    const { canLamp, lightLamp } = await import('../run');
+    expect(SCENES.rest.rite).toBe('dark');
+    let run = enter(5, 'rest');
+    expect(run.clarity).toBeGreaterThanOrEqual(2);
+    expect(canLamp(run)).toBe(false);
+    expect(lightLamp(run)).toBe(run);
+    let lit = enter(5, 'crossing', { startingClarity: 12 });
+    for (let i = 0; i < 4; i++) {
+      lit = lightLamp(lit);
+      lit = chooseCandidate(lit, 0);
+    }
+    expect(lit.history[0].lit).toEqual(['vessel', 'threshold', 'wake', 'hand']);
+    expect(lit.lamps).toBe(4);
+  });
+});

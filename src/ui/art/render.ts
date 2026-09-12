@@ -39,6 +39,8 @@ export async function renderSpreadImage(opts: {
   positions?: number[];
   /** The tally line, drawn under the outcome. */
   tally?: string;
+  /** How the hand was played across the descent, drawn above the notes. */
+  hand?: string;
 }): Promise<Blob | null> {
   const W = 1080;
   const H = 1350;
@@ -120,6 +122,7 @@ export async function renderSpreadImage(opts: {
     ${!opts.stops && opts.journey ? `<text x="${W / 2}" y="${H - 215}" font-size="34" letter-spacing="12" text-anchor="middle" fill="#d6b25e" font-family="Georgia, serif">${esc(opts.journey)}</text>` : ''}
     <text x="${W / 2}" y="${footerY}" font-size="26" text-anchor="middle" fill="#8d86a3" font-family="Georgia, serif">${esc(opts.footer)}</text>
     ${opts.notes ? `<text x="${W / 2}" y="${notesY}" font-size="24" text-anchor="middle" fill="#d6b25e" font-family="Georgia, serif">${esc(opts.notes)}</text>` : ''}
+    ${opts.hand ? `<text x="${W / 2}" y="${cardY + cardH + (opts.tally ? 214 : 170) + 96}" font-size="23" text-anchor="middle" fill="#b9b2cc" font-family="Georgia, serif">☞ ${esc(opts.hand)}</text>` : ''}
     <text x="${W / 2}" y="${brandY}" font-size="30" letter-spacing="4" text-anchor="middle" fill="#d6b25e" font-family="Georgia, serif">ARCANA DESCENT</text>
   </svg>`;
 

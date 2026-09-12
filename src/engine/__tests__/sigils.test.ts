@@ -147,3 +147,16 @@ describe('every rite', () => {
     expect(newKnowledgeSigils(all)).toContain('every-rite');
   });
 });
+
+describe('Lamplighter', () => {
+  it('needs one scene lit in every seat, and a return', () => {
+    const run = finish(12);
+    expect(run.phase.kind).toBe('ascended');
+    const k = emptyKnowledge();
+    expect(newSigils(run, k)).not.toContain('lamplighter');
+    const lit = { ...run, history: run.history.map((h, i) => (i === 1 ? { ...h, lit: ['vessel', 'threshold', 'wake', 'hand'] } : h)) } as RunState;
+    expect(newSigils(lit, k)).toContain('lamplighter');
+    const half = { ...run, history: run.history.map((h) => ({ ...h, lit: ['vessel', 'hand'] })) } as RunState;
+    expect(newSigils(half, k)).not.toContain('lamplighter');
+  });
+});
