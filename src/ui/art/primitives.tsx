@@ -81,6 +81,9 @@ export function Mountains({ y = 80, fill = INK, opacity = 0.35 }: { y?: number; 
 export function Water({ y = 92, rows = 3 }: { y?: number; rows?: number }) {
   return (
     <g fill="none" stroke={INK} strokeWidth={0.7} opacity={0.7}>
+      {/* a translucent body of water under the ripples, with a pale glint along the first crest */}
+      <path d={`M-20 ${y} q5 -2.5 10 0 t10 0 t10 0 t10 0 t10 0 t10 0 t10 0 t10 0 t10 0 t10 0 V${y + rows * 5 + 6} H-20 Z`} fill="#6f93b8" stroke="none" opacity={0.3} />
+      <path d={`M-20 ${y + 1.2} q5 -2.5 10 0 t10 0 t10 0 t10 0 t10 0 t10 0 t10 0 t10 0 t10 0 t10 0`} stroke={PALE} strokeWidth={0.5} opacity={0.6} />
       {Array.from({ length: rows }, (_, i) => (
         <path key={i} className="live-water" style={{ animationDelay: `${i * -0.9}s` }} d={`M-20 ${y + i * 5} q5 -2.5 10 0 t10 0 t10 0 t10 0 t10 0 t10 0 t10 0 t10 0 t10 0 t10 0`} />
       ))}
