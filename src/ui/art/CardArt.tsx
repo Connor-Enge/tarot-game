@@ -3,7 +3,7 @@ import { getCard, type Card } from '../../engine';
 import { MAJOR_ART } from './majors';
 import { minorArt } from './minors';
 import { majorMood, minorMood, MOOD_SKY } from './palette';
-import { GOLD_FLAT, INK, PALE } from './primitives';
+import { GOLD, GOLD_FLAT, INK, PALE } from './primitives';
 
 /**
  * Shared gradients, patterns and filters. Rendered ONCE at the app root;
@@ -96,6 +96,10 @@ export function ArtDefs() {
           <stop offset="0" stopColor="#3f4252" />
           <stop offset="1" stopColor="#9a9eae" />
         </linearGradient>
+        <radialGradient id="windowVignette" cx="0.5" cy="0.45" r="0.75">
+          <stop offset="0.55" stopColor="#2a2118" stopOpacity="0" />
+          <stop offset="1" stopColor="#2a2118" stopOpacity="0.28" />
+        </radialGradient>
         <pattern id="hatch" width="2.6" height="2.6" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
           <path d="M0 0 V2.6" stroke="#2a2118" strokeWidth="0.45" opacity="0.32" />
         </pattern>
@@ -169,15 +173,24 @@ function CardArtInner({ cardId, className, texture = true }: { cardId: string; c
   const kind = card.arcana === 'major' ? 'major' : card.suit!;
   const art = card.arcana === 'major' ? MAJOR_ART[card.number]() : minorArt(card.suit!, card.number);
   const titleSize = card.name.length > 16 ? 6.2 : 7;
+  const cw = label(card).length > 3 ? 3 : 0; // a wider cartouche for the long numerals
   return (
     <svg viewBox="0 0 100 160" className={className} xmlns="http://www.w3.org/2000/svg">
       <rect x={0} y={0} width={100} height={160} rx={6} fill={PAPER[kind]} />
       {texture && <rect x={0} y={0} width={100} height={160} rx={6} filter="url(#paper)" />}
-      {/* frame */}
-      <rect x={3} y={3} width={94} height={154} rx={4} fill="none" stroke={GOLD_FLAT} strokeWidth={1.2} />
-      <rect x={6} y={6} width={88} height={148} rx={3} fill="none" stroke={INK} strokeWidth={0.5} opacity={0.6} />
-      {[[9, 9], [91, 9], [9, 151], [91, 151]].map(([x, y], i) => (
-        <path key={i} d={`M${x} ${y} m-3 0 a3 3 0 1 0 6 0 a3 3 0 1 0 -6 0`} fill="none" stroke={GOLD_FLAT} strokeWidth={0.6} />
+      {/* frame: a foil rail between two fine lines, quatrefoils at the corners, lozenges at the sides */}
+      <rect x={2.5} y={2.5} width={95} height={155} rx={4.5} fill="none" stroke={GOLD} strokeWidth={1.8} />
+      <rect x={2.5} y={2.5} width={95} height={155} rx={4.5} fill="none" stroke={INK} strokeWidth={0.3} opacity={0.5} />
+      <rect x={4.6} y={4.6} width={90.8} height={150.8} rx={3.5} fill="none" stroke={INK} strokeWidth={0.3} opacity={0.5} />
+      <rect x={6.5} y={6.5} width={87} height={147} rx={3} fill="none" stroke={INK} strokeWidth={0.5} opacity={0.6} />
+      {[[8.5, 8.5], [91.5, 8.5], [8.5, 151.5], [91.5, 151.5]].map(([x, y], i) => (
+        <g key={i}>
+          <path d={`M${x} ${y - 3.2} q2.2 0 2.2 2.2 q1 -1 2.2 1 q-1.2 1 -2.2 1 q0 2.2 -2.2 2.2 q0 -2.2 -2.2 -2.2 q-1.2 0 -2.2 -1 q1 -2 2.2 -1 q2.2 0 2.2 -2.2 z`} fill={GOLD} stroke={INK} strokeWidth={0.3} />
+          <circle cx={x} cy={y} r={0.7} fill={INK} opacity={0.7} />
+        </g>
+      ))}
+      {[[4.6, 80], [95.4, 80]].map(([x, y], i) => (
+        <path key={i} d={`M${x} ${y - 3.5} l1.6 3.5 l-1.6 3.5 l-1.6 -3.5 z`} fill={GOLD} stroke={INK} strokeWidth={0.3} />
       ))}
       {/* art window */}
       <clipPath id={`clip-${card.id}`}>
@@ -187,12 +200,21 @@ function CardArtInner({ cardId, className, texture = true }: { cardId: string; c
       <g clipPath={`url(#clip-${card.id})`}>
         <g transform="translate(10 18)">{art}</g>
       </g>
+      {/* the window's edges fall into shadow, and a gold mat sits inside the ink line */}
+      <rect x={10} y={18} width={80} height={112} rx={2} fill="url(#windowVignette)" />
       <rect x={10} y={18} width={80} height={112} rx={2} fill="none" stroke={INK} strokeWidth={0.8} />
-      {/* plates */}
-      <text x={50} y={13.5} fontSize={7} textAnchor="middle" fill={INK} fontFamily="Georgia, serif" letterSpacing={0.5}>
+      <rect x={11.2} y={19.2} width={77.6} height={109.6} rx={1.5} fill="none" stroke={GOLD_FLAT} strokeWidth={0.4} opacity={0.75} />
+      {/* plates: the numeral in a small cartouche with rules either side, the name on a ribboned plate */}
+      <path d={`M14 11 h${36 - cw} M${64 + cw} 11 h${22 - cw}`} stroke={GOLD_FLAT} strokeWidth={0.5} opacity={0.8} />
+      <circle cx={13} cy={11} r={0.8} fill={GOLD_FLAT} />
+      <circle cx={87} cy={11} r={0.8} fill={GOLD_FLAT} />
+      <path d={`M${40 - cw} 11 q${10 + cw} -6.5 ${20 + cw * 2} 0 q${-10 - cw} 6.5 ${-20 - cw * 2} 0 z`} fill={PALE} stroke={INK} strokeWidth={0.5} opacity={0.95} />
+      <text x={50} y={13.4} fontSize={6.2} textAnchor="middle" fill={INK} fontFamily="Georgia, serif" letterSpacing={0.5}>
         {label(card)}
       </text>
-      <rect x={12} y={135} width={76} height={16} rx={2} fill={PALE} stroke={INK} strokeWidth={0.5} opacity={0.9} />
+      <path d="M12 135 h76 v16 h-76 z" fill={PALE} stroke={INK} strokeWidth={0.5} opacity={0.92} />
+      <path d="M13.2 136.2 h73.6 v13.6 h-73.6 z" fill="none" stroke={GOLD_FLAT} strokeWidth={0.4} opacity={0.8} />
+      <path d="M12 135 l-2.5 3 l2.5 3 M12 145 l-2.5 3 l2.5 3 M88 135 l2.5 3 l-2.5 3 M88 145 l2.5 3 l-2.5 3" fill={PALE} stroke={INK} strokeWidth={0.4} opacity={0.9} />
       <text x={50} y={146} fontSize={titleSize} textAnchor="middle" fill={INK} fontFamily="Georgia, serif" fontVariant="small-caps" letterSpacing={0.4}>
         {card.name}
       </text>

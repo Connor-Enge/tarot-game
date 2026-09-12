@@ -968,7 +968,11 @@ identity, not power, which is the point.
   far slopes and keep a ridge line, ground has a hatched verge under its
   horizon, clouds have a hatched belly, trees a tapered trunk and a
   shaded lobe, horses a shadowed belly, hooves, a bridle and strands in
-  the mane, pillars fluting and a shaded side; the numbered Minors are scenes after the
+  the mane, pillars fluting and a shaded side. The frame is a foil rail
+  between fine lines with quatrefoils at the corners and lozenges at the
+  sides; the window has a gold mat inside its ink line and a vignette
+  that darkens toward the edges; the numeral sits in a small cartouche
+  between rules, the name on a ribboned plate; the numbered Minors are scenes after the
   Waite-Smith convention (every pip present, and a figure doing the thing:
   the Two of Wands holds the globe on the battlement, the Five of
   Pentacles passes the lit window in snow, the Eight of Cups walks away
