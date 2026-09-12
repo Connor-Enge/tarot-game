@@ -198,6 +198,10 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <Pillar x={10} y={4} h={94} />
       <Pillar x={70} y={4} h={94} />
       <path d="M22 10 h36 M22 14 h36" stroke={INK} strokeWidth={0.4} opacity={0.4} />
+      {/* carved capitals on the grey pillars, a red carpet down the steps */}
+      {[10, 70].map((x) => <path key={x} d={`M${x - 6} 8 q3 -3 6 0 q3 -3 6 0 v2 h-12 z`} fill={PALE} stroke={INK} strokeWidth={0.5} />)}
+      <path d="M22 96 h36 v16 h-36 z" fill={BLOOD} opacity={0.45} />
+      <path d="M24 100 h32 M24 106 h32" stroke={GOLD_FLAT} strokeWidth={0.5} opacity={0.7} />
       {/* the seat, the teacher in red with the white pallium, the triple crown */}
       <Throne x={40} y={84} w={28} h={28} fill="#b8b4a8" back="plain" />
       <Person x={40} y={84} h={50} pose="raise-right" robe="#b8462f" inner={PALE} hair="#9a9088" belt={null} />
@@ -223,10 +227,11 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       {[[19, 98], [26, 101], [22, 104]].map(([x, y], i) => <Rose key={i} x={x} y={y} r={1.4} />)}
       {[[53, 99], [60, 102]].map(([x, y], i) => <Lily key={i} x={x} y={y} s={2.4} />)}
       {/* the crossed keys */}
-      <g stroke={GOLD_FLAT} strokeWidth={1.2} fill="none">
-        <path d="M34 108 l12 -8 M46 108 l-12 -8" />
-        <circle cx={33} cy={108.6} r={1.6} />
-        <circle cx={47} cy={108.6} r={1.6} />
+      <g stroke={GOLD_FLAT} strokeWidth={1.3} fill="none" strokeLinecap="round">
+        <path d="M33 108 l14 -9 M47 108 l-14 -9" />
+        <circle cx={32} cy={108.8} r={2} />
+        <circle cx={48} cy={108.8} r={2} />
+        <path d="M45.5 100 l1.5 -1 M44 101 l1.5 -1 M34.5 100 l-1.5 -1 M36 101 l-1.5 -1" strokeWidth={1} />
       </g>
     </g>
   ),
@@ -240,11 +245,15 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <Mountains y={86} opacity={0.3} />
       {/* the tree of knowledge with the serpent, and the tree of flame */}
       <Tree x={11} y={100} h={32} fill={LEAF} />
-      {[[7, 78], [14, 74], [10, 84], [16, 82]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r={1.3} fill={BLOOD} stroke={INK} strokeWidth={0.3} />)}
-      <path d="M8 98 q5 -8 -1 -14 q-5 -6 2 -12" fill="none" stroke={GOLD_FLAT} strokeWidth={1.3} strokeLinecap="round" />
-      <circle cx={9.5} cy={71.5} r={1.1} fill={GOLD_FLAT} />
-      <line x1={69} y1={100} x2={69} y2={76} stroke={INK} strokeWidth={1.8} />
-      {[[61, 74], [66, 68], [72, 66], [77, 73], [69, 78]].map(([x, y], i) => <Flame key={i} x={x} y={y} s={4.2} />)}
+      {[[7, 78], [14, 74], [10, 84], [16, 82], [5, 86], [18, 78]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r={1.3} fill={BLOOD} stroke={INK} strokeWidth={0.3} />)}
+      <path d="M8 98 q5 -8 -1 -14 q-5 -6 2 -12" fill="none" stroke={GOLD_FLAT} strokeWidth={1.4} strokeLinecap="round" />
+      <path d="M8 98 q5 -8 -1 -14 q-5 -6 2 -12" fill="none" stroke={INK} strokeWidth={0.35} strokeLinecap="round" opacity={0.6} />
+      <path d="M9 72 q1.5 -2 3.5 -1 q-1 1.5 -3.5 1 z" fill={GOLD_FLAT} stroke={INK} strokeWidth={0.3} />
+      <circle cx={11} cy={71.6} r={0.3} fill={INK} />
+      <path d="M12.5 71.2 l1.5 -0.4 M12.5 71.6 l1.5 0.4" stroke={BLOOD} strokeWidth={0.3} />
+      <path d="M67.5 100 l0.5 -24 l2 0 l0.5 24 z" fill="#5a3a22" stroke={INK} strokeWidth={0.5} />
+      <path d="M69 84 l-5 -6 M69 80 l5 -5 M69 88 l5 -4" stroke="#5a3a22" strokeWidth={1.2} strokeLinecap="round" />
+      {[[61, 74], [66, 68], [72, 66], [77, 73], [69, 78], [63, 80], [75, 82]].map(([x, y], i) => <Flame key={i} x={x} y={y} s={4} />)}
       {/* the two, unclothed, one looking to the angel, one to her */}
       <Person x={27} y={100} h={36} pose="raise-left" robe={SKIN} hair="#d9a441" belt={null} />
       <Person x={53} y={100} h={37} pose="out" robe={SKIN} hair="#3a2a1e" belt={null} />
