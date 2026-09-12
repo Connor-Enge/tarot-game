@@ -382,12 +382,12 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <path d="M14 66 q-6 10 2 22" fill="none" stroke="#d9a441" strokeWidth={2} strokeLinecap="round" />
       <path d="M14 66 q-6 10 2 22" fill="none" stroke={INK} strokeWidth={0.4} />
       <circle cx={13.5} cy={65} r={1.6} fill="#d9a441" stroke={INK} strokeWidth={0.4} />
-      <g>
-        <path d="M62 84 q3 -14 6 -22 q3 8 6 22 z" fill={BLOOD} stroke={INK} strokeWidth={0.5} />
-        <circle cx={68} cy={60} r={2.6} fill={BLOOD} stroke={INK} strokeWidth={0.5} />
-        <path d="M66 58 l-1 -4 l2.5 2.5 M70 58 l1 -4 l-2.5 2.5" fill="none" stroke={BLOOD} strokeWidth={1.2} />
-        <path d="M68 62 l3 1" stroke={INK} strokeWidth={0.6} />
-      </g>
+      {/* the jackal-headed one rises on the right: a red figure, a jackal's muzzle and tall ears */}
+      <Person x={68} y={86} h={30} pose="raise-left" robe={BLOOD} inner="#c94a3a" hair="none" belt={GOLD_FLAT} face={false} shade={false} />
+      <path d="M64 61 q4 -3 8 0 l3 2 q-1 2 -3 1.5 l-8 0 z" fill={BLOOD} stroke={INK} strokeWidth={0.4} />
+      <path d="M65 60 l-1.5 -6 l3.5 4.5 M71 60 l1.5 -6 l-3.5 4.5" fill={BLOOD} stroke={INK} strokeWidth={0.4} />
+      <circle cx={69.5} cy={61.2} r={0.5} fill={PALE} />
+      <circle cx={75} cy={63} r={0.5} fill={INK} />
       <g>
         <Sphinx x={26} y={30} fill="#5f7fb0" face="#8fa8d0" feature={INK} />
         <line x1={51} y1={28} x2={51} y2={12} stroke={GOLD_FLAT} strokeWidth={1.2} strokeLinecap="round" />

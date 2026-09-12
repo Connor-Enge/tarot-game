@@ -680,8 +680,13 @@ function Court({ suit, rank }: { suit: Suit; rank: number }): ReactElement {
         </g>
         {/* the rider in mail under the suit's surcoat, a plumed helm */}
         <Person x={rx} y={ry} h={34} pose={pose} robe={robe} inner="#c9cdd4" hair="none" belt={GOLD_FLAT} face />
-        <path d={`M${rx - 3.6} ${ry - 30.6} a3.6 3.6 0 0 1 7.2 0 v1.4 h-7.2 z`} fill="#c9cdd4" stroke={INK} strokeWidth={0.4} />
-        <path d={`M${rx} ${ry - 34} q4 -4 7 -1 q-4 0 -6 3`} fill={suit === 'cups' ? PALE : robe} stroke={INK} strokeWidth={0.35} />
+        {/* a steel helm: the skull over the crown of the head, a visor with its slit, a plume in the suit's colour */}
+        <path d={`M${rx - 3.8} ${ry - 30.4} a3.8 3.8 0 0 1 7.6 0 v1.6 h-7.6 z`} fill="#c9cdd4" stroke={INK} strokeWidth={0.4} />
+        <path d={`M${rx - 3.8} ${ry - 28.8} h7.6 l-0.6 2.2 h-6.4 z`} fill="#b0b5be" stroke={INK} strokeWidth={0.35} />
+        <path d={`M${rx - 2.6} ${ry - 27.8} h5.2`} stroke={INK} strokeWidth={0.5} />
+        <path d={`M${rx} ${ry - 34.2} v2.4`} stroke={INK} strokeWidth={0.4} />
+        <path d={`M${rx} ${ry - 34.2} q4 -5 8 -2 q-4 0 -7 4`} fill={suit === 'cups' ? PALE : robe} stroke={INK} strokeWidth={0.35} />
+        <path d={`M${rx + 1} ${ry - 33.5} q3 -3 6 -2`} fill="none" stroke={INK} strokeWidth={0.25} opacity={0.6} />
         {suit === 'cups' ? <Sym x={34} y={60} s={6} /> : <g transform={charge ? 'rotate(-30 50 46)' : undefined}><Sym x={50} y={charge ? 44 : 52} s={8} /></g>}
       </g>
     );
