@@ -48,19 +48,26 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
     <g>
       <Infinity x={40} y={12} s={5} />
       {/* rose arbour above, lilies and roses below */}
-      <path d="M0 4 q40 10 80 0" fill="none" stroke={LEAF} strokeWidth={1} />
+      <path d="M0 4 q40 10 80 0" fill="none" stroke={LEAF} strokeWidth={1.2} />
+      {[4, 15, 30, 50, 66, 77].map((x, i) => <path key={x} d={`M${x} ${5 + (i % 2) * 3} q-3 -4 -1 -6 q3 2 1 6 q3 -4 5 -2 q-3 3 -5 2`} fill={LEAF} stroke={INK} strokeWidth={0.3} />)}
       {[8, 22, 40, 58, 72].map((x, i) => <Rose key={x} x={x} y={6 + (i % 2) * 2} r={2.4} />)}
       <path d="M0 96 q20 -8 40 0 t40 0 v16 h-80 z" fill={LEAF} opacity={0.5} />
       {[6, 18, 30].map((x, i) => <Rose key={x} x={x} y={101 + (i % 2) * 3} r={2.6} />)}
       {[50, 62, 74].map((x, i) => <Lily key={x} x={x} y={100 + (i % 2) * 2} s={3.2} />)}
       {/* the table and the four tools */}
-      <rect x={13} y={82} width={54} height={4} fill={PALE} stroke={INK} strokeWidth={0.7} />
-      <rect x={14} y={86} width={52} height={2} fill="url(#hatch)" />
-      {[17, 63].map((x) => <rect key={x} x={x} y={86} width={2.2} height={12} fill={INK} />)}
-      <Wand x={22} y={76} s={5} />
-      <Cup x={34} y={77} s={4.5} />
-      <Sword x={47} y={76} s={5} />
-      <Pentacle x={59} y={76} s={4.5} />
+      <rect x={12} y={81} width={56} height={5} fill="#c9a877" stroke={INK} strokeWidth={0.7} />
+      <rect x={12} y={84} width={56} height={2} fill="url(#hatch)" opacity={0.7} />
+      <path d="M14 82.5 h52" stroke={PALE} strokeWidth={0.4} opacity={0.6} />
+      {[16, 62].map((x) => (
+        <g key={x}>
+          <path d={`M${x} 86 v12 M${x - 1.5} 90 q1.5 -1 3 0 M${x - 1.5} 95 q1.5 1 3 0`} fill="none" stroke={INK} strokeWidth={2.2} strokeLinecap="round" />
+          <path d={`M${x - 2.5} 98 h5`} stroke={INK} strokeWidth={1.4} strokeLinecap="round" />
+        </g>
+      ))}
+      <Wand x={21} y={75} s={6} />
+      <Cup x={34} y={76} s={5.5} />
+      <Sword x={47} y={75} s={6} />
+      <Pentacle x={60} y={75} s={5.5} />
       {/* the magician: red mantle over white, wand raised, hand to the earth */}
       <Person x={40} y={82} h={50} pose="point-down" robe="#b8462f" inner={PALE} hair="#3a2a1e" belt={null} />
       {(() => { const hd = hands(40, 82, 50, 'point-down'); return (
@@ -75,7 +82,8 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       {/* the serpent belt, biting its tail */}
       <path d="M34 57 q6 -3 12 0 q-6 3 -12 0 z" fill="none" stroke={LEAF} strokeWidth={1} />
       <circle cx={46} cy={57} r={0.7} fill={LEAF} />
-      <circle cx={40} cy={30} r={2} fill={PALE} stroke={INK} strokeWidth={0.4} />
+      {/* the white headband */}
+      <path d="M35.2 35.2 q4.8 -1.6 9.6 0 v2 q-4.8 -1.6 -9.6 0 z" fill={PALE} stroke={INK} strokeWidth={0.35} />
     </g>
   ),
   2: () => (
