@@ -970,7 +970,11 @@ identity, not power, which is the point.
   the Codex sheet) the art is alive: the Wheel and the World's wreath
   turn, the Sun's rays wheel, stars twinkle, water and clouds drift, the
   Tower's bolt flickers, flames lick, the Hanged Man sways, the Moon's
-  crayfish rises. Nowhere else; the hand and the seats stay still. A
+  crayfish rises. The hand and the seats stay still. The scene vignette
+  over a reading is alive too, and so is a remembered scene's art: its
+  flames lick, its water drifts, its stars twinkle, its clouds move. The
+  same primitives carry the same hooks, so the world breathes the way the
+  cards do when held close. A
   reversed face is lit from below: the art runs a little cooler and dimmer
   and a violet shadow sits over what is now its top, so a turned card reads
   as turned at a glance, before the corner mark is found. On the map, a

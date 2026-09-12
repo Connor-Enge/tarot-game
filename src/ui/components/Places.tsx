@@ -39,7 +39,7 @@ export function Places({ knowledge: k }: { knowledge: Knowledge }) {
         return (
           <div className="sheet" role="dialog" aria-label={sc.place} onClick={() => setPick(null)}>
             <div className="sheet__body" onClick={(ev) => ev.stopPropagation()}>
-              <div className="memory__art" style={{ '--book-hue': sc.hue } as React.CSSProperties}>
+              <div className="memory__art alive" style={{ '--book-hue': sc.hue } as React.CSSProperties}>
                 <SceneArt id={pick.scene} className="scene__art" />
                 <span className="memory__where muted small">{sc.place}</span>
               </div>

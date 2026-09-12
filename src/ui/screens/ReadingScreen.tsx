@@ -140,7 +140,7 @@ function ReadingScreenInner() {
       </header>
 
       <div className="reading__left">
-      <section className="scene">
+      <section className="scene alive">
         <SceneArt id={scene.id} className="scene__art" />
         <p className="scene__place muted">{scene.place}</p>
         <p className="scene__prompt">{scene.prompt}</p>

@@ -63,7 +63,7 @@ export function MemorySheet({
         onPointerUp={onPointerUp}
         key={index}
       >
-        <div className="memory__art" style={{ '--book-hue': scene.hue } as React.CSSProperties}>
+        <div className="memory__art alive" style={{ '--book-hue': scene.hue } as React.CSSProperties}>
           <SceneArt id={h.sceneId} className="scene__art" />
           <span className="memory__where muted small">{scene.place}</span>
         </div>
