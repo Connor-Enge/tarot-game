@@ -1096,11 +1096,14 @@ function Court({ suit, rank }: { suit: Suit; rank: number }): ReactElement {
             <circle cx={64} cy={60} r={4} fill={GOLD_FLAT} stroke={INK} strokeWidth={0.5} />
             <circle cx={64} cy={60} r={1.6} fill={INK} />
             <line x1={64} y1={64} x2={64} y2={80} stroke={GREEN} strokeWidth={1.2} />
-            <ellipse cx={20} cy={104} rx={7} ry={3.5} fill={INK} />
-            <circle cx={14} cy={100} r={2.4} fill={INK} />
-            <path d="M12 98 l-1 -3 l2 1 M16 98 l1 -3 l-2 1" fill="none" stroke={INK} strokeWidth={0.8} />
-            <circle cx={13.2} cy={100} r={0.4} fill={GOLD_FLAT} />
-            <circle cx={14.8} cy={100} r={0.4} fill={GOLD_FLAT} />
+            {/* the black cat sits square, tail curled about its feet, eyes on us */}
+            <path d="M12 106 q-1 -8 4 -10 q5 2 4 10 z" fill={INK} />
+            <path d="M20 105 q6 -2 4 -7" fill="none" stroke={INK} strokeWidth={1.6} strokeLinecap="round" />
+            <circle cx={16} cy={94.5} r={3.2} fill={INK} />
+            <path d="M13.2 93 l-0.6 -3.4 l2.4 1.8 M18.8 93 l0.6 -3.4 l-2.4 1.8" fill={INK} />
+            <circle cx={14.8} cy={94.2} r={0.5} fill={GOLD_FLAT} />
+            <circle cx={17.2} cy={94.2} r={0.5} fill={GOLD_FLAT} />
+            <path d="M13 96 l-2.5 -0.4 M13 96.8 l-2.5 0.4 M19 96 l2.5 -0.4 M19 96.8 l2.5 0.4" stroke={PALE} strokeWidth={0.25} opacity={0.7} />
           </g>
         )}
         {suit === 'cups' && (
@@ -1120,9 +1123,13 @@ function Court({ suit, rank }: { suit: Suit; rank: number }): ReactElement {
         {suit === 'pentacles' && (
           <g>
             <Sym x={40} y={76} s={7} />
-            <ellipse cx={66} cy={104} rx={5} ry={3} fill="#8a6a3a" />
-            <circle cx={70} cy={101} r={2} fill="#8a6a3a" />
-            <path d="M69 99 l-1 -4 M71 99 l1 -4" stroke="#8a6a3a" strokeWidth={1} strokeLinecap="round" />
+            {/* the hare crouched in the grass, ears up */}
+            <path d="M60 106 q0 -6 6 -6 q5 0 6 5 v1 z" fill="#8a6a3a" stroke={INK} strokeWidth={0.4} />
+            <circle cx={72.5} cy={102.5} r={2.4} fill="#8a6a3a" stroke={INK} strokeWidth={0.4} />
+            <path d="M71.5 100.5 q-1.5 -5 0.5 -6 q1.5 2 0.8 6 M73.5 100.3 q0 -5 2 -5.5 q1 2.5 -0.6 5.8" fill="#a98a5a" stroke={INK} strokeWidth={0.35} />
+            <circle cx={73.6} cy={102.2} r={0.4} fill={INK} />
+            <path d="M74.8 103.4 l1 0.2" stroke={INK} strokeWidth={0.4} />
+            <circle cx={61} cy={104} r={1.2} fill={PALE} opacity={0.7} />
             <path d="M8 104 q10 -12 22 -4 M6 96 q8 -8 16 -2" fill="none" stroke={GREEN} strokeWidth={1.2} />
           </g>
         )}
@@ -1152,9 +1159,13 @@ function Court({ suit, rank }: { suit: Suit; rank: number }): ReactElement {
       {suit === 'cups' && <path d="M8 100 q5 -4 10 0 q-5 4 -10 0 z M18 100 l4 -3 v6 z" fill={PALE} stroke={INK} strokeWidth={0.5} />}
       {suit === 'pentacles' && (
         <g>
-          <ellipse cx={20} cy={104} rx={8} ry={4} fill={INK} />
-          <circle cx={13} cy={100} r={3} fill={INK} />
-          <path d="M11 98 q-3 -4 0 -6 M15 98 q3 -4 0 -6" fill="none" stroke={INK} strokeWidth={1} />
+          {/* the bull's head carved on the throne's foot, horns curved, a ring in the nose */}
+          <path d="M8 104 q0 -6 6 -7 h6 q5 1 6 6 v3 h-18 z" fill={INK} />
+          <circle cx={13} cy={98.5} r={3.4} fill={INK} />
+          <path d="M10 96.5 q-4 -4 -1.5 -7 q2 2 2.5 5.5 M16 96.5 q4 -4 1.5 -7 q-2 2 -2.5 5.5" fill={PALE} stroke={INK} strokeWidth={0.4} />
+          <circle cx={11.8} cy={98.3} r={0.45} fill={PALE} />
+          <circle cx={14.2} cy={98.3} r={0.45} fill={PALE} />
+          <circle cx={13} cy={101.2} r={0.9} fill="none" stroke={GOLD_FLAT} strokeWidth={0.4} />
           <path d="M60 104 q8 -10 16 -6 M64 100 q6 -2 10 -6" fill="none" stroke={GREEN} strokeWidth={1.2} />
           {[62, 70].map((x) => <circle key={x} cx={x} cy={96} r={1.6} fill="#7a3fa0" />)}
         </g>
