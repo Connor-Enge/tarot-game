@@ -349,6 +349,8 @@ export interface ResolveOptions {
   chargedBonus?: number;
   extraNeutralCost?: number;
   mendBonus?: number;
+  /** Added to every named reading that lifts the total (Wax Seal). */
+  namedBonus?: number;
 }
 
 export function scoreSlot(scene: Scene, slot: SlotId, drawn: DrawnCard, marks: Marks = {}, chargedBonus = CHARGED_BONUS): SlotResolution {
@@ -400,7 +402,7 @@ export function resolveReading(scene: Scene, reading: Reading, marks: Marks = {}
   let total = slots.reduce((a, s) => a + s.score, 0);
   for (const c of COMBOS) {
     if (c.when(reading)) {
-      total += c.score;
+      total += c.score + (c.score > 0 ? opts.namedBonus ?? 0 : 0);
       comboNotes.push(c.note);
       comboIds.push(c.id);
     }

@@ -103,6 +103,22 @@ const ART: Record<string, () => ReactElement> = {
       <path d="M12 30 l-2 3" stroke={DIM} strokeWidth={1} strokeLinecap="round" />
     </g>
   ),
+  oil: () => (
+    <g>
+      <path d="M17 8 H23 V12 C27 14 29 18 29 24 C29 30 25 34 20 34 C15 34 11 30 11 24 C11 18 13 14 17 12 Z" fill={PALE} opacity={0.14} stroke={GOLD_FLAT} strokeWidth={1.2} strokeLinejoin="round" />
+      <path d="M13 26 C15 24 18 25 20 27 C22 29 25 28 27 26 L27 28 C25 31 23 32 20 32 C17 32 14 30 13 28 Z" fill={GOLD_FLAT} opacity={0.7} />
+      <path d="M16 6 H24" stroke={GOLD_FLAT} strokeWidth={1.6} strokeLinecap="round" />
+      <circle cx={16} cy={17} r={1.2} fill={PALE} opacity={0.8} />
+    </g>
+  ),
+  wax: () => (
+    <g>
+      <path d="M20 8 C25 7 30 9 32 14 C34 19 32 25 28 28 C24 31 17 33 12 29 C8 26 7 19 10 14 C12 10 15 9 20 8 Z" fill="#b8423f" opacity={0.85} />
+      <path d="M20 8 C25 7 30 9 32 14 C34 19 32 25 28 28 C24 31 17 33 12 29 C8 26 7 19 10 14 C12 10 15 9 20 8 Z" fill="none" stroke={GOLD_FLAT} strokeWidth={0.8} opacity={0.7} />
+      <circle cx={20} cy={19} r={6.5} fill="none" stroke={PALE} strokeWidth={1} opacity={0.75} />
+      <text x={20} y={21.6} textAnchor="middle" fontSize={7} fill={PALE} fontFamily="Georgia, serif" opacity={0.9}>♪</text>
+    </g>
+  ),
   stillwater: () => (
     <g>
       <path d="M8 22 Q14 19 20 22 T32 22" fill="none" stroke={RED} strokeWidth={1.3} strokeLinecap="round" />
@@ -127,6 +143,15 @@ const ART: Record<string, () => ReactElement> = {
         <circle key={i} cx={x} cy={y} r={1.3 - (i % 2) * 0.4} fill={RED} opacity={0.7} />
       ))}
       <path d="M20 8 q-3 4 0 8 q3 -4 0 -8" fill={RED} opacity={0.35} />
+    </g>
+  ),
+  soot: () => (
+    <g>
+      <path d="M8 30 C12 24 14 26 17 22 C20 18 24 20 27 16 C30 13 32 15 33 12" fill="none" stroke={DIM} strokeWidth={4} strokeLinecap="round" opacity={0.9} />
+      <path d="M8 30 C12 24 14 26 17 22 C20 18 24 20 27 16 C30 13 32 15 33 12" fill="none" stroke="#0b0a12" strokeWidth={2.2} strokeLinecap="round" opacity={0.85} />
+      <circle cx={12} cy={14} r={1.6} fill={DIM} opacity={0.7} />
+      <circle cx={30} cy={26} r={1.2} fill={DIM} opacity={0.6} />
+      <circle cx={22} cy={30} r={0.9} fill={DIM} opacity={0.6} />
     </g>
   ),
   fog: () => (

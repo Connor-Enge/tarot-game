@@ -153,3 +153,34 @@ describe('thread, compass, ash', () => {
     expect(foretell(plain, 0).foretold).toHaveLength(0);
   });
 });
+
+describe('lamp oil, wax seal, soot', () => {
+  it('oil makes the lamp cost one; soot leaves reversed cards dark under it', async () => {
+    const { canLamp, lampCost, lampVerdicts, lightLamp } = await import('../run');
+    let run = chooseNode(withRelics({ ...startRun(11), clarity: 1 }, ['oil']), 0);
+    expect(lampCost(run)).toBe(1);
+    expect(canLamp(run)).toBe(true);
+    run = lightLamp(run);
+    expect(run.clarity).toBe(0);
+    let dark = chooseNode(withRelics({ ...startRun(11), clarity: 4 }, ['soot']), 0);
+    dark = { ...dark, slots: [{ ...dark.slots[0], candidates: dark.slots[0].candidates.map((c, i) => ({ ...c, reversed: i === 0 })) }] };
+    dark = lightLamp(dark);
+    const v = lampVerdicts(dark);
+    expect(v[0]).toBeNull();
+    expect(v.slice(1).every((x) => x !== null)).toBe(true);
+  });
+  it('wax adds half a point to every named reading that lifts the total, never to one that drags it', async () => {
+    const { resolveReading } = await import('../resolve');
+    const { SCENES } = await import('../scenes');
+    const scene = Object.values(SCENES).find((s) => !s.terminal)!;
+    const up = (cardId: string) => ({ cardId, reversed: false });
+    const reading = { vessel: up('major-0'), threshold: up('major-16'), wake: up('major-13'), hand: up('major-21') };
+    const plain = resolveReading(scene, reading, {});
+    const sealed = resolveReading(scene, reading, {}, { namedBonus: 0.5 });
+    expect(plain.comboIds.length).toBeGreaterThan(0);
+    const { comboScore } = await import('../resolve');
+    const lifting = plain.comboIds.filter((id) => comboScore(id) > 0).length;
+    expect(lifting).toBeGreaterThan(0);
+    expect(sealed.total).toBeCloseTo(plain.total + 0.5 * lifting);
+  });
+});

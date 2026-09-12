@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSettings } from '../../settings';
-import { activeSlotState, canLamp, canTakeBack, canWhisperHere, LAMP_COST, lampVerdicts, currentScene, readingSoFar, reckoningText, RITES, SLOT_POSITION, THRESHOLDS, getCard, hasRelic, redrawCost, sceneNumber, scoreSlot, SLOT_IDS, SLOTS, totalScenes, whisperCost, whisperWords } from '../../engine';
+import { activeSlotState, canLamp, canTakeBack, canWhisperHere, lampCost, lampVerdicts, currentScene, readingSoFar, reckoningText, RITES, SLOT_POSITION, THRESHOLDS, getCard, hasRelic, redrawCost, sceneNumber, scoreSlot, SLOT_IDS, SLOTS, totalScenes, whisperCost, whisperWords } from '../../engine';
 
 /** Dev only: show the oracle's score on each candidate when the page is opened with ?oracle. */
 const ORACLE = import.meta.env.DEV && typeof location !== 'undefined' && location.search.includes('oracle');
@@ -327,7 +327,7 @@ function ReadingScreenInner() {
           Whisper ◈{wCost}
         </button>
         <button className={`btn ${lampOn ? 'btn--lit' : ''}`} disabled={!canLamp(run)} onClick={lightLamp} title={lampOn ? 'The lamp is lit over this seat' : 'Hold a lamp over this seat: see what each card would do here'}>
-          {lampOn ? 'Lit' : `Lamp ◈${LAMP_COST}`}
+          {lampOn ? 'Lit' : `Lamp ◈${lampCost(run)}`}
         </button>
         <button className="btn btn--primary" disabled={lifted === null} onClick={confirm}>
           {run.activeSlot === SLOT_IDS.length - 1 ? 'Read' : 'Place'}

@@ -522,8 +522,12 @@ export function holdCandidate(run: RunState, index: number): RunState {
 
 /** Spend Clarity to hear one keyword of a candidate. The UI shows it; the Codex remembers it. */
 /** The Lamp: once per seat, for Clarity, see what each card in the hand would do in this seat. */
+export function lampCost(run: RunState): number {
+  return hasRelic(run, 'oil') ? 1 : LAMP_COST;
+}
+
 export function canLamp(run: RunState): boolean {
-  if (run.phase.kind !== 'reading' || run.clarity < LAMP_COST) return false;
+  if (run.phase.kind !== 'reading' || run.clarity < lampCost(run)) return false;
   if (currentScene(run).rite === 'dark') return false;
   const slot = run.slots[run.activeSlot];
   return !!slot && slot.chosen === null && !slot.lit && slot.candidates.some((c) => !c.hidden);
@@ -532,7 +536,7 @@ export function canLamp(run: RunState): boolean {
 export function lightLamp(run: RunState): RunState {
   if (!canLamp(run)) return run;
   const slots = run.slots.map((s, i) => (i === run.activeSlot ? { ...s, lit: true } : s));
-  return { ...run, slots, clarity: run.clarity - LAMP_COST, lamps: (run.lamps ?? 0) + 1 };
+  return { ...run, slots, clarity: run.clarity - lampCost(run), lamps: (run.lamps ?? 0) + 1 };
 }
 
 export type LampVerdict = 'helped' | 'hurt' | 'neither';
@@ -543,8 +547,9 @@ export function lampVerdicts(run: RunState): (LampVerdict | null)[] {
   if (!slot || !slot.lit || run.phase.kind !== 'reading') return [];
   const scene = currentScene(run);
   const bonus = hasRelic(run, 'ring') ? 2 : undefined;
+  const soot = hasRelic(run, 'soot');
   return slot.candidates.map((c) => {
-    if (c.hidden) return null;
+    if (c.hidden || (soot && c.reversed)) return null;
     const score = scoreSlot(scene, slot.slot, c, run.marks, bonus).score;
     return score >= 1 ? 'helped' : score <= -1 ? 'hurt' : 'neither';
   });
@@ -586,6 +591,7 @@ function resolve(run: RunState): RunState {
     chargedBonus: hasRelic(run, 'ring') ? 2 : undefined,
     extraNeutralCost: (hasRelic(run, 'weight') ? 1 : 0) + run.mods.extraNeutralCost || undefined,
     mendBonus: (hasRelic(run, 'bread') ? 2 : 0) - (hasRelic(run, 'ash') ? 1 : 0) || undefined,
+    namedBonus: hasRelic(run, 'wax') ? 0.5 : undefined,
   });
   // The Well's toll: every reading below the first Abyss costs one vitality per Abyss passed, however it went.
   const toll = run.well ?? 0;

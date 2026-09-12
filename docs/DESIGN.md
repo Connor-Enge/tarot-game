@@ -635,7 +635,10 @@ is said about any card; only what this seat, in this scene, would make of
 it. The score is never shown, so a +1 and a +4 look alike under the lamp
 and the choice between two served seats is still the player's. One scene
 keeps the Dark, a rite where no lamp burns: the hollow under the hill.
-Lamplighter marks a return with one scene lit in all four seats. Engine:
+Lamplighter marks a return with one scene lit in all four seats. Lamp Oil
+brings the cost to one; Soot, a curse, leaves reversed cards dark under it.
+Wax Seal, a boon for the named readings, adds half a point to every one
+that lifts the total. Engine:
 `LAMP_COST`, `canLamp`, `lightLamp`, `lampVerdicts`; `SlotState.lit`.
 
 ## The Table
@@ -871,7 +874,7 @@ identity, not power, which is the point.
   omen is distinct.
 - **Scenes**: 30 exist (29 plus the Abyss), which was the target; more are welcome. Latest: the mill, the drowned chapel, the hunt.
 - **Named readings**: 34. Each is a memorable line, never a definition.
-- **Relics**: 12 boons, 8 curses. **Vows**: 7. **Weathers**: 14. **Trades**: 6. **Sigils**: 34. **Rites**: 8.
+- **Relics**: 14 boons, 9 curses. **Vows**: 7. **Weathers**: 14. **Trades**: 6. **Sigils**: 34. **Rites**: 8.
 - **Combos**: 47 named readings exist. Two older tone readings were
   retired because they duplicated newer ones: `all-reversed` contradicted
   `four-reversed` on the same hand, and a second `one-suit` fired twice
