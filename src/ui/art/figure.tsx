@@ -12,7 +12,7 @@ export const SKIN_INK = '#8a5a3a';
 export const LEAF = '#4e7238';
 
 type P = { x: number; y: number };
-export type Pose = 'stand' | 'walk' | 'raise-right' | 'raise-left' | 'out' | 'hold' | 'sit' | 'sit-hold' | 'point-down' | 'reach-right' | 'reach-left';
+export type Pose = 'stand' | 'walk' | 'raise-right' | 'raise-left' | 'out' | 'hold' | 'sit' | 'sit-hold' | 'point-down' | 'reach-right' | 'reach-left' | 'up';
 
 /** Head with hair and a hint of a face. `hair` is a colour, or 'none' for a bare crown. */
 export function Head({ x, y, r = 5, hair = '#3a2a1e', face = true, turn = 0 }: P & { r?: number; hair?: string; face?: boolean; turn?: number }) {
@@ -66,6 +66,7 @@ export function Person({ x, y, h = 50, pose = 'stand', robe = PALE, inner, hair 
     'point-down': { l: { x: L.x - armLen * 0.35, y: L.y + armLen * 1.05 }, r: { x: R.x + armLen * 0.55, y: R.y - armLen * 1.05 }, rElbow: { x: R.x + armLen * 0.45, y: R.y - armLen * 0.25 } },
     'reach-right': { l: { x: x + sw * 0.7, y: waist - r * 0.2 }, r: { x: R.x + armLen * 0.75, y: waist + r * 0.1 }, lElbow: { x: L.x + sw * 0.2, y: L.y + armLen * 0.5 }, rElbow: { x: R.x + armLen * 0.35, y: R.y + armLen * 0.45 } },
     'reach-left': { l: { x: L.x - armLen * 0.75, y: waist + r * 0.1 }, r: { x: x - sw * 0.7, y: waist - r * 0.2 }, lElbow: { x: L.x - armLen * 0.35, y: L.y + armLen * 0.45 }, rElbow: { x: R.x - sw * 0.2, y: R.y + armLen * 0.5 } },
+    up: { l: { x: L.x - armLen * 0.5, y: L.y - armLen * 0.95 }, r: { x: R.x + armLen * 0.5, y: R.y - armLen * 0.95 }, lElbow: { x: L.x - armLen * 0.45, y: L.y - armLen * 0.2 }, rElbow: { x: R.x + armLen * 0.45, y: R.y - armLen * 0.2 } },
   };
   const p = poses[pose];
   const arm = (from: P, elbow: P | undefined, to: P) => (elbow ? `M${from.x} ${from.y} Q${elbow.x} ${elbow.y} ${to.x} ${to.y}` : `M${from.x} ${from.y} L${to.x} ${to.y}`);
@@ -133,6 +134,7 @@ export function hands(x: number, y: number, h: number, pose: Pose): { l: P; r: P
     'point-down': { l: { x: L.x - armLen * 0.35, y: L.y + armLen * 1.05 }, r: { x: R.x + armLen * 0.55, y: R.y - armLen * 1.05 } },
     'reach-right': { l: { x: x + sw * 0.7, y: waist - r * 0.2 }, r: { x: R.x + armLen * 0.75, y: waist + r * 0.1 } },
     'reach-left': { l: { x: L.x - armLen * 0.75, y: waist + r * 0.1 }, r: { x: x - sw * 0.7, y: waist - r * 0.2 } },
+    up: { l: { x: L.x - armLen * 0.5, y: L.y - armLen * 0.95 }, r: { x: R.x + armLen * 0.5, y: R.y - armLen * 0.95 } },
   };
   return table[pose];
 }
