@@ -288,26 +288,30 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
   ),
   8: () => (
     <g>
-      <Infinity x={26} y={14} s={5} />
       <Mountains y={74} opacity={0.22} />
       <Ground y={100} fill="#d9b06a" opacity={0.6} />
-      {/* she stands behind the lion, one hand resting on the mane, unhurried */}
-      <Figure x={18} y={94} h={40} arms="right-up" fill={PALE} />
-      <path d="M10 52 q8 -7 16 0" fill="none" stroke="#7aa35a" strokeWidth={1.6} strokeLinecap="round" />
-      {[12, 18, 24].map((x) => <circle key={x} cx={x} cy={50.5} r={1.2} fill="#c94a4a" />)}
-      {/* the lion: body, mane, face, a tail curling up */}
-      <ellipse cx={54} cy={92} rx={20} ry={9} fill="#c98a3c" stroke={INK} strokeWidth={0.8} />
-      <path d="M72 90 q10 -6 4 -18" fill="none" stroke="#c98a3c" strokeWidth={2.4} strokeLinecap="round" />
-      <circle cx={70} cy={70} r={2} fill="#8a5a22" />
+      <Grass x={2} y={100} w={20} n={6} />
+      {/* the lion: body, legs, mane, a face that has stopped roaring, a tail curling up */}
+      <path d="M70 92 q10 -8 3 -20" fill="none" stroke="#c98a3c" strokeWidth={2.4} strokeLinecap="round" />
+      <circle cx={72.5} cy={71} r={2.2} fill="#8a5a22" />
+      <ellipse cx={56} cy={92} rx={19} ry={8.5} fill="#c98a3c" stroke={INK} strokeWidth={0.7} />
+      <path d="M44 96 l-2 5 h5 M60 96 l1 5 h5 M70 96 l1 5 h4" fill="none" stroke={INK} strokeWidth={0.8} strokeLinecap="round" />
+      <rect x={38} y={84} width={36} height={16} fill="url(#hatch)" opacity={0.4} />
       {Array.from({ length: 16 }, (_, i) => {
         const a = (i / 16) * Math.PI * 2;
-        return <path key={i} d={`M${40 + Math.cos(a) * 11} ${78 + Math.sin(a) * 11} l${Math.cos(a) * 6} ${Math.sin(a) * 6}`} stroke="#8a5a22" strokeWidth={3} strokeLinecap="round" />;
+        return <path key={i} d={`M${47 + Math.cos(a) * 10} ${78 + Math.sin(a) * 10} l${Math.cos(a) * 6} ${Math.sin(a) * 6}`} stroke="#8a5a22" strokeWidth={3} strokeLinecap="round" />;
       })}
-      <circle cx={40} cy={78} r={11.5} fill="#e0a85a" stroke={INK} strokeWidth={0.8} />
-      <circle cx={36} cy={76} r={1.2} fill={INK} />
-      <circle cx={44} cy={76} r={1.2} fill={INK} />
-      <path d="M37 83 q3 3 6 0" fill="none" stroke={INK} strokeWidth={0.8} />
-      <path d="M40 80 l-1.5 2 h3 z" fill={INK} />
+      <circle cx={47} cy={78} r={10.5} fill="#e0a85a" stroke={INK} strokeWidth={0.8} />
+      <circle cx={43.5} cy={76} r={1.1} fill={INK} />
+      <circle cx={50.5} cy={76} r={1.1} fill={INK} />
+      <path d="M47 80 l-1.5 2 h3 z" fill={INK} />
+      <path d="M43 84 q4 2 8 0" fill="none" stroke={INK} strokeWidth={0.8} />
+      {/* she leans in, both hands at the jaw, a garland at her waist and in her hair */}
+      <Person x={22} y={96} h={44} pose="reach-right" robe={PALE} inner="#f3ecd8" hair="#d9a441" belt={null} />
+      {[[15, 73], [19, 74.5], [23, 74.5], [27, 73]].map(([x, y], i) => <Rose key={i} x={x} y={y} r={1.5} />)}
+      <path d="M14 73 q8 3 14 0" fill="none" stroke={LEAF} strokeWidth={0.7} />
+      {[[18.5, 51], [25.5, 51]].map(([x, y], i) => <Rose key={i} x={x} y={y} r={1.3} />)}
+      <Infinity x={22} y={46} s={4} />
     </g>
   ),
   9: () => (
@@ -315,40 +319,95 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <rect x={0} y={0} width={80} height={112} fill="#0e0c1c" opacity={0.8} />
       <Star x={16} y={18} r={2} points={5} />
       <Star x={66} y={12} r={1.6} points={5} />
+      <Star x={30} y={8} r={1.2} points={5} />
+      {/* snow on the peaks, then the dark below */}
       <Mountains y={90} opacity={0.9} fill="#1c1830" />
       <path d="M0 112 L20 96 L40 104 L60 92 L80 100 V112 Z" fill="#26213d" />
-      {/* the lantern's light, then the lantern, then the one who carries it */}
-      <circle cx={60} cy={40} r={22} fill={GOLD_FLAT} opacity={0.12} />
-      <circle cx={60} cy={40} r={11} fill={GOLD_FLAT} opacity={0.18} />
-      <Figure x={40} y={98} h={46} arms="right-up" fill="#a9acb8" cloak />
-      <line x1={28} y1={98} x2={28} y2={50} stroke={GOLD_FLAT} strokeWidth={1.6} />
-      <circle cx={28} cy={49} r={2} fill={GOLD_FLAT} />
-      <Lantern x={60} y={40} />
-      <path d="M52 52 q4 -6 7 -9" fill="none" stroke={PALE} strokeWidth={2} strokeLinecap="round" />
+      <path d="M0 112 L20 96 L40 104 L60 92 L80 100 V112 Z" fill="url(#hatch)" opacity={0.6} />
+      <path d="M0 96 l6 -6 l6 6 M60 92 l6 -6 l6 6" fill="#e8e6f0" opacity={0.6} />
+      {/* the lantern's light, then the lantern held up, then the one who carries it */}
+      <circle cx={61} cy={44} r={22} fill={GOLD_FLAT} opacity={0.12} />
+      <circle cx={61} cy={44} r={11} fill={GOLD_FLAT} opacity={0.18} />
+      <Person x={40} y={98} h={48} pose="raise-right" robe="#a9acb8" inner="#8f93a0" hair="#d0d0d0" belt={null} shade />
+      {/* hood over the head, a long white beard */}
+      <path d="M33 56 q0 -9 7 -10 q7 1 7 10 q-2 -5 -7 -5 q-5 0 -7 5 z" fill="#8f93a0" stroke={INK} strokeWidth={0.5} />
+      <path d="M36.5 57 q1 6 3.5 12 q2.5 -6 3.5 -12 q-3.5 3 -7 0 z" fill="#e8e6f0" stroke={INK} strokeWidth={0.35} />
+      {(() => { const hd = hands(40, 98, 48, 'raise-right'); return (
+        <g>
+          <path d={`M${hd.r.x} ${hd.r.y} q1 3 3 5`} fill="none" stroke={INK} strokeWidth={0.8} />
+          <Lantern x={hd.r.x + 3} y={hd.r.y + 10} />
+          <line x1={hd.l.x} y1={hd.l.y + 4} x2={hd.l.x} y2={hd.l.y - 40} stroke={GOLD_FLAT} strokeWidth={1.6} strokeLinecap="round" />
+          <circle cx={hd.l.x} cy={hd.l.y - 41} r={1.8} fill={GOLD_FLAT} />
+        </g>
+      ); })()}
     </g>
   ),
   10: () => (
     <g>
-      <Cloud x={2} y={14} w={20} />
-      <Cloud x={56} y={12} w={22} />
-      <Cloud x={2} y={100} w={20} />
-      <Cloud x={56} y={100} w={22} />
-      <g className="live-spin">
-      <circle cx={40} cy={56} r={28} fill={PALE} stroke={INK} strokeWidth={1.2} />
-      <circle cx={40} cy={56} r={18} fill="none" stroke={INK} strokeWidth={0.8} />
-      <circle cx={40} cy={56} r={6} fill={GOLD} stroke={INK} strokeWidth={0.8} />
-      {Array.from({ length: 8 }, (_, i) => {
-        const a = (i / 8) * Math.PI * 2;
-        return <line key={i} x1={40 + Math.cos(a) * 6} y1={56 + Math.sin(a) * 6} x2={40 + Math.cos(a) * 18} y2={56 + Math.sin(a) * 18} stroke={INK} strokeWidth={0.8} />;
-      })}
-      {['T', 'A', 'R', 'O'].map((ch, i) => {
-        const a = (i / 4) * Math.PI * 2 - Math.PI / 4;
-        return <text key={ch} x={40 + Math.cos(a) * 23} y={56 + Math.sin(a) * 23 + 2.5} fontSize={7} textAnchor="middle" fill={INK} fontFamily="serif">{ch}</text>;
-      })}
+      {/* the four in the corners, each on a cloud with a book: angel, eagle, lion, bull */}
+      {[[10, 14], [70, 14], [10, 100], [70, 100]].map(([x, y], i) => <Cloud key={i} x={x - 8} y={y + 2} w={18} />)}
+      <g>
+        <Wings x={10} y={12} span={12} />
+        <Person x={10} y={20} h={13} pose="hold" robe={PALE} hair="#d9a441" belt={null} shade={false} />
+        <g>
+          <ellipse cx={70} cy={16} rx={3.6} ry={4.6} fill="#8a5a22" stroke={INK} strokeWidth={0.4} />
+          <path d="M66.5 14 q-6 -6 -8 0 q4 -1 6 3 M73.5 14 q6 -6 8 0 q-4 -1 -6 3" fill="#8a5a22" stroke={INK} strokeWidth={0.4} />
+          <circle cx={70} cy={10.5} r={2.4} fill={PALE} stroke={INK} strokeWidth={0.4} />
+          <path d="M71.5 10.5 l2.5 0.8 l-2.5 1.2 z" fill={GOLD_FLAT} stroke={INK} strokeWidth={0.3} />
+          <circle cx={69.4} cy={10} r={0.4} fill={INK} />
+        </g>
+        <g>
+          <circle cx={10} cy={97} r={3.4} fill="#e0a85a" stroke={INK} strokeWidth={0.4} />
+          {Array.from({ length: 10 }, (_, i) => { const a = (i / 10) * Math.PI * 2; return <line key={i} x1={10 + Math.cos(a) * 3.4} y1={97 + Math.sin(a) * 3.4} x2={10 + Math.cos(a) * 5.4} y2={97 + Math.sin(a) * 5.4} stroke="#8a5a22" strokeWidth={1.4} strokeLinecap="round" />; })}
+          <circle cx={8.8} cy={96.4} r={0.4} fill={INK} />
+          <circle cx={11.2} cy={96.4} r={0.4} fill={INK} />
+        </g>
+        <g>
+          <circle cx={70} cy={97} r={3.6} fill="#5a4a3a" stroke={INK} strokeWidth={0.4} />
+          <path d="M66.5 95 q-3 -4 -1 -6 q2 1 2 5 M73.5 95 q3 -4 1 -6 q-2 1 -2 5" fill="none" stroke={PALE} strokeWidth={1} />
+          <circle cx={68.8} cy={97} r={0.4} fill={PALE} />
+          <circle cx={71.2} cy={97} r={0.4} fill={PALE} />
+        </g>
+        {[[10, 24], [70, 24], [10, 104], [70, 104]].map(([x, y], i) => <path key={i} d={`M${x - 4} ${y} h8 v2.5 h-8 z M${x} ${y} v2.5`} fill={PALE} stroke={INK} strokeWidth={0.35} />)}
       </g>
-      <path d="M12 70 q-6 12 2 22" fill="none" stroke={INK} strokeWidth={2} strokeLinecap="round" />
-      <path d="M66 40 l6 -10 l4 12 z" fill={BLOOD} />
-      <path d="M32 24 q8 -8 16 0 l-2 6 h-12 z" fill={GOLD} stroke={INK} strokeWidth={0.6} />
+      <g className="live-spin">
+        <circle cx={40} cy={56} r={26} fill={PALE} stroke={INK} strokeWidth={1.2} />
+        <circle cx={40} cy={56} r={17} fill="none" stroke={INK} strokeWidth={0.8} />
+        <circle cx={40} cy={56} r={6} fill={GOLD} stroke={INK} strokeWidth={0.8} />
+        {Array.from({ length: 8 }, (_, i) => {
+          const a = (i / 8) * Math.PI * 2;
+          return <line key={i} x1={40 + Math.cos(a) * 6} y1={56 + Math.sin(a) * 6} x2={40 + Math.cos(a) * 17} y2={56 + Math.sin(a) * 17} stroke={INK} strokeWidth={0.8} />;
+        })}
+        {['T', 'A', 'R', 'O'].map((ch, i) => {
+          const a = (i / 4) * Math.PI * 2 - Math.PI / 4;
+          return <text key={ch} x={40 + Math.cos(a) * 21.5} y={56 + Math.sin(a) * 21.5 + 2.5} fontSize={6.5} textAnchor="middle" fill={INK} fontFamily="Georgia, serif">{ch}</text>;
+        })}
+        {/* the four alchemical marks between the letters */}
+        <g stroke={INK} strokeWidth={0.6} fill="none">
+          <path d="M40 34 v4 M38 36 h4 M38.5 31.5 a1.5 1.5 0 1 0 3 0 a1.5 1.5 0 1 0 -3 0" />
+          <path d="M60 54 l2 4 h-4 z M60 58 v2 M58 60 h4" />
+          <path d="M38 79 l2 -4 l2 4 z" />
+          <path d="M18.5 56 a2 2 0 1 0 4 0 a2 2 0 1 0 -4 0 M18.5 56 h4" />
+        </g>
+      </g>
+      {/* the serpent down the left, the jackal up the right, the sphinx on top */}
+      <path d="M14 66 q-6 10 2 22" fill="none" stroke="#d9a441" strokeWidth={2} strokeLinecap="round" />
+      <path d="M14 66 q-6 10 2 22" fill="none" stroke={INK} strokeWidth={0.4} />
+      <circle cx={13.5} cy={65} r={1.6} fill="#d9a441" stroke={INK} strokeWidth={0.4} />
+      <g>
+        <path d="M62 84 q3 -14 6 -22 q3 8 6 22 z" fill={BLOOD} stroke={INK} strokeWidth={0.5} />
+        <circle cx={68} cy={60} r={2.6} fill={BLOOD} stroke={INK} strokeWidth={0.5} />
+        <path d="M66 58 l-1 -4 l2.5 2.5 M70 58 l1 -4 l-2.5 2.5" fill="none" stroke={BLOOD} strokeWidth={1.2} />
+        <path d="M68 62 l3 1" stroke={INK} strokeWidth={0.6} />
+      </g>
+      <g>
+        <path d="M30 30 h20 v-6 q-2 -6 -10 -6 q-8 0 -10 6 z" fill="#5f7fb0" stroke={INK} strokeWidth={0.5} />
+        <circle cx={40} cy={16} r={3.6} fill="#5f7fb0" stroke={INK} strokeWidth={0.5} />
+        <path d="M36 14 l-1.5 6 h11 l-1.5 -6 z" fill="#5f7fb0" stroke={INK} strokeWidth={0.4} />
+        <circle cx={38.8} cy={16.4} r={0.5} fill={INK} />
+        <circle cx={41.2} cy={16.4} r={0.5} fill={INK} />
+        <line x1={47} y1={26} x2={47} y2={12} stroke={GOLD_FLAT} strokeWidth={1.2} />
+      </g>
     </g>
   ),
   11: () => (
@@ -356,20 +415,26 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <Pillar x={10} y={4} h={94} />
       <Pillar x={70} y={4} h={94} />
       <rect x={16} y={4} width={48} height={90} fill="#5a2d7a" opacity={0.28} />
-      <Throne x={40} y={92} w={30} h={30} fill={PALE} back="square" />
-      <Figure x={40} y={92} h={48} arms="right-up" fill={BLOOD} cloak crown />
-      <Sword x={56} y={40} s={11} />
-      {/* balance scales */}
-      <g stroke={GOLD_FLAT} strokeWidth={1} fill="none">
-        <line x1={20} y1={62} x2={20} y2={54} />
-        <line x1={12} y1={54} x2={28} y2={54} />
-        <line x1={12} y1={54} x2={9} y2={64} />
-        <line x1={12} y1={54} x2={15} y2={64} />
-        <line x1={28} y1={54} x2={25} y2={64} />
-        <line x1={28} y1={54} x2={31} y2={64} />
-      </g>
-      <path d="M8 64 h8 q-1 3 -4 3 q-3 0 -4 -3 z M24 64 h8 q-1 3 -4 3 q-3 0 -4 -3 z" fill={GOLD} stroke={INK} strokeWidth={0.5} />
-      <rect x={38} y={56} width={4} height={4} fill={PALE} stroke={INK} strokeWidth={0.4} />
+      <rect x={16} y={4} width={48} height={90} fill="url(#hatch)" opacity={0.25} />
+      <Throne x={40} y={92} w={30} h={30} fill="#b8b4a8" back="square" />
+      {/* the green mantle, then the red robe, crown with its square jewel */}
+      <path d="M28 52 L18 92 H62 L52 52 Z" fill={LEAF} stroke={INK} strokeWidth={0.5} />
+      <Person x={40} y={92} h={50} pose="raise-right" robe="#b8462f" inner="#c94a3a" hair="#3a2a1e" crown belt={GOLD_FLAT} />
+      <rect x={38.4} y={40.2} width={3.2} height={3.2} fill={PALE} stroke={INK} strokeWidth={0.4} />
+      {(() => { const hd = hands(40, 92, 50, 'raise-right'); return (
+        <g>
+          {/* the sword upright in one hand, the scales in the other */}
+          <line x1={hd.r.x} y1={hd.r.y + 2} x2={hd.r.x} y2={hd.r.y - 20} stroke="#c9cdd4" strokeWidth={2.2} strokeLinecap="round" />
+          <line x1={hd.r.x} y1={hd.r.y - 4} x2={hd.r.x} y2={hd.r.y - 21} stroke={INK} strokeWidth={0.5} />
+          <path d={`M${hd.r.x - 4} ${hd.r.y - 3} h8`} stroke={GOLD_FLAT} strokeWidth={1.4} />
+          <g stroke={GOLD_FLAT} strokeWidth={1} fill="none">
+            <line x1={hd.l.x} y1={hd.l.y} x2={hd.l.x} y2={hd.l.y - 5} />
+            <line x1={hd.l.x - 8} y1={hd.l.y - 5} x2={hd.l.x + 8} y2={hd.l.y - 5} />
+            <path d={`M${hd.l.x - 8} ${hd.l.y - 5} l-3 9 M${hd.l.x - 8} ${hd.l.y - 5} l3 9 M${hd.l.x + 8} ${hd.l.y - 5} l-3 9 M${hd.l.x + 8} ${hd.l.y - 5} l3 9`} />
+          </g>
+          <path d={`M${hd.l.x - 12} ${hd.l.y + 4} h8 q-1 3 -4 3 q-3 0 -4 -3 z M${hd.l.x + 4} ${hd.l.y + 4} h8 q-1 3 -4 3 q-3 0 -4 -3 z`} fill={GOLD} stroke={INK} strokeWidth={0.5} />
+        </g>
+      ); })()}
     </g>
   ),
   12: () => (
