@@ -54,6 +54,17 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <path d="M0 96 q20 -8 40 0 t40 0 v16 h-80 z" fill={LEAF} opacity={0.5} />
       {[6, 18, 30].map((x, i) => <Rose key={x} x={x} y={101 + (i % 2) * 3} r={2.6} />)}
       {[50, 62, 74].map((x, i) => <Lily key={x} x={x} y={100 + (i % 2) * 2} s={3.2} />)}
+      {/* the magician: red mantle over white, wand raised, hand to the earth */}
+      <Person x={40} y={82} h={50} pose="point-down" robe="#b8462f" inner={PALE} hair="#3a2a1e" belt={null} />
+      {(() => { const hd = hands(40, 82, 50, 'point-down'); return (
+        <g>
+          <line x1={hd.r.x} y1={hd.r.y + 3} x2={hd.r.x} y2={hd.r.y - 11} stroke={PALE} strokeWidth={1.4} strokeLinecap="round" />
+          <line x1={hd.r.x} y1={hd.r.y + 3} x2={hd.r.x} y2={hd.r.y - 11} stroke={INK} strokeWidth={0.4} />
+          <circle cx={hd.r.x} cy={hd.r.y - 12.5} r={1.4} fill={GOLD} stroke={INK} strokeWidth={0.4} />
+          <circle cx={hd.r.x} cy={hd.r.y + 4.5} r={1.4} fill={GOLD} stroke={INK} strokeWidth={0.4} />
+          <line x1={hd.l.x} y1={hd.l.y} x2={hd.l.x - 1} y2={hd.l.y + 4} stroke={SKIN_INK} strokeWidth={0.6} strokeLinecap="round" />
+        </g>
+      ); })()}
       {/* the table and the four tools */}
       <rect x={12} y={81} width={56} height={5} fill="#c9a877" stroke={INK} strokeWidth={0.7} />
       <rect x={12} y={84} width={56} height={2} fill="url(#hatch)" opacity={0.7} />
@@ -68,17 +79,6 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <Cup x={34} y={76} s={5.5} />
       <Sword x={47} y={75} s={6} />
       <Pentacle x={60} y={75} s={5.5} />
-      {/* the magician: red mantle over white, wand raised, hand to the earth */}
-      <Person x={40} y={82} h={50} pose="point-down" robe="#b8462f" inner={PALE} hair="#3a2a1e" belt={null} />
-      {(() => { const hd = hands(40, 82, 50, 'point-down'); return (
-        <g>
-          <line x1={hd.r.x} y1={hd.r.y + 3} x2={hd.r.x} y2={hd.r.y - 11} stroke={PALE} strokeWidth={1.4} strokeLinecap="round" />
-          <line x1={hd.r.x} y1={hd.r.y + 3} x2={hd.r.x} y2={hd.r.y - 11} stroke={INK} strokeWidth={0.4} />
-          <circle cx={hd.r.x} cy={hd.r.y - 12.5} r={1.4} fill={GOLD} stroke={INK} strokeWidth={0.4} />
-          <circle cx={hd.r.x} cy={hd.r.y + 4.5} r={1.4} fill={GOLD} stroke={INK} strokeWidth={0.4} />
-          <line x1={hd.l.x} y1={hd.l.y} x2={hd.l.x - 1} y2={hd.l.y + 4} stroke={SKIN_INK} strokeWidth={0.6} strokeLinecap="round" />
-        </g>
-      ); })()}
       {/* the serpent belt, biting its tail */}
       <path d="M34 57 q6 -3 12 0 q-6 3 -12 0 z" fill="none" stroke={LEAF} strokeWidth={1} />
       <circle cx={46} cy={57} r={0.7} fill={LEAF} />
