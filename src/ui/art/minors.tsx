@@ -586,24 +586,59 @@ const SWORDS: Record<number, () => ReactElement> = {
 const PENTACLES: Record<number, () => ReactElement> = {
   2: () => (
     <g>
-      <Water y={70} rows={3} />
-      {[12, 60].map((x, i) => <path key={x} d={`M${x} ${70 + i * 4} l6 -8 l6 8 z M${x - 2} ${70 + i * 4} h16 l-3 4 h-10 z`} fill={PALE} stroke={INK} strokeWidth={0.4} />)}
+      {/* two ships ride the high waves behind; the dancer in the tall hat keeps two coins in the loop of a ribbon */}
+      <Water y={66} rows={3} />
+      {[10, 58].map((x, i) => (
+        <g key={x}>
+          <path d={`M${x + 6} ${66 + i * 4} v-12`} stroke={INK} strokeWidth={0.6} />
+          <path d={`M${x + 6} ${55 + i * 4} l7 9 h-7 z`} fill={PALE} stroke={INK} strokeWidth={0.4} />
+          <path d={`M${x - 2} ${66 + i * 4} h18 l-4 5 h-11 z`} fill="#5a3a22" stroke={INK} strokeWidth={0.4} />
+          <path d={`M${x - 2} ${66 + i * 4} h18 l-4 5 h-11 z`} fill="url(#hatch)" opacity={0.5} />
+        </g>
+      ))}
       <Ground y={96} fill={GOLD_FLAT} opacity={0.5} />
-      <Person x={40} y={104} h={48} pose="out" robe={ROBE.pentacles} />
-      <path d="M26 72 c0 -14 28 -14 28 0 c0 14 -28 14 -28 0" fill="none" stroke={GREEN} strokeWidth={2.2} />
-      <Row suit="pentacles" xs={[26, 54]} y={72} s={6} />
+      <Person x={40} y={104} h={48} pose="out" robe={ROBE.pentacles} inner={BLOOD} hair="#5a3a22" belt={GOLD_FLAT} />
+      <path d="M35.5 57 q4.5 -3 9 0 l1.5 -14 q-6 -2 -12 0 z" fill={BLOOD} stroke={INK} strokeWidth={0.4} />
+      <path d="M34 57 h12" stroke={INK} strokeWidth={0.5} />
+      {(() => { const hd = hands(40, 104, 48, 'out'); return (
+        <g>
+          {(() => { const w = hd.r.x - hd.l.x; const d = `M${hd.l.x} ${hd.l.y - 2} C${hd.l.x + w * 0.45} ${hd.l.y - 16} ${hd.r.x - w * 0.45} ${hd.r.y + 12} ${hd.r.x} ${hd.r.y - 2} C${hd.r.x - w * 0.45} ${hd.r.y - 16} ${hd.l.x + w * 0.45} ${hd.l.y + 12} ${hd.l.x} ${hd.l.y - 2}`; return (
+            <g>
+              <path d={d} fill="none" stroke={LEAF} strokeWidth={2.4} />
+              <path d={d} fill="none" stroke={INK} strokeWidth={0.4} opacity={0.5} />
+            </g>
+          ); })()}
+          <PentSym x={hd.l.x} y={hd.l.y - 2} s={6} />
+          <PentSym x={hd.r.x} y={hd.r.y - 2} s={6} />
+        </g>
+      ); })()}
     </g>
   ),
   3: () => (
     <g>
+      {/* inside the church: a pointed arch with three coins in its tracery, the mason on his bench, the monk and the one with the plans */}
       <rect x={0} y={0} width={80} height={112} fill={STONE} opacity={0.35} />
-      <path d="M14 112 V46 q26 -30 52 0 V112" fill="none" stroke={INK} strokeWidth={2} />
-      <Row suit="pentacles" xs={[40, 30, 50]} y={30} s={6} />
-      <rect x={20} y={88} width={14} height={16} fill="#8a6a3a" stroke={INK} strokeWidth={0.6} />
-      <Person x={27} y={92} h={34} pose="raise-right" robe={ROBE.pentacles} />
-      <Person x={56} y={106} h={38} pose="hold" robe={INK} />
-      <Person x={68} y={106} h={36} pose="hold" robe={PALE} />
-      <rect x={52} y={80} width={14} height={8} fill={PALE} stroke={INK} strokeWidth={0.5} />
+      <path d="M12 112 V50 q28 -34 56 0 V112" fill="#8c8a94" opacity={0.35} />
+      <path d="M12 112 V50 q28 -34 56 0 V112" fill="none" stroke={INK} strokeWidth={2} />
+      <path d="M16 112 V52 q24 -30 48 0 V112" fill="none" stroke={INK} strokeWidth={0.5} opacity={0.6} />
+      <path d="M40 22 v14 M30 30 l10 6 M50 30 l-10 6" stroke={INK} strokeWidth={0.6} opacity={0.6} />
+      <Row suit="pentacles" xs={[40]} y={22} s={5.5} />
+      <Row suit="pentacles" xs={[30, 50]} y={32} s={5.5} />
+      <path d="M0 96 h80 M0 104 h80 M20 96 v8 M44 96 v8 M64 96 v8" stroke={INK} strokeWidth={0.4} opacity={0.35} />
+      <rect x={18} y={88} width={16} height={16} fill="#8a6a3a" stroke={INK} strokeWidth={0.6} />
+      <rect x={18} y={88} width={16} height={16} fill="url(#hatch)" opacity={0.4} />
+      <Person x={27} y={92} h={34} pose="raise-right" robe={ROBE.pentacles} inner={ROBE_PALE.pentacles} hair="#5a3a22" />
+      {(() => { const hd = hands(27, 92, 34, 'raise-right'); return (
+        <g>
+          <line x1={hd.r.x} y1={hd.r.y} x2={hd.r.x + 2} y2={hd.r.y - 8} stroke="#8a6a3a" strokeWidth={1.4} strokeLinecap="round" />
+          <rect x={hd.r.x - 1} y={hd.r.y - 11.5} width={7} height={3.5} rx={1} fill="#5a3a22" stroke={INK} strokeWidth={0.4} />
+        </g>
+      ); })()}
+      <Person x={54} y={106} h={38} pose="hold" robe={INK} inner="#3a3a44" hair="none" face={false} belt={null} shade={false} />
+      <path d="M48.5 74 q1 -8 5.5 -9 q4.5 1 5.5 9 q-2.5 -4 -5.5 -4 q-3 0 -5.5 4 z" fill={INK} stroke="#3a3a44" strokeWidth={0.5} />
+      <Person x={68} y={106} h={36} pose="hold" robe={PALE} inner="#e9d9b6" hair="#9a9088" belt={GOLD_FLAT} />
+      <rect x={58} y={80} width={14} height={9} fill={PALE} stroke={INK} strokeWidth={0.5} />
+      <path d="M60 83 h10 M60 85.5 h7 M60 88 h4" stroke={INK} strokeWidth={0.4} opacity={0.7} />
     </g>
   ),
   4: () => (
