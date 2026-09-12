@@ -26,7 +26,7 @@ export function CodexScreen() {
   const open = useGame((s) => s.codexOpen);
   const openCodex = useGame((s) => s.openCodex);
   const knownCount = Object.values(k.cards).filter((c) => c.tier > 0).length;
-  const combos = k.combos ?? [];
+  const combos = (k.combos ?? []).filter((id) => comboNote(id));
   const sigils = new Set(k.sigils ?? []);
   const [suit, setSuit] = useState<SuitFilter>('all');
   const [tf, setTf] = useState<TierFilter>('all');

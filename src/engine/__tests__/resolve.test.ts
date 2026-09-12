@@ -97,3 +97,27 @@ describe('combo scores', () => {
     expect(comboScore('no-such-reading')).toBe(0);
   });
 });
+
+describe('named readings, the newer set', () => {
+  it('every id is unique, so no reading is counted twice', async () => {
+    const { COMBO_IDS } = await import('../resolve');
+    expect(new Set(COMBO_IDS).size).toBe(COMBO_IDS.length);
+    expect(COMBO_IDS.filter((id) => id === 'one-suit')).toHaveLength(1);
+    expect(COMBO_IDS).not.toContain('all-reversed');
+  });
+  it('fires on the star in the hand, two kings, and death beside the tower without a star', async () => {
+    const { resolveReading, COMBO_IDS } = await import('../resolve');
+    const { SCENES } = await import('../scenes');
+    const scene = Object.values(SCENES).find((s) => !s.terminal)!;
+    const up = (cardId: string) => ({ cardId, reversed: false });
+    const a = resolveReading(scene, { vessel: up('wands-14'), threshold: up('cups-14'), wake: up('major-13'), hand: up('major-17') }, {});
+    expect(a.comboIds).toContain('star-hand');
+    expect(a.comboIds).toContain('two-kings');
+    expect(a.comboIds).not.toContain('death-and-tower');
+    const b = resolveReading(scene, { vessel: up('major-13'), threshold: up('major-16'), wake: up('cups-10'), hand: { cardId: 'major-15', reversed: true } }, {});
+    expect(b.comboIds).toContain('death-and-tower');
+    expect(b.comboIds).toContain('ten-wake');
+    expect(b.comboIds).toContain('devil-hand-reversed');
+    expect(COMBO_IDS.length).toBeGreaterThanOrEqual(47);
+  });
+});

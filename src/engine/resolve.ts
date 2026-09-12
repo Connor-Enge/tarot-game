@@ -58,25 +58,10 @@ const COMBOS: Combo[] = [
     note: 'You chose with the chain still on.',
   },
   {
-    id: 'all-reversed',
-    when: (r) => SLOT_IDS.every((s) => r[s].reversed),
-    score: -2,
-    note: 'Every card lay wrong. The reading curdled.',
-  },
-  {
     id: 'all-major',
     when: (r) => SLOT_IDS.every((s) => getCard(r[s].cardId).arcana === 'major'),
     score: 2,
     note: 'Four great arcana. The room went quiet.',
-  },
-  {
-    id: 'one-suit',
-    when: (r) => {
-      const suits = SLOT_IDS.map((s) => getCard(r[s].cardId).suit);
-      return suits.every((x) => x && x === suits[0]);
-    },
-    score: 2,
-    note: 'One suit, four seats. The reading spoke with a single voice.',
   },
   {
     id: 'sun-in-the-wake',
@@ -272,6 +257,78 @@ const COMBOS: Combo[] = [
     },
     score: 0.5,
     note: 'Three of a kind, and the table noticed.',
+  },
+  {
+    id: 'star-hand',
+    when: (r) => has(r, 'major-17', 'hand') && !r.hand.reversed,
+    score: 1,
+    note: 'You reached for the light, and it was there.',
+  },
+  {
+    id: 'lovers-threshold-reversed',
+    when: (r) => has(r, 'major-6', 'threshold') && r.threshold.reversed,
+    score: -1,
+    note: 'The choice stood in the way, and it had already been made wrong.',
+  },
+  {
+    id: 'death-and-tower',
+    when: (r) => has(r, 'major-13') && has(r, 'major-16') && !has(r, 'major-17'),
+    score: -1.5,
+    note: 'Two endings, and nothing between them to begin.',
+  },
+  {
+    id: 'devil-hand-reversed',
+    when: (r) => has(r, 'major-15', 'hand') && r.hand.reversed,
+    score: 1,
+    note: 'You let go of the chain.',
+  },
+  {
+    id: 'empress-wake',
+    when: (r) => has(r, 'major-3', 'wake') && !r.wake.reversed,
+    score: 0.5,
+    note: 'Something grew where you had been.',
+  },
+  {
+    id: 'ace-vessel',
+    when: (r) => getCard(r.vessel.cardId).arcana === 'minor' && getCard(r.vessel.cardId).number === 1 && !r.vessel.reversed,
+    score: 0.5,
+    note: 'It began clean.',
+  },
+  {
+    id: 'ten-wake',
+    when: (r) => (r.wake.cardId === 'cups-10' || r.wake.cardId === 'pentacles-10') && !r.wake.reversed,
+    score: 0.5,
+    note: 'The count came full.',
+  },
+  {
+    id: 'wands-ten-hand',
+    when: (r) => has(r, 'wands-10', 'hand') && !r.hand.reversed,
+    score: -1,
+    note: 'You carried all of it, and it was too much.',
+  },
+  {
+    id: 'seven-swords-hand',
+    when: (r) => has(r, 'swords-7', 'hand') && !r.hand.reversed,
+    score: -1,
+    note: 'You took the quiet road, and it was watched.',
+  },
+  {
+    id: 'two-pages',
+    when: (r) => SLOT_IDS.filter((s) => getCard(r[s].cardId).arcana === 'minor' && getCard(r[s].cardId).number === 11).length >= 2,
+    score: 0.5,
+    note: 'Two pages, both of them carrying news.',
+  },
+  {
+    id: 'two-kings',
+    when: (r) => SLOT_IDS.filter((s) => getCard(r[s].cardId).arcana === 'minor' && getCard(r[s].cardId).number === 14).length >= 2,
+    score: 0.5,
+    note: 'Two crowns, and for once they agreed.',
+  },
+  {
+    id: 'two-fives',
+    when: (r) => SLOT_IDS.filter((s) => getCard(r[s].cardId).arcana === 'minor' && getCard(r[s].cardId).number === 5).length >= 2,
+    score: -1,
+    note: 'Two fives. Nobody left the table happy.',
   },
 ];
 

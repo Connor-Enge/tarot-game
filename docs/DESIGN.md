@@ -872,7 +872,14 @@ identity, not power, which is the point.
 - **Scenes**: 30 exist (29 plus the Abyss), which was the target; more are welcome. Latest: the mill, the drowned chapel, the hunt.
 - **Named readings**: 34. Each is a memorable line, never a definition.
 - **Relics**: 12 boons, 8 curses. **Vows**: 7. **Weathers**: 14. **Trades**: 6. **Sigils**: 34. **Rites**: 8.
-- **Combos**: 37 named readings exist (three of them readings of tone: four upright, four reversed, one suit). Their banners are coloured by what they are: pale gold for four upright, violet for four reversed, the suit's colour for one suit, and a dark red ribbon for any named reading that drags the total down. This is the richest vein for "the
+- **Combos**: 47 named readings exist. Two older tone readings were
+  retired because they duplicated newer ones: `all-reversed` contradicted
+  `four-reversed` on the same hand, and a second `one-suit` fired twice
+  for one reading. Ids a Codex still carries from before are simply not
+  shown. The Codex filters unknown ids, so old saves are safe. Across five
+  simulation seeds the newer set lifts a random reader by about two points;
+  the guard's single-seed number can swing seven points on its own, so
+  judge drift over several seeds (three of them readings of tone: four upright, four reversed, one suit). Their banners are coloured by what they are: pale gold for four upright, violet for four reversed, the suit's colour for one suit, and a dark red ribbon for any named reading that drags the total down. This is the richest vein for "the
   combined meaning" and should keep growing with named, memorable results.
 - **Art**: all 78 faces are procedural SVG (`src/ui/art/`). Majors are
   bespoke compositions; the numbered Minors are scenes after the
