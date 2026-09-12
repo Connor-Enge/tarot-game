@@ -436,22 +436,41 @@ const CUPS: Record<number, () => ReactElement> = {
   ),
   7: () => (
     <g>
-      <Cloud x={2} y={50} w={76} />
+      {/* seven cups in a cloud, each with its vision; the dreamer below in shadow, looking up */}
+      <Cloud x={-2} y={54} w={84} />
+      <Cloud x={6} y={30} w={30} />
+      <Cloud x={44} y={28} w={32} />
       <Row suit="cups" xs={[14, 32, 50, 68]} y={30} s={6.5} />
       <Row suit="cups" xs={[22, 40, 58]} y={56} s={6.5} />
-      {[[14, 22], [32, 22], [50, 22], [68, 22], [22, 48], [40, 48], [58, 48]].map(([x, y], i) => (
-        <g key={i}>
-          {i === 0 && <circle cx={x} cy={y} r={2} fill={INK} />}
-          {i === 1 && <path d={`M${x - 2} ${y + 1} l2 -4 l2 4 z`} fill={GOLD_FLAT} />}
-          {i === 2 && <path d={`M${x - 2} ${y} l2 -2 l2 2 l-2 2 z`} fill={BLOOD} />}
-          {i === 3 && <circle cx={x} cy={y} r={1.8} fill="none" stroke={INK} strokeWidth={0.6} />}
-          {i === 4 && <path d={`M${x - 2} ${y + 1} h4 v-3 h-4 z`} fill={STONE} />}
-          {i === 5 && <Star x={x} y={y} r={2.2} points={5} />}
-          {i === 6 && <circle cx={x} cy={y} r={2} fill={GREEN} />}
-        </g>
-      ))}
+      {/* a head, a veiled figure in light, a serpent, a tower, jewels, the wreath with the skull, a dragon */}
+      <g>
+        <circle cx={14} cy={20} r={3} fill={SKIN} stroke={SKIN_INK} strokeWidth={0.4} />
+        <path d="M11 20 a3 3 0 0 1 6 0 q-1 -1 -3 -1 q-2 0 -3 1 z" fill="#d9a441" stroke={INK} strokeWidth={0.3} />
+        <circle cx={13} cy={20.5} r={0.35} fill={INK} />
+        <circle cx={15} cy={20.5} r={0.35} fill={INK} />
+      </g>
+      <g>
+        {Array.from({ length: 8 }, (_, i) => { const a = (i / 8) * Math.PI * 2; return <line key={i} x1={32 + Math.cos(a) * 4} y1={19 + Math.sin(a) * 4} x2={32 + Math.cos(a) * 6.5} y2={19 + Math.sin(a) * 6.5} stroke={GOLD_FLAT} strokeWidth={0.6} opacity={0.8} />; })}
+        <path d="M29 24 q0 -8 3 -9 q3 1 3 9 z" fill={PALE} stroke={INK} strokeWidth={0.4} />
+      </g>
+      <path d="M47 24 q2 -4 5 -2 q3 2 0 -4 q-2 -2 1 -3" fill="none" stroke={LEAF} strokeWidth={1.3} strokeLinecap="round" />
+      <circle cx={53.5} cy={15} r={0.9} fill={LEAF} />
+      <path d="M65 24 v-7 h1.5 v-2 h1.5 v2 h1.5 v-2 h1.5 v2 h1.5 v7 z" fill={STONE} stroke={INK} strokeWidth={0.4} />
+      <path d="M18 51 l2 -3 l2 3 l-2 2 z M22 50 l2 -3 l2 3 l-2 2 z M20 46 l2 -3 l2 3 l-2 2 z" fill={BLOOD} stroke={INK} strokeWidth={0.3} />
+      <path d="M22.5 48.5 l1.5 -2 l1.5 2 l-1.5 1.5 z" fill="#6ab7d6" stroke={INK} strokeWidth={0.3} />
+      <g>
+        <circle cx={40} cy={47} r={4} fill="none" stroke={LEAF} strokeWidth={1.6} />
+        <circle cx={40} cy={47} r={2} fill={PALE} stroke={INK} strokeWidth={0.3} />
+        <circle cx={39.3} cy={46.6} r={0.4} fill={INK} />
+        <circle cx={40.7} cy={46.6} r={0.4} fill={INK} />
+      </g>
+      <g>
+        <path d="M54 50 q4 -5 8 -3 q3 2 2 5 q-4 -2 -6 1 q-3 -1 -4 -3 z" fill="#5a7a3a" stroke={INK} strokeWidth={0.4} />
+        <path d="M56 47 l-2 -4 l4 2 M60 46 l1 -4 l2 3" fill="#5a7a3a" stroke={INK} strokeWidth={0.3} />
+        <circle cx={63} cy={49} r={0.4} fill={BLOOD} />
+      </g>
       <Ground y={100} fill={INK} opacity={0.7} />
-      <Person x={40} y={104} h={34} pose="up" robe={INK} />
+      <Person x={40} y={104} h={34} pose="raise-right" robe={INK} inner="#3a3a44" hair="none" face={false} belt={null} shade={false} />
     </g>
   ),
   8: () => (
@@ -470,12 +489,19 @@ const CUPS: Record<number, () => ReactElement> = {
   ),
   9: () => (
     <g>
-      <path d="M8 44 q32 -14 64 0 v14 h-64 z" fill={ROBE_PALE.cups} stroke={INK} strokeWidth={0.6} />
-      <Row suit="cups" xs={[12, 20, 28, 36, 44, 52, 60, 68, 76]} y={46} s={5} />
-      <rect x={28} y={84} width={24} height={14} fill="#8a6a3a" stroke={INK} strokeWidth={0.6} />
-      <Person x={40} y={90} h={40} pose="hold" robe={ROBE.cups} />
-      <path d="M31 72 q9 4 18 0" fill="none" stroke={PALE} strokeWidth={1.6} strokeLinecap="round" />
+      {/* the arched table draped in blue with nine cups upon it; the stout host on his bench, arms folded, well pleased */}
+      <path d="M6 46 q34 -16 68 0 v14 h-68 z" fill={ROBE_PALE.cups} stroke={INK} strokeWidth={0.6} />
+      <path d="M6 46 q34 -16 68 0 v14 h-68 z" fill="url(#hatch)" opacity={0.3} />
+      <path d="M6 60 h68 v6 h-68 z" fill="#3f6fa8" opacity={0.7} />
+      <path d="M8 60 v6 M20 60 v6 M32 60 v6 M44 60 v6 M56 60 v6 M68 60 v6" stroke={INK} strokeWidth={0.4} opacity={0.5} />
+      <Row suit="cups" xs={[12, 20, 28, 36, 44, 52, 60, 68, 76]} y={45} s={5} />
       <Ground y={98} fill={GOLD_FLAT} opacity={0.5} />
+      <rect x={26} y={84} width={28} height={14} fill="#8a6a3a" stroke={INK} strokeWidth={0.6} />
+      <rect x={26} y={84} width={28} height={14} fill="url(#hatch)" opacity={0.4} />
+      <Person x={40} y={90} h={40} pose="hold" robe={ROBE.cups} inner={PALE} hair="#5a3a22" belt={GOLD_FLAT} />
+      <path d="M35.5 51.5 q4.5 -5 9 0 l1 1.5 h-11 z" fill={BLOOD} stroke={INK} strokeWidth={0.4} />
+      <path d="M33 72 q7 5 14 0 M33 72 q7 -2 14 0" fill="none" stroke={ROBE.cups} strokeWidth={3.2} strokeLinecap="round" />
+      <path d="M33 72 q7 5 14 0" fill="none" stroke={INK} strokeWidth={0.4} opacity={0.5} />
     </g>
   ),
   10: () => (
