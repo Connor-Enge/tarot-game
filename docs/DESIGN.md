@@ -12,9 +12,9 @@ Working title. A mobile-first roguelike built on one mechanic: **the four-seat s
 ## The pitch in one breath
 
 You descend. At every scene you lay a reading of four cards, choosing each from
-three dealt to you. The reading *is* what happens. Nobody tells you what the
-cards mean. You learn by watching what they do, and by dying with them on the
-table.
+three dealt to you. The reading *is* what happens. Each seat says what it
+calls for; nobody tells you what the cards bring. You learn by watching what
+they do, and by dying with them on the table.
 
 ## Pillars
 
@@ -134,9 +134,13 @@ after playtesting.
 3. Sum of weights across the four seats, minus a small penalty per reversed
    card, plus any **combos** (Tower in the Threshold + Star in the Wake: "After
    the fall, a light."), gives a total.
-4. Total maps to a tier: calamity / harm / neutral / boon / triumph.
+4. Total maps to a tier: calamity / harm / neutral / boon / triumph, against
+   a bar the scene's stakes lift (see *Stakes raise the bar*): at stakes 1,
+   neutral above 1.5, boon from 4, triumph from 7. A table that brings
+   nothing reads as harm.
 5. Tier picks the scene's outcome line and the vitality/clarity deltas. Harm is
-   scaled by scene stakes.
+   scaled by scene stakes; a boon or triumph mends more at higher stakes
+   (see *Stakes pay*).
 
 Narration is four **omens** (one per card, orientation-aware, no meaning
 stated) followed by the outcome. This is the main channel through which
@@ -146,9 +150,9 @@ Tower is without a definition.
 ### Resources
 
 - **Vitality (♥)** — hit points. Starts at 10. Zero is death.
-- **Clarity (◈)** — spent to redraw a seat. Earned by neutral-or-better
-  outcomes. Later: spend to peek at a candidate's Codex entry mid-run, or to
-  flip a card's orientation.
+- **Clarity (◈)** — spent to redraw a seat, whisper what a card brings,
+  turn a card, hold one back, light the lamp, or foretell a door. Earned by
+  neutral-or-better outcomes.
 
 ## Knowledge (the Codex)
 
