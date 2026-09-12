@@ -674,13 +674,27 @@ const SWORDS: Record<number, () => ReactElement> = {
   ),
   7: () => (
     <g>
+      {/* the camp: striped tents with pennants, a fire with figures about it far off; the thief tiptoes away with five blades, two left standing */}
+      <Mountains y={70} opacity={0.12} />
       <Ground y={92} fill={GOLD_FLAT} opacity={0.4} />
-      {[8, 30, 56].map((x, i) => <path key={x} d={`M${x} 92 l10 -22 l10 22 z`} fill={[PALE, BLOOD, GOLD_FLAT][i]} stroke={INK} strokeWidth={0.5} opacity={0.85} />)}
-      <Row suit="swords" xs={[60, 68]} y={100} s={9} />
+      {[[6, PALE], [28, BLOOD], [52, GOLD_FLAT]].map(([x, fill], i) => (
+        <g key={i}>
+          <path d={`M${x} 92 l11 -24 l11 24 z`} fill={fill as string} stroke={INK} strokeWidth={0.5} opacity={0.9} />
+          <path d={`M${(x as number) + 11} 68 l11 24 h-11 z`} fill="url(#hatch)" opacity={0.45} />
+          <path d={`M${(x as number) + 5} 92 l6 -12 l6 12`} fill="none" stroke={INK} strokeWidth={0.35} opacity={0.5} />
+          <path d={`M${(x as number) + 11} 68 v-6 l5 2 l-5 2`} fill={i === 1 ? PALE : BLOOD} stroke={INK} strokeWidth={0.3} />
+        </g>
+      ))}
+      <path d="M70 90 q2 -4 4 0" fill="none" stroke={BLOOD} strokeWidth={1} />
+      <path d="M71 88 q1 -3 2 -5 q1 2 1 5" fill={GOLD_FLAT} stroke={BLOOD} strokeWidth={0.3} />
+      {[[66, 92], [78, 91]].map(([x, y], i) => <Person key={i} x={x} y={y} h={12} pose="stand" robe={INK} face={false} belt={null} shade={false} />)}
+      <Row suit="swords" xs={[58, 66]} y={102} s={9} />
       <g transform="rotate(-12 26 104)">
-        <Person x={26} y={104} h={40} pose="hold" robe={ROBE.swords} />
+        <Person x={26} y={104} h={40} pose="hold" robe={ROBE.swords} inner={BLOOD} hair="#3a2a1e" belt={GOLD_FLAT} />
+        <path d="M31 57 q4 -5 8 -3 q-2 3 -6 4 z" fill={BLOOD} stroke={INK} strokeWidth={0.3} />
       </g>
       <Row suit="swords" xs={[12, 17, 22, 27, 32]} y={76} s={10} angle={-30} />
+      <path d="M14 106 q3 -1 6 0 M22 108 q3 -1 6 0" fill="none" stroke={INK} strokeWidth={0.4} opacity={0.5} />
     </g>
   ),
   8: () => (
