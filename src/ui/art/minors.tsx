@@ -2,6 +2,7 @@ import type { ReactElement } from 'react';
 import type { Suit } from '../../engine';
 import { ROBE, ROBE_PALE } from './palette';
 import { BLOOD, Cloud, Figure, Flame, GOLD, GOLD_FLAT, Horse, INK, Moon, Mountains, PALE, Star, Sun, SUIT_SYMBOL, Throne, Tree, Water } from './primitives';
+import { Person, hands } from './figure';
 
 /**
  * The numbered Minors are scenes, after the Waite-Smith convention: every
@@ -84,6 +85,9 @@ const SUIT_SCENERY: Record<Suit, () => ReactElement> = {
     </g>
   ),
 };
+
+/** Hair for each suit's court: fire red, water fair, air dark, earth brown. */
+const COURT_HAIR: Record<Suit, string> = { wands: '#c94a3a', cups: '#d9a441', swords: '#3a2a1e', pentacles: '#5a3a22' };
 
 /** Court dressing: what each suit's court carries around it. */
 const COURT_DRESSING: Record<Suit, () => ReactElement> = {
@@ -613,28 +617,30 @@ function Court({ suit, rank }: { suit: Suit; rank: number }): ReactElement {
   const Dressing = COURT_DRESSING[suit];
   const robe = ROBE[suit];
   const pale = ROBE_PALE[suit];
+  const hair = COURT_HAIR[suit];
   if (rank === 11) {
-    // Page: standing, looking at what they hold.
+    // Page: standing, looking at what they hold; a feathered cap.
+    const pose = suit === 'swords' ? 'raise-right' : 'hold';
     return (
       <g>
         <Scenery />
         <Dressing />
         {suit === 'swords' && [10, 24, 56, 70].map((x, i) => <path key={x} d={`M${x} ${40 + i * 6} q6 -2 12 0`} fill="none" stroke={PALE} strokeWidth={0.9} opacity={0.8} />)}
         {suit === 'pentacles' && <Ground y={96} fill={GREEN} opacity={0.5} />}
-        <Figure x={34} y={98} h={48} arms={suit === 'swords' ? 'right-up' : 'hold'} fill={robe} cap />
-        <path d="M22 84 l-3 6 h8 l-1 -6 z" fill={INK} opacity={0.75} />
-        <path d="M24 84 q4 -8 10 -6" fill="none" stroke={INK} strokeWidth={0.7} opacity={0.75} />
-        {suit === 'wands' && <Sym x={34} y={66} s={9} />}
+        <Person x={34} y={98} h={48} pose={pose} robe={robe} inner={pale} hair={hair} belt={GOLD_FLAT} />
+        {/* the cap and its feather */}
+        <path d="M29 53 q5 -6 10 0 l0.5 1.5 q-5.5 -2 -11 0 z" fill={INK} opacity={0.8} />
+        <path d="M38 52 q4 -8 9 -7 q-3 2 -6 7" fill={PALE} stroke={INK} strokeWidth={0.4} />
+        {suit === 'wands' && <Sym x={43} y={68} s={9} />}
         {suit === 'cups' && (
           <g>
-            <Sym x={34} y={70} s={7} />
-            <path d="M31 62 q3 -5 6 0 q-3 3 -6 0 z" fill={PALE} stroke={INK} strokeWidth={0.4} />
-            <circle cx={35.5} cy={62.4} r={0.5} fill={INK} />
+            <Sym x={34} y={69} s={6.5} />
+            <path d="M31 61.5 q3 -5 6 0 q-3 3 -6 0 z" fill={PALE} stroke={INK} strokeWidth={0.4} />
+            <circle cx={35.5} cy={61.9} r={0.5} fill={INK} />
           </g>
         )}
-        {suit === 'swords' && <g transform="rotate(-20 46 48)"><Sym x={46} y={48} s={11} /></g>}
-        {suit === 'pentacles' && <Sym x={34} y={58} s={6} />}
-        {suit === 'pentacles' && <path d="M30 66 l4 -4 l4 4" fill="none" stroke={INK} strokeWidth={0.6} />}
+        {suit === 'swords' && <g transform="rotate(-20 52 44)"><Sym x={52} y={44} s={11} /></g>}
+        {suit === 'pentacles' && <Sym x={34} y={70} s={6} />}
       </g>
     );
   }
@@ -642,6 +648,9 @@ function Court({ suit, rank }: { suit: Suit; rank: number }): ReactElement {
     // Knight: the pace is the tell. Wands rears, Cups walks, Swords charges, Pentacles stands still.
     const charge = suit === 'swords';
     const rear = suit === 'wands';
+    const rx = charge ? 40 : 34;
+    const ry = rear ? 80 : 84;
+    const pose = suit === 'cups' ? 'hold' : 'raise-right';
     return (
       <g>
         <Scenery />
@@ -653,48 +662,55 @@ function Court({ suit, rank }: { suit: Suit; rank: number }): ReactElement {
         <g transform={rear ? 'rotate(-18 40 104)' : charge ? 'skewX(-14)' : undefined}>
           <Horse x={charge ? 52 : 38} y={104} fill={suit === 'swords' ? PALE : suit === 'cups' ? PALE : pale} w={52} />
         </g>
-        <Figure x={charge ? 40 : 34} y={rear ? 80 : 84} h={34} arms={suit === 'cups' ? 'hold' : 'right-up'} fill={robe} />
-        {suit === 'cups' ? <Sym x={34} y={58} s={6} /> : <g transform={charge ? 'rotate(-30 50 46)' : undefined}><Sym x={50} y={charge ? 44 : 52} s={8} /></g>}
+        {/* the rider in mail under the suit's surcoat, a plumed helm */}
+        <Person x={rx} y={ry} h={34} pose={pose} robe={robe} inner="#c9cdd4" hair="none" belt={GOLD_FLAT} face />
+        <path d={`M${rx - 3.6} ${ry - 30.6} a3.6 3.6 0 0 1 7.2 0 v1.4 h-7.2 z`} fill="#c9cdd4" stroke={INK} strokeWidth={0.4} />
+        <path d={`M${rx} ${ry - 34} q4 -4 7 -1 q-4 0 -6 3`} fill={suit === 'cups' ? PALE : robe} stroke={INK} strokeWidth={0.35} />
+        {suit === 'cups' ? <Sym x={34} y={60} s={6} /> : <g transform={charge ? 'rotate(-30 50 46)' : undefined}><Sym x={50} y={charge ? 44 : 52} s={8} /></g>}
       </g>
     );
   }
   if (rank === 13) {
     // Queen: seated, with the suit's companion. Sunflower and cat, a shell by the sea, a raised hand in wind, a rabbit in the grass.
+    const pose = suit === 'swords' ? 'raise-right' : 'sit-hold';
     return (
       <g>
         <Scenery />
         <Dressing />
         {suit === 'cups' && <Water y={96} rows={3} />}
         <Throne x={40} y={98} w={32} h={38} fill={pale} back="arch" />
-        <Figure x={40} y={98} h={50} arms={suit === 'swords' ? 'right-up' : 'hold'} fill={robe} cloak crown />
+        <path d="M27 60 L20 98 H60 L53 60 Z" fill={pale} stroke={INK} strokeWidth={0.4} opacity={0.9} />
+        <Person x={40} y={98} h={50} pose={pose} robe={robe} inner={PALE} hair={hair} crown belt={GOLD_FLAT} />
         {suit === 'wands' && (
           <g>
-            <Sym x={40} y={76} s={7} />
-            <circle cx={62} cy={60} r={4} fill={GOLD_FLAT} stroke={INK} strokeWidth={0.5} />
-            <circle cx={62} cy={60} r={1.6} fill={INK} />
-            <line x1={62} y1={64} x2={62} y2={80} stroke={GREEN} strokeWidth={1.2} />
-            <ellipse cx={22} cy={104} rx={7} ry={3.5} fill={INK} />
-            <circle cx={16} cy={100} r={2.4} fill={INK} />
-            <path d="M14 98 l-1 -3 l2 1 M18 98 l1 -3 l-2 1" fill="none" stroke={INK} strokeWidth={0.8} />
+            <Sym x={40} y={74} s={7} />
+            <circle cx={64} cy={60} r={4} fill={GOLD_FLAT} stroke={INK} strokeWidth={0.5} />
+            <circle cx={64} cy={60} r={1.6} fill={INK} />
+            <line x1={64} y1={64} x2={64} y2={80} stroke={GREEN} strokeWidth={1.2} />
+            <ellipse cx={20} cy={104} rx={7} ry={3.5} fill={INK} />
+            <circle cx={14} cy={100} r={2.4} fill={INK} />
+            <path d="M12 98 l-1 -3 l2 1 M16 98 l1 -3 l-2 1" fill="none" stroke={INK} strokeWidth={0.8} />
+            <circle cx={13.2} cy={100} r={0.4} fill={GOLD_FLAT} />
+            <circle cx={14.8} cy={100} r={0.4} fill={GOLD_FLAT} />
           </g>
         )}
         {suit === 'cups' && (
           <g>
-            <Sym x={40} y={76} s={7} />
-            <path d="M34 66 q6 -6 12 0" fill="none" stroke={GOLD_FLAT} strokeWidth={0.8} />
+            <Sym x={40} y={74} s={7} />
+            <path d="M34 64 q6 -6 12 0" fill="none" stroke={GOLD_FLAT} strokeWidth={0.8} />
             <path d="M8 104 a7 7 0 0 1 14 0 z" fill={PALE} stroke={INK} strokeWidth={0.5} />
             <path d="M10 104 l5 -6 M15 104 v-7 M20 104 l-5 -6" stroke={INK} strokeWidth={0.4} />
           </g>
         )}
         {suit === 'swords' && (
           <g>
-            <g transform="rotate(0 54 40)"><Sym x={54} y={44} s={12} /></g>
+            {(() => { const hd = hands(40, 98, 50, 'raise-right'); return <Sym x={hd.r.x - 1} y={hd.r.y + 4} s={12} />; })()}
             {[8, 14, 20].map((y) => <path key={y} d={`M4 ${y} q8 -3 16 0`} fill="none" stroke={PALE} strokeWidth={0.9} opacity={0.8} />)}
           </g>
         )}
         {suit === 'pentacles' && (
           <g>
-            <Sym x={40} y={78} s={7} />
+            <Sym x={40} y={76} s={7} />
             <ellipse cx={66} cy={104} rx={5} ry={3} fill="#8a6a3a" />
             <circle cx={70} cy={101} r={2} fill="#8a6a3a" />
             <path d="M69 99 l-1 -4 M71 99 l1 -4" stroke="#8a6a3a" strokeWidth={1} strokeLinecap="round" />
@@ -704,34 +720,29 @@ function Court({ suit, rank }: { suit: Suit; rank: number }): ReactElement {
       </g>
     );
   }
-  // King: enthroned, the suit held as office. Salamanders, a fish in the sea, a raised blade, a bull at the foot.
+  // King: enthroned and bearded, the suit held as office. Salamanders, a fish in the sea, a raised blade, a bull at the foot.
   return (
     <g>
       <Scenery />
       <Dressing />
       {suit === 'cups' && <Water y={90} rows={4} />}
       {suit === 'cups' && <rect x={12} y={84} width={56} height={8} fill={STONE} opacity={0.6} />}
-      <Throne x={40} y={98} w={38} h={44} fill={suit === 'wands' ? '#7a3a2a' : INK} back="square" dais />
-      <Figure x={40} y={98} h={52} arms="right-up" fill={robe} cloak crown />
-      <line x1={26} y1={62} x2={26} y2={96} stroke={GOLD_FLAT} strokeWidth={1.3} strokeLinecap="round" />
-      <circle cx={26} cy={59} r={2.6} fill={GOLD_FLAT} stroke={INK} strokeWidth={0.5} />
-      <path d="M24.5 56 l1.5 -2.5 l1.5 2.5" fill="none" stroke={INK} strokeWidth={0.5} />
-      {suit === 'wands' && (
+      <Throne x={40} y={98} w={38} h={44} fill={suit === 'wands' ? '#7a3a2a' : suit === 'pentacles' ? '#3a3a2a' : '#4a4a58'} back="square" dais />
+      <path d="M26 60 L18 98 H62 L54 60 Z" fill={pale} stroke={INK} strokeWidth={0.4} opacity={0.9} />
+      <Person x={40} y={98} h={52} pose="raise-right" robe={robe} inner={PALE} hair={hair} crown belt={GOLD_FLAT} />
+      <path d="M35.6 52.5 q1 4 4.4 9 q3.4 -5 4.4 -9 q-4.4 3 -8.8 0 z" fill={hair} stroke={INK} strokeWidth={0.35} />
+      {(() => { const hd = hands(40, 98, 52, 'raise-right'); return (
         <g>
-          <Sym x={58} y={58} s={8} />
-          {[18, 62].map((x) => <path key={x} d={`M${x} 90 q4 -6 8 0 q-4 4 -8 0 z`} fill={GOLD_FLAT} stroke={INK} strokeWidth={0.4} />)}
+          <line x1={hd.l.x} y1={hd.l.y + 2} x2={hd.l.x} y2={hd.l.y - 18} stroke={GOLD_FLAT} strokeWidth={1.3} strokeLinecap="round" />
+          <circle cx={hd.l.x} cy={hd.l.y - 20.5} r={2.6} fill={GOLD_FLAT} stroke={INK} strokeWidth={0.5} />
+          <path d={`M${hd.l.x - 1.5} ${hd.l.y - 23.5} l1.5 -2.5 l1.5 2.5`} fill="none" stroke={INK} strokeWidth={0.5} />
+          {suit === 'swords' ? <Sym x={hd.r.x - 1} y={hd.r.y + 4} s={12} /> : <Sym x={hd.r.x} y={hd.r.y + (suit === 'wands' ? 6 : 2)} s={8} />}
         </g>
-      )}
-      {suit === 'cups' && (
-        <g>
-          <Sym x={58} y={58} s={8} />
-          <path d="M8 100 q5 -4 10 0 q-5 4 -10 0 z M18 100 l4 -3 v6 z" fill={PALE} stroke={INK} strokeWidth={0.5} />
-        </g>
-      )}
-      {suit === 'swords' && <Sym x={58} y={50} s={12} />}
+      ); })()}
+      {suit === 'wands' && [18, 62].map((x) => <path key={x} d={`M${x} 90 q4 -6 8 0 q-4 4 -8 0 z`} fill={GOLD_FLAT} stroke={INK} strokeWidth={0.4} />)}
+      {suit === 'cups' && <path d="M8 100 q5 -4 10 0 q-5 4 -10 0 z M18 100 l4 -3 v6 z" fill={PALE} stroke={INK} strokeWidth={0.5} />}
       {suit === 'pentacles' && (
         <g>
-          <Sym x={58} y={58} s={8} />
           <ellipse cx={20} cy={104} rx={8} ry={4} fill={INK} />
           <circle cx={13} cy={100} r={3} fill={INK} />
           <path d="M11 98 q-3 -4 0 -6 M15 98 q3 -4 0 -6" fill="none" stroke={INK} strokeWidth={1} />

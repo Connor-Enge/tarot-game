@@ -962,7 +962,7 @@ identity, not power, which is the point.
   pattern from `ArtDefs`, and a small garden (rose, lily, wheat,
   pomegranate, grass, a cliff edge). `hands()` returns where a pose's
   hands end up so a card can put a wand, a rose or a sceptre in them. The
-  Majors are all drawn this way; the courts and pips follow; the numbered Minors are scenes after the
+  Majors and the sixteen courts are drawn this way; the pips follow; the numbered Minors are scenes after the
   Waite-Smith convention (every pip present, and a figure doing the thing:
   the Two of Wands holds the globe on the battlement, the Five of
   Pentacles passes the lit window in snow, the Eight of Cups walks away
