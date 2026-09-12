@@ -2235,3 +2235,11 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 @media (max-width: 400px) { .spread--cross .seat__pos { font-size: 0.56rem; letter-spacing: 0.03em; } }
 .node__hint { display: block; margin-top: 2px; color: var(--muted); font-size: 0.58rem; letter-spacing: 0.02em; }
 .node__place { background: rgba(11,10,18,0.92); border: 1px solid rgba(214,178,94,0.25); border-radius: 8px; padding: 3px 5px; z-index: 4; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+
+/* --- the chronicle: the descent told straight through --------------------- */
+.chronicle { width: 100%; max-width: 440px; margin: 4px auto 0; padding: 10px 14px 12px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(214,178,94,0.16); text-align: left; }
+.chronicle__head { text-align: center; letter-spacing: 0.12em; text-transform: uppercase; font-size: 0.66rem; color: var(--gold); margin-bottom: 6px; }
+.chronicle__line { margin: 0 0 8px; font-size: 0.92rem; line-height: 1.5; color: var(--ink); text-indent: 0; }
+.chronicle__n { display: inline-grid; place-items: center; width: 18px; height: 18px; margin-right: 6px; border-radius: 50%; border: 1px solid rgba(214,178,94,0.5); color: var(--gold-2); font-size: 0.62rem; vertical-align: 2px; }
+.chronicle__line--hand { color: var(--muted); font-style: italic; border-top: 1px dashed rgba(214,178,94,0.25); padding-top: 8px; }
+.chronicle .chip { display: block; margin: 6px auto 0; }

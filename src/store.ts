@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { CARDS, setKnownCards, scoreSlot, currentScene, hasRelic, roadNotTaken, noteHand, runHand, handGrade, type TableLay } from './engine';
 setKnownCards(CARDS.map((c) => c.id));
-import { sfx, startDrone, stopDrone } from './audio';
+import { setDroneDepth, sfx, startDrone, stopDrone } from './audio';
 import { clearRun, loadRun, saveRun } from './persist';
 import { hapticsEnabled, useSettings } from './settings';
 import {
@@ -505,7 +505,9 @@ export const useGame = create<GameStore>((set, get) => ({
     const { run } = get();
     if (!run) return;
     sfx.flip();
-    set({ run: advanceRun(run), lifted: null });
+    const next = advanceRun(run);
+    if (next.phase.kind === 'map') setDroneDepth(Math.max(0, (next.map[next.layer]?.[0]?.act ?? 1) - 1));
+    set({ run: next, lifted: null });
   },
 
   takeBack: () => {

@@ -698,6 +698,17 @@ seats of ten, a steady hand in seven, a wavering hand in five, and a
 reckless hand in fewer. The line under it counts seats, clean scenes and
 what was left in the hand; the share text carries the word.
 
+## The chronicle
+
+The run-end journal opens with the descent told straight through: one
+paragraph a scene, in the scene's own words (its place, then what came of
+the reading, then any named reading that sounded, and a note when two
+cards that knew each other sat together), ending with how the hand was
+played. Nothing in it is new to the player; it is the road gathered up
+so it can be read as a story and copied out as text. Under it, the drone
+deepens by act: the filter closes a little and the oscillators sink a few
+cents as the road goes down. Engine: `engine/chronicle.ts`.
+
 ## The Long Night
 
 A descent unlocked by five deaths and one return: every scene is read

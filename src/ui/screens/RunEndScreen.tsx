@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getCard, getDescent, getLore, getRelic, getVow, getWeather, handGrade, hasRelic, KIND_GLYPH, reckon, reckoningText, runHand, SCENES, SIGILS, SLOT_IDS, SLOT_POSITION, SLOTS, tallyText, type RunState } from '../../engine';
+import { chronicle, chronicleText, getCard, getDescent, getLore, getRelic, getVow, getWeather, handGrade, hasRelic, KIND_GLYPH, reckon, reckoningText, runHand, SCENES, SIGILS, SLOT_IDS, SLOT_POSITION, SLOTS, tallyText, type RunState } from '../../engine';
 import { shareText, useGame } from '../../store';
 import { Card } from '../components/Card';
 import { RelicArt } from '../art/relics';
@@ -28,6 +28,7 @@ function RunEndScreenInner() {
   const finest = useGame((s) => s.finest);
   const [tab, setTab] = useState<'reveal' | 'journal'>('reveal');
   const [copied, setCopied] = useState(false);
+  const [copiedChronicle, setCopiedChronicle] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [replay, setReplay] = useState(0);
   const [busy, setBusy] = useState(false);
@@ -241,6 +242,28 @@ function RunEndScreenInner() {
           <p className="muted small center">
             {mode.kind === 'daily' ? `Daily ${mode.label}` : mode.kind === 'weekly' ? `Weekly ${mode.label}` : getDescent(mode.descent).name} · seed {run.seed.toString(36)}
           </p>
+          <div className="chronicle rise">
+            <div className="chronicle__head muted small">The chronicle</div>
+            {chronicle(run).map((line, i) => (
+              <p key={i} className={`chronicle__line ${i >= run.history.length ? 'chronicle__line--hand' : ''}`}>
+                {i < run.history.length && <span className="chronicle__n" aria-hidden>{i + 1}</span>}
+                {line}
+              </p>
+            ))}
+            <button
+              type="button"
+              className="chip"
+              onClick={async () => {
+                try {
+                  await navigator.clipboard.writeText(chronicleText(run, endTitle(run, dead)));
+                  setCopiedChronicle(true);
+                  setTimeout(() => setCopiedChronicle(false), 1600);
+                } catch { /* no clipboard */ }
+              }}
+            >
+              {copiedChronicle ? 'Copied' : '❧ Copy the chronicle'}
+            </button>
+          </div>
           {run.history.map((h, i) => (
             <article key={i} className={`journal__row tier--${h.resolution.tier} rise`} style={{ animationDelay: `${i * 80}ms` }}>
               <div className="journal__head">

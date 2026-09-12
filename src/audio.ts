@@ -7,7 +7,7 @@ import type { OutcomeTier } from './engine';
 
 let ctx: AudioContext | null = null;
 let master: GainNode | null = null;
-let drone: { stop: () => void } | null = null;
+let drone: { stop: () => void; depth: (d: number) => void } | null = null;
 let enabled = true;
 
 export function setSoundEnabled(on: boolean) {
@@ -276,7 +276,18 @@ export function startDrone() {
         lfo.stop();
       }, 3000);
     },
+    // Deeper acts sit lower and darker: the filter closes a little and the oscillators sink a few cents.
+    depth: (d: number) => {
+      const k = Math.max(0, Math.min(2, d));
+      f.frequency.setTargetAtTime(220 - k * 45, c.currentTime, 2.5);
+      oscs.forEach((o) => o.detune.setTargetAtTime(-k * 18, c.currentTime, 2.5));
+    },
   };
+}
+
+/** Tell the drone how deep the descent is: 0 for the Shallows, 1 for the Deep, 2 at the Abyss. */
+export function setDroneDepth(depth: number) {
+  drone?.depth(depth);
 }
 
 export function stopDrone() {
