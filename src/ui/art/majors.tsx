@@ -652,6 +652,11 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <Mountains y={90} opacity={0.9} fill={INK} />
       {/* the tower of grey stone on its crag, the crown struck off */}
       <path d="M22 112 l8 -18 h20 l8 18 z" fill="#2a2030" />
+      <path d="M22 112 l8 -18 h20 l8 18 z" fill="url(#crosshatch)" opacity={0.5} />
+      <path d="M26 104 l4 -6 M52 100 l4 6" stroke={INK} strokeWidth={0.5} opacity={0.6} />
+      {/* smoke rolls from the windows, and the bolt lights the sky about it */}
+      <circle cx={58} cy={18} r={14} fill={GOLD_FLAT} opacity={0.1} />
+      <path d="M36 48 q-6 -4 -4 -12 q4 4 6 10 M46 64 q6 -4 5 -12 q-4 4 -5 10" fill="#3a3040" opacity={0.6} />
       <rect x={30} y={36} width={20} height={60} fill="#b8b4a8" stroke={INK} strokeWidth={1} />
       <rect x={30} y={36} width={20} height={60} fill="url(#hatch)" opacity={0.7} />
       {[[33, 44], [43, 44], [33, 56], [43, 56], [33, 68], [43, 68], [33, 80], [43, 80]].map(([x, y], i) => <path key={i} d={`M${x} ${y} h5 M${x + 2} ${y} v${i % 2 ? 4 : 0}`} stroke={INK} strokeWidth={0.4} opacity={0.6} />)}
@@ -660,7 +665,12 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       ))}
       <rect x={35} y={50} width={4} height={6} fill="#1a1420" />
       <rect x={41} y={66} width={4} height={6} fill="#1a1420" />
-      <path d="M28 30 l6 -8 l6 6 l6 -6 l6 8 z" fill={GOLD} stroke={INK} strokeWidth={0.7} transform="rotate(-25 40 26) translate(-6 -6)" />
+      <g transform="rotate(-25 40 26) translate(-6 -6)">
+        <path d="M28 30 l6 -8 l6 6 l6 -6 l6 8 z" fill={GOLD} stroke={INK} strokeWidth={0.7} />
+        <circle cx={34} cy={23.5} r={0.8} fill={BLOOD} />
+        <circle cx={46} cy={23.5} r={0.8} fill={BLOOD} />
+        <circle cx={40} cy={27.5} r={0.8} fill="#6ab7d6" />
+      </g>
       <Lightning x={62} y={4} len={44} />
       <Flame x={34} y={40} s={5} />
       <Flame x={46} y={48} s={6} />
@@ -692,9 +702,13 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <path d="M73 65 q3 -1 4 2" fill="none" stroke={INK} strokeWidth={0.7} />
       {/* the pool, and the dry ground with its five streams */}
       <path d="M0 90 q14 -6 30 0 v22 h-30 z" fill="#7fa3c9" opacity={0.6} />
+      <path d="M0 90 q14 -6 30 0 v3 q-16 -5 -30 0 z" fill="url(#hatch)" opacity={0.5} />
+      <Star x={12} y={104} r={2.4} points={8} fill={PALE} />
       <Water y={96} rows={2} />
       <Ground y={100} fill={LEAF} opacity={0.5} />
       <Grass x={50} y={100} w={22} n={6} />
+      <Grass x={34} y={106} w={12} n={4} />
+      {[[62, 104], [72, 102]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r={1.1} fill={PALE} stroke={INK} strokeWidth={0.25} />)}
       {/* she kneels, one knee on the land, and pours from both jugs */}
       <Person x={42} y={98} h={38} pose="reach-left" robe={SKIN} hair="#d9a441" belt={null} />
       {(() => { const hd = hands(42, 98, 38, 'reach-left'); return (
