@@ -122,14 +122,23 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       {/* twelve stars over her, cypresses and a stream behind */}
       {Array.from({ length: 12 }, (_, i) => <Star key={i} x={40 + Math.cos((i / 12) * Math.PI * 2 - Math.PI / 2) * 11} y={8 + Math.sin((i / 12) * Math.PI * 2 - Math.PI / 2) * 5} r={1.4} points={6} />)}
       {[6, 12, 68, 74].map((x, i) => <path key={x} d={`M${x} 62 q-3 -14 0 -30 q3 16 0 30 z`} fill={LEAF} opacity={0.85 - (i % 2) * 0.2} stroke={INK} strokeWidth={0.3} />)}
+      {/* the waterfall behind the cypresses, falling to the stream */}
+      <path d="M60 30 q2 14 -2 32" fill="none" stroke="#8fc3e0" strokeWidth={4} opacity={0.6} />
+      <path d="M59 30 q2 14 -2 32 M61.5 30 q2 14 -2 32" fill="none" stroke={PALE} strokeWidth={0.6} opacity={0.7} />
       <path d="M0 64 q20 -4 40 0 t40 0 v6 q-20 4 -40 0 t-40 0 z" fill="#5a7a3a" opacity={0.6} />
       <path d="M0 62 q22 -3 44 1 t36 -1" fill="none" stroke="#8fc3e0" strokeWidth={2.2} opacity={0.8} />
       <path d="M0 62 q22 -3 44 1 t36 -1" fill="none" stroke={PALE} strokeWidth={0.6} opacity={0.6} strokeDasharray="3 4" />
       {/* the cushioned throne, the empress, sceptre and shield */}
       <Throne x={42} y={92} w={34} h={26} fill="#c94a3a" back="arch" />
       <rect x={26} y={68} width={32} height={6} rx={3} fill="#e0a39a" stroke={INK} strokeWidth={0.4} />
+      <rect x={26} y={68} width={32} height={6} rx={3} fill="url(#hatch)" opacity={0.3} />
+      {/* the Venus sign on the cushion, and a myrtle wreath under her crown */}
+      <circle cx={30} cy={70.5} r={1.4} fill="none" stroke={INK} strokeWidth={0.4} />
+      <path d="M30 72 v2 M29 73 h2" stroke={INK} strokeWidth={0.4} />
       <Person x={42} y={92} h={50} pose="raise-right" robe="#f1e5c8" inner="#e9d9b6" hair="#d9a441" crown belt="#c94a3a" />
-      {[[36, 74], [44, 78], [40, 84], [48, 86]].map(([x, y], i) => <Pomegranate key={i} x={x} y={y} r={1.5} />)}
+      <path d="M37 44.5 q5 2 10 0" fill="none" stroke={LEAF} strokeWidth={1.2} />
+      {[38, 41, 44, 46].map((x, i) => <path key={x} d={`M${x} ${45 + (i % 2) * 0.6} q1 -1.5 2 0 q-1 1.2 -2 0 z`} fill={LEAF} stroke={INK} strokeWidth={0.2} />)}
+      {[[36, 74], [44, 78], [40, 84], [48, 86], [34, 82], [46, 70], [38, 66], [50, 80]].map(([x, y], i) => <Pomegranate key={i} x={x} y={y} r={1.5} />)}
       {(() => { const hd = hands(42, 92, 50, 'raise-right'); return (
         <g>
           <line x1={hd.r.x} y1={hd.r.y + 2} x2={hd.r.x + 1} y2={hd.r.y - 9} stroke={GOLD_FLAT} strokeWidth={1.2} strokeLinecap="round" />
@@ -161,7 +170,12 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
         </g>
       ))}
       {/* the emperor: red robe over mail, a long white beard, crown, ankh and orb */}
+      <path d="M28 58 L20 94 H60 L52 58 Z" fill="#8a2e24" stroke={INK} strokeWidth={0.4} opacity={0.9} />
+      <path d="M28 58 L20 94 H32 L34 58 Z" fill="url(#hatch)" opacity={0.4} />
       <Person x={40} y={94} h={52} pose="sit-hold" robe="#b8462f" inner="#8a8f99" hair="#e8e2d6" crown belt={GOLD_FLAT} />
+      {/* mail shows at the boots */}
+      <path d="M29 88 h8 v5 h-8 z M43 88 h8 v5 h-8 z" fill="#8a8f99" stroke={INK} strokeWidth={0.4} />
+      <path d="M29 88 h8 v5 h-8 z M43 88 h8 v5 h-8 z" fill="url(#crosshatch)" opacity={0.7} />
       <path d="M35.6 48.5 q1 4 4.4 10 q3.4 -6 4.4 -10 q-4.4 3 -8.8 0 z" fill="#e8e2d6" stroke={INK} strokeWidth={0.35} />
       <path d="M38 50 q2 2 4 0" fill="none" stroke={INK} strokeWidth={0.3} />
       {(() => { const hd = hands(40, 94, 52, 'sit-hold'); return (
