@@ -741,6 +741,10 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       {/* the two towers, the path that winds between them, the pool below */}
       <rect x={6} y={46} width={9} height={30} fill="#3a3040" stroke={INK} strokeWidth={0.6} />
       <rect x={65} y={46} width={9} height={30} fill="#3a3040" stroke={INK} strokeWidth={0.6} />
+      <rect x={11} y={46} width={4} height={30} fill="url(#hatch)" opacity={0.5} />
+      <rect x={70} y={46} width={4} height={30} fill="url(#hatch)" opacity={0.5} />
+      <path d="M9 52 h3 v4 h-3 z M9 62 h3 v4 h-3 z M68 52 h3 v4 h-3 z M68 62 h3 v4 h-3 z" fill={GOLD_FLAT} opacity={0.5} />
+      <path d="M6 50 h9 M65 50 h9 M6 58 h9 M65 58 h9 M6 66 h9 M65 66 h9" stroke={INK} strokeWidth={0.3} opacity={0.4} />
       <path d="M5 46 h11 M64 46 h11 M8 43 h2 v3 h-2 z M12 43 h2 v3 h-2 z M67 43 h2 v3 h-2 z M71 43 h2 v3 h-2 z" fill="#3a3040" stroke={INK} strokeWidth={0.5} />
       <path d="M38 112 q-6 -20 4 -40 q6 -10 -2 -20" fill="none" stroke={PALE} strokeWidth={3} opacity={0.5} />
       <path d="M38 112 q-6 -20 4 -40 q6 -10 -2 -20" fill="none" stroke="url(#hatch)" strokeWidth={3} opacity={0.6} />
@@ -760,6 +764,8 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
         <path d="M67 88 q4 -3 2 -8" fill="none" stroke="#3a3a44" strokeWidth={1.4} strokeLinecap="round" />
       </g>
       <path d="M0 92 q40 -8 80 0 v20 h-80 z" fill="#2a3a5a" opacity={0.7} />
+      <path d="M0 92 q40 -8 80 0" fill="none" stroke={PALE} strokeWidth={0.6} opacity={0.5} />
+      <path d="M30 96 q10 -3 20 0" fill="none" stroke={GOLD_FLAT} strokeWidth={0.8} opacity={0.4} />
       <Water y={94} rows={3} />
       {/* the crayfish climbing out */}
       <g className="live-rise">
@@ -774,6 +780,7 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <rect x={0} y={0} width={80} height={112} fill={GOLD_FLAT} opacity={0.18} />
       <Sun x={40} y={22} r={14} rays={20} face />
       {/* the garden wall, sunflowers turned to the child */}
+      <rect x={0} y={54} width={80} height={2.5} fill="#c9b07a" stroke={INK} strokeWidth={0.5} />
       <rect x={0} y={56} width={80} height={16} fill="#d9c39a" stroke={INK} strokeWidth={0.8} />
       <rect x={0} y={56} width={80} height={16} fill="url(#hatch)" opacity={0.45} />
       {[[0, 60], [16, 60], [32, 60], [48, 60], [64, 60], [8, 66], [24, 66], [40, 66], [56, 66], [72, 66]].map(([x, y], i) => <path key={i} d={`M${x} ${y} h14`} stroke={INK} strokeWidth={0.4} opacity={0.5} />)}
@@ -781,6 +788,7 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
         <g key={i}>
           <line x1={x} y1={56} x2={x} y2={46} stroke={LEAF} strokeWidth={1.2} />
           <path d={`M${x - 3} 52 q-4 -1 -5 2 q3 1 5 -1`} fill={LEAF} stroke={INK} strokeWidth={0.3} />
+          <path d={`M${x + 3} 50 q4 -1 5 2 q-3 1 -5 -1`} fill={LEAF} stroke={INK} strokeWidth={0.3} />
           {Array.from({ length: 10 }, (_, k) => { const a = (k / 10) * Math.PI * 2; return <ellipse key={k} cx={x + Math.cos(a) * 4.6} cy={44 + Math.sin(a) * 4.6} rx={1.6} ry={1} fill={GOLD} stroke={INK} strokeWidth={0.3} transform={`rotate(${(a * 180) / Math.PI} ${x + Math.cos(a) * 4.6} ${44 + Math.sin(a) * 4.6})`} />; })}
           <circle cx={x} cy={44} r={2.6} fill="#5a3a22" stroke={INK} strokeWidth={0.4} />
         </g>
@@ -795,6 +803,8 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
         <g>
           <line x1={hd.l.x} y1={hd.l.y + 2} x2={hd.l.x - 2} y2={hd.l.y - 22} stroke={INK} strokeWidth={1.2} strokeLinecap="round" />
           <path d={`M${hd.l.x - 2} ${hd.l.y - 22} l-16 4 q4 4 0 8 l16 2 z`} fill={BLOOD} stroke={INK} strokeWidth={0.5} />
+          <path d={`M${hd.l.x - 6} ${hd.l.y - 17} l-8 2 M${hd.l.x - 6} ${hd.l.y - 13} l-8 1`} stroke={INK} strokeWidth={0.3} opacity={0.5} />
+          <circle cx={hd.l.x - 2} cy={hd.l.y - 23.5} r={1.2} fill={GOLD_FLAT} stroke={INK} strokeWidth={0.3} />
         </g>
       ); })()}
     </g>
