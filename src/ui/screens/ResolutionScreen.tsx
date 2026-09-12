@@ -125,7 +125,7 @@ function ResolutionScreenInner() {
         })}
         {resolution.kinship && resolution.kinship.pairs.map(([a, b], i) => (
           <p key={`${a}|${b}`} className="kin rise" style={{ animationDelay: `${400 + (resolution.narration.length + i) * step}ms` }}>
-            <span className="kin__mark" aria-hidden>✶</span> {getCard(a).name} and {getCard(b).name} know each other. <span className="kin__score">+{KIN_BONUS}</span>
+            <span className="kin__mark" aria-hidden>✶</span> {getCard(a).name} and {getCard(b).name} know each other. <span className="kin__score">+{run.mods.kinBonus ?? KIN_BONUS}</span>
           </p>
         ))}
         {dream && (

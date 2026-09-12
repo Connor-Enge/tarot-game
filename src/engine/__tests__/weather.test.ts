@@ -29,10 +29,10 @@ describe('weekly weather', () => {
   it('never picks a road length', () => {
     for (let i = 0; i < 200; i++) expect(['long', 'short']).not.toContain(weeklyWeather(i * 7919 + 3).id);
   });
-  it('has fourteen distinct weathers', () => {
-    expect(WEATHERS.length).toBe(14);
-    expect(new Set(WEATHERS.map((w) => w.id)).size).toBe(14);
-    expect(new Set(WEATHERS.map((w) => w.name)).size).toBe(14);
+  it('has sixteen distinct weathers', () => {
+    expect(WEATHERS.length).toBe(16);
+    expect(new Set(WEATHERS.map((w) => w.id)).size).toBe(16);
+    expect(new Set(WEATHERS.map((w) => w.name)).size).toBe(16);
   });
 });
 
@@ -59,5 +59,25 @@ describe("the week's card", () => {
     expect(charges).toContain(dayCard(week));
     const stale = { ...fresh, daily: { last: '2026-09-01', streak: 9, best: 9 } };
     expect(dailyCharges(stale, label, day, week)).toEqual([dayCard(day)]);
+  });
+});
+
+describe('lantern walk and old company', () => {
+  it('lantern walk lights every seat; old company doubles what kin lift', async () => {
+    const { chooseNode, chooseCandidate } = await import('../run');
+    const { getWeather } = await import('../weather');
+    let lit = chooseNode(startRun(5, getWeather('lantern-walk').config), 0);
+    expect(lit.slots[0].lit).toBe(true);
+    lit = chooseCandidate(lit, 0);
+    expect(lit.slots[1].lit).toBe(true);
+    const { resolveReading } = await import('../resolve');
+    const { SCENES } = await import('../scenes');
+    const scene = Object.values(SCENES).find((s) => !s.terminal)!;
+    const up = (cardId: string) => ({ cardId, reversed: false });
+    const reading = { vessel: up('major-0'), threshold: up('cups-2'), wake: up('major-19'), hand: up('wands-5') };
+    const half = resolveReading(scene, reading, {}, { kin: ['major-0|major-19'] });
+    const full = resolveReading(scene, reading, {}, { kin: ['major-0|major-19'], kinBonus: 1 });
+    expect(full.total).toBeCloseTo(half.total + 0.5);
+    expect(startRun(5, getWeather('old-company').config).mods.kinBonus).toBe(1);
   });
 });

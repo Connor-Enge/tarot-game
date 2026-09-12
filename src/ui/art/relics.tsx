@@ -242,6 +242,21 @@ const VOW_ART: Record<string, () => ReactElement> = {
       <path d="M20 14 L26 26 H14 Z" fill={GOLD_FLAT} opacity={0.5} />
     </g>
   ),
+  unlit: () => (
+    <g>
+      <path d="M17 8 H23 V12 C27 14 29 18 29 24 C29 30 25 34 20 34 C15 34 11 30 11 24 C11 18 13 14 17 12 Z" fill="none" stroke={PALE} strokeWidth={1.2} strokeLinejoin="round" opacity={0.8} />
+      <path d="M16 6 H24" stroke={PALE} strokeWidth={1.4} strokeLinecap="round" opacity={0.8} />
+      <path d="M12 30 L28 14" stroke={PALE} strokeWidth={1.3} strokeLinecap="round" opacity={0.85} />
+    </g>
+  ),
+  lamplit: () => (
+    <g>
+      <path d="M17 12 H23 V15 C27 17 29 21 29 26 C29 31 25 34 20 34 C15 34 11 31 11 26 C11 21 13 17 17 15 Z" fill="none" stroke={PALE} strokeWidth={1.2} strokeLinejoin="round" opacity={0.85} />
+      <path d="M16 10 H24" stroke={PALE} strokeWidth={1.4} strokeLinecap="round" opacity={0.85} />
+      <path d="M20 22 C18 19 18.5 17 20 15 C21.5 17 22 19 20 22 Z" fill={GOLD_FLAT} />
+      {[[6, 12], [34, 12], [20, 4]].map(([x, y], k) => <circle key={k} cx={x} cy={y} r={0.9} fill={GOLD_FLAT} opacity={0.8} />)}
+    </g>
+  ),
 };
 
 VOW_ART.thrift = () => (

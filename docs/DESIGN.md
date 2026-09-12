@@ -891,7 +891,7 @@ identity, not power, which is the point.
   omen is distinct.
 - **Scenes**: 32 exist (31 plus the Abyss); more are welcome. Latest: the lit street (which keeps a rite of its own: every seat lit, the lamp free), the observatory.
 - **Named readings**: 34. Each is a memorable line, never a definition.
-- **Relics**: 14 boons, 9 curses. **Vows**: 7. **Weathers**: 14. **Trades**: 6. **Sigils**: 35. **Rites**: 9.
+- **Relics**: 14 boons, 9 curses. **Vows**: 9. **Weathers**: 16. **Trades**: 6. **Sigils**: 35. **Rites**: 9.
 - **Combos**: 47 named readings exist. With three seats down, the reading
   plate says which of the readings the player has already found could still
   be completed by the fourth seat ("Within reach: You reached for the

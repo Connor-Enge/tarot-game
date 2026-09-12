@@ -95,3 +95,18 @@ describe('noteVow', () => {
     expect(resetRecords(k).vows).toBeUndefined();
   });
 });
+
+describe('unlit and lamplit', () => {
+  it('unlit breaks on a lit seat except on the Lit Street; lamplit needs a lamp except where none can or need burn', () => {
+    const unlit = getVow('unlit');
+    const lamplit = getVow('lamplit');
+    const entry = { sceneId: 'crossing', reading: {} as never, resolution: {} as never };
+    expect(unlit.keeps({ ...entry }, SCENES.crossing)).toBe(true);
+    expect(unlit.keeps({ ...entry, lit: ['vessel'] }, SCENES.crossing)).toBe(false);
+    expect(unlit.keeps({ ...entry, lit: ['vessel', 'threshold', 'wake', 'hand'] }, SCENES.lamps)).toBe(true);
+    expect(lamplit.keeps({ ...entry }, SCENES.crossing)).toBe(false);
+    expect(lamplit.keeps({ ...entry, lit: ['hand'] }, SCENES.crossing)).toBe(true);
+    expect(lamplit.keeps({ ...entry }, SCENES.rest)).toBe(true);
+    expect(lamplit.keeps({ ...entry }, SCENES.lamps)).toBe(true);
+  });
+});

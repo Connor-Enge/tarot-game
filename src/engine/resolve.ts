@@ -381,18 +381,20 @@ export interface ResolveOptions {
   namedBonus?: number;
   /** Pairs that know each other, as sorted 'a|b' keys. Each pair on the table lifts the reading. */
   kin?: readonly string[];
+  /** What each kin pair lifts by; KIN_BONUS unless the weather says otherwise. */
+  kinBonus?: number;
 }
 
 export const KIN_BONUS = 0.5;
 
 /** Which of the given pairs are both on the table. */
-export function kinshipAmong(cardIds: readonly string[], kin: readonly string[] | undefined): { pairs: [string, string][]; score: number } {
+export function kinshipAmong(cardIds: readonly string[], kin: readonly string[] | undefined, bonus = KIN_BONUS): { pairs: [string, string][]; score: number } {
   if (!kin || kin.length === 0) return { pairs: [], score: 0 };
   const ids = Array.from(new Set(cardIds)).sort();
   const pairs: [string, string][] = [];
   for (let i = 0; i < ids.length; i++)
     for (let j = i + 1; j < ids.length; j++) if (kin.includes(`${ids[i]}|${ids[j]}`)) pairs.push([ids[i], ids[j]]);
-  return { pairs, score: pairs.length * KIN_BONUS };
+  return { pairs, score: pairs.length * bonus };
 }
 
 export function scoreSlot(scene: Scene, slot: SlotId, drawn: DrawnCard, marks: Marks = {}, chargedBonus = CHARGED_BONUS): SlotResolution {
@@ -449,7 +451,7 @@ export function resolveReading(scene: Scene, reading: Reading, marks: Marks = {}
       comboIds.push(c.id);
     }
   }
-  const kinship = kinshipAmong(SLOT_IDS.map((s) => reading[s].cardId), opts.kin);
+  const kinship = kinshipAmong(SLOT_IDS.map((s) => reading[s].cardId), opts.kin, opts.kinBonus ?? KIN_BONUS);
   if (kinship.pairs.length) total += kinship.score;
   const tier = tierFor(total);
   const base = BASE_DELTAS[tier];

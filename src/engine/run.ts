@@ -110,7 +110,7 @@ export interface RunState {
   /** Counters for the scene in progress. */
   sceneSpent: { redraws: number; whispers: number; turns?: number };
   /** Depth modifiers carried by the run. */
-  mods: { extraNeutralCost: number; noEcho: boolean; abyssStakes?: number; seatTick?: boolean };
+  mods: { extraNeutralCost: number; noEcho: boolean; abyssStakes?: number; seatTick?: boolean; allLit?: boolean; kinBonus?: number };
   slots: SlotState[];
   activeSlot: number;
   phase: Phase;
@@ -228,7 +228,7 @@ export function startRun(seed: number, config: RunConfig = {}): RunState {
     whispers: 0,
     actLayers,
     echo: null,
-    mods: { extraNeutralCost: config.extraNeutralCost ?? 0, noEcho: !!config.noEcho, abyssStakes: config.abyssStakes, seatTick: config.seatTick || undefined },
+    mods: { extraNeutralCost: config.extraNeutralCost ?? 0, noEcho: !!config.noEcho, abyssStakes: config.abyssStakes, seatTick: config.seatTick || undefined, allLit: config.allLit || undefined, kinBonus: config.kinBonus },
     sceneSpent: { redraws: 0, whispers: 0 },
     foretold: [],
     takeBacks: 1 + ((config.startingRelics ?? []).includes('thread') ? 1 : 0),
@@ -268,7 +268,7 @@ function keepsakeShown(run: RunState, state: SlotState): boolean | undefined {
 
 function dealSeat(run: RunState, rng: Rng, deck: DeckState, slot: SlotId): { deck: DeckState; state: SlotState } {
   const rite = currentScene(run).rite;
-  const lit = rite === 'lit' ? true : undefined;
+  const lit = rite === 'lit' || run.mods.allLit ? true : undefined;
   if (run.pendingDeal) {
     return { deck, state: { slot, candidates: run.pendingDeal, chosen: null, whispered: [], lit } };
   }
@@ -597,6 +597,7 @@ function resolve(run: RunState): RunState {
     mendBonus: (hasRelic(run, 'bread') ? 2 : 0) - (hasRelic(run, 'ash') ? 1 : 0) || undefined,
     namedBonus: hasRelic(run, 'wax') ? 0.5 : undefined,
     kin: run.kin,
+    kinBonus: run.mods.kinBonus,
   });
   // The Well's toll: every reading below the first Abyss costs one vitality per Abyss passed, however it went.
   const toll = run.well ?? 0;

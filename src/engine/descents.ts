@@ -36,6 +36,10 @@ export interface RunConfig {
   seatTick?: boolean;
   /** Pairs the reader's Codex knows to have been read together often: kin, as sorted 'a|b' keys. */
   kin?: string[];
+  /** Every seat comes lit, as on the Lit Street. */
+  allLit?: boolean;
+  /** What a kin pair on the table lifts the reading by, if not the usual half point. */
+  kinBonus?: number;
 }
 
 /**

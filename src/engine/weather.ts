@@ -30,6 +30,8 @@ export const WEATHERS: Weather[] = [
   { id: 'candlelit', glyph: '✶', name: 'Candlelit', text: 'You carry a Candle Stub.', config: { startingRelics: ['candle'] } },
   { id: 'guttering', glyph: '⌇', name: 'Guttering', text: 'Tallow follows you. Five clarity to begin.', config: { startingRelics: ['tallow'], startingClarity: 5 } },
   { id: 'black-tide', glyph: '◉', name: 'Black Tide', text: 'The Abyss holds higher stakes.', config: { abyssStakes: 4 } },
+  { id: 'lantern-walk', glyph: '☼', name: 'Lantern Walk', text: 'Every seat is lit. The lamp asks nothing.', config: { allLit: true } },
+  { id: 'old-company', glyph: '✶', name: 'Old Company', text: 'Cards that know each other lift a reading by a full point.', config: { kinBonus: 1 } },
 ];
 
 export function getWeather(id: string): Weather {

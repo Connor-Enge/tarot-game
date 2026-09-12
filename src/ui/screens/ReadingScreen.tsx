@@ -108,7 +108,7 @@ function ReadingScreenInner() {
   );
   const lastPlaced = soFar.seats[soFar.seats.length - 1];
   const knownCombos = useGame((s) => s.knowledge.combos);
-  const kinSoFar = kinshipAmong(soFar.seats.map((x) => x.card.id), run.kin);
+  const kinSoFar = kinshipAmong(soFar.seats.map((x) => x.card.id), run.kin, run.mods.kinBonus ?? KIN_BONUS);
   const placedIds = soFar.seats.map((x) => x.card.id);
   const kinHere = (cardId: string) => !!run.kin && placedIds.some((p) => run.kin!.includes([p, cardId].sort().join('|')));
   const withinReach = soFar.placed === SLOT_IDS.length - 1
@@ -220,7 +220,7 @@ function ReadingScreenInner() {
           )}
           {kinSoFar.pairs.map(([a, b]) => (
             <p key={`${a}|${b}`} className="kin kin--sofar center small">
-              <span className="kin__mark" aria-hidden>✶</span> {getCard(a).name} and {getCard(b).name} know each other. <span className="kin__score">+{KIN_BONUS}</span>
+              <span className="kin__mark" aria-hidden>✶</span> {getCard(a).name} and {getCard(b).name} know each other. <span className="kin__score">+{run.mods.kinBonus ?? KIN_BONUS}</span>
             </p>
           ))}
           {withinReach.length > 0 && (

@@ -115,6 +115,26 @@ const ART: Record<string, () => ReactElement> = {
       <circle cx={130} cy={8} r={3} fill="none" stroke={GOLD_FLAT} strokeWidth={0.6} opacity={0.6} />
     </g>
   ),
+  'lantern-walk': () => (
+    <g>
+      {[18, 48, 78, 108, 138].map((x, k) => (
+        <g key={x}>
+          <line x1={x} y1={36} x2={x} y2={14} stroke="#0a0812" strokeWidth={1.6} />
+          <rect x={x - 2.5} y={10} width={5} height={5} fill="#0a0812" />
+          <rect x={x - 1.5} y={11} width={3} height={3} fill={GOLD_FLAT} opacity={k === 3 ? 0.25 : 0.95} />
+          {k !== 3 && <ellipse cx={x} cy={12} rx={9} ry={7} fill={GOLD_FLAT} opacity={0.12} />}
+        </g>
+      ))}
+      <path d="M0 36 V33 H150 V36 Z" fill="#0a0812" />
+    </g>
+  ),
+  'old-company': () => (
+    <g>
+      {[[40, 12], [70, 22], [110, 10], [125, 24]].map(([x, y], k) => <circle key={k} cx={x} cy={y} r={1.4} fill="#bfe6f5" opacity={0.9} />)}
+      <path d="M40 12 L70 22 M110 10 L125 24" stroke="#bfe6f5" strokeWidth={0.6} opacity={0.7} />
+      <path d="M0 36 V30 Q40 26 75 30 T150 30 V36 Z" fill="#0a0812" />
+    </g>
+  ),
 };
 
 /** The sky behind each weather: two stops, top to horizon. */
@@ -133,6 +153,8 @@ const SKY: Record<string, [string, string]> = {
   candlelit: ['#160e10', '#3c2418'],
   guttering: ['#1a0c10', '#3a1418'],
   'black-tide': ['#050410', '#0e0c1e'],
+  'lantern-walk': ['#14100c', '#3a2c14'],
+  'old-company': ['#0c1424', '#1e3040'],
 };
 
 /** A moon at the given phase, 0 new through 0.5 full to 1 new again. The shadow disc is clipped to the moon. */
