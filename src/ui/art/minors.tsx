@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 import type { Suit } from '../../engine';
 import { ROBE, ROBE_PALE } from './palette';
 import { BLOOD, Cloud, Flame, GOLD, GOLD_FLAT, Horse, INK, Moon, Mountains, PALE, Star, Sun, SUIT_SYMBOL, Throne, Tree, Water } from './primitives';
-import { Person, hands, type Pose } from './figure';
+import { Person, hands, SKIN, SKIN_INK, type Pose } from './figure';
 import type { Arms } from './primitives';
 
 /** The old silhouette's arm names, mapped onto the drawn figure's poses. */
@@ -595,14 +595,26 @@ export function minorArt(suit: Suit, rank: number): ReactElement {
     return (
       <g>
         <AceScene suit={suit} />
-        <Cloud x={-10} y={64} w={36} />
-        {/* an open hand from the cloud */}
-        <path d="M14 60 q8 -6 18 -2 l6 -3 q2 3 -2 5 l3 -1 q2 3 -3 5 q-4 4 -12 4 q-8 0 -10 -4 z" fill={PALE} stroke={INK} strokeWidth={0.7} strokeLinejoin="round" />
-        <Sym x={50} y={52} s={17} />
         {Array.from({ length: 8 }, (_, i) => {
           const a = (i / 8) * Math.PI * 2;
           return <line key={i} x1={50 + Math.cos(a) * 22} y1={52 + Math.sin(a) * 22} x2={50 + Math.cos(a) * 26} y2={52 + Math.sin(a) * 26} stroke={GOLD_FLAT} strokeWidth={0.8} strokeLinecap="round" />;
         })}
+        {/* yods fall about the gift */}
+        {[[26, 26], [74, 30], [70, 74], [30, 86], [66, 14], [20, 40], [76, 52], [38, 10]].map(([x, y], i) => (
+          <path key={i} d={`M${x} ${y} q1.2 3 0 5 q-1.2 -2 0 -5`} fill={GOLD_FLAT} opacity={0.85} />
+        ))}
+        <Cloud x={-10} y={64} w={36} />
+        {/* a hand from the cloud, cuffed, gripping the gift: forearm, palm, then the fingers over the stem */}
+        <path d="M14 56 q10 -2 20 0 v9 q-10 2 -20 0 z" fill={SKIN} stroke={SKIN_INK} strokeWidth={0.5} />
+        <path d="M13 54 h7 v13 h-7 z" fill={PALE} stroke={INK} strokeWidth={0.5} />
+        <path d="M13 54 h7 v13 h-7 z" fill="url(#hatch)" opacity={0.5} />
+        <path d="M32 55 q7 -4 14 -1 l3 3 v7 l-3 3 q-7 3 -14 -1 z" fill={SKIN} stroke={SKIN_INK} strokeWidth={0.5} />
+        <path d="M40 57 q3 -1 5 0 M40 63 q3 1 5 0" fill="none" stroke={SKIN_INK} strokeWidth={0.3} opacity={0.6} />
+        <Sym x={50} y={52} s={17} />
+        {[54.5, 58, 61.5, 65].map((y, i) => (
+          <rect key={i} x={44} y={y} width={9.5 - i * 0.6} height={3} rx={1.5} fill={SKIN} stroke={SKIN_INK} strokeWidth={0.4} />
+        ))}
+        <path d="M40 55 q5 -6 11 -4 q-1 3 -7 5 z" fill={SKIN} stroke={SKIN_INK} strokeWidth={0.4} />
       </g>
     );
   }
