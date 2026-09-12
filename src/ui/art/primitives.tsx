@@ -154,22 +154,46 @@ export function Figure({ x, y, h = 36, arms = 'down', fill = INK, cloak = false,
 }
 
 export function Throne({ x, y, w = 30, h = 34, fill = PALE, back = 'plain', dais = false }: P & { w?: number; h?: number; fill?: string; back?: 'plain' | 'arch' | 'square'; dais?: boolean }) {
+  const dark = fill === INK;
+  const line = dark ? PALE : INK;
   return (
     <g>
       {dais && (
         <g>
           <rect x={x - w / 2 - 12} y={y} width={w + 24} height={4} fill={fill} stroke={INK} strokeWidth={0.7} />
+          <rect x={x - w / 2 - 12} y={y} width={w + 24} height={4} fill="url(#hatch)" opacity={0.4} />
           <rect x={x - w / 2 - 18} y={y + 4} width={w + 36} height={4} fill={fill} stroke={INK} strokeWidth={0.7} />
+          <rect x={x - w / 2 - 18} y={y + 4} width={w + 36} height={4} fill="url(#hatch)" opacity={0.4} />
         </g>
       )}
-      {back === 'arch' && <path d={`M${x - w / 2} ${y - h} a${w / 2} ${w / 2} 0 0 1 ${w} 0 Z`} fill={fill} stroke={INK} strokeWidth={0.8} />}
-      {back === 'arch' && <path d={`M${x - w / 2 + 4} ${y - h} a${w / 2 - 4} ${w / 2 - 4} 0 0 1 ${w - 8} 0`} fill="none" stroke={INK} strokeWidth={0.5} opacity={0.6} />}
-      {back === 'square' && <rect x={x - w / 2} y={y - h - 14} width={w} height={14} fill={fill} stroke={INK} strokeWidth={0.8} />}
-      {back === 'square' && [x - w / 2, x + w / 2].map((fx) => <circle key={fx} cx={fx} cy={y - h - 15} r={2.2} fill={GOLD_FLAT} stroke={INK} strokeWidth={0.5} />)}
-      {back === 'square' && <path d={`M${x - w / 2 + 4} ${y - h - 10} h${w - 8} M${x - w / 2 + 4} ${y - h - 6} h${w - 8}`} stroke={INK} strokeWidth={0.5} opacity={0.6} />}
+      {back === 'arch' && (
+        <g>
+          <path d={`M${x - w / 2} ${y - h} a${w / 2} ${w / 2} 0 0 1 ${w} 0 Z`} fill={fill} stroke={INK} strokeWidth={0.8} />
+          <path d={`M${x - w / 2 + 4} ${y - h} a${w / 2 - 4} ${w / 2 - 4} 0 0 1 ${w - 8} 0`} fill="none" stroke={line} strokeWidth={0.5} opacity={0.6} />
+          <path d={`M${x - w / 2 + 2} ${y - h} a${w / 2 - 2} ${w / 2 - 2} 0 0 1 ${w - 4} 0 Z`} fill="url(#hatch)" opacity={0.35} />
+          {/* a carved shell in the crown of the arch */}
+          <path d={`M${x - 4} ${y - h - w / 2 + 6} q4 -5 8 0 M${x - 2.5} ${y - h - w / 2 + 6} q2.5 -3.5 5 0 M${x} ${y - h - w / 2 + 6} v-4`} fill="none" stroke={line} strokeWidth={0.4} opacity={0.7} />
+        </g>
+      )}
+      {back === 'square' && (
+        <g>
+          <rect x={x - w / 2} y={y - h - 14} width={w} height={14} fill={fill} stroke={INK} strokeWidth={0.8} />
+          <rect x={x - w / 2} y={y - h - 14} width={w} height={14} fill="url(#hatch)" opacity={0.35} />
+          {[x - w / 2, x + w / 2].map((fx) => <circle key={fx} cx={fx} cy={y - h - 15} r={2.2} fill={GOLD_FLAT} stroke={INK} strokeWidth={0.5} />)}
+          <path d={`M${x - w / 2 + 4} ${y - h - 10} h${w - 8} M${x - w / 2 + 4} ${y - h - 6} h${w - 8}`} stroke={line} strokeWidth={0.5} opacity={0.6} />
+          {/* carved lozenges along the back rail */}
+          {[-1, 0, 1].map((k) => <path key={k} d={`M${x + k * (w / 3.4)} ${y - h - 10.5} l2 2.5 l-2 2.5 l-2 -2.5 z`} fill="none" stroke={line} strokeWidth={0.4} opacity={0.7} />)}
+        </g>
+      )}
       <rect x={x - w / 2} y={y - h} width={w} height={h} fill={fill} stroke={INK} strokeWidth={0.8} />
+      <rect x={x + w / 2 - w * 0.3} y={y - h} width={w * 0.3} height={h} fill="url(#hatch)" opacity={0.45} />
+      {/* the seat's edge and a carved panel on the front */}
+      <path d={`M${x - w / 2} ${y - h * 0.5} h${w}`} stroke={line} strokeWidth={0.5} opacity={0.6} />
+      <rect x={x - w / 2 + 3} y={y - h * 0.42} width={w - 6} height={h * 0.32} fill="none" stroke={line} strokeWidth={0.4} opacity={0.5} />
       <rect x={x - w / 2 - 3} y={y - h * 0.5} width={3} height={h * 0.5} fill={fill} stroke={INK} strokeWidth={0.8} />
       <rect x={x + w / 2} y={y - h * 0.5} width={3} height={h * 0.5} fill={fill} stroke={INK} strokeWidth={0.8} />
+      <circle cx={x - w / 2 - 1.5} cy={y - h * 0.5} r={1.6} fill={fill} stroke={INK} strokeWidth={0.5} />
+      <circle cx={x + w / 2 + 1.5} cy={y - h * 0.5} r={1.6} fill={fill} stroke={INK} strokeWidth={0.5} />
     </g>
   );
 }
