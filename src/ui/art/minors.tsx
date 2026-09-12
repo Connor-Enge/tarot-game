@@ -1108,10 +1108,16 @@ function Court({ suit, rank }: { suit: Suit; rank: number }): ReactElement {
         )}
         {suit === 'cups' && (
           <g>
+            {/* a scallop shell crowns the throne; the lidded cup with its angels; a shell and pebbles at the water's edge */}
+            <path d="M28 46 q12 -14 24 0 z" fill={PALE} stroke={INK} strokeWidth={0.5} />
+            <path d="M40 46 v-10 M40 46 l-7 -7 M40 46 l7 -7 M40 46 l-10 -3 M40 46 l10 -3" stroke={INK} strokeWidth={0.35} opacity={0.7} />
             <Sym x={40} y={74} s={7} />
-            <path d="M34 64 q6 -6 12 0" fill="none" stroke={GOLD_FLAT} strokeWidth={0.8} />
+            <path d="M35 68.5 q5 -6 10 0 l-1 1.5 h-8 z" fill={GOLD} stroke={INK} strokeWidth={0.4} />
+            <path d="M40 66 v-3 M38.5 63 h3" stroke={INK} strokeWidth={0.5} />
+            <path d="M33 74 q-3 -4 -1 -7 q2 1 2 5 M47 74 q3 -4 1 -7 q-2 1 -2 5" fill={PALE} stroke={INK} strokeWidth={0.3} />
             <path d="M8 104 a7 7 0 0 1 14 0 z" fill={PALE} stroke={INK} strokeWidth={0.5} />
-            <path d="M10 104 l5 -6 M15 104 v-7 M20 104 l-5 -6" stroke={INK} strokeWidth={0.4} />
+            <path d="M10 104 l5 -6 M15 104 v-7 M20 104 l-5 -6 M12 104 l3 -4 M18 104 l-3 -4" stroke={INK} strokeWidth={0.4} />
+            {[[62, 104], [68, 106], [74, 103]].map(([x, y], i) => <ellipse key={i} cx={x} cy={y} rx={2.2} ry={1.2} fill={STONE} stroke={INK} strokeWidth={0.3} />)}
           </g>
         )}
         {suit === 'swords' && (
@@ -1156,7 +1162,18 @@ function Court({ suit, rank }: { suit: Suit; rank: number }): ReactElement {
         </g>
       ); })()}
       {suit === 'wands' && [18, 62].map((x) => <path key={x} d={`M${x} 90 q4 -6 8 0 q-4 4 -8 0 z`} fill={GOLD_FLAT} stroke={INK} strokeWidth={0.4} />)}
-      {suit === 'cups' && <path d="M8 100 q5 -4 10 0 q-5 4 -10 0 z M18 100 l4 -3 v6 z" fill={PALE} stroke={INK} strokeWidth={0.5} />}
+      {suit === 'cups' && (
+        <g>
+          {/* a fish leaps from the sea at his left hand; a ship rides the swell at his right; a fish amulet at his throat */}
+          <path d="M6 98 q6 -8 12 -2 q-6 8 -12 2 z" fill={PALE} stroke={INK} strokeWidth={0.5} />
+          <path d="M18 96 l5 -4 l-1 5 l1 5 z" fill={PALE} stroke={INK} strokeWidth={0.5} />
+          <circle cx={9.5} cy={96.5} r={0.5} fill={INK} />
+          <path d="M10 99 q3 -2 6 -1" fill="none" stroke={INK} strokeWidth={0.3} opacity={0.6} />
+          <path d="M64 92 v-12 M64 80 l7 8 h-7 z" fill={PALE} stroke={INK} strokeWidth={0.4} />
+          <path d="M58 92 h14 l-3 4 h-8 z" fill="#5a3a22" stroke={INK} strokeWidth={0.4} />
+          <path d="M37 60 q3 -2 5 0 q-2 2 -5 0 z" fill={GOLD_FLAT} stroke={INK} strokeWidth={0.3} />
+        </g>
+      )}
       {suit === 'pentacles' && (
         <g>
           {/* the bull's head carved on the throne's foot, horns curved, a ring in the nose */}
