@@ -418,24 +418,39 @@ const SWORDS: Record<number, () => ReactElement> = {
   2: () => (
     <g>
       <Moon x={66} y={14} r={5} />
+      <Mountains y={54} opacity={0.15} />
       <Water y={60} rows={3} />
-      {[12, 30, 50].map((x, i) => <ellipse key={x} cx={x} cy={64 + i * 2} rx={5} ry={2} fill={STONE} />)}
-      <rect x={20} y={90} width={40} height={12} fill={STONE} opacity={0.8} />
-      <Person x={40} y={96} h={44} pose="hold" robe={ROBE_PALE.swords} />
-      <rect x={35} y={58} width={10} height={2.4} fill={INK} />
-      <Row suit="swords" xs={[30]} y={62} s={13} angle={-35} />
-      <Row suit="swords" xs={[50]} y={62} s={13} angle={35} />
+      {[12, 30, 52].map((x, i) => (
+        <g key={x}>
+          <ellipse cx={x} cy={64 + i * 2} rx={5} ry={2.2} fill={STONE} stroke={INK} strokeWidth={0.4} />
+          <ellipse cx={x + 1.5} cy={64.6 + i * 2} rx={3} ry={1.4} fill="url(#hatch)" opacity={0.6} />
+        </g>
+      ))}
+      {/* a stone bench; she sits blindfolded with a sword in either hand, crossed over her breast */}
+      <rect x={18} y={92} width={44} height={12} fill={STONE} stroke={INK} strokeWidth={0.6} />
+      <rect x={18} y={92} width={44} height={12} fill="url(#hatch)" opacity={0.5} />
+      <Person x={40} y={98} h={46} pose="sit-hold" robe={ROBE_PALE.swords} inner={PALE} hair="#3a2a1e" belt={null} />
+      <Row suit="swords" xs={[29]} y={64} s={15} angle={-32} />
+      <Row suit="swords" xs={[51]} y={64} s={15} angle={32} />
+      <path d="M34 78 q6 -10 14 -14 M46 78 q-6 -10 -14 -14" fill="none" stroke={ROBE_PALE.swords} strokeWidth={3.4} strokeLinecap="round" />
+      <path d="M34 78 q6 -10 14 -14 M46 78 q-6 -10 -14 -14" fill="none" stroke={INK} strokeWidth={0.4} opacity={0.5} />
+      <rect x={35.2} y={55.4} width={9.6} height={2.6} rx={0.6} fill={PALE} stroke={INK} strokeWidth={0.4} />
     </g>
   ),
   3: () => (
     <g>
+      <rect x={0} y={0} width={80} height={112} fill={STONE} opacity={0.25} />
       <Cloud x={-6} y={22} w={40} />
       <Cloud x={44} y={20} w={42} />
-      {Array.from({ length: 14 }, (_, i) => <line key={i} x1={6 + i * 5.5} y1={26 + (i % 3) * 6} x2={4 + i * 5.5} y2={38 + (i % 3) * 6} stroke={PALE} strokeWidth={0.7} opacity={0.8} />)}
-      <path d="M40 92 C18 76 14 50 40 58 C66 50 62 76 40 92 Z" fill={BLOOD} stroke={INK} strokeWidth={0.8} />
-      <Row suit="swords" xs={[40]} y={64} s={16} />
-      <Row suit="swords" xs={[30]} y={62} s={16} angle={-28} />
-      <Row suit="swords" xs={[50]} y={62} s={16} angle={28} />
+      {Array.from({ length: 16 }, (_, i) => <line key={i} x1={4 + i * 5} y1={26 + (i % 3) * 6} x2={2 + i * 5} y2={40 + (i % 3) * 6} stroke={PALE} strokeWidth={0.7} opacity={0.8} />)}
+      {Array.from({ length: 12 }, (_, i) => <line key={i} x1={6 + i * 6.5} y1={70 + (i % 4) * 8} x2={4.5 + i * 6.5} y2={80 + (i % 4) * 8} stroke={PALE} strokeWidth={0.6} opacity={0.6} />)}
+      {/* the heart, full and shaded, the three blades through it */}
+      <path d="M40 94 C16 78 12 50 40 58 C68 50 64 78 40 94 Z" fill={BLOOD} stroke={INK} strokeWidth={0.8} />
+      <path d="M40 94 C52 84 62 72 60 62 C56 54 46 54 40 58 Z" fill="url(#crosshatch)" opacity={0.55} />
+      <path d="M26 64 q4 -4 9 -2" fill="none" stroke={PALE} strokeWidth={1.2} strokeLinecap="round" opacity={0.6} />
+      <Row suit="swords" xs={[40]} y={70} s={17} angle={180} />
+      <Row suit="swords" xs={[30]} y={68} s={17} angle={152} />
+      <Row suit="swords" xs={[50]} y={68} s={17} angle={208} />
     </g>
   ),
   4: () => (
@@ -567,12 +582,22 @@ const PENTACLES: Record<number, () => ReactElement> = {
   ),
   4: () => (
     <g>
-      {[4, 18, 32, 50, 64].map((x, i) => <rect key={x} x={x} y={40 - (i % 2) * 8} width={10} height={40} fill={STONE} opacity={0.5} />)}
+      {/* the city behind him, towers with lit windows */}
+      {[4, 18, 32, 50, 64].map((x, i) => (
+        <g key={x}>
+          <rect x={x} y={40 - (i % 2) * 8} width={10} height={40} fill={STONE} opacity={0.5} />
+          <rect x={x + 5} y={40 - (i % 2) * 8} width={5} height={40} fill="url(#hatch)" opacity={0.4} />
+          <path d={`M${x - 0.5} ${40 - (i % 2) * 8} h3 v-3 h2 v3 h3 v-3 h2 v3 h1.5`} fill={STONE} opacity={0.5} />
+          {[0, 1, 2].map((k) => <rect key={k} x={x + 3} y={48 - (i % 2) * 8 + k * 9} width={2.2} height={3.2} fill={GOLD_FLAT} opacity={0.5} />)}
+        </g>
+      ))}
       <Ground y={88} fill={STONE} opacity={0.5} />
-      <rect x={26} y={86} width={28} height={12} fill="#8a6a3a" stroke={INK} strokeWidth={0.6} />
-      <Person x={40} y={92} h={44} pose="hold" robe={ROBE.pentacles} crown />
+      <rect x={24} y={86} width={32} height={12} fill="#8a6a3a" stroke={INK} strokeWidth={0.6} />
+      <rect x={24} y={86} width={32} height={12} fill="url(#hatch)" opacity={0.4} />
+      {/* he clutches a coin to his breast, one balanced on his crown, one under either foot */}
+      <Person x={40} y={92} h={44} pose="hold" robe={ROBE.pentacles} inner={ROBE_PALE.pentacles} hair="#5a3a22" crown />
       <Row suit="pentacles" xs={[40]} y={74} s={7} />
-      <Row suit="pentacles" xs={[40]} y={44} s={5} />
+      <Row suit="pentacles" xs={[40]} y={39} s={4.5} />
       <Row suit="pentacles" xs={[30, 50]} y={100} s={5.5} />
     </g>
   ),
