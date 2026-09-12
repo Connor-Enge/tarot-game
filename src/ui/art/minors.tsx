@@ -315,22 +315,60 @@ const WANDS: Record<number, () => ReactElement> = {
 const CUPS: Record<number, () => ReactElement> = {
   2: () => (
     <g>
+      {/* the house on its hill behind; the two face each other and exchange cups under the caduceus and the winged lion */}
+      <Mountains y={70} opacity={0.12} />
+      <path d="M52 76 q8 -10 24 -6 v10 h-24 z" fill={GREEN} opacity={0.35} />
+      <path d="M60 72 v-8 h10 v8 z M58 64 l7 -5 l7 5 z M64 72 v-4 h3 v4" fill={PALE} stroke={INK} strokeWidth={0.4} />
       <Ground y={94} fill={GREEN} opacity={0.6} />
-      <Person x={26} y={102} h={44} pose="raise-right" robe={ROBE.cups} />
-      <Person x={54} y={102} h={44} pose="raise-left" robe={ROBE_PALE.cups} />
-      <Row suit="cups" xs={[30, 50]} y={70} s={7} />
-      <path d="M40 46 v-18 M36 30 q4 -4 8 0 M36 24 q4 -4 8 0" fill="none" stroke={GOLD_FLAT} strokeWidth={1.2} />
-      <path d="M34 22 q6 -8 12 0" fill="none" stroke={BLOOD} strokeWidth={1.8} />
+      <Person x={26} y={102} h={44} pose="reach-right" robe={ROBE.cups} inner={ROBE_PALE.cups} hair="#3a2a1e" />
+      <Person x={54} y={102} h={44} pose="reach-left" robe={ROBE_PALE.cups} inner={PALE} hair="#d9a441" belt={GOLD_FLAT} />
+      <path d="M22 60 q4 -4 8 0 l1 3 q-5 -2 -10 0 z" fill={GOLD_FLAT} stroke={INK} strokeWidth={0.4} />
+      <path d="M49 61 q5 -5 10 0 v6 q-5 -3 -10 0 z" fill={PALE} stroke={INK} strokeWidth={0.4} />
+      {(() => { const l = hands(26, 102, 44, 'reach-right'); const r = hands(54, 102, 44, 'reach-left'); return (
+        <g>
+          <CupSym x={l.r.x + 1} y={l.r.y - 4} s={6} />
+          <CupSym x={r.l.x - 1} y={r.l.y - 4} s={6} />
+        </g>
+      ); })()}
+      {/* the caduceus: the staff, two serpents twined, wings, the lion's head above */}
+      <path d="M40 66 v-30" stroke={GOLD_FLAT} strokeWidth={1.3} strokeLinecap="round" />
+      <path d="M36 62 q4 -4 8 -8 q-4 -4 -8 -8 q4 -4 8 -8 M44 62 q-4 -4 -8 -8 q4 -4 8 -8 q-4 -4 -8 -8" fill="none" stroke={BLOOD} strokeWidth={1.2} strokeLinecap="round" />
+      <path d="M38 38 q-6 -6 -10 -2 q4 0 6 4 M42 38 q6 -6 10 -2 q-4 0 -6 4" fill={PALE} stroke={INK} strokeWidth={0.4} />
+      <circle cx={40} cy={30} r={4} fill="#c98a3c" stroke={INK} strokeWidth={0.5} />
+      {Array.from({ length: 10 }, (_, i) => { const a = (i / 10) * Math.PI * 2; return <line key={i} x1={40 + Math.cos(a) * 4} y1={30 + Math.sin(a) * 4} x2={40 + Math.cos(a) * 6.2} y2={30 + Math.sin(a) * 6.2} stroke="#8a5a22" strokeWidth={1.4} strokeLinecap="round" />; })}
+      <circle cx={38.6} cy={29.4} r={0.5} fill={INK} />
+      <circle cx={41.4} cy={29.4} r={0.5} fill={INK} />
+      <path d="M39 32 q1 1 2 0" fill="none" stroke={INK} strokeWidth={0.4} />
     </g>
   ),
   3: () => (
     <g>
+      {/* three dance in a ring with cups raised, the harvest heaped about their feet */}
+      <Mountains y={74} opacity={0.12} />
       <Ground y={96} fill={GOLD_FLAT} opacity={0.5} />
-      {[[22, 'right-up'], [40, 'up'], [58, 'left-up']].map(([x, a], i) => (
-        <Person key={i} x={x as number} y={104} h={42} pose={POSE_OF[a as Arms]} robe={[ROBE.cups, ROBE_PALE.cups, '#e9d9b6'][i]} />
+      <Person x={22} y={104} h={42} pose="raise-right" robe={ROBE.cups} inner={ROBE_PALE.cups} hair="#3a2a1e" belt={GOLD_FLAT} />
+      <Person x={40} y={104} h={42} pose="up" robe={PALE} inner="#f3ecd8" hair="#d9a441" belt={BLOOD} />
+      <Person x={58} y={104} h={42} pose="raise-left" robe="#d9b86a" inner="#e9d9b6" hair="#8a5a3a" belt={LEAF} />
+      {(() => { const a = hands(22, 104, 42, 'raise-right'); const b = hands(40, 104, 42, 'up'); const c = hands(58, 104, 42, 'raise-left'); return (
+        <g>
+          <CupSym x={a.r.x} y={a.r.y - 5} s={6} />
+          <CupSym x={b.r.x} y={b.r.y - 5} s={6} />
+          <CupSym x={c.l.x} y={c.l.y - 5} s={6} />
+        </g>
+      ); })()}
+      {[[10, 103], [30, 105], [50, 105], [70, 103]].map(([x, y], i) => (
+        <g key={i}>
+          <ellipse cx={x} cy={y} rx={4.4} ry={2.8} fill="#d98a3c" stroke={INK} strokeWidth={0.4} />
+          <path d={`M${x - 2} ${y - 2.6} q2 -1 4 0 M${x} ${y - 2.8} v-2`} fill="none" stroke={INK} strokeWidth={0.4} />
+          <path d={`M${x - 1.5} ${y - 2.4} v4.8 M${x + 1.5} ${y - 2.4} v4.8`} stroke={INK} strokeWidth={0.3} opacity={0.5} />
+        </g>
       ))}
-      <Row suit="cups" xs={[18, 40, 62]} y={52} s={7} />
-      {[10, 30, 50, 70].map((x) => <ellipse key={x} cx={x} cy={102} rx={4} ry={2.5} fill="#d98a3c" stroke={INK} strokeWidth={0.4} />)}
+      {[[20, 100], [62, 100]].map(([x, y], i) => (
+        <g key={i}>
+          {[0, 1, 2, 3, 4, 5].map((k) => <circle key={k} cx={x + (k % 3) * 1.8 - 1.8} cy={y + Math.floor(k / 3) * 1.8} r={1.1} fill="#7a3fa0" stroke={INK} strokeWidth={0.2} />)}
+          <path d={`M${x} ${y - 1.5} q-3 -3 -5 -1`} fill="none" stroke={LEAF} strokeWidth={0.6} />
+        </g>
+      ))}
     </g>
   ),
   4: () => (
@@ -370,14 +408,30 @@ const CUPS: Record<number, () => ReactElement> = {
   ),
   6: () => (
     <g>
+      {/* the courtyard of the old house: the elder child offers a cup of flowers to the younger; the guard walks off; six cups bloom */}
       <rect x={0} y={44} width={80} height={68} fill={GOLD_FLAT} opacity={0.25} />
-      <rect x={54} y={30} width={26} height={40} fill={PALE} stroke={INK} strokeWidth={0.6} />
-      <path d="M54 30 l13 -10 l13 10 z" fill={BLOOD} stroke={INK} strokeWidth={0.5} />
-      <Person x={30} y={104} h={34} pose="raise-right" robe={ROBE.cups} />
-      <Person x={50} y={104} h={24} pose="raise-left" robe={ROBE_PALE.cups} />
-      <Row suit="cups" xs={[42]} y={76} s={6} />
-      <Row suit="cups" xs={[10, 22, 66, 74, 12]} y={98} s={5.5} />
-      {[42, 10, 22, 66, 74, 12].map((x, i) => <path key={i} d={`M${x} ${i === 0 ? 70 : 92} l-2 -3 l2 -1 l2 1 z`} fill={PALE} stroke={INK} strokeWidth={0.3} />)}
+      <rect x={50} y={30} width={30} height={42} fill={PALE} stroke={INK} strokeWidth={0.6} />
+      <rect x={50} y={30} width={30} height={42} fill="url(#hatch)" opacity={0.25} />
+      <path d="M50 30 l15 -12 l15 12 z" fill={BLOOD} stroke={INK} strokeWidth={0.5} />
+      <path d="M56 40 h6 v7 h-6 z M68 40 h6 v7 h-6 z M62 72 v-12 h8 v12" fill="#7fa3c9" stroke={INK} strokeWidth={0.4} />
+      <path d="M62 72 v-12 h8 v12" fill="#5a3a22" />
+      <path d="M0 80 h80 M0 90 h80 M0 100 h80 M16 80 v10 M40 80 v10 M64 80 v10 M28 90 v10 M52 90 v10" stroke={INK} strokeWidth={0.4} opacity={0.3} />
+      <rect x={4} y={50} width={8} height={30} fill={STONE} opacity={0.6} />
+      <path d="M5 56 h6 v8 h-6 z M5 56 l6 8 M11 56 l-6 8" fill={PALE} stroke={INK} strokeWidth={0.4} />
+      <Person x={70} y={64} h={18} pose="walk" robe={STONE} hair="none" face={false} belt={null} shade={false} />
+      <path d="M69 47 v6" stroke={INK} strokeWidth={0.8} />
+      <Person x={30} y={104} h={34} pose="reach-right" robe={ROBE.cups} inner={ROBE_PALE.cups} hair="#d9a441" />
+      <path d="M26.5 73 q3.5 -3 7 0 l0.5 2 h-8 z" fill={BLOOD} stroke={INK} strokeWidth={0.3} />
+      <Person x={52} y={104} h={24} pose="reach-left" robe={ROBE_PALE.cups} inner={PALE} hair="#3a2a1e" belt={null} />
+      {(() => { const hd = hands(30, 104, 34, 'reach-right'); return <CupSym x={hd.r.x + 1} y={hd.r.y - 4} s={5.5} />; })()}
+      <Row suit="cups" xs={[10, 22, 66, 76]} y={98} s={5.5} />
+      <Row suit="cups" xs={[14]} y={84} s={5.5} />
+      {[[10, 92], [22, 92], [66, 92], [76, 92], [14, 78], [44, 75]].map(([x, y], i) => (
+        <g key={i}>
+          {[0, 1, 2, 3, 4].map((k) => { const a = (k / 5) * Math.PI * 2 - Math.PI / 2; return <circle key={k} cx={x + Math.cos(a) * 1.6} cy={y + Math.sin(a) * 1.6} r={1} fill={PALE} stroke={INK} strokeWidth={0.2} />; })}
+          <circle cx={x} cy={y} r={0.6} fill={GOLD_FLAT} />
+        </g>
+      ))}
     </g>
   ),
   7: () => (
