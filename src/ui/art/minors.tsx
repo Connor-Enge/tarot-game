@@ -3,10 +3,7 @@ import type { Suit } from '../../engine';
 import { ROBE, ROBE_PALE } from './palette';
 import { BLOOD, Cloud, Flame, GOLD, GOLD_FLAT, Horse, INK, Moon, Mountains, PALE, Star, Sun, SUIT_SYMBOL, Cup as CupSym, Pentacle as PentSym, Sword as SwordSym, Throne, Tree, Water } from './primitives';
 import { Person, Rose, hands, LEAF, SKIN, SKIN_INK, type Pose } from './figure';
-import type { Arms } from './primitives';
 
-/** The old silhouette's arm names, mapped onto the drawn figure's poses. */
-const POSE_OF: Record<Arms, Pose> = { down: 'stand', up: 'up', raised: 'up', out: 'out', 'left-up': 'raise-left', 'right-up': 'raise-right', hold: 'hold' };
 
 /**
  * The numbered Minors are scenes, after the Waite-Smith convention: every
@@ -216,34 +213,69 @@ const WANDS: Record<number, () => ReactElement> = {
   ),
   4: () => (
     <g>
-      <rect x={0} y={40} width={80} height={72} fill={STONE} opacity={0.25} />
-      <Row suit="wands" xs={[14, 30, 50, 66]} y={70} s={12} />
-      <path d="M14 46 q26 16 52 0" fill="none" stroke={GREEN} strokeWidth={3} />
-      {[20, 32, 44, 56].map((x, i) => <circle key={x} cx={x} cy={52 + Math.sin(i * 1.2) * 2} r={2} fill={BLOOD} stroke={INK} strokeWidth={0.3} />)}
-      <Person x={32} y={104} h={26} pose="up" robe={ROBE_PALE.wands} />
-      <Person x={48} y={104} h={26} pose="up" robe={ROBE.wands} />
+      {/* the castle beyond the moat; four staves hung with a garland of leaves, fruit and roses; two with bouquets raised */}
+      <path d="M44 62 h32 v-20 h-32 z M46 42 v-5 h4 v5 M54 42 v-8 h6 v8 M66 42 v-5 h4 v5 M72 42 v-6 h4 v6" fill={STONE} opacity={0.55} />
+      <path d="M60 62 v-10 h6 v10" fill={INK} opacity={0.4} />
+      <path d="M50 46 h3 v3 h-3 z M68 48 h3 v3 h-3 z" fill={GOLD_FLAT} opacity={0.6} />
+      <path d="M0 68 h80 v10 h-80 z" fill="#7fa3c9" opacity={0.35} />
+      <Water y={72} rows={1} />
       <Ground y={100} fill={GOLD_FLAT} opacity={0.5} />
+      <Row suit="wands" xs={[14, 30, 50, 66]} y={70} s={12} />
+      <path d="M14 46 q26 16 52 0" fill="none" stroke={LEAF} strokeWidth={3.2} />
+      {[18, 26, 34, 46, 54, 62].map((x, i) => <path key={x} d={`M${x} ${48 + Math.sin(i * 1.1) * 3} q-3 -4 -1 -6 q3 2 1 6 q3 -4 5 -2 q-3 3 -5 2`} fill={LEAF} stroke={INK} strokeWidth={0.3} />)}
+      {[[22, 52], [40, 56], [58, 52]].map(([x, y], i) => <Rose key={i} x={x} y={y} r={2} />)}
+      {[[30, 55], [50, 55]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r={2} fill="#d98a3c" stroke={INK} strokeWidth={0.3} />)}
+      <Person x={30} y={104} h={32} pose="up" robe={ROBE_PALE.wands} inner={PALE} hair="#d9a441" belt={BLOOD} />
+      <Person x={50} y={104} h={32} pose="up" robe={ROBE.wands} inner={ROBE_PALE.wands} hair="#3a2a1e" />
+      {(() => { const a = hands(30, 104, 32, 'up'); const b = hands(50, 104, 32, 'up'); return (
+        <g>
+          {[a.l, a.r, b.l, b.r].map((h, i) => (
+            <g key={i}>
+              <path d={`M${h.x} ${h.y} l${i % 2 ? 1 : -1} -6`} stroke={LEAF} strokeWidth={0.8} />
+              <Rose x={h.x + (i % 2 ? 1 : -1)} y={h.y - 7} r={1.8} color={i < 2 ? BLOOD : GOLD_FLAT} />
+            </g>
+          ))}
+        </g>
+      ); })()}
     </g>
   ),
   5: () => (
     <g>
+      {/* five at odds, staves crossing every way, on rough ground */}
+      <Mountains y={70} opacity={0.12} />
       <Ground y={92} fill="#9aa27a" />
-      {[[12, 100, 'right-up'], [28, 96, 'up'], [44, 102, 'left-up'], [60, 96, 'right-up'], [72, 104, 'up']].map(([x, y, a], i) => (
-        <Person key={i} x={x as number} y={y as number} h={30} pose={POSE_OF[a as Arms]} robe={i % 2 ? ROBE.wands : ROBE_PALE.wands} />
+      {[[12, 100, 'raise-right', ROBE_PALE.wands, '#3a2a1e'], [28, 96, 'up', ROBE.wands, '#d9a441'], [44, 102, 'raise-left', '#3f6fa8', '#8a5a3a'], [60, 96, 'raise-right', LEAF, '#3a2a1e'], [72, 104, 'up', '#d9b86a', '#c94a3a']].map(([x, y, a, robe, hair], i) => (
+        <Person key={i} x={x as number} y={y as number} h={30} pose={a as Pose} robe={robe as string} hair={hair as string} belt={GOLD_FLAT} />
       ))}
-      <Row suit="wands" xs={[10, 30, 46, 62, 74]} y={62} s={9} angle={-20} />
+      {(() => { const specs: [number, number, Pose][] = [[12, 100, 'raise-right'], [28, 96, 'up'], [44, 102, 'raise-left'], [60, 96, 'raise-right'], [72, 104, 'up']]; const angles = [-25, 15, 35, -40, 10]; return (
+        <g>
+          {specs.map(([x, y, a], i) => { const hd = hands(x, y, 30, a); const h = a === 'raise-left' ? hd.l : hd.r; return (
+            <g key={i} transform={`rotate(${angles[i]} ${h.x} ${h.y})`}>
+              <Row suit="wands" xs={[h.x]} y={h.y - 2} s={10} />
+            </g>
+          ); })}
+        </g>
+      ); })()}
     </g>
   ),
   6: () => (
     <g>
+      {/* the rider comes home laureled on a caparisoned horse; the footmen walk beside with their staves */}
       <Ground y={96} fill={GOLD_FLAT} opacity={0.5} />
-      {[8, 70, 16].map((x, i) => <Person key={i} x={x} y={104 - i} h={22} pose="up" robe={INK} />)}
-      <Row suit="wands" xs={[8, 70, 16, 64]} y={60} s={9} />
+      {[[8, 104, '#3a3a44'], [70, 104, LEAF], [16, 103, '#7d5aa6'], [64, 103, BLOOD]].map(([x, y, robe], i) => (
+        <Person key={i} x={x as number} y={y as number} h={24} pose="up" robe={robe as string} hair={i % 2 ? '#3a2a1e' : '#d9a441'} belt={null} />
+      ))}
+      <Row suit="wands" xs={[3, 13, 75, 66]} y={62} s={9} />
       <Horse x={40} y={102} fill={PALE} w={48} />
-      <Person x={36} y={84} h={34} pose="raise-right" robe={ROBE.wands} />
-      <Row suit="wands" xs={[52]} y={52} s={10} />
-      <ellipse cx={52} cy={44} rx={5} ry={3} fill="none" stroke={GREEN} strokeWidth={1.6} />
-      <ellipse cx={36} cy={49} rx={5} ry={2.4} fill="none" stroke={GREEN} strokeWidth={1.4} />
+      <path d="M22 92 q18 8 36 0 v4 q-18 6 -36 0 z" fill={LEAF} opacity={0.8} stroke={INK} strokeWidth={0.4} />
+      <Person x={36} y={84} h={34} pose="raise-right" robe={ROBE.wands} inner={ROBE_PALE.wands} hair="#3a2a1e" belt={GOLD_FLAT} />
+      {(() => { const hd = hands(36, 84, 34, 'raise-right'); return (
+        <g>
+          <Row suit="wands" xs={[hd.r.x]} y={hd.r.y - 4} s={10} />
+          <ellipse cx={hd.r.x} cy={hd.r.y - 13} rx={5} ry={3} fill="none" stroke={LEAF} strokeWidth={1.6} />
+        </g>
+      ); })()}
+      <ellipse cx={36} cy={50.5} rx={5} ry={2.4} fill="none" stroke={LEAF} strokeWidth={1.4} />
     </g>
   ),
   7: () => (
@@ -261,12 +293,18 @@ const WANDS: Record<number, () => ReactElement> = {
   ),
   8: () => (
     <g>
+      {/* eight staves in flight over the river and the house on the hill */}
       <Mountains y={84} opacity={0.25} />
-      <Water y={92} rows={2} />
-      <Ground y={100} fill={GREEN} opacity={0.6} />
+      <path d="M56 84 h12 v-8 h-12 z M55 76 l7 -5 l7 5 z" fill={PALE} stroke={INK} strokeWidth={0.4} />
+      <path d="M0 96 q20 -8 40 -2 t40 -6 v24 h-80 z" fill={GREEN} opacity={0.6} />
+      <path d="M0 100 q20 -6 44 2 q14 4 36 -2" fill="none" stroke="#7fa3c9" strokeWidth={3} opacity={0.6} />
+      <Water y={101} rows={1} />
       {[[10, 30], [22, 24], [34, 18], [46, 12], [16, 52], [28, 46], [40, 40], [52, 34]].map(([x, y], i) => (
-        <g key={i} transform={`rotate(-35 ${x} ${y})`}>
-          <Row suit="wands" xs={[x]} y={y} s={9} />
+        <g key={i}>
+          <path d={`M${x - 16} ${y + 12} l8 -6 M${x - 20} ${y + 16} l6 -4`} stroke={PALE} strokeWidth={0.6} opacity={0.6} />
+          <g transform={`rotate(-35 ${x} ${y})`}>
+            <Row suit="wands" xs={[x]} y={y} s={9} />
+          </g>
         </g>
       ))}
     </g>
