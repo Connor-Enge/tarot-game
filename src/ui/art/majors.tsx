@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 import {
   BLOOD, Chain, Cloud, Cup, Figure, Flame, GOLD, GOLD_FLAT, Ground, Horse, INK, Infinity, Lantern, Lightning, Moon, Mountains, PALE, Pentacle, Pillar, Star, Sun, Sword, Throne, Tree, Wand, Water, Wings,
 } from './primitives';
-import { Cliff, Grass, Lily, Person, Pomegranate, Rose, Wheat, hands, SKIN, SKIN_INK, LEAF } from './figure';
+import { Cliff, Grass, Head, Lily, Person, Pomegranate, Rose, Wheat, hands, SKIN, SKIN_INK, LEAF } from './figure';
 
 /** One composition per Major Arcana, drawn in the 80 x 112 art window. */
 export const MAJOR_ART: Record<number, () => ReactElement> = {
@@ -439,76 +439,145 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
   ),
   12: () => (
     <g>
-      <rect x={14} y={6} width={5} height={100} fill={INK} />
-      <rect x={61} y={6} width={5} height={100} fill={INK} />
-      <rect x={10} y={6} width={60} height={5} fill={INK} />
+      {/* a living gallows: two trunks and a beam, leaves still on it */}
+      <rect x={13} y={6} width={5} height={102} fill="#5a3a22" stroke={INK} strokeWidth={0.5} />
+      <rect x={62} y={6} width={5} height={102} fill="#5a3a22" stroke={INK} strokeWidth={0.5} />
+      <rect x={10} y={6} width={60} height={5} fill="#5a3a22" stroke={INK} strokeWidth={0.5} />
       {[20, 30, 46, 56].map((x) => (
-        <path key={x} d={`M${x} 11 q3 4 0 8 q-3 -4 0 -8`} fill={GOLD} stroke={INK} strokeWidth={0.4} />
+        <path key={x} d={`M${x} 11 q3 4 0 8 q-3 -4 0 -8`} fill={LEAF} stroke={INK} strokeWidth={0.4} />
+      ))}
+      {[[13, 30], [18, 50], [13, 70], [67, 40], [62, 60], [67, 84]].map(([x, y], i) => (
+        <path key={i} d={`M${x} ${y} q${x < 40 ? 4 : -4} -3 ${x < 40 ? 6 : -6} 0 q${x < 40 ? -3 : 3} 3 ${x < 40 ? -6 : 6} 0 z`} fill={LEAF} stroke={INK} strokeWidth={0.35} />
       ))}
       <g className="live-sway">
-      <line x1={40} y1={11} x2={40} y2={24} stroke={INK} strokeWidth={1.8} />
-      <path d="M40 24 l-8 10 M40 24 l6 4" stroke={INK} strokeWidth={2.4} strokeLinecap="round" />
-      <path d="M32 34 l16 0 l-4 30 l-8 0 z" fill={INK} />
-      <path d="M34 62 l-6 8 M46 62 l6 8" stroke={INK} strokeWidth={2.2} strokeLinecap="round" />
-      <circle cx={40} cy={76} r={4.4} fill={INK} />
-      <circle cx={40} cy={76} r={8} fill="none" stroke={GOLD_FLAT} strokeWidth={0.9} />
+        {/* the rope, the tied foot, the straight leg; the other leg bent behind into a four */}
+        <line x1={48} y1={11} x2={48} y2={22} stroke="#b89a6a" strokeWidth={1.4} />
+        <path d="M36 50 L28 40 L44 33" fill="none" stroke="#c94a3a" strokeWidth={4.2} strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M36 50 L28 40 L44 33" fill="none" stroke={INK} strokeWidth={0.4} strokeLinecap="round" strokeLinejoin="round" opacity={0.6} />
+        <ellipse cx={45.5} cy={32} rx={2.6} ry={1.6} fill="#d9a441" stroke={INK} strokeWidth={0.4} transform="rotate(-30 45.5 32)" />
+        <line x1={44} y1={52} x2={48} y2={24} stroke="#c94a3a" strokeWidth={4.4} strokeLinecap="round" />
+        <ellipse cx={48.3} cy={21.5} rx={2.8} ry={1.7} fill="#d9a441" stroke={INK} strokeWidth={0.4} />
+        <path d="M46.5 22 h4" stroke="#b89a6a" strokeWidth={1.2} />
+        {/* arms folded behind the back */}
+        <path d="M33 72 q-4 -8 2 -14 M47 72 q4 -8 -2 -14" fill="none" stroke="#3f6fa8" strokeWidth={3} strokeLinecap="round" />
+        {/* the blue tunic, belted, and the head with its halo */}
+        <path d="M32 50 h16 l-1 24 q-7 3 -14 0 z" fill="#3f6fa8" stroke={INK} strokeWidth={0.6} />
+        <path d="M40 50 h8 l-1 24 q-3.5 1.5 -7 1.5 z" fill="url(#hatch)" />
+        <path d="M32 52 h16" stroke={GOLD_FLAT} strokeWidth={1.4} />
+        <path d="M34 76 q6 -3 12 0" fill="none" stroke={INK} strokeWidth={0.4} />
+        {Array.from({ length: 12 }, (_, i) => { const a = (i / 12) * Math.PI * 2; return <line key={i} x1={40 + Math.cos(a) * 7} y1={82 + Math.sin(a) * 7} x2={40 + Math.cos(a) * 10} y2={82 + Math.sin(a) * 10} stroke={GOLD_FLAT} strokeWidth={0.9} strokeLinecap="round" />; })}
+        <g transform="rotate(180 40 82)">
+          <Head x={40} y={82} r={5} hair="#d9a441" />
+        </g>
       </g>
     </g>
   ),
   13: () => (
     <g>
       <rect x={0} y={0} width={80} height={112} fill="url(#skyDeep)" opacity={0.35} />
+      {/* the two towers on the horizon, the sun between them, the river */}
       <rect x={4} y={40} width={8} height={30} fill={INK} opacity={0.6} />
       <rect x={68} y={40} width={8} height={30} fill={INK} opacity={0.6} />
       <Sun x={40} y={52} r={7} rays={8} />
       <Water y={64} rows={2} />
+      <path d="M0 74 h80 v38 h-80 z" fill="#3a3040" opacity={0.35} />
+      {/* the fallen king, crown rolled away */}
+      <g transform="rotate(-78 14 100)">
+        <Person x={14} y={100} h={24} pose="stand" robe="#7d5aa6" inner="#d9a441" hair="#9a9088" belt={null} face={false} />
+      </g>
+      <path d="M4 104 l0 -4 l2 2 l2 -3 l2 3 l2 -2 l0 4 z" fill={GOLD} stroke={INK} strokeWidth={0.4} />
+      {/* the bishop stands, the woman turns away, the child kneels with flowers */}
+      <Person x={66} y={104} h={22} pose="hold" robe="#d9b86a" inner={PALE} hair="none" belt={null} />
+      <path d="M63.5 84.5 l2.5 -5 l2.5 5 z" fill={GOLD} stroke={INK} strokeWidth={0.4} />
+      <Person x={56} y={106} h={14} pose="sit" robe="#e9e2d0" hair="#d9a441" belt={null} face={false} />
+      <Rose x={52} y={104} r={1.3} color={PALE} />
+      {/* the pale horse and its rider in black armour, the black banner with the white rose */}
       <Horse x={40} y={100} fill={PALE} w={44} />
-      <Figure x={38} y={82} h={34} arms="right-up" fill={INK} />
-      <path d="M52 44 h18 v14 h-18 z" fill={INK} />
-      {[0, 1, 2, 3, 4].map((i) => { const a = (i / 5) * Math.PI * 2; return <circle key={i} cx={61 + Math.cos(a) * 2.6} cy={51 + Math.sin(a) * 2.6} r={1.8} fill={PALE} />; })}
-      <circle cx={61} cy={51} r={1.2} fill={PALE} />
-      <line x1={52} y1={44} x2={52} y2={72} stroke={INK} strokeWidth={1.4} />
-      <circle cx={38} cy={50} r={3.6} fill={PALE} stroke={INK} strokeWidth={0.6} />
-      <path d="M36.5 49.5 h1 M39 49.5 h1 M37 52 h2" stroke={INK} strokeWidth={0.7} />
-      <Ground y={104} />
+      <Person x={38} y={86} h={40} pose="hold" robe={INK} inner="#3a3a44" hair="none" belt="#3a3a44" face={false} />
+      <circle cx={38} cy={50} r={4} fill={PALE} stroke={INK} strokeWidth={0.5} />
+      <path d="M36.2 49.6 a1 1 0 1 0 0.1 0 M39.4 49.6 a1 1 0 1 0 0.1 0" fill={INK} />
+      <circle cx={36.4} cy={49.6} r={0.9} fill={INK} />
+      <circle cx={39.6} cy={49.6} r={0.9} fill={INK} />
+      <path d="M36.5 52.5 h3 M37.2 52.5 v1 M38.2 52.5 v1" stroke={INK} strokeWidth={0.5} />
+      <path d="M33 45 h10 l-1 -3 h-8 z" fill={INK} stroke="#3a3a44" strokeWidth={0.4} />
+      <path d="M37.5 41 l0.5 -4 l0.5 4" fill={BLOOD} stroke={INK} strokeWidth={0.3} />
+      {(() => { const hd = hands(38, 86, 40, 'hold'); return (
+        <g>
+          <line x1={hd.l.x - 6} y1={hd.l.y + 6} x2={hd.l.x + 14} y2={hd.l.y - 30} stroke={INK} strokeWidth={1.3} strokeLinecap="round" />
+          <path d={`M${hd.l.x + 4} ${hd.l.y - 12} l10 -18 l14 6 l-7 12 z`} fill={INK} stroke="#3a3a44" strokeWidth={0.5} />
+          {(() => { const cx = hd.l.x + 14.5, cy = hd.l.y - 18; return (
+            <g>
+              {[0, 1, 2, 3, 4].map((i) => { const a = (i / 5) * Math.PI * 2; return <circle key={i} cx={cx + Math.cos(a) * 2.4} cy={cy + Math.sin(a) * 2.4} r={1.6} fill={PALE} />; })}
+              <circle cx={cx} cy={cy} r={1.1} fill={PALE} />
+            </g>
+          ); })()}
+        </g>
+      ); })()}
     </g>
   ),
   14: () => (
     <g>
+      {/* the road to the crown of light, the pool, the irises */}
       <Sun x={66} y={12} r={6} rays={8} />
       <path d="M62 20 l4 -6 l4 6 z" fill={GOLD} stroke={INK} strokeWidth={0.4} />
-      <path d="M52 30 q12 18 4 36 q-6 12 10 30" fill="none" stroke={GOLD_FLAT} strokeWidth={2.2} opacity={0.5} />
-      <Wings x={36} y={46} span={40} />
-      <Figure x={36} y={92} h={52} arms="out" fill={PALE} halo />
-      <path d="M32 60 l4 -6 l4 6 z" fill="none" stroke={GOLD_FLAT} strokeWidth={0.9} />
-      <Cup x={14} y={64} s={5} />
-      <Cup x={58} y={72} s={5} />
-      {/* the stream, poured at an impossible angle */}
-      <path d="M17 60 q18 -10 40 8" fill="none" stroke="#6ab7d6" strokeWidth={2.2} strokeLinecap="round" />
-      <path d="M17 60 q18 -10 40 8" fill="none" stroke={PALE} strokeWidth={0.6} strokeLinecap="round" opacity={0.7} />
-      <Water y={96} rows={3} />
-      {/* irises */}
+      <path d="M54 30 q12 18 2 36 q-6 12 10 30" fill="none" stroke="#d9c39a" strokeWidth={4} opacity={0.7} />
+      <Mountains y={72} opacity={0.18} />
+      <path d="M0 92 q20 -6 34 0 v20 h-34 z" fill="#7fa3c9" opacity={0.6} />
+      <Water y={96} rows={2} />
       {[6, 12].map((x, i) => (
         <g key={i}>
-          <line x1={x} y1={100} x2={x} y2={88} stroke="#5a7a3a" strokeWidth={1} />
-          <path d={`M${x} 88 l-3 -4 l3 1 l3 -1 z`} fill="#7a3fa0" stroke={INK} strokeWidth={0.3} />
+          <line x1={x} y1={100} x2={x} y2={84} stroke="#5a7a3a" strokeWidth={1} />
+          <path d={`M${x} 84 l-3 -4 l3 1 l3 -1 z M${x} 84 l-2 3 M${x} 84 l2 3`} fill="#7a3fa0" stroke={INK} strokeWidth={0.3} />
         </g>
       ))}
+      {/* the angel: one foot in the water, one on the stone, a cup in either hand */}
+      <Wings x={38} y={48} span={44} />
+      <Person x={38} y={92} h={52} pose="out" robe={PALE} inner="#f3ecd8" hair="#d9a441" halo belt={null} />
+      <circle cx={38} cy={46.2} r={1.6} fill={GOLD} stroke={INK} strokeWidth={0.3} />
+      <path d="M34 66 l4 -6 l4 6 z" fill="none" stroke={GOLD_FLAT} strokeWidth={0.9} />
+      <rect x={32.5} y={67} width={11} height={1.2} fill={GOLD_FLAT} />
+      {(() => { const hd = hands(38, 92, 52, 'out'); return (
+        <g>
+          <Cup x={hd.l.x - 1} y={hd.l.y - 8} s={4.5} />
+          <Cup x={hd.r.x + 1} y={hd.r.y + 2} s={4.5} />
+          <path d={`M${hd.l.x - 1} ${hd.l.y - 11} q14 -8 ${hd.r.x - hd.l.x + 2} ${hd.r.y - hd.l.y + 10}`} fill="none" stroke="#6ab7d6" strokeWidth={2.2} strokeLinecap="round" />
+          <path d={`M${hd.l.x - 1} ${hd.l.y - 11} q14 -8 ${hd.r.x - hd.l.x + 2} ${hd.r.y - hd.l.y + 10}`} fill="none" stroke={PALE} strokeWidth={0.6} strokeLinecap="round" opacity={0.7} />
+        </g>
+      ); })()}
     </g>
   ),
   15: () => (
     <g>
       <rect x={0} y={0} width={80} height={112} fill={INK} opacity={0.75} />
-      <Star x={40} y={10} r={6} points={5} fill={PALE} />
-      <Wings x={40} y={30} span={44} />
-      <Figure x={40} y={74} h={50} arms="left-up" fill={INK} />
-      <path d="M33 26 l-4 -9 l6 5 M47 26 l4 -9 l-6 5" fill={INK} stroke={PALE} strokeWidth={0.6} />
-      <rect x={30} y={74} width={20} height={10} fill={INK} stroke={PALE} strokeWidth={0.8} />
-      <Chain x={18} y={80} len={10} />
-      <Chain x={52} y={80} len={10} />
-      <Figure x={16} y={106} h={26} arms="down" fill={PALE} />
-      <Figure x={64} y={106} h={26} arms="down" fill={PALE} />
-      <Flame x={64} y={80} s={3} />
+      <Star x={40} y={9} r={6} points={5} fill={PALE} />
+      {/* bat wings, the horned one on the half cube, torch pointed down */}
+      <path d="M36 36 q-14 -12 -30 -4 q6 2 6 8 q6 -2 8 4 q6 -2 8 6 z M44 36 q14 -12 30 -4 q-6 2 -6 8 q-6 -2 -8 4 q-6 -2 -8 6 z" fill="#2a2030" stroke={PALE} strokeWidth={0.5} />
+      <rect x={28} y={74} width={24} height={12} fill={INK} stroke={PALE} strokeWidth={0.8} />
+      <rect x={28} y={74} width={24} height={12} fill="url(#hatch)" opacity={0.5} />
+      <circle cx={40} cy={80} r={1.6} fill="none" stroke={PALE} strokeWidth={0.6} />
+      <Person x={40} y={76} h={50} pose="raise-right" robe="#5a4a3a" inner="#6f5c48" hair="#3a2a1e" belt={null} />
+      <path d="M35.5 28 q-5 -4 -3 -11 q2 4 5 8 M44.5 28 q5 -4 3 -11 q-2 4 -5 8" fill="#3a2a1e" stroke={PALE} strokeWidth={0.4} />
+      <path d="M38.2 24 l1.8 3.2 l1.8 -3.2 l-3.6 2 h3.6 z" fill={PALE} opacity={0.9} />
+      <path d="M33 74 l-6 8 q-2 3 2 4 M47 74 l6 8 q2 3 -2 4" fill="none" stroke="#5a4a3a" strokeWidth={1.2} />
+      {(() => { const hd = hands(40, 76, 50, 'raise-right'); return (
+        <g>
+          <path d={`M${hd.r.x - 1.5} ${hd.r.y - 2} v-4 M${hd.r.x + 1.5} ${hd.r.y - 2} v-4 M${hd.r.x - 0.2} ${hd.r.y - 2.5} v-4.5`} stroke={SKIN_INK} strokeWidth={0.8} strokeLinecap="round" />
+          <line x1={hd.l.x} y1={hd.l.y} x2={hd.l.x - 2} y2={hd.l.y + 12} stroke="#8a5a22" strokeWidth={1.6} strokeLinecap="round" />
+          <g transform={`rotate(180 ${hd.l.x - 2} ${hd.l.y + 14})`}>
+            <Flame x={hd.l.x - 2} y={hd.l.y + 14} s={4} />
+          </g>
+        </g>
+      ); })()}
+      {/* the two, chained loosely, small horns and tails, one tail aflame */}
+      <Person x={16} y={108} h={28} pose="stand" robe={SKIN} hair="#3a2a1e" belt={null} />
+      <Person x={64} y={108} h={28} pose="stand" robe={SKIN} hair="#d9a441" belt={null} />
+      <path d="M13.5 82 l-1 -3 l2 2 M18.5 82 l1 -3 l-2 2 M61.5 82 l-1 -3 l2 2 M66.5 82 l1 -3 l-2 2" fill="none" stroke={INK} strokeWidth={0.7} />
+      <path d="M21 100 q6 -2 4 -8" fill="none" stroke={SKIN_INK} strokeWidth={1} strokeLinecap="round" />
+      <path d="M59 100 q-6 -2 -4 -8" fill="none" stroke={SKIN_INK} strokeWidth={1} strokeLinecap="round" />
+      <Flame x={55} y={91} s={2.6} />
+      <Chain x={20} y={87} len={9} angle={-25} />
+      <Chain x={51} y={83} len={9} angle={25} />
+      <Ground y={108} fill="#1a1420" />
     </g>
   ),
   16: () => (
