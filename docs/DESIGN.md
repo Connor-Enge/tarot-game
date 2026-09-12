@@ -205,9 +205,10 @@ calamity *scars* them. Charged cards always land upright and score +1.
 Scarred cards always land reversed. Marks last the run. The deck remembers
 what you did with it.
 
-**Whisper**: spend 1 Clarity to hear one keyword of the lifted candidate
-(orientation-aware). Shown as a ribbon on the card. Counts toward glimpsing
-that card in the Codex. This is the only mid-run knowledge purchase.
+**Whisper**: spend 1 Clarity to hear one thing the lifted candidate
+brings to this seat (see *Whispers say what a card brings*). Shown as a
+ribbon on the card and kept as a chip. Counts toward glimpsing that card
+in the Codex.
 
 **Daily descent**: one seed per UTC day (`dailySeed`). The end screen's
 Share button produces a spoiler-light result string: mode, outcome, a glyph
@@ -545,7 +546,8 @@ Every surface that can show text about a card, and what gates it:
 |---------|-------|------|
 | Card face | name, art | none (Codex shows faces once dealt) |
 | Resolution omens | omen line | none (the sanctioned leak) |
-| Whisper ribbon | one keyword (two with the Bell) | costs Clarity |
+| Whisper ribbon | one tag the card brings, chosen for the seat (two with the Bell or once mastered); kept as a chip | costs Clarity |
+| Tag chips in hand | tags a seat has taken the card for or a whisper has said; every tag once the Codex knows the card that way up | consequence, and the open page |
 | Run end reveal | upright meaning; reversed if reversed | death or return with the card on the table |
 | Codex keywords | keywords | tier 1 (three reads or whispers) |
 | Codex meaning | upright meaning | tier 2 |
@@ -755,7 +757,25 @@ first twelve descents; the Depths fall 97, 87, 80, 70, 63; the oracle
 was too much (fresh 64%, Depth 5 41%, oracle 91%, triumphs a tenth of
 readings).
 
-## The road not taken
+## Whispers say what a card brings
+
+A whisper used to give one keyword of the card ("will", "abundance"),
+which the reader then had to translate into what the seat asks for
+("power", "wealth"). With the ask on the table that translation was
+the whole cost of the purchase, and an informed reader stopped
+buying. Now a whisper says one thing the card brings *here*
+(`whisperTags`): a tag the seat wants if the card has one, else a tag
+it fears, else the next of the card's own; two with the Small Bell or
+once the card is mastered. What is heard is kept in the Codex as if a
+seat had taken the card for it (`noteBrought`), so the chip stays on
+the card for every hand after. Keywords are the Codex's; tags are the
+table's. A card the Codex knows this way up (tier two upright, tier
+three reversed) shows every tag as chips without being asked
+(`visibleTags`): the page is already open, so the table stops charging
+for it. This replaces the free keyword ribbon known cards used to wear.
+The whisper button greys out once nothing is left unheard.
+
+
 
 Every remembered scene keeps the cards passed over in each seat, as they
 would have been read (the Mirror flips them too). At resolution, and on

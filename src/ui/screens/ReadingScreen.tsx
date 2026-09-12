@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSettings } from '../../settings';
-import { activeSlotState, askText, broughtTags, canLamp, canTakeBack, canWhisperHere, kinshipAmong, seatAsk, tagFit, type SlotId, type Tag, KIN_BONUS, lampCost, lampVerdicts, namedWithinReach, readingSoFar, reckoningText, RITES, SLOT_POSITION, thresholdsFor, sceneAsRead, getCard, hasRelic, redrawCost, sceneNumber, scoreSlot, SLOT_IDS, SLOTS, totalScenes, whisperCost, whisperWords } from '../../engine';
+import { activeSlotState, askText, visibleTags, cardTags, canLamp, canTakeBack, canWhisperHere, kinshipAmong, seatAsk, tagFit, type SlotId, type Tag, KIN_BONUS, lampCost, lampVerdicts, namedWithinReach, readingSoFar, reckoningText, RITES, SLOT_POSITION, thresholdsFor, sceneAsRead, getCard, hasRelic, redrawCost, sceneNumber, scoreSlot, SLOT_IDS, SLOTS, totalScenes, whisperCost } from '../../engine';
 
 /** Dev only: show the oracle's score on each candidate when the page is opened with ?oracle. */
 const ORACLE = import.meta.env.DEV && typeof location !== 'undefined' && location.search.includes('oracle');
@@ -95,11 +95,11 @@ function ReadingScreenInner() {
   const wCost = whisperCost(run);
   const canRedraw = run.clarity >= rCost;
   const hushed = !canWhisperHere(run);
-  const knownCards = useGame((s) => s.knowledge.cards);
-  // A card the Codex knows (tier two or better) whispers its seat word for free.
-  const knowsFree = (cardId: string) => (knownCards[cardId]?.tier ?? 0) >= 2;
-  const canWhisper = !hushed && lifted !== null && run.clarity >= wCost && !active.whispered.includes(lifted) && !active.candidates[lifted]?.hidden && !knowsFree(active.candidates[lifted]?.cardId ?? '');
-  const bell = hasRelic(run, 'bell');
+  const knowledge = useGame((s) => s.knowledge);
+  // A whisper says one thing the card brings here; there is nothing to whisper once every tag shows.
+  const liftedCand = lifted !== null ? active.candidates[lifted] : undefined;
+  const unheard = liftedCand && !liftedCand.hidden ? cardTags(getCard(liftedCand.cardId), liftedCand.reversed).some((t) => !visibleTags(knowledge, liftedCand.cardId, liftedCand.reversed).includes(t)) : false;
+  const canWhisper = !hushed && lifted !== null && run.clarity >= wCost && !active.whispered.includes(lifted) && unheard;
   const lamp = lampVerdicts(run);
   const lampOn = !!active.lit;
   // Re-key the hand when the candidates change so the deal animation replays.
@@ -130,10 +130,9 @@ function ReadingScreenInner() {
   const soFarBySlot = Object.fromEntries(soFar.seats.map((x) => [x.slot, x]));
   // The ask: what this seat calls for and cannot bear, said before any card lands.
   const ask = seatAsk(scene, active.slot);
-  const knowledge = useGame((s) => s.knowledge);
-  // What the Codex has seen each card in hand bring, this way up, and how that sits with the ask.
+  // What each card in hand is known to bring, this way up, and how that sits with the ask.
   const chipsFor = (cardId: string, reversed: boolean) =>
-    broughtTags(knowledge, cardId, reversed)
+    visibleTags(knowledge, cardId, reversed)
       .map((tag) => ({ tag, fit: tagFit(ask, tag) }))
       .sort((a, b) => ORDER[a.fit] - ORDER[b.fit])
       .slice(0, 5);
@@ -291,9 +290,7 @@ function ReadingScreenInner() {
         {active.candidates.map((c, i) => {
           const card = getCard(c.cardId);
           const whispered = active.whispered.includes(i);
-          const kws = c.reversed ? card.keywords.reversed : card.keywords.upright;
-          // A mastered card, like a Small Bell, gives two words.
-          const kw = whisperWords(kws, active.slot, bell || (knownCards[c.cardId]?.tier ?? 0) >= 3 ? 2 : 1).join(' · ');
+          const heard = (active.whisperedTags?.[i] ?? []).join(' · ');
           return (
             <div
               className={`deal ${lifted === i ? 'deal--lantern' : ''}`}
@@ -316,8 +313,7 @@ function ReadingScreenInner() {
                 lifted={lifted === i}
                 dim={lifted !== null && lifted !== i}
                 mark={run.marks[c.cardId]}
-                whisper={whispered || (!c.hidden && knowsFree(c.cardId)) ? kw : undefined}
-                whisperKnown={!whispered && !c.hidden && knowsFree(c.cardId)}
+                whisper={whispered && heard ? heard : undefined}
                 yours={c.yours}
                 held={c.held}
                 kin={!c.hidden && kinHere(c.cardId)}
@@ -399,7 +395,7 @@ function ReadingScreenInner() {
         <button className={`btn ${dragPull ? 'btn--pull' : ''}`} disabled={!canRedraw} onClick={redraw} title="Deal three new cards for this seat">
           Redraw {rCost === 0 ? '· free' : `◈${rCost}`}
         </button>
-        <button className="btn" disabled={!canWhisper} onClick={whisperLifted} title={hushed ? 'No whispers in this scene' : 'Hear one word of the lifted card'}>
+        <button className="btn" disabled={!canWhisper} onClick={whisperLifted} title={hushed ? 'No whispers in this scene' : 'Hear one thing the lifted card brings here'}>
           Whisper ◈{wCost}
         </button>
         <button className={`btn ${lampOn ? 'btn--lit' : ''}`} disabled={!canLamp(run)} onClick={lightLamp} title={lampOn ? 'The lamp is lit over this seat' : 'Hold a lamp over this seat: see what each card would do here'}>

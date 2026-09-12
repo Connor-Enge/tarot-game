@@ -65,9 +65,10 @@ describe('run', () => {
 
   it('whisper costs clarity, once per candidate', () => {
     let run = chooseNode(startRun(7), 0);
-    run = whisper(run, 1);
+    run = whisper(run, 1, ['order']);
     expect(run.clarity).toBe(1);
     expect(run.slots[0].whispered).toEqual([1]);
+    expect(run.slots[0].whisperedTags?.[1]).toEqual(['order']);
     run = whisper(run, 1);
     expect(run.clarity).toBe(1);
     run = whisper(run, 0);

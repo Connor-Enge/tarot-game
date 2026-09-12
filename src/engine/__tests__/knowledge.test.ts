@@ -343,3 +343,18 @@ describe('what a card was seen to bring', () => {
     expect(noteBrought(k, 'major-4', false, [])).toBe(k);
   });
 });
+
+describe('what a card shows in hand', () => {
+  it('shows only witnessed tags until the Codex knows the card this way up, then all of them', async () => {
+    const { visibleTags, noteBrought, noteDeath, emptyKnowledge } = await import('../knowledge');
+    const { cardTags, getCard } = await import('../cards');
+    let k = emptyKnowledge();
+    expect(visibleTags(k, 'major-4', false)).toEqual([]);
+    k = noteBrought(k, 'major-4', false, ['order']);
+    expect(visibleTags(k, 'major-4', false)).toEqual(['order']);
+    // Death with the card upright makes it known: the upright page is open, so every upright tag shows; reversed still waits.
+    k = noteDeath(k, [{ cardId: 'major-4', reversed: false }]);
+    expect(visibleTags(k, 'major-4', false)).toEqual(cardTags(getCard('major-4'), false));
+    expect(visibleTags(k, 'major-4', true)).toEqual([]);
+  });
+});

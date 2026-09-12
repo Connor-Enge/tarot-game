@@ -121,7 +121,7 @@ export function CodexDetail({ cardId, onClose }: { cardId: string; onClose: () =
         )}
         {(broughtTags(k, cardId, false).length > 0 || broughtTags(k, cardId, true).length > 0) && (
           <div className="brought">
-            <div className="muted small">What seats have taken it for</div>
+            <div className="muted small">What it has been seen to bring</div>
             {broughtTags(k, cardId, false).length > 0 && (
               <p className="brought__line">
                 <span className="omens__mark" aria-hidden>↑</span>

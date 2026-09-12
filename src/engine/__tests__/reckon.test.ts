@@ -92,3 +92,19 @@ describe('the ask', () => {
     }
   });
 });
+
+describe('what a whisper says', () => {
+  it('names a tag the seat wants first, then one it fears, then the rest, skipping what is already known', async () => {
+    const { seatAsk, whisperTags } = await import('../resolve');
+    const { cardTags, getCard } = await import('../cards');
+    const ask = seatAsk(SCENES.beast, 'hand'); // wants power, patience, love, conflict; fears chaos
+    // Strength upright: power, patience, love, fire.
+    expect(whisperTags('major-8', false, ask, [])).toEqual(['power']);
+    expect(whisperTags('major-8', false, ask, ['power'])).toEqual(['patience']);
+    expect(whisperTags('major-8', false, ask, [], 2)).toEqual(['power', 'patience']);
+    // The Fool upright: beginning, freedom, chaos, hope. Nothing wanted here, so the feared tag comes first.
+    expect(whisperTags('major-0', false, ask, [])).toEqual(['chaos']);
+    const all = cardTags(getCard('major-0'), false);
+    expect(whisperTags('major-0', false, ask, all)).toEqual([]);
+  });
+});

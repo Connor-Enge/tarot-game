@@ -1,5 +1,5 @@
 import { SLOT_IDS, type OutcomeTier, type SlotId } from './scenes';
-import type { Tag } from './cards';
+import { cardTags, getCard, type Tag } from './cards';
 
 /**
  * The Codex: what the player has *earned the right to know* about each card.
@@ -125,6 +125,18 @@ export function noteBrought(k: Knowledge, cardId: string, reversed: boolean, tag
 /** What the Codex has seen this card bring, this way up. */
 export function broughtTags(k: Knowledge, cardId: string, reversed: boolean): Tag[] {
   return k.cards[cardId]?.brought?.[reversed ? 'reversed' : 'upright'] ?? [];
+}
+
+/**
+ * The tags a card shows in hand: everything, once the Codex knows the card
+ * this way up (tier two upright, tier three reversed, where the page is
+ * already open); otherwise only what seats have taken it for or whispers
+ * have said. The table never charges for what the reader has earned.
+ */
+export function visibleTags(k: Knowledge, cardId: string, reversed: boolean): Tag[] {
+  const tier = k.cards[cardId]?.tier ?? 0;
+  if (tier >= (reversed ? 3 : 2)) return [...cardTags(getCard(cardId), reversed)];
+  return broughtTags(k, cardId, reversed);
 }
 
 /** A correct recall in Study counts toward glimpsing the card, like a whisper. */

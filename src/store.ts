@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { CARDS, setKnownCards, scoreSlot, currentScene, hasRelic, roadNotTaken, noteHand, runHand, handGrade, challengeLink, type Challenge, type TableLay } from './engine';
+import { CARDS, setKnownCards, scoreSlot, currentScene, hasRelic, seatAsk, sceneAsRead, visibleTags, whisperTags, roadNotTaken, noteHand, runHand, handGrade, challengeLink, type Challenge, type TableLay } from './engine';
 setKnownCards(CARDS.map((c) => c.id));
 import { setDroneDepth, sfx, startDrone, stopDrone } from './audio';
 import { clearRun, loadRun, saveRun } from './persist';
@@ -489,12 +489,18 @@ export const useGame = create<GameStore>((set, get) => ({
   whisperLifted: () => {
     const { run, lifted, knowledge } = get();
     if (!run || lifted === null) return;
-    const next = whisperRun(run, lifted);
+    const slot0 = run.slots[run.activeSlot];
+    const cand = slot0?.candidates[lifted];
+    if (!cand) return;
+    // The whisper says one thing the card brings here (two with the Bell, or once the card is mastered), and the Codex keeps it.
+    const ask = seatAsk(sceneAsRead(run), slot0.slot);
+    const known = visibleTags(knowledge, cand.cardId, cand.reversed);
+    const count = hasRelic(run, 'bell') || (knowledge.cards[cand.cardId]?.tier ?? 0) >= 3 ? 2 : 1;
+    const heard = whisperTags(cand.cardId, cand.reversed, ask, known, count);
+    const next = whisperRun(run, lifted, heard);
     if (next === run) return;
-    const slot = next.slots[next.activeSlot];
-    const cardId = slot.candidates[lifted].cardId;
-    getCard(cardId);
-    const learned = noteWhisper(knowledge, cardId);
+    const cardId = cand.cardId;
+    const learned = noteBrought(noteWhisper(knowledge, cardId), cardId, cand.reversed, heard);
     saveKnowledge(learned);
     buzz([5, 40, 5]);
     sfx.whisper();

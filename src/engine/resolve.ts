@@ -591,6 +591,18 @@ export function tagFit(ask: SeatAsk, tag: Tag): 'want' | 'fear' | 'none' {
   return ask.wanted.includes(tag) ? 'want' : ask.feared.includes(tag) ? 'fear' : 'none';
 }
 
+/**
+ * What a whisper says: one thing the card brings, chosen for the seat being
+ * filled. Tags the seat wants come first, then tags it fears, then the rest
+ * in the card's own order; tags already known are skipped. Never a meaning,
+ * only what a seat could take the card for.
+ */
+export function whisperTags(cardId: string, reversed: boolean, ask: SeatAsk, known: readonly Tag[], count = 1): Tag[] {
+  const tags = cardTags(getCard(cardId), reversed).filter((t) => !known.includes(t));
+  const rank = (t: Tag) => (ask.wanted.includes(t) ? 0 : ask.feared.includes(t) ? 1 : 2);
+  return [...tags].sort((a, b) => rank(a) - rank(b)).slice(0, count);
+}
+
 /** Two plain sentences per seat, in the position's own terms: what it asked for, and what the card brought. */
 export function reckoningText(r: SlotReckoning, cardName: string): string {
   const want = r.wanted.length ? list(r.wanted) : 'nothing in particular';

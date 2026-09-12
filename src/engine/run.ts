@@ -1,3 +1,4 @@
+import type { Tag } from './cards';
 import { createDeck, discard, draw, REVERSED_CHANCE, type DeckState, type DrawnCard } from './deck';
 import type { RunConfig } from './descents';
 import { resolveReading, scoreSlot, type Reading, type Resolution } from './resolve';
@@ -22,8 +23,10 @@ export interface SlotState {
   slot: SlotId;
   candidates: DrawnCard[];
   chosen: number | null; // index into candidates
-  /** Candidate indices whose keyword has been whispered this seat. */
+  /** Candidate indices whispered this seat. */
   whispered: number[];
+  /** What each whisper said: the tags heard, by candidate index. */
+  whisperedTags?: Record<number, Tag[]>;
   /** The lamp has been held over this seat: every card in the hand shows what it would do here. */
   lit?: boolean;
 }
@@ -564,7 +567,7 @@ export function canWhisperHere(run: RunState): boolean {
   return run.phase.kind === 'reading' && currentScene(run).rite !== 'hush';
 }
 
-export function whisper(run: RunState, index: number): RunState {
+export function whisper(run: RunState, index: number, heard: readonly Tag[] = []): RunState {
   if (run.phase.kind !== 'reading' || !canWhisperHere(run)) return run;
   const cost = whisperCost(run);
   if (run.clarity < cost) return run;
@@ -572,7 +575,7 @@ export function whisper(run: RunState, index: number): RunState {
   if (!slot || slot.chosen !== null) return run;
   if (index < 0 || index >= slot.candidates.length || slot.whispered.includes(index)) return run;
   if (slot.candidates[index].hidden) return run;
-  const slots = run.slots.map((s, i) => (i === run.activeSlot ? { ...s, whispered: [...s.whispered, index] } : s));
+  const slots = run.slots.map((s, i) => (i === run.activeSlot ? { ...s, whispered: [...s.whispered, index], whisperedTags: { ...s.whisperedTags, [index]: [...heard] } } : s));
   return { ...run, slots, clarity: run.clarity - cost, whispers: run.whispers + 1, sceneSpent: { ...run.sceneSpent, whispers: run.sceneSpent.whispers + 1 } };
 }
 
