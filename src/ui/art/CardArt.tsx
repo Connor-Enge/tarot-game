@@ -237,14 +237,33 @@ function CardBackInner({ className, variant = 'standard' }: { className?: string
       {[[8.5, 8.5], [91.5, 8.5], [8.5, 151.5], [91.5, 151.5]].map(([x, y], i) => (
         <path key={i} d={`M${x} ${y - 3.2} q2.2 0 2.2 2.2 q1 -1 2.2 1 q-1.2 1 -2.2 1 q0 2.2 -2.2 2.2 q0 -2.2 -2.2 -2.2 q-1.2 0 -2.2 -1 q1 -2 2.2 -1 q2.2 0 2.2 -2.2 z`} fill={GOLD} stroke={GOLD_FLAT} strokeWidth={0.3} />
       ))}
-      <circle cx={50} cy={80} r={26} fill={glow} stroke={GOLD_FLAT} strokeWidth={0.8} />
+      {/* the rose of the back: an eight-point compass in foil over a dotted ring, a moon in the eye, small stars between the points */}
+      <circle cx={50} cy={80} r={27} fill={glow} stroke={GOLD} strokeWidth={1.4} />
+      <circle cx={50} cy={80} r={26} fill="none" stroke={GOLD_FLAT} strokeWidth={0.3} opacity={0.7} />
       <circle cx={50} cy={80} r={22} fill="none" stroke={GOLD_FLAT} strokeWidth={0.4} strokeDasharray="1 2" />
       {Array.from({ length: 8 }, (_, i) => {
         const a = (i / 8) * Math.PI * 2;
-        return <line key={i} x1={50 + Math.cos(a) * 8} y1={80 + Math.sin(a) * 8} x2={50 + Math.cos(a) * 20} y2={80 + Math.sin(a) * 20} stroke={GOLD_FLAT} strokeWidth={i % 2 ? 0.5 : 1} />;
+        const long = i % 2 === 0;
+        const tip = long ? 21 : 15;
+        const base = 3.2;
+        const px = 50 + Math.cos(a) * tip, py = 80 + Math.sin(a) * tip;
+        const lx = 50 + Math.cos(a + Math.PI / 2) * base, ly = 80 + Math.sin(a + Math.PI / 2) * base;
+        const rx = 50 + Math.cos(a - Math.PI / 2) * base, ry = 80 + Math.sin(a - Math.PI / 2) * base;
+        return (
+          <g key={i}>
+            <path d={`M${px} ${py} L${lx} ${ly} L${50 + Math.cos(a) * 8} ${80 + Math.sin(a) * 8} Z`} fill={GOLD} opacity={long ? 0.95 : 0.8} />
+            <path d={`M${px} ${py} L${rx} ${ry} L${50 + Math.cos(a) * 8} ${80 + Math.sin(a) * 8} Z`} fill={GOLD_FLAT} opacity={long ? 0.6 : 0.45} />
+          </g>
+        );
       })}
-      <circle cx={50} cy={80} r={7} fill="none" stroke={GOLD_FLAT} strokeWidth={0.8} />
-      <circle cx={53} cy={79} r={5.5} fill={glow} />
+      {Array.from({ length: 8 }, (_, i) => {
+        const a = (i / 8) * Math.PI * 2 + Math.PI / 8;
+        return <circle key={i} cx={50 + Math.cos(a) * 24} cy={80 + Math.sin(a) * 24} r={0.7} fill={GOLD_FLAT} opacity={0.8} />;
+      })}
+      <circle cx={50} cy={80} r={8} fill={glow} stroke={GOLD} strokeWidth={0.9} />
+      <circle cx={50} cy={80} r={6.2} fill="none" stroke={GOLD_FLAT} strokeWidth={0.3} opacity={0.8} />
+      <circle cx={50} cy={80} r={4.8} fill={GOLD_FLAT} opacity={0.9} />
+      <circle cx={52.2} cy={79.2} r={4} fill={glow} />
       {variant === 'inverted' && <path d="M50 30 l4 6 h-8 z M50 130 l-4 -6 h8 z" fill={GOLD_FLAT} opacity={0.8} />}
       {variant === 'arcana' && <text x={50} y={26} fontSize={7} textAnchor="middle" fill={GOLD_FLAT} fontFamily="Georgia, serif" letterSpacing={2}>XXII</text>}
       {variant === 'fogbound' && <path d="M14 140 q8 -4 16 0 t16 0 t16 0 t16 0 t8 0" fill="none" stroke={GOLD_FLAT} strokeWidth={0.8} opacity={0.6} />}
@@ -274,9 +293,11 @@ function CardBackInner({ className, variant = 'standard' }: { className?: string
           <ellipse cx={50} cy={136} rx={6} ry={2} fill="none" stroke={GOLD_FLAT} strokeWidth={0.5} />
         </g>
       )}
-      <circle cx={50} cy={80} r={1.5} fill={GOLD_FLAT} />
       {[[50, 24], [50, 136], [18, 80], [82, 80]].map(([x, y], i) => (
-        <path key={i} d={`M${x} ${y - 4} l3 4 l-3 4 l-3 -4 z`} fill={GOLD_FLAT} opacity={0.8} />
+        <g key={i}>
+          <path d={`M${x} ${y - 4} l3 4 l-3 4 l-3 -4 z`} fill={GOLD} stroke={GOLD_FLAT} strokeWidth={0.3} opacity={0.9} />
+          <circle cx={x} cy={y} r={0.7} fill={glow} />
+        </g>
       ))}
     </svg>
   );
