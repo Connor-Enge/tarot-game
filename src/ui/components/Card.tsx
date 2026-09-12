@@ -83,6 +83,8 @@ export function Card({ cardId, reversed = false, faceDown = false, size = 'md', 
   const card = cardId ? getCard(cardId) : undefined;
   // The deck ages with you: cards read many times pick up wear.
   const resolved = useGame((s) => (cardId ? s.knowledge.cards[cardId]?.resolved ?? 0 : 0));
+  // A mastered card is gilt wherever it shows: the deck remembers what the reader has learned.
+  const mastered = useGame((s) => !!cardId && (s.knowledge.cards[cardId]?.tier ?? 0) >= 3);
   const isSignature = useGame((s) => !!cardId && s.knowledge.signature === cardId);
   const wear = faceDown || !card ? 0 : resolved >= 25 ? 3 : resolved >= 12 ? 2 : resolved >= 5 ? 1 : 0;
   const cls = [
@@ -96,6 +98,7 @@ export function Card({ cardId, reversed = false, faceDown = false, size = 'md', 
     echo && 'card--echo',
     hiddenSuit && `card--fog-${hiddenSuit}`,
     card && !faceDown && `card--suit-${card.arcana === 'major' ? 'major' : card.suit}`,
+    mastered && !faceDown && 'card--mastered',
     wear > 0 && `card--worn card--worn-${wear}`,
     drag && 'card--dragging',
   ]
@@ -127,6 +130,7 @@ export function Card({ cardId, reversed = false, faceDown = false, size = 'md', 
         {faceDown || !card ? <CardBack className="card__svg" variant={variant} /> : <CardArt cardId={card.id} className="card__svg" texture={size === 'lg' || size === 'md'} />}
         {mark === 'scarred' && <div className="card__scar" aria-hidden />}
         {wear > 0 && <div className="card__wear" aria-hidden />}
+        {mastered && !faceDown && <span className="card__gilt" aria-hidden />}
         {isSignature && !faceDown && <span className="card__sig" aria-hidden>✦</span>}
       </div>
       {reversed && !faceDown && size === 'lg' && <span className="card__rev-mark" aria-hidden title="reversed">⥯</span>}

@@ -977,7 +977,10 @@ identity, not power, which is the point.
   cards do when held close. A
   reversed face is lit from below: the art runs a little cooler and dimmer
   and a violet shadow sits over what is now its top, so a turned card reads
-  as turned at a glance, before the corner mark is found. On the map, a
+  as turned at a glance, before the corner mark is found. A mastered card
+  is gilt wherever it shows: a fine double gold rule inside its edge with a
+  bead at each corner, so the hand, the seats and the Codex all say which
+  cards the reader has learned to the end. On the map, a
   place you have read at, or foretold, shows its own scene art inside the
   node as a small round porthole, the kind glyph shrunk to a badge on its
   rim and the verdict mark beside it, so the road so far is a trail of
