@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 import type { Suit } from '../../engine';
 import { ROBE, ROBE_PALE } from './palette';
 import { BLOOD, Cloud, Flame, GOLD, GOLD_FLAT, Horse, INK, Moon, Mountains, PALE, Star, Sun, SUIT_SYMBOL, Sword as SwordSym, Throne, Tree, Water } from './primitives';
-import { Person, Rose, hands, SKIN, SKIN_INK, type Pose } from './figure';
+import { Person, Rose, hands, LEAF, SKIN, SKIN_INK, type Pose } from './figure';
 import type { Arms } from './primitives';
 
 /** The old silhouette's arm names, mapped onto the drawn figure's poses. */
@@ -309,13 +309,17 @@ const CUPS: Record<number, () => ReactElement> = {
   ),
   4: () => (
     <g>
+      <Mountains y={80} opacity={0.15} />
       <Ground y={92} fill={GREEN} opacity={0.6} />
-      <Tree x={22} y={92} h={56} />
-      <Person x={24} y={98} h={30} pose="hold" robe={ROBE.cups} />
-      <Row suit="cups" xs={[40, 54, 68]} y={100} s={6.5} />
-      <Cloud x={46} y={54} w={26} />
-      <path d="M54 52 q8 -4 16 0 q-6 4 -16 0 z" fill={PALE} stroke={INK} strokeWidth={0.5} />
-      <Row suit="cups" xs={[66]} y={44} s={6.5} />
+      {/* he sits under the tree with his arms folded, three cups before him and a fourth offered from a cloud */}
+      <Tree x={20} y={92} h={60} fill={LEAF} />
+      <Person x={26} y={100} h={40} pose="sit-hold" robe={ROBE.cups} inner={ROBE_PALE.cups} hair="#3a2a1e" />
+      <path d="M20 79 q6 4 12 0" fill="none" stroke={ROBE.cups} strokeWidth={3.2} strokeLinecap="round" />
+      <path d="M20 79 q6 4 12 0" fill="none" stroke={INK} strokeWidth={0.4} opacity={0.5} />
+      <Row suit="cups" xs={[44, 56, 68]} y={101} s={6.5} />
+      <Cloud x={48} y={52} w={26} />
+      <path d="M56 50 q8 -4 16 0 q-6 4 -16 0 z" fill={SKIN} stroke={SKIN_INK} strokeWidth={0.5} />
+      <Row suit="cups" xs={[68]} y={42} s={6.5} />
     </g>
   ),
   5: () => (
@@ -368,10 +372,12 @@ const CUPS: Record<number, () => ReactElement> = {
       <Mountains y={60} opacity={0.5} fill="#3b3159" />
       <Water y={82} rows={2} />
       <Ground y={92} fill="#3b3159" opacity={0.8} />
-      <Row suit="cups" xs={[12, 22, 32, 42, 52]} y={104} s={5.5} />
-      <Row suit="cups" xs={[17, 27, 37]} y={94} s={5.5} />
-      <Person x={64} y={78} h={30} pose="hold" robe={BLOOD} />
-      <path d="M64 78 q6 -14 4 -30" fill="none" stroke={GOLD_FLAT} strokeWidth={1} opacity={0.5} />
+      {/* eight cups stacked and left behind; he walks away up the path with his staff, back turned */}
+      <Row suit="cups" xs={[10, 20, 30, 40, 50]} y={106} s={5.5} />
+      <Row suit="cups" xs={[15, 25, 35]} y={96} s={5.5} />
+      <path d="M52 98 q6 -12 10 -30" fill="none" stroke="#d9c39a" strokeWidth={3} opacity={0.5} />
+      <Person x={60} y={90} h={36} pose="walk" robe={BLOOD} inner="#8a2e24" hair="#3a2a1e" face={false} belt={null} />
+      <line x1={69} y1={92} x2={70} y2={64} stroke="#8a5a22" strokeWidth={1.3} strokeLinecap="round" />
     </g>
   ),
   9: () => (
