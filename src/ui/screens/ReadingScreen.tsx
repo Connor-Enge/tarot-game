@@ -93,7 +93,10 @@ function ReadingScreenInner() {
   const wCost = whisperCost(run);
   const canRedraw = run.clarity >= rCost;
   const hushed = !canWhisperHere(run);
-  const canWhisper = !hushed && lifted !== null && run.clarity >= wCost && !active.whispered.includes(lifted) && !active.candidates[lifted]?.hidden;
+  const knownCards = useGame((s) => s.knowledge.cards);
+  // A card the Codex knows (tier two or better) whispers its seat word for free.
+  const knowsFree = (cardId: string) => (knownCards[cardId]?.tier ?? 0) >= 2;
+  const canWhisper = !hushed && lifted !== null && run.clarity >= wCost && !active.whispered.includes(lifted) && !active.candidates[lifted]?.hidden && !knowsFree(active.candidates[lifted]?.cardId ?? '');
   const bell = hasRelic(run, 'bell');
   const lamp = lampVerdicts(run);
   const lampOn = !!active.lit;
@@ -274,7 +277,8 @@ function ReadingScreenInner() {
                 lifted={lifted === i}
                 dim={lifted !== null && lifted !== i}
                 mark={run.marks[c.cardId]}
-                whisper={whispered ? kw : undefined}
+                whisper={whispered || (!c.hidden && knowsFree(c.cardId)) ? kw : undefined}
+                whisperKnown={!whispered && !c.hidden && knowsFree(c.cardId)}
                 yours={c.yours}
                 held={c.held}
                 kin={!c.hidden && kinHere(c.cardId)}

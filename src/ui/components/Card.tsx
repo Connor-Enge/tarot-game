@@ -13,6 +13,8 @@ interface Props {
   mark?: 'charged' | 'scarred';
   /** A whispered keyword, shown as a ribbon. Never the full meaning. */
   whisper?: string;
+  /** The ribbon came free, from a card the Codex already knows. */
+  whisperKnown?: boolean;
   /** The reader's keepsake, on the deal that first shows it. */
   yours?: boolean;
   /** Held back from the seat before. */
@@ -35,7 +37,7 @@ interface Props {
 }
 
 /** Card faces show name and art only. Meaning lives in the Codex. */
-export function Card({ cardId, reversed = false, faceDown = false, size = 'md', lifted, dim, mark, whisper, yours, held, kin, animKey, delay = 0, onClick, onLongPress, echo, hiddenSuit, onDragMove, onDragEnd }: Props) {
+export function Card({ cardId, reversed = false, faceDown = false, size = 'md', lifted, dim, mark, whisper, whisperKnown, yours, held, kin, animKey, delay = 0, onClick, onLongPress, echo, hiddenSuit, onDragMove, onDragEnd }: Props) {
   const mode = useGame((s) => s.mode);
   const variant: BackVariant = mode.kind === 'weekly' ? 'weekly' : mode.kind === 'free' && mode.descent !== 'standard' && mode.descent !== 'short' ? (mode.descent as BackVariant) : 'standard';
   const timer = useRef<number | null>(null);
@@ -128,7 +130,7 @@ export function Card({ cardId, reversed = false, faceDown = false, size = 'md', 
         {isSignature && !faceDown && <span className="card__sig" aria-hidden>✦</span>}
       </div>
       {reversed && !faceDown && size === 'lg' && <span className="card__rev-mark" aria-hidden title="reversed">⥯</span>}
-      {whisper && <div className="card__whisper">{whisper}</div>}
+      {whisper && <div className={`card__whisper ${whisperKnown ? 'card__whisper--known' : ''}`}>{whisper}</div>}
       {yours && !whisper && <div className="card__whisper card__whisper--yours">yours</div>}
       {held && !whisper && !yours && <div className="card__whisper card__whisper--held">held</div>}
       {echo && !whisper && !yours && !held && <div className="card__whisper card__whisper--echo">echo</div>}

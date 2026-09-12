@@ -2249,3 +2249,4 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .challenge__head { color: var(--gold-2); font-size: 1rem; }
 .challenge__mark { margin-right: 4px; }
 .challenge__row { display: flex; gap: 8px; align-items: center; margin-top: 2px; }
+.card__whisper--known { background: linear-gradient(160deg, rgba(233,228,242,0.85), rgba(180,172,200,0.8)); color: #1a1830; opacity: 0.92; }

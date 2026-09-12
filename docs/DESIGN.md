@@ -623,6 +623,14 @@ with the deck's size on the button. Cards land wrong more often there
 (0.35). It has its own back, a quill over the line it has written. It is the one place the game lets the reader stack the deck,
 and it is gated behind knowing enough of it to stack it well.
 
+## Known cards whisper for free
+
+A card the Codex knows (tier two, "known", or better) wears its seat word
+in the hand without being asked, as a paler ribbon than a paid whisper.
+The Codex already shows that card's keywords, so nothing new is said; the
+table simply stops charging for what the reader has earned. Whisper stays
+for cards not yet known, and the button greys out on a known one.
+
 ## The Lamp
 
 Once per seat, for two Clarity, the player holds a lamp over the seat and
