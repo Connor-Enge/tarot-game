@@ -697,24 +697,63 @@ const PENTACLES: Record<number, () => ReactElement> = {
   ),
   8: () => (
     <g>
+      {/* the town far off, the post with the six finished coins, the apprentice at his bench with mallet and chisel */}
+      <path d="M0 62 h6 v-8 h4 v8 h6 v-5 h4 v5 h8 v-10 h3 v10 h6 v-6 h5 v6 h6 v-4 h4 v4 h48 v40 h-80 z" fill={STONE} opacity={0.35} />
+      <path d="M0 62 h60" stroke={INK} strokeWidth={0.4} opacity={0.4} />
       <Ground y={96} fill={STONE} opacity={0.4} />
-      <line x1={64} y1={10} x2={64} y2={96} stroke="#8a6a3a" strokeWidth={2} />
-      <Row suit="pentacles" xs={[64, 64, 64, 64, 64, 64]} y={20} s={0} />
-      {[18, 32, 46, 60, 74, 88].map((y) => <Row key={y} suit="pentacles" xs={[64]} y={y} s={5} />)}
-      <rect x={14} y={84} width={26} height={14} fill="#8a6a3a" stroke={INK} strokeWidth={0.6} />
-      <Person x={22} y={92} h={40} pose="raise-right" robe={ROBE.pentacles} />
-      <Row suit="pentacles" xs={[36]} y={82} s={5} />
-      <Row suit="pentacles" xs={[10]} y={104} s={5} />
+      <rect x={62} y={10} width={4} height={86} fill="#8a6a3a" stroke={INK} strokeWidth={0.5} />
+      <rect x={64} y={10} width={2} height={86} fill="url(#hatch)" opacity={0.5} />
+      {[18, 32, 46, 60, 74, 88].map((y) => (
+        <g key={y}>
+          <path d={`M64 ${y - 9} v4`} stroke={INK} strokeWidth={0.5} />
+          <PentSym x={64} y={y} s={5} />
+        </g>
+      ))}
+      <rect x={12} y={84} width={30} height={14} fill="#8a6a3a" stroke={INK} strokeWidth={0.6} />
+      <rect x={12} y={84} width={30} height={14} fill="url(#hatch)" opacity={0.4} />
+      <path d="M14 98 v8 M40 98 v8" stroke="#5a3a22" strokeWidth={1.6} />
+      <Person x={24} y={92} h={42} pose="reach-right" robe={ROBE.pentacles} inner={ROBE_PALE.pentacles} hair="#5a3a22" />
+      {(() => { const hd = hands(24, 92, 42, 'reach-right'); return (
+        <g>
+          <line x1={hd.r.x} y1={hd.r.y} x2={hd.r.x + 5} y2={hd.r.y + 6} stroke={STONE} strokeWidth={1.2} strokeLinecap="round" />
+          <line x1={hd.l.x} y1={hd.l.y} x2={hd.l.x + 2} y2={hd.l.y - 10} stroke="#8a6a3a" strokeWidth={1.6} strokeLinecap="round" />
+          <rect x={hd.l.x - 2} y={hd.l.y - 14} width={8} height={4} rx={1} fill="#5a3a22" stroke={INK} strokeWidth={0.4} />
+        </g>
+      ); })()}
+      <PentSym x={44} y={86} s={5} />
+      <PentSym x={8} y={104} s={5} />
     </g>
   ),
   9: () => (
     <g>
+      {/* the manor far behind; her vineyard, the vines trained on posts and hung with coins; a snail in the grass */}
+      <Mountains y={60} opacity={0.12} />
+      <path d="M50 56 h24 v-14 h-24 z M54 42 h4 v-6 h-4 z M66 42 h4 v-6 h-4 z M48 56 h28" fill={STONE} opacity={0.4} />
       <Ground y={90} fill={GOLD_FLAT} opacity={0.5} />
-      {[6, 18, 62, 74].map((x) => <path key={x} d={`M${x} 90 v-40 q4 -6 8 0 v40`} fill={GREEN} opacity={0.6} />)}
-      <Row suit="pentacles" xs={[8, 20, 64, 76, 10, 18, 66, 74, 40]} y={58} s={4.5} />
-      {[12, 24, 60, 72].map((x, i) => <circle key={x} cx={x} cy={44 + (i % 2) * 8} r={2.4} fill="#7a3fa0" opacity={0.8} />)}
-      <Person x={40} y={100} h={50} pose="raise-left" robe={ROBE.pentacles} />
-      <path d="M22 54 l-4 -4 l6 1 l1 5 z" fill={INK} />
+      {[6, 18, 62, 74].map((x) => (
+        <g key={x}>
+          <path d={`M${x} 90 v-40 q4 -6 8 0 v40`} fill={GREEN} opacity={0.6} />
+          <path d={`M${x + 4} 50 v40`} stroke="#8a6a3a" strokeWidth={1} opacity={0.6} />
+          {[56, 66, 76].map((y) => <path key={y} d={`M${x + 4} ${y} q-5 -2 -6 -6 q5 0 6 6 q5 -2 6 -6 q-5 0 -6 6`} fill={LEAF} stroke={INK} strokeWidth={0.3} />)}
+        </g>
+      ))}
+      {[[8, 46], [22, 44], [64, 44], [78, 46]].map(([x, y], i) => (
+        <g key={i}>
+          {[0, 1, 2, 3, 4, 5].map((k) => <circle key={k} cx={x + (k % 3) * 1.8 - 1.8} cy={y + Math.floor(k / 3) * 1.8} r={1.1} fill="#7a3fa0" stroke={INK} strokeWidth={0.2} />)}
+        </g>
+      ))}
+      <Row suit="pentacles" xs={[8, 20, 64, 76]} y={60} s={4.5} />
+      <Row suit="pentacles" xs={[12, 16, 68, 72]} y={70} s={4.5} />
+      <Row suit="pentacles" xs={[40]} y={104} s={4.5} />
+      <Person x={40} y={100} h={50} pose="raise-left" robe={ROBE.pentacles} inner="#d9b86a" hair="#5a3a22" belt={GOLD_FLAT} />
+      {(() => { const hd = hands(40, 100, 50, 'raise-left'); return (
+        <g>
+          <path d={`M${hd.l.x - 1} ${hd.l.y - 2} q-2 -6 2 -9 q4 1 4 6 l-1 3 z`} fill="#5a4a3a" stroke={INK} strokeWidth={0.4} />
+          <path d={`M${hd.l.x + 1} ${hd.l.y - 11} q2 -2 3 0 l-1 2 z`} fill={BLOOD} stroke={INK} strokeWidth={0.3} />
+          <path d={`M${hd.l.x - 1} ${hd.l.y - 4} l-3 2`} stroke={INK} strokeWidth={0.5} />
+        </g>
+      ); })()}
+      <path d="M52 100 a3 3 0 1 1 6 0 z M58 100 q3 -1 4 -3" fill="#c98a3c" stroke={INK} strokeWidth={0.4} />
     </g>
   ),
   10: () => (
