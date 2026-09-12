@@ -1077,8 +1077,14 @@ function Court({ suit, rank }: { suit: Suit; rank: number }): ReactElement {
         {suit === 'pentacles' && [0, 1, 2, 3].map((i) => <path key={i} d={`M0 ${98 + i * 4} q40 -3 80 0`} fill="none" stroke={INK} strokeWidth={0.5} opacity={0.4} />)}
         {suit === 'cups' && <Water y={92} rows={2} />}
         {charge && [6, 14, 60, 70].map((x, i) => <path key={x} d={`M${x} ${20 + i * 12} q10 -3 20 0`} fill="none" stroke={PALE} strokeWidth={1} opacity={0.8} />)}
+        {/* dust or spray under the hooves, and the horse's trappings in the suit's colour */}
+        {rear && [[14, 100], [24, 104], [56, 102]].map(([x, y], i) => <path key={i} d={`M${x} ${y} q3 -2 6 0 q3 2 6 0`} fill="none" stroke="#b8763a" strokeWidth={0.8} opacity={0.6} />)}
+        {charge && [[8, 98], [16, 104], [70, 100]].map(([x, y], i) => <path key={i} d={`M${x} ${y} q4 -3 8 0`} fill="none" stroke={PALE} strokeWidth={1} opacity={0.8} />)}
         <g transform={rear ? 'rotate(-18 40 104)' : charge ? 'skewX(-14)' : undefined}>
           <Horse x={charge ? 52 : 38} y={104} fill={suit === 'swords' ? PALE : suit === 'cups' ? PALE : pale} w={52} />
+          <path d={`M${(charge ? 52 : 38) - 18} 92 q18 8 36 0 v4 q-18 6 -36 0 z`} fill={robe} opacity={0.85} stroke={INK} strokeWidth={0.4} />
+          <path d={`M${(charge ? 52 : 38) - 14} 94 h28`} stroke={GOLD_FLAT} strokeWidth={0.5} opacity={0.8} />
+          <path d={`M${(charge ? 52 : 38) + 22} 78 l6 4 M${(charge ? 52 : 38) + 26} 76 l1 6`} fill="none" stroke={GOLD_FLAT} strokeWidth={0.6} />
         </g>
         {/* the rider in mail under the suit's surcoat, a plumed helm */}
         <Person x={rx} y={ry} h={34} pose={pose} robe={robe} inner="#c9cdd4" hair="none" belt={GOLD_FLAT} face />
