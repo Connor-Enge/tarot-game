@@ -200,7 +200,8 @@ function CardArtInner({ cardId, className, texture = true }: { cardId: string; c
       <g clipPath={`url(#clip-${card.id})`}>
         <g transform="translate(10 18)">{art}</g>
       </g>
-      {/* the window's edges fall into shadow, and a gold mat sits inside the ink line */}
+      {/* the paper's grain shows through the picture, then the window's edges fall into shadow, and a gold mat sits inside the ink line */}
+      {texture && <rect x={10} y={18} width={80} height={112} rx={2} filter="url(#paper)" opacity={0.7} />}
       <rect x={10} y={18} width={80} height={112} rx={2} fill="url(#windowVignette)" />
       <rect x={10} y={18} width={80} height={112} rx={2} fill="none" stroke={INK} strokeWidth={0.8} />
       <rect x={11.2} y={19.2} width={77.6} height={109.6} rx={1.5} fill="none" stroke={GOLD_FLAT} strokeWidth={0.4} opacity={0.75} />
