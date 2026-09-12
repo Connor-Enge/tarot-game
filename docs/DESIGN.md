@@ -972,7 +972,19 @@ identity, not power, which is the point.
   between fine lines with quatrefoils at the corners and lozenges at the
   sides; the window has a gold mat inside its ink line and a vignette
   that darkens toward the edges; the numeral sits in a small cartouche
-  between rules, the name on a ribboned plate; the numbered Minors are scenes after the
+  between rules, the name on a ribboned plate; the card's paper grain
+  shows through the picture at low opacity so the illustration reads
+  as printed on the same stock as its frame. The back carries the same
+  rail and corners with a foil compass rose, a moon in its eye. Later
+  passes went back over everything with the same hand: thrones carry a
+  carved panel, finials, lozenges and a shell; faces have brows, a
+  nose line and a jaw shadow; the four suit symbols are a grained wand,
+  a chalice with a knop and foot, a blade with a fuller and a wrapped
+  grip, and a coin with an engraved rim; water has a body under its
+  ripples; the courts' companions (cat, hare, bull, fish, butterflies,
+  salamanders) are drawn rather than stamped; pages wear a pinned cloak
+  and satchel, knights ride caparisoned horses with dust or spray
+  under the hooves; the numbered Minors are scenes after the
   Waite-Smith convention (every pip present, and a figure doing the thing:
   the Two of Wands holds the globe on the battlement, the Five of
   Pentacles passes the lit window in snow, the Eight of Cups walks away
