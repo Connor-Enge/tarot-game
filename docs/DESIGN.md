@@ -963,7 +963,12 @@ identity, not power, which is the point.
   pomegranate, grass, a cliff edge). `hands()` returns where a pose's
   hands end up so a card can put a wand, a rose or a sceptre in them. The
   every figure on every card, Majors, courts and pip scenes alike, is
-  drawn this way, and the old silhouette is no longer used on any face; the numbered Minors are scenes after the
+  drawn this way, and the old silhouette is no longer used on any face.
+  The shared landscape carries the same hand: mountains hatch their
+  far slopes and keep a ridge line, ground has a hatched verge under its
+  horizon, clouds have a hatched belly, trees a tapered trunk and a
+  shaded lobe, horses a shadowed belly, hooves, a bridle and strands in
+  the mane, pillars fluting and a shaded side; the numbered Minors are scenes after the
   Waite-Smith convention (every pip present, and a figure doing the thing:
   the Two of Wands holds the globe on the battlement, the Five of
   Pentacles passes the lit window in snow, the Eight of Cups walks away

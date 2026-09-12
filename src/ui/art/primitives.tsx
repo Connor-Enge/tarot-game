@@ -24,6 +24,7 @@ export function Sun({ x, y, r = 10, rays = 12, face = false }: P & { r?: number;
     <g>
       <g className="live-rays">{lines}</g>
       <circle cx={x} cy={y} r={r} fill={GOLD} stroke={INK} strokeWidth={0.8} />
+      <circle cx={x} cy={y} r={r * 0.78} fill="none" stroke={INK} strokeWidth={0.35} opacity={0.45} />
       {face && (
         <g stroke={INK} strokeWidth={0.8} fill="none">
           <path d={`M${x - 4} ${y - 2} q1.5 -1.5 3 0 M${x + 1} ${y - 2} q1.5 -1.5 3 0`} />
@@ -55,11 +56,26 @@ export function Star({ x, y, r = 4, points = 8, fill = GOLD }: P & { r?: number;
 }
 
 export function Ground({ y = 96, fill = INK, opacity = 1 }: { y?: number; fill?: string; opacity?: number }) {
-  return <path d={`M0 ${y} Q20 ${y - 3} 40 ${y} T80 ${y} L80 112 L0 112 Z`} fill={fill} opacity={opacity} />;
+  const d = `M0 ${y} Q20 ${y - 3} 40 ${y} T80 ${y} L80 112 L0 112 Z`;
+  return (
+    <g opacity={opacity}>
+      <path d={d} fill={fill} />
+      <path d={`M0 ${y} Q20 ${y - 3} 40 ${y} T80 ${y} L80 ${y + 7} Q60 ${y + 4} 40 ${y + 7} T0 ${y + 7} Z`} fill="url(#hatch)" opacity={0.45} />
+      <path d={`M0 ${y} Q20 ${y - 3} 40 ${y} T80 ${y}`} fill="none" stroke={INK} strokeWidth={0.45} opacity={0.5} />
+    </g>
+  );
 }
 
 export function Mountains({ y = 80, fill = INK, opacity = 0.35 }: { y?: number; fill?: string; opacity?: number }) {
-  return <path d={`M0 ${y + 14} L14 ${y - 6} L24 ${y + 4} L38 ${y - 16} L52 ${y + 2} L62 ${y - 8} L80 ${y + 12} L80 112 L0 112 Z`} fill={fill} opacity={opacity} />;
+  const ridge = `M0 ${y + 14} L14 ${y - 6} L24 ${y + 4} L38 ${y - 16} L52 ${y + 2} L62 ${y - 8} L80 ${y + 12}`;
+  return (
+    <g opacity={opacity}>
+      <path d={`${ridge} L80 112 L0 112 Z`} fill={fill} />
+      {/* the slopes that face away from the light, hatched */}
+      <path d={`M14 ${y - 6} L24 ${y + 4} L18 ${y + 9} Z M38 ${y - 16} L52 ${y + 2} L40 ${y + 8} Z M62 ${y - 8} L80 ${y + 12} L66 ${y + 12} Z`} fill="url(#crosshatch)" opacity={0.7} />
+      <path d={ridge} fill="none" stroke={INK} strokeWidth={0.5} opacity={0.6} />
+    </g>
+  );
 }
 
 export function Water({ y = 92, rows = 3 }: { y?: number; rows?: number }) {
@@ -74,13 +90,24 @@ export function Water({ y = 92, rows = 3 }: { y?: number; rows?: number }) {
 
 export function Cloud({ x, y, w = 24 }: P & { w?: number }) {
   const h = w * 0.4;
-  return <path d={`M${x} ${y} a${h * 0.5} ${h * 0.5} 0 0 1 ${w * 0.25} ${-h * 0.5} a${h * 0.6} ${h * 0.6} 0 0 1 ${w * 0.35} 0 a${h * 0.5} ${h * 0.5} 0 0 1 ${w * 0.3} ${h * 0.4} a${h * 0.4} ${h * 0.4} 0 0 1 ${-w * 0.05} ${h * 0.5} L${x} ${y + h * 0.4} Z`} fill={PALE} stroke={INK} strokeWidth={0.6} className="live-cloud" style={{ animationDelay: `${(x % 5) * -2}s` }} />;
+  const d = `M${x} ${y} a${h * 0.5} ${h * 0.5} 0 0 1 ${w * 0.25} ${-h * 0.5} a${h * 0.6} ${h * 0.6} 0 0 1 ${w * 0.35} 0 a${h * 0.5} ${h * 0.5} 0 0 1 ${w * 0.3} ${h * 0.4} a${h * 0.4} ${h * 0.4} 0 0 1 ${-w * 0.05} ${h * 0.5} L${x} ${y + h * 0.4} Z`;
+  return (
+    <g className="live-cloud" style={{ animationDelay: `${(x % 5) * -2}s` }}>
+      <path d={d} fill={PALE} stroke={INK} strokeWidth={0.6} />
+      {/* the underside, hatched, so the cloud has a belly */}
+      <path d={`M${x + w * 0.08} ${y + h * 0.3} q${w * 0.2} ${h * 0.1} ${w * 0.4} 0 q${w * 0.2} ${-h * 0.1} ${w * 0.4} 0 L${x + w * 0.85} ${y + h * 0.4} L${x} ${y + h * 0.4} Z`} fill="url(#hatch)" opacity={0.6} />
+      <path d={`M${x + w * 0.28} ${y - h * 0.15} q${w * 0.12} ${-h * 0.35} ${w * 0.3} ${-h * 0.05}`} fill="none" stroke={INK} strokeWidth={0.35} opacity={0.5} />
+    </g>
+  );
 }
 
 export function Pillar({ x, y = 8, h = 80, w = 8, dark = false }: P & { h?: number; w?: number; dark?: boolean }) {
   return (
     <g>
       <rect x={x - w / 2} y={y} width={w} height={h} fill={dark ? INK : PALE} stroke={INK} strokeWidth={0.8} />
+      {/* fluting, and the shaded side */}
+      <path d={`M${x - w * 0.25} ${y + 3} v${h - 6} M${x} ${y + 3} v${h - 6} M${x + w * 0.25} ${y + 3} v${h - 6}`} stroke={dark ? PALE : INK} strokeWidth={0.35} opacity={0.35} />
+      {!dark && <rect x={x + w * 0.15} y={y} width={w * 0.35} height={h} fill="url(#hatch)" opacity={0.6} />}
       <rect x={x - w / 2 - 2} y={y - 3} width={w + 4} height={4} fill={dark ? INK : PALE} stroke={INK} strokeWidth={0.8} />
       <rect x={x - w / 2 - 2} y={y + h - 1} width={w + 4} height={4} fill={dark ? INK : PALE} stroke={INK} strokeWidth={0.8} />
     </g>
@@ -162,7 +189,13 @@ export function Horse({ x, y, fill = PALE, w = 34 }: P & { fill?: string; w?: nu
       <path d={`M${bx + w * 0.5} ${by - h * 0.72} l${w * 0.03} ${-h * 0.14} l${w * 0.05} ${h * 0.1}`} fill="none" />
       <circle cx={bx + w * 0.58} cy={by - h * 0.62} r={w * 0.02} fill={INK} stroke="none" />
       <path d={`M${bx + w * 0.3} ${by - h * 0.2} q${w * 0.06} ${-h * 0.3} ${w * 0.2} ${-h * 0.5}`} fill="none" strokeWidth={1.4} />
+      <path d={`M${bx + w * 0.33} ${by - h * 0.28} l${w * 0.05} ${-h * 0.14} M${bx + w * 0.38} ${by - h * 0.42} l${w * 0.06} ${-h * 0.12} M${bx + w * 0.44} ${by - h * 0.56} l${w * 0.06} ${-h * 0.1}`} fill="none" strokeWidth={0.7} />
       <path d={`M${bx - w * 0.4} ${by - h * 0.05} q${-w * 0.14} ${h * 0.15} ${-w * 0.08} ${h * 0.5}`} fill="none" strokeWidth={1.4} />
+      <path d={`M${bx - w * 0.42} ${by + h * 0.05} q${-w * 0.1} ${h * 0.15} ${-w * 0.05} ${h * 0.4} M${bx - w * 0.46} ${by + h * 0.1} q${-w * 0.08} ${h * 0.12} ${-w * 0.02} ${h * 0.32}`} fill="none" strokeWidth={0.6} />
+      {/* the belly in shadow, hooves, a bridle */}
+      <ellipse cx={bx} cy={by + h * 0.12} rx={w * 0.34} ry={h * 0.18} fill="url(#hatch)" stroke="none" opacity={0.6} />
+      <path d={`M${bx - w * 0.38} ${by + h * 0.52} h${w * 0.07} M${bx - w * 0.18} ${by + h * 0.53} h${w * 0.07} M${bx + w * 0.12} ${by + h * 0.53} h${w * 0.07} M${bx + w * 0.35} ${by + h * 0.52} h${w * 0.08}`} stroke={INK} strokeWidth={w * 0.05} strokeLinecap="round" />
+      <path d={`M${bx + w * 0.5} ${by - h * 0.5} l${w * 0.14} ${h * 0.02} M${bx + w * 0.57} ${by - h * 0.55} l${w * 0.02} ${h * 0.14}`} fill="none" strokeWidth={0.5} opacity={0.7} />
     </g>
   );
 }
@@ -182,10 +215,13 @@ export function Infinity({ x, y, s = 6 }: P & { s?: number }) {
 export function Tree({ x, y, h = 26, fill = INK }: P & { h?: number; fill?: string }) {
   return (
     <g>
-      <path d={`M${x - 1.2} ${y} l0 ${-h * 0.5} M${x} ${y - h * 0.5} l${-h * 0.2} ${-h * 0.2} M${x} ${y - h * 0.45} l${h * 0.22} ${-h * 0.25}`} stroke={fill} strokeWidth={1.4} fill="none" />
-      <circle cx={x} cy={y - h * 0.7} r={h * 0.3} fill={fill} />
-      <circle cx={x - h * 0.22} cy={y - h * 0.55} r={h * 0.2} fill={fill} />
-      <circle cx={x + h * 0.24} cy={y - h * 0.58} r={h * 0.22} fill={fill} />
+      {/* a tapered trunk with two boughs, a canopy of three lobes with the far side hatched */}
+      <path d={`M${x - 1.6} ${y} l0.4 ${-h * 0.5} l${-h * 0.2} ${-h * 0.2} l${h * 0.22} ${h * 0.16} l${h * 0.22} ${-h * 0.25} l${-h * 0.2} ${h * 0.29} l0.4 ${h * 0.5} z`} fill={fill === INK ? '#3a2a1e' : '#5a3a22'} stroke={INK} strokeWidth={0.5} strokeLinejoin="round" />
+      <circle cx={x - h * 0.22} cy={y - h * 0.55} r={h * 0.2} fill={fill} stroke={INK} strokeWidth={0.5} />
+      <circle cx={x + h * 0.24} cy={y - h * 0.58} r={h * 0.22} fill={fill} stroke={INK} strokeWidth={0.5} />
+      <circle cx={x} cy={y - h * 0.7} r={h * 0.3} fill={fill} stroke={INK} strokeWidth={0.5} />
+      <circle cx={x + h * 0.24} cy={y - h * 0.58} r={h * 0.22} fill="url(#hatch)" opacity={0.6} />
+      <path d={`M${x + h * 0.08} ${y - h * 0.5} a${h * 0.3} ${h * 0.3} 0 0 0 ${h * 0.14} ${-h * 0.4}`} fill="none" stroke="url(#hatch)" strokeWidth={h * 0.16} opacity={0.6} />
     </g>
   );
 }
