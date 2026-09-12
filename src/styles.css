@@ -2233,3 +2233,5 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .spread--cross { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .spread--cross .seat { min-width: 0; }
 @media (max-width: 400px) { .spread--cross .seat__pos { font-size: 0.56rem; letter-spacing: 0.03em; } }
+.node__hint { display: block; margin-top: 2px; color: var(--muted); font-size: 0.58rem; letter-spacing: 0.02em; }
+.node__place { background: rgba(11,10,18,0.92); border: 1px solid rgba(214,178,94,0.25); border-radius: 8px; padding: 3px 5px; z-index: 4; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }

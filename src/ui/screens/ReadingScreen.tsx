@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSettings } from '../../settings';
 import { activeSlotState, canLamp, canTakeBack, canWhisperHere, kinshipAmong, KIN_BONUS, lampCost, lampVerdicts, namedWithinReach, currentScene, readingSoFar, reckoningText, RITES, SLOT_POSITION, THRESHOLDS, getCard, hasRelic, redrawCost, sceneNumber, scoreSlot, SLOT_IDS, SLOTS, totalScenes, whisperCost, whisperWords } from '../../engine';
 
@@ -46,6 +46,15 @@ function ReadingScreenInner() {
   const deckOpen = useGame((s) => s.deckOpen);
   const openDeck = useGame((s) => s.openDeck);
   const [zoom, setZoom] = useState<{ cardId: string; reversed: boolean } | null>(null);
+  // After a card lands, bring the next hand into view on a phone, where the plate pushes it down.
+  const handRef = useRef<HTMLElement>(null);
+  const activeSlot = run.activeSlot;
+  useEffect(() => {
+    if (activeSlot === 0 || window.innerWidth >= 700) return;
+    const reduce = document.documentElement.classList.contains('reduce-motion') || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const t = window.setTimeout(() => handRef.current?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' }), 260);
+    return () => window.clearTimeout(t);
+  }, [activeSlot]);
 
   // Keys: 1-4 lift a candidate, Enter places it, R redraws, W whispers, T turns.
   useEffect(() => {
@@ -237,7 +246,7 @@ function ReadingScreenInner() {
       </div>
 
       <div className="reading__right">
-      <section className={`hand ${active.candidates.length > 3 ? 'hand--four' : ''} ${dragPull ? 'hand--pull' : ''} ${lampOn ? 'hand--lit' : ''}`} aria-label={`candidates for ${seatsNamed ? SLOTS[active.slot].name : `seat ${run.activeSlot + 1}`}: choose one`} key={handKey}>
+      <section ref={handRef} className={`hand ${active.candidates.length > 3 ? 'hand--four' : ''} ${dragPull ? 'hand--pull' : ''} ${lampOn ? 'hand--lit' : ''}`} aria-label={`candidates for ${seatsNamed ? SLOTS[active.slot].name : `seat ${run.activeSlot + 1}`}: choose one`} key={handKey}>
         {active.candidates.map((c, i) => {
           const card = getCard(c.cardId);
           const whispered = active.whispered.includes(i);

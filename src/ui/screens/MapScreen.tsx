@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { actOfLayer, canCut, canTakeVow, currentAct, cycleLength, foretellCost, getVow, KIND_GLYPH, RITES, ritesWalked, SCENES, tallyText, visitedNodes, vowOffer, wellTurn } from '../../engine';
+import { actOfLayer, canCut, canTakeVow, currentAct, cycleLength, foretellCost, getVow, KIND_GLYPH, RITES, ritesWalked, SCENES, tallyText, visitedNodes, vowOffer, wellTurn, foretoldHint, SLOTS, SLOT_POSITION } from '../../engine';
 import { ActBanner, ActMark } from '../art/banners';
 import { RoadStrip } from '../art/road';
 import { SceneArt } from '../art/scenes';
@@ -315,7 +315,12 @@ function MapScreenInner() {
                     )}
                     <span className="node__glyph">{KIND_GLYPH[node.kind]}</span>
                     {tierHere && <span className={`node__tier node__tier--${tierHere}`} aria-hidden>{TIER_MARK[tierHere]}</span>}
-                    {run.foretold.includes(node.id) && <span className="node__place">{SCENES[node.sceneId].place}</span>}
+                    {run.foretold.includes(node.id) && (
+                      <span className="node__place">
+                        {SCENES[node.sceneId].place}
+                        {(() => { const h = foretoldHint(SCENES[node.sceneId]); return h ? <span className="node__hint">{SLOTS[h.slot].glyph} {SLOT_POSITION[h.slot].role.toLowerCase()} answers to {h.tag}</span> : null; })()}
+                      </span>
+                    )}
                     {(() => {
                       const rite = SCENES[node.sceneId].rite;
                       const known = rite && !wasHere && (ritesKnown.includes(rite) || run.foretold.includes(node.id));

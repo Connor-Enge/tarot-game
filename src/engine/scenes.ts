@@ -61,6 +61,21 @@ export const RITES: Record<Rite, { name: string; glyph: string; text: string }> 
   lit: { name: 'The Lit Street', glyph: '☼', text: 'Every seat is lit already. The lamp asks nothing here.' },
 };
 
+/**
+ * What a foretold scene gives away beyond its name: the one seat that
+ * answers most strongly, and to what. A single tag, never the whole
+ * affinity; enough to plan a seat, not enough to solve the scene.
+ */
+export function foretoldHint(scene: Scene): { slot: SlotId; tag: string; weight: number } | null {
+  let best: { slot: SlotId; tag: string; weight: number } | null = null;
+  for (const slot of SLOT_IDS) {
+    for (const [tag, w] of Object.entries(scene.affinity[slot]).sort(([a], [b]) => a.localeCompare(b))) {
+      if (w > 0 && (!best || w > best.weight)) best = { slot, tag, weight: w };
+    }
+  }
+  return best;
+}
+
 /** Rites the reader has walked: any scene carrying one that appears in the omen log. */
 export function ritesWalked(omenLog: readonly { scene: string }[] | undefined): Rite[] {
   const seen = new Set((omenLog ?? []).map((e) => SCENES[e.scene]?.rite).filter((r): r is Rite => !!r));

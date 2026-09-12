@@ -31,3 +31,15 @@ describe('scenes', () => {
     expect(scenes.filter((s) => s.terminal)).toHaveLength(1);
   });
 });
+
+describe('foretold hint', () => {
+  it('names the single strongest seat and tag of a scene', async () => {
+    const { foretoldHint, SCENES, SLOT_IDS } = await import('../scenes');
+    const h = foretoldHint(SCENES.bell)!;
+    expect(h).not.toBeNull();
+    expect(SLOT_IDS).toContain(h.slot);
+    expect(SCENES.bell.affinity[h.slot][h.tag as never]).toBe(h.weight);
+    for (const slot of SLOT_IDS) for (const w of Object.values(SCENES.bell.affinity[slot]) as number[]) expect(w).toBeLessThanOrEqual(h.weight);
+    for (const s of Object.values(SCENES)) expect(foretoldHint(s)).not.toBeNull();
+  });
+});
