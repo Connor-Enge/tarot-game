@@ -388,7 +388,7 @@ export const useGame = create<GameStore>((set, get) => ({
       : 'neither';
     if (next.phase.kind === 'reading') {
       buzz(verdict === 'hurt' ? [20, 30, 40] : verdict === 'helped' ? [10, 20, 10] : 10);
-      sfx.place(suit);
+      sfx.place(suit, placed?.reversed);
       window.setTimeout(() => sfx.seat(verdict), 140);
       const k2 = noteDealt(knowledge, dealtIn(next));
       if (k2 !== knowledge) saveKnowledge(k2);
@@ -397,7 +397,7 @@ export const useGame = create<GameStore>((set, get) => ({
     }
     const tier = 'resolution' in next.phase ? next.phase.resolution.tier : null;
     buzz(tier === 'calamity' ? [40, 30, 80] : tier === 'triumph' ? [15, 20, 15, 20, 30] : 20);
-    sfx.place(suit);
+    sfx.place(suit, placed?.reversed);
     if (tier) sfx.resolve(tier);
     if (next.vow?.broken && !run.vow?.broken) {
       sfx.vowBroken();

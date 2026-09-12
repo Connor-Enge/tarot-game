@@ -39,7 +39,7 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <Pillar x={70} y={6} h={90} />
       <rect x={16} y={6} width={48} height={70} fill="url(#veil)" opacity={0.8} />
       <Moon x={40} y={12} r={5} />
-      <Throne x={40} y={92} w={26} h={20} fill={PALE} />
+      <Throne x={40} y={92} w={26} h={20} fill={PALE} back="arch" />
       <Figure x={40} y={92} h={44} arms="hold" fill="#3f6fa8" cloak crown />
       <path d="M32 96 q8 -6 16 0" fill="none" stroke={GOLD_FLAT} strokeWidth={1.4} />
       <Water y={100} rows={2} />
@@ -51,7 +51,7 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
         <Star key={i} x={x} y={8 + (i % 2) * 4} r={2.5} points={6} />
       ))}
       <Tree x={12} y={70} h={24} fill={INK} />
-      <Throne x={44} y={88} w={34} h={32} fill={PALE} />
+      <Throne x={44} y={88} w={34} h={32} fill={PALE} back="arch" />
       <Figure x={44} y={88} h={44} arms="out" fill="#e9d9b6" cloak crown />
       <path d="M52 78 l4 -4 l4 4 l-4 6 z" fill={BLOOD} stroke={INK} strokeWidth={0.5} />
       <g stroke={GOLD_FLAT} strokeWidth={1} fill="none">
@@ -67,7 +67,7 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <rect x={0} y={0} width={80} height={112} fill={BLOOD} opacity={0.18} />
       <Mountains y={56} opacity={0.45} fill={BLOOD} />
       <Sun x={66} y={14} r={5} rays={8} />
-      <Throne x={40} y={94} w={38} h={48} fill={INK} />
+      <Throne x={40} y={94} w={38} h={48} fill={INK} back="square" dais />
       {/* ram heads on the throne */}
       {[22, 58].map((x) => (
         <g key={x}>
@@ -227,7 +227,7 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <Pillar x={10} y={4} h={94} />
       <Pillar x={70} y={4} h={94} />
       <rect x={16} y={4} width={48} height={90} fill="#5a2d7a" opacity={0.28} />
-      <Throne x={40} y={92} w={30} h={30} fill={PALE} />
+      <Throne x={40} y={92} w={30} h={30} fill={PALE} back="square" />
       <Figure x={40} y={92} h={48} arms="right-up" fill={BLOOD} cloak crown />
       <Sword x={56} y={40} s={11} />
       {/* balance scales */}
