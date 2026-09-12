@@ -2269,3 +2269,5 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .placebook__cardmark { position: absolute; right: -4px; bottom: -4px; font-size: 0.62rem; color: var(--muted); background: #0b0a12; border-radius: 50%; width: 14px; height: 14px; display: grid; place-items: center; }
 .placebook__card.tier--triumph .placebook__cardmark, .placebook__card.tier--boon .placebook__cardmark { color: var(--gold-2); }
 .placebook__card.tier--calamity .placebook__cardmark, .placebook__card.tier--harm .placebook__cardmark { color: #e0a39a; }
+.node__familiar { position: absolute; bottom: -6px; left: -6px; z-index: 2; display: grid; place-items: center; width: 16px; height: 16px; border-radius: 50%; font-size: 0.6rem; background: #0b0a12; border: 1px solid rgba(191,230,245,0.55); color: #bfe6f5; }
+.codex__kin { position: absolute; right: -3px; bottom: -4px; font-size: 0.56rem; line-height: 1; padding: 1px 4px; border-radius: 999px; background: #0b0a12; border: 1px solid rgba(191,230,245,0.5); color: #bfe6f5; pointer-events: none; }

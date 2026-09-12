@@ -27,6 +27,18 @@ function MapScreenInner() {
   const vowRecord = useGame((s) => s.knowledge.vows);
   const omenLog = useGame((s) => s.knowledge.omenLog);
   const ritesKnown = ritesWalked(omenLog);
+  // Familiar ground: scenes the Codex has read at before, counted by visit.
+  const familiar = (() => {
+    const m = new Map<string, number>();
+    const seen = new Set<string>();
+    for (const e of omenLog ?? []) {
+      const key = `${e.run}:${e.scene}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      m.set(e.scene, (m.get(e.scene) ?? 0) + 1);
+    }
+    return m;
+  })();
   const [cutAt, setCutAtRaw] = useState<number | null>(null);
   const setCutAt = (v: number | null) => {
     setCutAtRaw((prev) => {
@@ -320,6 +332,9 @@ function MapScreenInner() {
                         {SCENES[node.sceneId].place}
                         {(() => { const h = foretoldHint(SCENES[node.sceneId]); return h ? <span className="node__hint">{SLOTS[h.slot].glyph} {SLOT_POSITION[h.slot].role.toLowerCase()} answers to {h.tag}</span> : null; })()}
                       </span>
+                    )}
+                    {!wasHere && !passed && node.kind !== 'abyss' && !run.foretold.includes(node.id) && familiar.has(node.sceneId) && (
+                      <span className="node__familiar" title={`Familiar ground: read here ${familiar.get(node.sceneId)} time${familiar.get(node.sceneId) === 1 ? '' : 's'} before`} aria-label="familiar ground">≡</span>
                     )}
                     {(() => {
                       const rite = SCENES[node.sceneId].rite;

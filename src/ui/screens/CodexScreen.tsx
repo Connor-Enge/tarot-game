@@ -56,6 +56,12 @@ export function CodexScreen() {
         ? shownUnsorted.slice().sort((a, b) => (k.cards[b.id]?.resolved ?? 0) - (k.cards[a.id]?.resolved ?? 0))
         : shownUnsorted.slice().sort((a, b) => (lastSeen.get(b.id) ?? -1) - (lastSeen.get(a.id) ?? -1));
   const ledger = buildLedger(k);
+  // How many cards each card knows, for the deck grid and the builder.
+  const kinCount = (() => {
+    const m: Record<string, number> = {};
+    for (const key of bondedPairs(k)) for (const id of key.split('|')) m[id] = (m[id] ?? 0) + 1;
+    return m;
+  })();
 
   return (
     <main className="screen screen--codex">
@@ -240,6 +246,7 @@ export function CodexScreen() {
               >
                 <Card cardId={c.id} size="xs" faceDown={!seen} />
                 {tier > 0 && !building && <span className={`codex__dot codex__dot--t${tier}`} />}
+                {kinCount[c.id] > 0 && <span className="codex__kin" title={`knows ${kinCount[c.id]} card${kinCount[c.id] === 1 ? '' : 's'}`}>✶{kinCount[c.id]}</span>}
                 {!building && (() => {
                   const b = bestSeat(e);
                   return b ? <span className="codex__best" title={`sits best as ${SLOT_POSITION[b.seat].n} · ${SLOT_POSITION[b.seat].role}`}>{SLOT_POSITION[b.seat].n}</span> : null;

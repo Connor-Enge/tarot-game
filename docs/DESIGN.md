@@ -982,7 +982,11 @@ identity, not power, which is the point.
   node as a small round porthole, the kind glyph shrunk to a badge on its
   rim and the verdict mark beside it, so the road so far is a trail of
   places rather than a row of discs. Unread places stay glyphs: the art
-  would give away what Foretell sells. Foretell itself now says one more
+  would give away what Foretell sells. An unread node whose scene the
+  Codex has read at before wears a small "familiar ground" mark on its rim,
+  with the visit count on hover: only that the place is known, never which.
+  In the Codex deck grid, a card that knows others wears a small kin count,
+  so the Chosen can be built around company. Foretell itself now says one more
   thing: the seat that answers most strongly there, and to what ("◯
   situation answers to hope"). One tag of one seat, so a foretold scene
   can be planned for without being solved. In a reading, the room itself feels
