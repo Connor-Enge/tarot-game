@@ -903,7 +903,10 @@ identity, not power, which is the point.
   node as a small round porthole, the kind glyph shrunk to a badge on its
   rim and the verdict mark beside it, so the road so far is a trail of
   places rather than a row of discs. Unread places stay glyphs: the art
-  would give away what Foretell sells. The
+  would give away what Foretell sells. In a reading, the room itself feels
+  the tally so far: as seats land the ambient light warms toward gold for a
+  boon or triumph, cools to violet for an even reading, and sinks to red
+  for harm or calamity, breathing slowly at either extreme. The
   hooks are `live-*` classes on the primitives and a few major groups,
   gated by an `.alive` ancestor and switched off by reduce-motion. The
   same two places hold the card in the hand (`Held`): it tilts toward the

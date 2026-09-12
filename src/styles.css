@@ -2153,3 +2153,23 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .reduce-motion .node__art { animation: none; }
 .scene__rite--dark { color: #9a93b2; border-color: rgba(120,110,150,0.4); background: rgba(20,16,36,0.5); }
 .node__rite--dark { color: #9a93b2; border-color: rgba(120,110,150,0.6); }
+
+/* --- the room feels the reading so far: light warms as the tally rises, cools as it falls --- */
+.screen--reading::before {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: -1; opacity: 0;
+  background:
+    radial-gradient(70% 45% at 50% 62%, var(--reading-glow, transparent), transparent 70%),
+    linear-gradient(180deg, transparent 55%, var(--reading-floor, transparent) 100%);
+  transition: opacity 1200ms ease, background 1200ms ease;
+}
+.reading--triumph::before { --reading-glow: rgba(243,220,138,0.26); --reading-floor: rgba(214,178,94,0.22); opacity: 1; animation: reading-breathe 5s ease-in-out infinite; }
+.reading--boon::before { --reading-glow: rgba(214,178,94,0.16); --reading-floor: rgba(214,178,94,0.12); opacity: 1; }
+.reading--neutral::before { --reading-glow: rgba(150,130,200,0.08); --reading-floor: rgba(90,70,140,0.1); opacity: 1; }
+.reading--harm::before { --reading-glow: rgba(214,96,94,0.14); --reading-floor: rgba(120,30,40,0.22); opacity: 1; }
+.reading--calamity::before { --reading-glow: rgba(214,96,94,0.24); --reading-floor: rgba(120,20,30,0.36); opacity: 1; animation: reading-breathe 3.6s ease-in-out infinite; }
+@keyframes reading-breathe { 0%, 100% { opacity: 0.85; } 50% { opacity: 1; } }
+.screen--abyss.screen--reading::before { z-index: -2; }
+.reduce-motion .screen--reading::before { animation: none; transition: none; }
+/* the meter's pin carries an ember of the same light */
+.reading--triumph .sofar__pin, .reading--boon .sofar__pin { box-shadow: 0 0 10px rgba(243,220,138,0.8); }
+.reading--harm .sofar__pin, .reading--calamity .sofar__pin { box-shadow: 0 0 10px rgba(214,96,94,0.8); }

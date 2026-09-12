@@ -101,7 +101,7 @@ function ReadingScreenInner() {
   const soFarBySlot = Object.fromEntries(soFar.seats.map((x) => [x.slot, x]));
 
   return (
-    <main className={`screen screen--reading ${scene.terminal ? 'screen--abyss' : ''}`}>
+    <main className={`screen screen--reading ${scene.terminal ? 'screen--abyss' : ''} ${soFar.placed > 0 ? `reading--${soFar.tier}` : ''}`}>
       <header className="topbar">
         <span className="muted small">
           {sceneNumber(run)} / {totalScenes(run)}
