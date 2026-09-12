@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
 import type { Suit } from '../../engine';
 import { ROBE, ROBE_PALE } from './palette';
-import { BLOOD, Cloud, Flame, GOLD, GOLD_FLAT, Horse, INK, Moon, Mountains, PALE, Star, Sun, SUIT_SYMBOL, Sword as SwordSym, Throne, Tree, Water } from './primitives';
+import { BLOOD, Cloud, Flame, GOLD, GOLD_FLAT, Horse, INK, Moon, Mountains, PALE, Star, Sun, SUIT_SYMBOL, Pentacle as PentSym, Sword as SwordSym, Throne, Tree, Water } from './primitives';
 import { Person, Rose, hands, LEAF, SKIN, SKIN_INK, type Pose } from './figure';
 import type { Arms } from './primitives';
 
@@ -324,14 +324,22 @@ const CUPS: Record<number, () => ReactElement> = {
   ),
   5: () => (
     <g>
+      {/* the river, the bridge, the keep on the far bank */}
+      <Mountains y={62} opacity={0.15} />
+      <path d="M60 60 h12 v-16 h-12 z M59 44 h3 v-3 h-3 z M64.5 44 h3 v-3 h-3 z M70 44 h3 v-3 h-3 z" fill={STONE} opacity={0.75} />
+      <path d="M66 60 v-6 h3 v6" fill={INK} opacity={0.5} />
       <Water y={70} rows={2} />
-      <path d="M46 70 q10 -10 22 0" fill="none" stroke={STONE} strokeWidth={2.4} />
-      <rect x={62} y={40} width={12} height={22} fill={STONE} opacity={0.7} />
+      <path d="M44 72 q11 -12 24 -2" fill="none" stroke={STONE} strokeWidth={2.6} />
+      <path d="M44 72 q11 -12 24 -2" fill="none" stroke={INK} strokeWidth={0.4} opacity={0.5} />
       <Ground y={92} fill={STONE} opacity={0.5} />
-      <Person x={30} y={104} h={48} pose="stand" robe={INK} />
+      {/* the mourner in the black cloak, hooded, head bowed */}
+      <Person x={30} y={104} h={48} pose="stand" robe={INK} inner="#3a3a44" hair="none" face={false} belt={null} shade={false} />
+      <path d="M23 62 q1 -9 7 -10 q6 1 7 10 q-3 -4 -7 -4 q-4 0 -7 4 z" fill={INK} stroke="#3a3a44" strokeWidth={0.5} />
+      {/* three cups spilled, red and green run out of them; two still stand behind */}
       <Row suit="cups" xs={[8, 18, 44]} y={104} s={6} angle={70} />
-      <Row suit="cups" xs={[56, 68]} y={102} s={6} />
-      {[10, 20].map((x) => <path key={x} d={`M${x} 106 q6 2 10 6`} fill="none" stroke={BLOOD} strokeWidth={1} />)}
+      <path d="M11 106 q6 3 10 7 M21 106 q6 3 10 7" fill="none" stroke={BLOOD} strokeWidth={1.2} strokeLinecap="round" />
+      <path d="M47 106 q6 3 10 7" fill="none" stroke={LEAF} strokeWidth={1.2} strokeLinecap="round" />
+      <Row suit="cups" xs={[58, 70]} y={102} s={6} />
     </g>
   ),
   6: () => (
@@ -571,14 +579,26 @@ const PENTACLES: Record<number, () => ReactElement> = {
   5: () => (
     <g>
       <rect x={0} y={0} width={80} height={112} fill={INK} opacity={0.6} />
-      <path d="M40 8 h34 v56 h-34 z" fill="#3f6fa8" opacity={0.9} />
-      <Row suit="pentacles" xs={[57, 48, 66, 52, 62]} y={20} s={4.5} />
-      <path d="M48 42 h18 v18 h-18 z" fill={GOLD_FLAT} opacity={0.75} />
+      {/* the lit window of the church: a pointed arch, leaded, five coins in the tree of its glass */}
+      <path d="M42 62 v-40 q15 -18 30 0 v40 z" fill="#3f6fa8" opacity={0.95} />
+      <path d="M42 62 v-40 q15 -18 30 0 v40 z" fill="none" stroke={INK} strokeWidth={0.8} />
+      <path d="M46 62 v-38 q11 -13 22 0 v38 M57 12 v50 M42 36 h30 M42 50 h30" fill="none" stroke={INK} strokeWidth={0.45} opacity={0.7} />
+      <path d="M57 58 v-12 M57 46 l-6 -6 M57 46 l6 -6 M57 38 l-7 -6 M57 38 l7 -6" fill="none" stroke={GOLD_FLAT} strokeWidth={1} />
+      {[[57, 20], [51, 40], [63, 40], [50, 32], [64, 32]].map(([x, y], i) => <PentSym key={i} x={x} y={y} s={3.6} />)}
+      <path d="M40 66 h34" stroke={STONE} strokeWidth={2} opacity={0.6} />
       {Array.from({ length: 24 }, (_, i) => <circle key={i} cx={(i * 13) % 80} cy={(i * 29) % 100} r={0.9} fill={SNOW} opacity={0.8} />)}
       <Ground y={96} fill={SNOW} opacity={0.85} />
-      <Person x={14} y={104} h={38} pose="hold" robe={INK} />
-      <line x1={22} y1={104} x2={22} y2={76} stroke={INK} strokeWidth={1.4} />
-      <Person x={30} y={104} h={30} pose="stand" robe={BLOOD} />
+      <path d="M8 104 q2 -1 4 0 M16 108 q2 -1 4 0 M40 106 q2 -1 4 0" fill="none" stroke={STONE} strokeWidth={0.6} opacity={0.6} />
+      {/* the one on crutches, a bandaged foot, a bell at the neck; the other barefoot in a shawl */}
+      <Person x={14} y={104} h={38} pose="hold" robe={INK} inner="#3a3a44" hair="none" face={false} belt={null} shade={false} />
+      <path d="M8.5 70 q1 -7 5.5 -8 q4.5 1 5.5 8 q-2.5 -3 -5.5 -3 q-3 0 -5.5 3 z" fill={INK} stroke="#3a3a44" strokeWidth={0.5} />
+      <path d="M22 104 v-28 M19.5 78 h5 M6 104 v-26 M3.5 80 h5" stroke="#5a3a22" strokeWidth={1.3} strokeLinecap="round" />
+      <path d="M11 104 q3 -3 6 0 v-4 h-6 z" fill={PALE} stroke={INK} strokeWidth={0.4} />
+      <path d="M12.5 101 h3 M12.5 102.5 h3" stroke={INK} strokeWidth={0.3} />
+      <circle cx={14} cy={80} r={1.1} fill={GOLD_FLAT} stroke={INK} strokeWidth={0.3} />
+      <Person x={31} y={104} h={31} pose="stand" robe={BLOOD} inner="#8a2e24" hair="#3a2a1e" belt={null} />
+      <path d="M25 86 q6 -5 12 0 l1 6 q-7 -3 -14 0 z" fill="#6a4a3a" stroke={INK} strokeWidth={0.4} />
+      <path d="M25 80 q1 -6 6 -7 q5 1 6 7 q-3 -3 -6 -3 q-3 0 -6 3 z" fill="#6a4a3a" stroke={INK} strokeWidth={0.4} />
     </g>
   ),
   6: () => (
