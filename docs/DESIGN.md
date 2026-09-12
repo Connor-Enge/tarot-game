@@ -698,6 +698,15 @@ seats of ten, a steady hand in seven, a wavering hand in five, and a
 reckless hand in fewer. The line under it counts seats, clean scenes and
 what was left in the hand; the share text carries the word.
 
+## Challenge links
+
+The share text of a free descent ends with a link carrying its seed and
+descent. Opened, the title offers "A road someone sent you" with the seed
+shown, and Walk it starts that exact road: the same map, the same deals.
+The address is cleaned as soon as the offer is read. Dailies and weeklies
+are already shared by date, so they carry no link. Engine:
+`engine/challenge.ts` (`parseChallenge`, `challengeLink`).
+
 ## The chronicle
 
 The run-end journal opens with the descent told straight through: one

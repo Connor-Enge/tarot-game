@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { CARDS, setKnownCards, scoreSlot, currentScene, hasRelic, roadNotTaken, noteHand, runHand, handGrade, type TableLay } from './engine';
+import { CARDS, setKnownCards, scoreSlot, currentScene, hasRelic, roadNotTaken, noteHand, runHand, handGrade, challengeLink, type Challenge, type TableLay } from './engine';
 setKnownCards(CARDS.map((c) => c.id));
 import { setDroneDepth, sfx, startDrone, stopDrone } from './audio';
 import { clearRun, loadRun, saveRun } from './persist';
@@ -93,6 +93,9 @@ interface GameStore {
   codexOpen: string | null;
   /** A scene and lay handed to the Table in the Codex. */
   tableSeed: { sceneId: string; lay: TableLay } | null;
+  /** A seed and descent carried in by a link: someone else's road, offered on the title. */
+  challenge: Challenge | null;
+  setChallenge: (c: Challenge | null) => void;
   openTable: (sceneId: string, lay: TableLay) => void;
   clearTableSeed: () => void;
   /** Chosen descent variant for free runs. */
@@ -219,6 +222,8 @@ export const useGame = create<GameStore>((set, get) => ({
   lifted: null,
   codexOpen: null,
   tableSeed: null,
+  challenge: null,
+  setChallenge: (c) => set({ challenge: c }),
   openTable: (sceneId, lay) => { sfx.page(); set({ tableSeed: { sceneId, lay }, screen: 'codex', codexOpen: null }); },
   clearTableSeed: () => set({ tableSeed: null }),
   descent: 'standard',
@@ -596,9 +601,10 @@ export function shareText(run: RunState, mode: RunMode, knowledge?: Knowledge): 
         ? `Arcana Descent · Weekly ${mode.label}${mode.weather ? ` · ${getWeather(mode.weather).name}` : ''}`
         : `Arcana Descent · ${getDescent(mode.descent).name}${mode.depth ? ` · Depth ${mode.depth}` : ''} · seed ${run.seed.toString(36)}`;
   const streak = mode.kind === 'daily' && knowledge?.daily && knowledge.daily.streak > 1 ? `\nStreak: ${knowledge.daily.streak} days` : '';
+  const walk = mode.kind === 'free' && typeof location !== 'undefined' ? `\nWalk the same road: ${challengeLink(`${location.origin}${location.pathname}`, run.seed, mode.descent, mode.depth ?? 0)}` : '';
   const who = knowledge ? `${streak}\n— ${readerTitle(knowledge)}, ${Object.values(knowledge.cards).filter((c) => c.tier > 0).length} of 78 known` : '';
   const weekly = mode.kind === 'weekly' && knowledge?.records?.weekly ? `\nDeepest this week: ${Math.max(knowledge.records.weekly.bestDepth, run.history.length)} of ${run.map.length}` : '';
-  return `${head}\n${end}\n${tiers}\n${spread}${carried}${vow}${dealt}${hand}${weekly}${who}`;
+  return `${head}\n${end}\n${tiers}\n${spread}${carried}${vow}${dealt}${hand}${weekly}${who}${walk}`;
 }
 
 // Persist the run after every change so a closed tab can resume.

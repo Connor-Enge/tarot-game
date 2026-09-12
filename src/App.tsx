@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect } from 'react';
-import { currentAct, currentNode, getCard, SCENES, currentScene } from './engine';
+import { currentAct, currentNode, getCard, SCENES, currentScene, parseChallenge } from './engine';
 import { setHeartbeat } from './audio';
 import { useSettings } from './settings';
 import { useGame } from './store';
@@ -71,6 +71,15 @@ export function App() {
     setHeartbeat(low);
     return () => setHeartbeat(false);
   }, [low]);
+
+  // A link with a seed offers that road on the title, then leaves the address clean.
+  const setChallenge = useGame((s) => s.setChallenge);
+  useEffect(() => {
+    const c = parseChallenge(location.search);
+    if (!c) return;
+    setChallenge(c);
+    history.replaceState(null, '', location.pathname);
+  }, [setChallenge]);
 
   let view = <TitleScreen />;
   let key = 'title';

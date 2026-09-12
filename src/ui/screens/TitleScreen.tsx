@@ -26,6 +26,8 @@ export function TitleScreen() {
   const goto = useGame((s) => s.goto);
   const k = useGame((s) => s.knowledge);
   const openTable = useGame((s) => s.openTable);
+  const challenge = useGame((s) => s.challenge);
+  const setChallenge = useGame((s) => s.setChallenge);
   const descent = useGame((s) => s.descent);
   const setDescent = useGame((s) => s.setDescent);
   const depth = useGame((s) => s.depth);
@@ -213,6 +215,16 @@ export function TitleScreen() {
           <p className="muted small center chosen__hint">
             {chosenDeck(k).length} of {CHOSEN_MIN} cards chosen. Pick the rest in the Codex.
           </p>
+        )}
+        {challenge && (
+          <div className="challenge rise" role="region" aria-label="a road someone sent you">
+            <div className="challenge__head"><span className="challenge__mark" aria-hidden>⟡</span> A road someone sent you.</div>
+            <div className="muted small">{getDescent(challenge.descent).name}{challenge.depth ? ` · Depth ${challenge.depth}` : ''} · seed {challenge.seed.toString(36)}</div>
+            <div className="challenge__row">
+              <button className="btn btn--primary" onClick={() => { const c = challenge; setChallenge(null); newRun(c.seed, { descent: c.descent, depth: c.depth }); }}>Walk it</button>
+              <button className="chip" onClick={() => setChallenge(null)}>Not now</button>
+            </div>
+          </div>
         )}
         <button className="btn btn--primary" onClick={() => newRun()} disabled={current.id === 'chosen' && chosenDeck(k).length < CHOSEN_MIN}>
           {current.id === 'standard' ? 'Descend' : current.id === 'chosen' ? `Descend · your ${chosenDeck(k).length}` : `Descend · ${current.name}`}

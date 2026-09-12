@@ -2243,3 +2243,9 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .chronicle__n { display: inline-grid; place-items: center; width: 18px; height: 18px; margin-right: 6px; border-radius: 50%; border: 1px solid rgba(214,178,94,0.5); color: var(--gold-2); font-size: 0.62rem; vertical-align: 2px; }
 .chronicle__line--hand { color: var(--muted); font-style: italic; border-top: 1px dashed rgba(214,178,94,0.25); padding-top: 8px; }
 .chronicle .chip { display: block; margin: 6px auto 0; }
+
+/* --- a road someone sent you ------------------------------------------------ */
+.challenge { display: flex; flex-direction: column; gap: 6px; align-items: center; padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(243,220,138,0.45); background: linear-gradient(180deg, rgba(214,178,94,0.12), rgba(214,178,94,0.03)); box-shadow: 0 0 18px rgba(214,178,94,0.15); text-align: center; }
+.challenge__head { color: var(--gold-2); font-size: 1rem; }
+.challenge__mark { margin-right: 4px; }
+.challenge__row { display: flex; gap: 8px; align-items: center; margin-top: 2px; }
