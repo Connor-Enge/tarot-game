@@ -27,7 +27,7 @@ export function HowToPlay({ onClose }: { onClose: () => void }) {
               <span>{KIND_GLYPH.rest}</span>
             </span>
             <span>
-              <strong>Choose a door.</strong> Each layer of the map offers two or three. Their marks say what kind of place waits, not what happens there.
+              <strong>Choose a door.</strong> Each layer of the map offers two or three. Their marks say what kind of place waits, not what happens there. Diamonds mark higher stakes: the reading must bring more, harm costs more, and a boon or triumph mends more.
             </span>
           </li>
           <li className="howto__step">

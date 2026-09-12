@@ -468,7 +468,8 @@ export function resolveReading(scene: Scene, reading: Reading, marks: Marks = {}
   let vitality: number;
   if (tier === 'neutral') vitality = scene.rite === 'ember' ? 1 : mend ? 0 : base.vitality * scene.stakes - (opts.extraNeutralCost ?? 0);
   else if (base.vitality < 0) vitality = base.vitality * scene.stakes;
-  else vitality = base.vitality * (mend ?? 1);
+  // What holds at higher stakes pays more: a boon mends one per stake, a triumph one more than that.
+  else vitality = base.vitality * (mend ?? 1) + Math.max(0, scene.stakes - 1);
   const deltas = { vitality, clarity: base.clarity };
   const narration = [
     ...slots.map((s) => (s.reversed ? s.card.omen.reversed : s.card.omen.upright)),

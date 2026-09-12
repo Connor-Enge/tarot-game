@@ -757,6 +757,20 @@ first twelve descents; the Depths fall 97, 87, 80, 70, 63; the oracle
 was too much (fresh 64%, Depth 5 41%, oracle 91%, triumphs a tenth of
 readings).
 
+## Stakes pay
+
+With stakes raising the bar and scaling harm, a threat door was pure
+risk: a triumph paid the same two hearts everywhere, so the safe path
+was always right and a door was never a decision. Now what holds at
+higher stakes pays more: a boon mends one heart per stake and a
+triumph one more than that (stakes 3: +3 and +4), against harm at −2
+per stake and calamity at −4. A siege is a swing either way, which is
+what a door should be. The map marks stakes with diamonds under a
+door's glyph, so the risk is read before it is chosen; the reading
+screen states it again on arrival. The learner's numbers barely move
+(fresh 83%, Depth 5 66%) because the simulated reader does not seek
+threats; a player who does is choosing the swing on purpose.
+
 ## Whispers say what a card brings
 
 A whisper used to give one keyword of the card ("will", "abundance"),

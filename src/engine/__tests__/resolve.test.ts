@@ -189,3 +189,20 @@ describe('stakes raise the bar', () => {
     expect(order.indexOf(high.tier)).toBeLessThanOrEqual(order.indexOf(low.tier));
   });
 });
+
+describe('stakes pay', () => {
+  it('a boon or triumph mends one more per stake above the first, and harm costs stakes-fold', async () => {
+    const { resolveReading } = await import('../resolve');
+    const { SCENES } = await import('../scenes');
+    const strong = { vessel: { cardId: 'major-8', reversed: false }, threshold: { cardId: 'major-16', reversed: false }, hand: { cardId: 'major-8', reversed: false }, wake: { cardId: 'major-13', reversed: false } };
+    const one = resolveReading({ ...SCENES.beast, stakes: 1 }, strong);
+    const three = resolveReading({ ...SCENES.beast, stakes: 3 }, strong);
+    expect(one.tier).toBe('triumph');
+    if (three.tier === 'triumph') expect(three.deltas.vitality).toBe(one.deltas.vitality + 2);
+    const weak = { vessel: { cardId: 'major-0', reversed: true }, threshold: { cardId: 'major-0', reversed: true }, hand: { cardId: 'major-0', reversed: true }, wake: { cardId: 'major-0', reversed: true } };
+    const w1 = resolveReading({ ...SCENES.beast, stakes: 1 }, weak);
+    const w3 = resolveReading({ ...SCENES.beast, stakes: 3 }, weak);
+    expect(w1.deltas.vitality).toBeLessThan(0);
+    expect(w3.deltas.vitality).toBe(w1.deltas.vitality * 3);
+  });
+});

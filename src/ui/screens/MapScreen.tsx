@@ -326,6 +326,11 @@ function MapScreenInner() {
                       </span>
                     )}
                     <span className="node__glyph">{KIND_GLYPH[node.kind]}</span>
+                    {SCENES[node.sceneId].stakes > 1 && node.kind !== 'abyss' && !wasHere && (
+                      <span className="node__stakes" title={`Stakes ${SCENES[node.sceneId].stakes}: a higher bar, harm costs ${SCENES[node.sceneId].stakes}-fold, and what holds mends more`} aria-label={`stakes ${SCENES[node.sceneId].stakes}`}>
+                        {'◆'.repeat(SCENES[node.sceneId].stakes)}
+                      </span>
+                    )}
                     {tierHere && <span className={`node__tier node__tier--${tierHere}`} aria-hidden>{TIER_MARK[tierHere]}</span>}
                     {run.foretold.includes(node.id) && (
                       <span className="node__place">

@@ -2319,3 +2319,8 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 /* the scene's stakes, stated: a higher bar for the reading and a heavier cost for harm */
 .scene__stakes { margin: 4px auto 0; max-width: 34ch; line-height: 1.4; }
 .scene__stakes-marks { color: var(--gold); letter-spacing: 0.12em; margin-right: 4px; font-size: 0.7em; }
+
+/* stakes on a door: diamonds under the glyph, so a bigger risk reads as a bigger risk before it is chosen */
+.node__stakes { position: absolute; bottom: -9px; left: 50%; transform: translateX(-50%); font-size: 0.5rem; letter-spacing: 0.1em; color: var(--gold); text-shadow: 0 0 6px rgba(0,0,0,0.9); padding: 0 4px; border-radius: 999px; background: rgba(11,10,18,0.85); line-height: 1.4; white-space: nowrap; }
+.node--choosable .node__stakes { color: var(--gold-2); }
+.node--passed .node__stakes { opacity: 0.4; }
