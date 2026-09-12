@@ -823,7 +823,10 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       {(() => { const hd = hands(40, 46, 30, 'raise-left'); return (
         <g>
           <line x1={hd.l.x + 1} y1={hd.l.y + 1} x2={hd.l.x - 6} y2={hd.l.y - 5} stroke={GOLD_FLAT} strokeWidth={1.6} strokeLinecap="round" />
-          <path d={`M${hd.l.x - 6} ${hd.l.y - 5} l-8 -5 l2 9 z`} fill={GOLD} stroke={INK} strokeWidth={0.5} />
+          <line x1={hd.l.x + 1} y1={hd.l.y + 1} x2={hd.l.x - 6} y2={hd.l.y - 5} stroke={INK} strokeWidth={0.4} strokeLinecap="round" opacity={0.5} />
+          <path d={`M${hd.l.x - 6} ${hd.l.y - 5} q-5 -1 -9 -6 q1 5 4 8 z`} fill={GOLD} stroke={INK} strokeWidth={0.5} />
+          <path d={`M${hd.l.x - 15} ${hd.l.y - 11} q-1 5 4 8`} fill="none" stroke={INK} strokeWidth={0.4} />
+          {[0, 1, 2].map((i) => <path key={i} d={`M${hd.l.x - 18 - i * 3} ${hd.l.y - 14 - i * 2} q-2 4 0 8`} fill="none" stroke={GOLD_FLAT} strokeWidth={0.5} opacity={0.7 - i * 0.2} />)}
           <rect x={hd.l.x - 8} y={hd.l.y + 2} width={9} height={8} fill={PALE} stroke={INK} strokeWidth={0.5} />
           <path d={`M${hd.l.x - 3.5} ${hd.l.y + 3} v6 M${hd.l.x - 6.5} ${hd.l.y + 6} h6`} stroke={BLOOD} strokeWidth={1.2} />
         </g>
@@ -835,7 +838,9 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       {[14, 40, 66].map((x, i) => (
         <g key={i}>
           <path d={`M${x - 10} 106 v-14 h20 v14`} fill="#3a3040" stroke={PALE} strokeWidth={0.5} />
+          <path d={`M${x + 2} 106 v-14 h8 v14 z`} fill="url(#hatch)" opacity={0.4} />
           <path d={`M${x - 10} 96 h20`} stroke={PALE} strokeWidth={0.4} opacity={0.6} />
+          <path d={`M${x - 10} 92 l-4 -3 h20 l-2 3 z`} fill="#4a4058" stroke={PALE} strokeWidth={0.4} />
           <Person x={x} y={94} h={28} pose="up" robe="#c9c4d4" inner="#dedae6" hair={i === 1 ? '#3a2a1e' : '#9a9088'} belt={null} face={i !== 1} />
         </g>
       ))}
@@ -855,10 +860,12 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
           return <ellipse key={i} cx={x} cy={y} rx={3.4} ry={1.6} fill={i % 2 ? '#8fb35a' : '#7aa050'} stroke={INK} strokeWidth={0.4} transform={`rotate(${(a * 180) / Math.PI + 90} ${x} ${y})`} />;
         })}
       </g>
+      <ellipse cx={40} cy={56} rx={22} ry={36} fill={GOLD_FLAT} opacity={0.1} />
       {[[40, 15], [40, 97]].map(([x, y], i) => (
         <g key={i}>
           <path d={`M${x - 6} ${y} q6 -4 12 0 q-6 4 -12 0`} fill={BLOOD} stroke={INK} strokeWidth={0.5} />
-          <path d={`M${x - 3} ${y + 1} l-3 5 M${x + 3} ${y + 1} l3 5`} stroke={BLOOD} strokeWidth={1.4} strokeLinecap="round" />
+          <path d={`M${x - 3} ${y + 1} l-4 6 l2.5 -1 M${x + 3} ${y + 1} l4 6 l-2.5 -1`} fill="none" stroke={BLOOD} strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx={x} cy={y} r={1} fill={GOLD_FLAT} stroke={INK} strokeWidth={0.3} />
         </g>
       ))}
       {/* the dancer, a wand in either hand, the sash about her */}
@@ -871,6 +878,7 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       ); })()}
       <path d="M30 56 q10 8 20 -6 q2 14 -8 20 q-4 -8 -12 -14 z" fill="#7a3fa0" stroke={INK} strokeWidth={0.4} />
       <path d="M32 58 q8 6 16 -4" fill="none" stroke={INK} strokeWidth={0.3} opacity={0.6} />
+      <path d="M42 70 l-1 3 M44 69 l-0.5 3 M46 67 l0 3" stroke="#7a3fa0" strokeWidth={0.7} strokeLinecap="round" />
       {/* the four in the corners */}
       {[[8, 12], [72, 12], [8, 100], [72, 100]].map(([x, y], i) => <Cloud key={i} x={x - 9} y={y + 3} w={18} />)}
       <Head x={8} y={9} r={3.4} hair="#d9a441" />
