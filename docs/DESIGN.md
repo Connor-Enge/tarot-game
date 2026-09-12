@@ -872,9 +872,9 @@ identity, not power, which is the point.
 - **Minor Arcana** meanings and omens are hand-authored in
   `engine/minorText.ts` (112 omen lines, 112 meanings). A test asserts every
   omen is distinct.
-- **Scenes**: 30 exist (29 plus the Abyss), which was the target; more are welcome. Latest: the mill, the drowned chapel, the hunt.
+- **Scenes**: 32 exist (31 plus the Abyss); more are welcome. Latest: the lit street (which keeps a rite of its own: every seat lit, the lamp free), the observatory.
 - **Named readings**: 34. Each is a memorable line, never a definition.
-- **Relics**: 14 boons, 9 curses. **Vows**: 7. **Weathers**: 14. **Trades**: 6. **Sigils**: 34. **Rites**: 8.
+- **Relics**: 14 boons, 9 curses. **Vows**: 7. **Weathers**: 14. **Trades**: 6. **Sigils**: 34. **Rites**: 9.
 - **Combos**: 47 named readings exist. With three seats down, the reading
   plate says which of the readings the player has already found could still
   be completed by the fourth seat ("Within reach: You reached for the

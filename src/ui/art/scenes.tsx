@@ -279,6 +279,48 @@ const ART: Record<string, () => ReactElement> = {
       ))}
     </g>
   ),
+  lamps: () => (
+    <g>
+      <path d="M0 60 L0 50 L200 48 L200 60 Z" fill={DARK} />
+      {[24, 62, 100, 138, 176].map((x, i) => {
+        const out = i === 3;
+        return (
+          <g key={x}>
+            <line x1={x} y1={50} x2={x} y2={22} stroke={DARK} strokeWidth={2.2} />
+            <rect x={x - 3.5} y={17} width={7} height={7} fill={DARK} />
+            {!out && <rect x={x - 2.2} y={18.5} width={4.4} height={4.4} fill={GOLD_FLAT} opacity={0.95} />}
+            {!out && <ellipse cx={x} cy={21} rx={13} ry={11} fill={GOLD_FLAT} opacity={0.12} />}
+            {!out && <ellipse cx={x} cy={50} rx={11} ry={2.4} fill={GOLD_FLAT} opacity={0.14} />}
+            {out && <rect x={x - 2.2} y={18.5} width={4.4} height={4.4} fill={PALE} opacity={0.18} />}
+            {out && <circle cx={x} cy={20.5} r={0.9} fill={GOLD_FLAT} opacity={0.6} className="live-star" />}
+          </g>
+        );
+      })}
+      {[44, 82, 120, 158].map((x, i) => (
+        <g key={x}>
+          <rect x={x - 5} y={30} width={10} height={20} fill={DARK} />
+          <rect x={x - 3} y={33} width={6} height={17} fill="#050410" />
+          {i === 2 && <rect x={x - 3} y={33} width={6} height={17} fill={GOLD_FLAT} opacity={0.2} />}
+        </g>
+      ))}
+      <Figure x={100} y={50} h={10} fill={DARK} />
+    </g>
+  ),
+  observatory: () => (
+    <g>
+      <path d="M0 60 L0 54 L200 52 L200 60 Z" fill={DARK} />
+      <path d="M60 54 V34 A40 40 0 0 1 140 34 V54 Z" fill={DARK} />
+      <path d="M96 12 L104 12 L108 34 L92 34 Z" fill="#050410" />
+      <path d="M96 12 L104 12 L108 34 L92 34 Z" fill={PALE} opacity={0.08} />
+      <line x1={100} y1={30} x2={100} y2={12} stroke={GOLD_FLAT} strokeWidth={0.6} opacity={0.7} />
+      {[[20, 10, '#9ad0e6'], [48, 20, '#e0a39a'], [150, 8, '#a9c98a'], [176, 18, '#d9c6ec'], [70, 6, PALE], [128, 16, PALE], [186, 40, '#9ad0e6'], [12, 30, '#e0a39a']].map(([x, y, c], i) => (
+        <circle key={i} cx={x as number} cy={y as number} r={0.9 + (i % 3) * 0.25} fill={c as string} opacity={0.75} className="live-star" style={{ animationDelay: `${(i * 5) % 7 * -0.5}s` }} />
+      ))}
+      <path d="M20 10 L48 20 L70 6" fill="none" stroke={PALE} strokeWidth={0.3} opacity={0.35} />
+      <path d="M128 16 L150 8 L176 18" fill="none" stroke={PALE} strokeWidth={0.3} opacity={0.35} />
+      <Figure x={100} y={54} h={9} fill={DARK} />
+    </g>
+  ),
   bell: () => (
     <g>
       <path d="M0 60 L0 50 L200 46 L200 60 Z" fill={DARK} />

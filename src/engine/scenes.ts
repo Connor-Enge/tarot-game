@@ -48,7 +48,7 @@ export type Affinity = Partial<Record<Tag, number>>;
  * Rites: a stated rule a scene carries. Shown the moment you arrive, in
  * plain words, like every other rule. None of them touches a meaning.
  */
-export type Rite = 'mirror' | 'hush' | 'tithe' | 'moonlit' | 'bare' | 'ember' | 'look' | 'dark';
+export type Rite = 'mirror' | 'hush' | 'tithe' | 'moonlit' | 'bare' | 'ember' | 'look' | 'dark' | 'lit';
 export const RITES: Record<Rite, { name: string; glyph: string; text: string }> = {
   mirror: { name: 'The Mirror', glyph: '⧖', text: 'What lands wrong reads right here, and what lands right reads wrong.' },
   hush: { name: 'The Hush', glyph: '…', text: 'No whispers here. Redraw, turn, or trust your eye.' },
@@ -58,6 +58,7 @@ export const RITES: Record<Rite, { name: string; glyph: string; text: string }> 
   ember: { name: 'The Ember', glyph: '♨', text: 'Even a neutral reading mends one here.' },
   look: { name: 'The Long Look', glyph: '◉', text: 'The whole last hand is laid bare: every seat dealt at once, one more each, nothing face down.' },
   dark: { name: 'The Dark', glyph: '●', text: 'No lamp burns here. What a card would do in its seat, you judge unlit.' },
+  lit: { name: 'The Lit Street', glyph: '☼', text: 'Every seat is lit already. The lamp asks nothing here.' },
 };
 
 /** Rites the reader has walked: any scene carrying one that appears in the omen log. */
@@ -763,6 +764,51 @@ export const SCENES: Record<string, Scene> = {
       neutral: 'You step off the road and stand still in the ditch, and the hunt goes by you like weather.',
       boon: 'You turn and walk toward the horns, and the riders slow, and one of them nods, and the hunt goes on without you.',
       triumph: 'You whistle, and the hounds come to you, and the riders find they have been hunting on your behalf all along.',
+    },
+  },
+  lamps: {
+    id: 'lamps',
+    rite: 'lit',
+    kind: 'passage',
+    hue: 40,
+    minAct: 2,
+    place: 'A street of lamps, all lit, and one of them going out.',
+    prompt: 'A lit street. Every door is a choice, and every choice is watched.',
+    stakes: 2,
+    affinity: {
+      vessel: { truth: 1, wisdom: 1, order: 1, illusion: -1, fear: -1 },
+      threshold: { fire: 1, illusion: 2, hope: 1, air: -1 },
+      hand: { wisdom: 2, truth: 1, patience: 1, chaos: -1, fear: -1 },
+      wake: { hope: 2, renewal: 1, order: 1, loss: -1 },
+    },
+    outcomes: {
+      calamity: 'You walk the whole street under every lamp, and at the end of it the one going out was the only one that was ever really lit.',
+      harm: 'You choose a door by its lamp, and the lamp was lying, and the room behind it has been waiting for a guest.',
+      neutral: 'You walk to the end of the street and out the far side. The lamps go on burning for no one.',
+      boon: 'You choose the door under the lamp that is going out, and someone inside has kept a chair for you.',
+      triumph: 'You stop at the failing lamp and set it right, and every door on the street opens at once, and every one of them is yours.',
+    },
+  },
+  observatory: {
+    id: 'observatory',
+    kind: 'mystery',
+    hue: 250,
+    minAct: 2,
+    place: 'A dome open to a sky with the wrong stars.',
+    prompt: 'An observatory. Someone charted this sky. Whether it is true is another matter.',
+    stakes: 2,
+    affinity: {
+      vessel: { wisdom: 2, hope: 1, air: 1, fear: -1 },
+      threshold: { illusion: 2, truth: 1, order: 1, earth: -1 },
+      hand: { truth: 2, patience: 1, wisdom: 1, action: -1, illusion: -1 },
+      wake: { fortune: 2, beginning: 1, freedom: 1, binding: -1 },
+    },
+    outcomes: {
+      calamity: 'You trust the chart. It was drawn for a different sky, and you walk out under it with the wrong road memorised.',
+      harm: 'You look too long. When you come down, the stars you know have moved a little, and they do not move back.',
+      neutral: 'You look, and you chart nothing, and the dome closes behind you like an eye.',
+      boon: 'You find one star you know in the wrong sky, and from it the whole road home unfolds.',
+      triumph: 'You correct the chart. The sky obliges, and for the rest of the descent it is the stars that follow you.',
     },
   },
   abyss: {

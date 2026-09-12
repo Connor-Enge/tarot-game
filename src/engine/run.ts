@@ -264,10 +264,11 @@ function keepsakeShown(run: RunState, state: SlotState): boolean | undefined {
 }
 
 function dealSeat(run: RunState, rng: Rng, deck: DeckState, slot: SlotId): { deck: DeckState; state: SlotState } {
-  if (run.pendingDeal) {
-    return { deck, state: { slot, candidates: run.pendingDeal, chosen: null, whispered: [] } };
-  }
   const rite = currentScene(run).rite;
+  const lit = rite === 'lit' ? true : undefined;
+  if (run.pendingDeal) {
+    return { deck, state: { slot, candidates: run.pendingDeal, chosen: null, whispered: [], lit } };
+  }
   let count = rite === 'bare' ? CANDIDATES_PER_SLOT - 1 : CANDIDATES_PER_SLOT;
   if (slot === 'wake' && rite === 'moonlit') count++;
   if (rite === 'look') count++;
@@ -300,7 +301,7 @@ function dealSeat(run: RunState, rng: Rng, deck: DeckState, slot: SlotId): { dec
   if (run.keepsake && !run.keepsakeShown) cards = cards.map((c) => (c.cardId === run.keepsake && !c.hidden ? { ...c, yours: true } : c));
   // A card held back from the seat before joins this deal.
   if (run.held && run.pendingDeal === null) cards = [...cards, { ...run.held, hidden: false, held: true }];
-  return { deck: outDeck, state: { slot, candidates: cards, chosen: null, whispered: [] } };
+  return { deck: outDeck, state: { slot, candidates: cards, chosen: null, whispered: [], lit } };
 }
 
 /**

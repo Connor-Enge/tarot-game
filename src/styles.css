@@ -2183,3 +2183,5 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 @keyframes reach-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
 @keyframes reach-note { 0%, 100% { transform: translateY(0); opacity: 0.8; } 50% { transform: translateY(-2px); opacity: 1; } }
 .reduce-motion .reach, .reduce-motion .reach__mark { animation: none; }
+.scene__rite--lit { color: var(--gold-2); border-color: rgba(243,220,138,0.5); background: rgba(243,220,138,0.08); }
+.node__rite--lit { color: var(--gold-2); border-color: rgba(243,220,138,0.7); }

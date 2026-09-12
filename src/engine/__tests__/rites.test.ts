@@ -121,3 +121,18 @@ describe('the Dark', () => {
     expect(lit.lamps).toBe(4);
   });
 });
+
+describe('the Lit Street', () => {
+  it('lights every seat for free, so the lamp shows the hand without a Clarity asked', async () => {
+    const { canLamp, lampVerdicts } = await import('../run');
+    expect(SCENES.lamps.rite).toBe('lit');
+    let run = enter(9, 'lamps', { startingClarity: 0 });
+    expect(run.slots[0].lit).toBe(true);
+    expect(canLamp(run)).toBe(false);
+    expect(lampVerdicts(run).length).toBe(run.slots[0].candidates.length);
+    expect(run.clarity).toBe(0);
+    for (let i = 0; i < 3; i++) run = chooseCandidate(run, 0);
+    expect(run.slots[3].lit).toBe(true);
+    expect(run.history.length === 0 || run.history[0].lit?.length === 4).toBe(true);
+  });
+});
