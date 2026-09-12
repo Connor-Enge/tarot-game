@@ -265,20 +265,30 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
     <g>
       <Water y={36} rows={1} />
       <rect x={0} y={22} width={80} height={12} fill={PALE} opacity={0.65} />
+      <rect x={0} y={22} width={80} height={12} fill="url(#hatch)" opacity={0.25} />
+      <path d="M0 26 h80 M0 30 h80 M10 22 v4 M30 22 v4 M50 22 v4 M70 22 v4 M20 26 v4 M40 26 v4 M60 26 v4" stroke={INK} strokeWidth={0.3} opacity={0.4} />
       {[6, 20, 34, 48, 62, 76].map((x) => (
         <rect key={x} x={x - 3} y={16} width={6} height={7} fill={PALE} opacity={0.65} />
       ))}
+      <path d="M40 22 v-10 h6 v10 M40 12 l3 -3 l3 3" fill={PALE} opacity={0.65} />
       <path d="M0 34 h80" stroke={INK} strokeWidth={0.4} opacity={0.4} />
       {/* a canopy of stars on four poles */}
       <rect x={16} y={28} width={48} height={8} fill="url(#skyDeep)" stroke={INK} strokeWidth={0.8} />
       {[18, 30, 42, 54].map((x, i) => (
         <Star key={i} x={x + 4} y={32} r={2} points={5} />
       ))}
+      {[24, 36, 48, 60].map((x) => <Star key={x} x={x} y={30} r={0.9} points={5} fill={PALE} />)}
+      {/* a fringe along the canopy's hem */}
+      <path d={Array.from({ length: 12 }, (_, i) => `M${17 + i * 4} 36 l2 3 l2 -3`).join(' ')} fill="none" stroke={GOLD_FLAT} strokeWidth={0.5} />
       {[18, 62].map((x) => (
         <line key={x} x1={x} y1={36} x2={x} y2={72} stroke={INK} strokeWidth={1.2} />
       ))}
       {/* the charioteer in armour, moons at the shoulders, a star on the crown */}
       <Person x={40} y={86} h={46} pose="hold" robe="#8a8f99" inner="#c9cdd4" hair="#d9a441" crown belt={GOLD_FLAT} />
+      {/* the breastplate with its square, and mail over the skirt */}
+      <rect x={35.5} y={52} width={9} height={9} rx={1} fill="#b0b5be" stroke={INK} strokeWidth={0.4} />
+      <rect x={38.2} y={54.7} width={3.6} height={3.6} fill="none" stroke={INK} strokeWidth={0.5} />
+      <path d="M33 66 h14 v6 h-14 z" fill="url(#crosshatch)" opacity={0.6} />
       <Star x={40} y={35.5} r={2.2} points={8} />
       <path d="M29.5 49 a3 3 0 1 0 4 4 a2.3 2.3 0 1 1 -4 -4 z M50.5 49 a3 3 0 1 1 -4 4 a2.3 2.3 0 1 0 4 -4 z" fill={PALE} stroke={INK} strokeWidth={0.4} />
       {(() => { const hd = hands(40, 86, 46, 'hold'); return (
@@ -306,8 +316,10 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
   8: () => (
     <g>
       <Mountains y={74} opacity={0.22} />
+      <path d="M0 82 q30 -10 80 -4 v10 q-40 -4 -80 4 z" fill={LEAF} opacity={0.35} />
       <Ground y={100} fill="#d9b06a" opacity={0.6} />
       <Grass x={2} y={100} w={20} n={6} />
+      {[[6, 98], [12, 96]].map(([x, y], i) => <Rose key={i} x={x} y={y} r={1.3} color={PALE} />)}
       {/* the lion: a tawny body, a hatched flank, a scalloped mane, the muzzle turned up to her hands */}
       <path d="M70 92 q10 -8 3 -20" fill="none" stroke="#c98a3c" strokeWidth={2.4} strokeLinecap="round" />
       <circle cx={72.5} cy={71} r={2.2} fill="#8a5a22" />
@@ -327,8 +339,9 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <path d="M40 82 l-3 -0.5 M40 84 l-3 0.8 M50 82 l3 -0.5 M50 84 l3 0.8" stroke={INK} strokeWidth={0.35} opacity={0.7} />
       {/* she leans in, both hands at the jaw, a garland at her waist and in her hair */}
       <Person x={22} y={96} h={44} pose="reach-right" robe={PALE} inner="#f3ecd8" hair="#d9a441" belt={null} />
-      {[[15, 73], [19, 74.5], [23, 74.5], [27, 73]].map(([x, y], i) => <Rose key={i} x={x} y={y} r={1.5} />)}
-      <path d="M14 73 q8 3 14 0" fill="none" stroke={LEAF} strokeWidth={0.7} />
+      {/* a garland of roses climbs from her waist over her shoulder */}
+      <path d="M14 73 q8 3 14 0 q4 -6 2 -14" fill="none" stroke={LEAF} strokeWidth={0.8} />
+      {[[15, 73], [19, 74.5], [23, 74.5], [27, 73], [29.5, 66], [30, 60]].map(([x, y], i) => <Rose key={i} x={x} y={y} r={1.5} />)}
       {[[18.5, 51], [25.5, 51]].map(([x, y], i) => <Rose key={i} x={x} y={y} r={1.3} />)}
       <Infinity x={22} y={46} s={4} />
     </g>
