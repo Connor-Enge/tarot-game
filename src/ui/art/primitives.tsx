@@ -285,8 +285,13 @@ export function Wings({ x, y, span = 30 }: P & { span?: number }) {
 export function Wand({ x, y, s = 10 }: P & { s?: number }) {
   return (
     <g>
-      <line x1={x} y1={y - s} x2={x} y2={y + s} stroke={INK} strokeWidth={s * 0.22} strokeLinecap="round" />
+      {/* a living staff: brown wood with grain and a knot, leaves with a midrib, a flame at the tip */}
+      <line x1={x} y1={y - s} x2={x} y2={y + s} stroke="#5a3a22" strokeWidth={s * 0.24} strokeLinecap="round" />
+      <line x1={x} y1={y - s} x2={x} y2={y + s} stroke={INK} strokeWidth={s * 0.24 + 0.5} strokeLinecap="round" opacity={0.35} />
+      <path d={`M${x - s * 0.04} ${y - s * 0.7} q${s * 0.06} ${s * 0.5} 0 ${s * 1.2} M${x + s * 0.05} ${y - s * 0.2} q${-s * 0.04} ${s * 0.4} 0 ${s * 0.9}`} fill="none" stroke={INK} strokeWidth={0.3} opacity={0.5} />
+      <ellipse cx={x} cy={y + s * 0.55} rx={s * 0.1} ry={s * 0.06} fill="none" stroke={INK} strokeWidth={0.3} opacity={0.6} />
       <path d={`M${x} ${y - s * 0.4} q${-s * 0.5} ${-s * 0.3} ${-s * 0.35} ${-s * 0.8} q${s * 0.4} ${s * 0.2} ${s * 0.35} ${s * 0.8} M${x} ${y + s * 0.1} q${s * 0.5} ${-s * 0.3} ${s * 0.35} ${-s * 0.8} q${-s * 0.4} ${s * 0.2} ${-s * 0.35} ${s * 0.8}`} fill={GOLD} stroke={INK} strokeWidth={0.4} />
+      <path d={`M${x} ${y - s * 0.4} l${-s * 0.28} ${-s * 0.6} M${x} ${y + s * 0.1} l${s * 0.28} ${-s * 0.6}`} fill="none" stroke={INK} strokeWidth={0.25} opacity={0.6} />
       <Flame x={x} y={y - s} s={s * 0.28} />
     </g>
   );
@@ -295,9 +300,14 @@ export function Wand({ x, y, s = 10 }: P & { s?: number }) {
 export function Cup({ x, y, s = 10 }: P & { s?: number }) {
   return (
     <g stroke={INK} strokeWidth={0.6}>
+      {/* a chalice: the bowl with a highlight and a shaded side, a knop on the stem, a footed base with a rim line */}
       <path d={`M${x - s * 0.7} ${y - s * 0.7} h${s * 1.4} q0 ${s * 1.1} ${-s * 0.7} ${s * 1.1} q${-s * 0.7} 0 ${-s * 0.7} ${-s * 1.1} Z`} fill={GOLD} />
+      <path d={`M${x + s * 0.1} ${y - s * 0.7} h${s * 0.6} q0 ${s * 1.1} ${-s * 0.7} ${s * 1.1} q${s * 0.2} ${-s * 0.5} ${s * 0.1} ${-s * 1.1} Z`} fill="url(#hatch)" stroke="none" opacity={0.5} />
+      <path d={`M${x - s * 0.5} ${y - s * 0.5} q${-s * 0.05} ${s * 0.4} ${s * 0.15} ${s * 0.6}`} fill="none" stroke={PALE} strokeWidth={0.5} opacity={0.7} />
       <rect x={x - s * 0.1} y={y + s * 0.4} width={s * 0.2} height={s * 0.35} fill={INK} />
+      <circle cx={x} cy={y + s * 0.6} r={s * 0.13} fill={GOLD} strokeWidth={0.4} />
       <path d={`M${x - s * 0.55} ${y + s * 0.95} q${s * 0.55} ${-s * 0.35} ${s * 1.1} 0 Z`} fill={GOLD} />
+      <path d={`M${x - s * 0.45} ${y + s * 0.9} q${s * 0.45} ${-s * 0.2} ${s * 0.9} 0`} fill="none" strokeWidth={0.3} opacity={0.6} />
       <ellipse cx={x} cy={y - s * 0.7} rx={s * 0.7} ry={s * 0.18} fill={PALE} />
     </g>
   );
@@ -306,9 +316,13 @@ export function Cup({ x, y, s = 10 }: P & { s?: number }) {
 export function Sword({ x, y, s = 10, angle = 0 }: P & { s?: number; angle?: number }) {
   return (
     <g transform={`rotate(${angle} ${x} ${y})`} stroke={INK} strokeWidth={0.5}>
+      {/* a blade with a fuller and a shaded edge, a curved crossguard, a wrapped grip and a round pommel */}
       <path d={`M${x} ${y - s} l${s * 0.18} ${s * 0.25} v${s * 1.15} h${-s * 0.36} v${-s * 1.15} Z`} fill={PALE} />
-      <rect x={x - s * 0.5} y={y + s * 0.38} width={s} height={s * 0.14} fill={GOLD} />
+      <path d={`M${x} ${y - s} l${s * 0.18} ${s * 0.25} v${s * 1.15} h${-s * 0.18} v${-s * 1.15} Z`} fill="url(#hatch)" stroke="none" opacity={0.5} />
+      <line x1={x} y1={y - s * 0.6} x2={x} y2={y + s * 0.3} stroke={INK} strokeWidth={0.3} opacity={0.6} />
+      <path d={`M${x - s * 0.5} ${y + s * 0.45} q${s * 0.5} ${-s * 0.18} ${s} 0 v${s * 0.14} q${-s * 0.5} ${-s * 0.18} ${-s} 0 z`} fill={GOLD} />
       <rect x={x - s * 0.09} y={y + s * 0.52} width={s * 0.18} height={s * 0.4} fill={INK} />
+      <path d={`M${x - s * 0.09} ${y + s * 0.62} h${s * 0.18} M${x - s * 0.09} ${y + s * 0.72} h${s * 0.18} M${x - s * 0.09} ${y + s * 0.82} h${s * 0.18}`} stroke={GOLD_FLAT} strokeWidth={0.3} />
       <circle cx={x} cy={y + s} r={s * 0.14} fill={GOLD} />
     </g>
   );
@@ -322,9 +336,13 @@ export function Pentacle({ x, y, s = 10 }: P & { s?: number }) {
   const star = [0, 2, 4, 1, 3, 0].map((i) => pts[i].join(',')).join(' ');
   return (
     <g stroke={INK} strokeWidth={0.6}>
+      {/* a coin: an engraved rim of dots, a shaded lower edge, the star cut into the face */}
       <circle cx={x} cy={y} r={s * 0.9} fill={GOLD} />
+      <path d={`M${x - s * 0.9} ${y} a${s * 0.9} ${s * 0.9} 0 0 0 ${s * 1.8} 0 a${s * 0.9} ${s * 0.9} 0 0 1 ${-s * 1.8} 0 z`} fill="url(#hatch)" stroke="none" opacity={0.35} />
       <circle cx={x} cy={y} r={s * 0.78} fill="none" strokeWidth={0.4} />
+      {Array.from({ length: 12 }, (_, i) => { const a = (i / 12) * Math.PI * 2; return <circle key={i} cx={x + Math.cos(a) * s * 0.84} cy={y + Math.sin(a) * s * 0.84} r={s * 0.03} fill={INK} stroke="none" />; })}
       <polyline points={star} fill="none" strokeWidth={0.8} />
+      <circle cx={x} cy={y} r={s * 0.08} fill={INK} stroke="none" />
     </g>
   );
 }
