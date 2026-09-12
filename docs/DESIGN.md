@@ -629,7 +629,10 @@ A card the Codex knows (tier two, "known", or better) wears its seat word
 in the hand without being asked, as a paler ribbon than a paid whisper.
 The Codex already shows that card's keywords, so nothing new is said; the
 table simply stops charging for what the reader has earned. Whisper stays
-for cards not yet known, and the button greys out on a known one.
+for cards not yet known, and the button greys out on a known one. A
+mastered card gives two words, as the Small Bell does. While a reading is
+in progress the ambient motes behind the table take its colour too, gold
+as the tally rises and red as it falls, alongside the room's glow.
 
 ## The Lamp
 

@@ -110,6 +110,13 @@ function ReadingScreenInner() {
     hasRelic(run, 'ring') ? 2 : undefined,
   );
   const lastPlaced = soFar.seats[soFar.seats.length - 1];
+  // The motes drifting behind the table take the reading's colour: gold as it rises, red as it falls.
+  const readingTier = soFar.placed > 0 ? soFar.tier : null;
+  useEffect(() => {
+    const hue = readingTier === 'triumph' ? '48' : readingTier === 'boon' ? '44' : readingTier === 'harm' ? '8' : readingTier === 'calamity' ? '355' : '';
+    document.documentElement.style.setProperty('--reading-hue', hue);
+    return () => document.documentElement.style.setProperty('--reading-hue', '');
+  }, [readingTier]);
   const knownCombos = useGame((s) => s.knowledge.combos);
   const kinSoFar = kinshipAmong(soFar.seats.map((x) => x.card.id), run.kin, run.mods.kinBonus ?? KIN_BONUS);
   const placedIds = soFar.seats.map((x) => x.card.id);
@@ -254,7 +261,8 @@ function ReadingScreenInner() {
           const card = getCard(c.cardId);
           const whispered = active.whispered.includes(i);
           const kws = c.reversed ? card.keywords.reversed : card.keywords.upright;
-          const kw = whisperWords(kws, active.slot, bell ? 2 : 1).join(' · ');
+          // A mastered card, like a Small Bell, gives two words.
+          const kw = whisperWords(kws, active.slot, bell || (knownCards[c.cardId]?.tier ?? 0) >= 3 ? 2 : 1).join(' · ');
           return (
             <div
               className={`deal ${lifted === i ? 'deal--lantern' : ''}`}

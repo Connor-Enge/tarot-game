@@ -38,7 +38,8 @@ export function Ambient() {
       const dt = Math.min(t - last, 50);
       last = t;
       const rootStyle = getComputedStyle(document.documentElement);
-      const hue = rootStyle.getPropertyValue('--mote-hue').trim() || rootStyle.getPropertyValue('--scene-hue') || '260';
+      // A reading in progress colours the motes by how it is going; otherwise afterglow, then the scene.
+      const hue = rootStyle.getPropertyValue('--reading-hue').trim() || rootStyle.getPropertyValue('--mote-hue').trim() || rootStyle.getPropertyValue('--scene-hue') || '260';
       // The scene's kind changes what drifts: embers, leaves, sparks, or the usual dust.
       const kind = rootStyle.getPropertyValue('--mote-kind').trim().replace(/"/g, '');
       const ember = kind === 'threat';
