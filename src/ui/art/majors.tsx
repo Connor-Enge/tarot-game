@@ -291,21 +291,23 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <Mountains y={74} opacity={0.22} />
       <Ground y={100} fill="#d9b06a" opacity={0.6} />
       <Grass x={2} y={100} w={20} n={6} />
-      {/* the lion: body, legs, mane, a face that has stopped roaring, a tail curling up */}
+      {/* the lion: a tawny body, a hatched flank, a scalloped mane, the muzzle turned up to her hands */}
       <path d="M70 92 q10 -8 3 -20" fill="none" stroke="#c98a3c" strokeWidth={2.4} strokeLinecap="round" />
       <circle cx={72.5} cy={71} r={2.2} fill="#8a5a22" />
-      <ellipse cx={56} cy={92} rx={19} ry={8.5} fill="#c98a3c" stroke={INK} strokeWidth={0.7} />
-      <path d="M44 96 l-2 5 h5 M60 96 l1 5 h5 M70 96 l1 5 h4" fill="none" stroke={INK} strokeWidth={0.8} strokeLinecap="round" />
-      <rect x={38} y={84} width={36} height={16} fill="url(#hatch)" opacity={0.4} />
-      {Array.from({ length: 16 }, (_, i) => {
-        const a = (i / 16) * Math.PI * 2;
-        return <path key={i} d={`M${47 + Math.cos(a) * 10} ${78 + Math.sin(a) * 10} l${Math.cos(a) * 6} ${Math.sin(a) * 6}`} stroke="#8a5a22" strokeWidth={3} strokeLinecap="round" />;
-      })}
-      <circle cx={47} cy={78} r={10.5} fill="#e0a85a" stroke={INK} strokeWidth={0.8} />
-      <circle cx={43.5} cy={76} r={1.1} fill={INK} />
-      <circle cx={50.5} cy={76} r={1.1} fill={INK} />
-      <path d="M47 80 l-1.5 2 h3 z" fill={INK} />
-      <path d="M43 84 q4 2 8 0" fill="none" stroke={INK} strokeWidth={0.8} />
+      <ellipse cx={57} cy={92} rx={18} ry={8.5} fill="#c98a3c" stroke={INK} strokeWidth={0.7} />
+      <path d="M46 97 l-2 5 h5 M62 97 l1 5 h5 M71 96 l1 5 h4" fill="none" stroke={INK} strokeWidth={0.8} strokeLinecap="round" />
+      <path d="M46 97 l-2 5 h5 z M62 97 l1 5 h5 z M71 96 l1 5 h4 z" fill="#c98a3c" />
+      <ellipse cx={60} cy={94} rx={14} ry={6} fill="url(#hatch)" opacity={0.45} />
+      <path d="M47 66 q4 -6 8 -2 q6 -4 10 2 q6 0 6 6 q4 4 0 9 q2 6 -4 7 q-2 5 -8 3 q-5 4 -9 -1 q-6 1 -7 -5 q-5 -2 -2 -8 q-3 -6 3 -8 z" fill="#8a5a22" stroke={INK} strokeWidth={0.5} />
+      <path d="M50 70 q6 -3 12 0 q4 3 4 8 q-1 6 -6 8 q-6 1 -10 -3 q-3 -6 0 -13 z" fill="url(#crosshatch)" opacity={0.5} />
+      <circle cx={49} cy={78} r={9.5} fill="#e0a85a" stroke={INK} strokeWidth={0.7} />
+      <path d="M44 74 q2 -1.5 4 0 M50 74 q2 -1.5 4 0" fill="none" stroke={INK} strokeWidth={0.7} />
+      <circle cx={46} cy={75.2} r={0.8} fill={INK} />
+      <circle cx={52} cy={75.2} r={0.8} fill={INK} />
+      <ellipse cx={45} cy={82} rx={5} ry={3.6} fill="#e9c58a" stroke={INK} strokeWidth={0.5} />
+      <path d="M43.5 80.5 l-1.5 1.5 h3 z" fill={INK} />
+      <path d="M41 83 q2 2 4 0.5 M45 83.5 q2 1.5 4 0" fill="none" stroke={INK} strokeWidth={0.5} />
+      <path d="M40 82 l-3 -0.5 M40 84 l-3 0.8 M50 82 l3 -0.5 M50 84 l3 0.8" stroke={INK} strokeWidth={0.35} opacity={0.7} />
       {/* she leans in, both hands at the jaw, a garland at her waist and in her hair */}
       <Person x={22} y={96} h={44} pose="reach-right" robe={PALE} inner="#f3ecd8" hair="#d9a441" belt={null} />
       {[[15, 73], [19, 74.5], [23, 74.5], [27, 73]].map(([x, y], i) => <Rose key={i} x={x} y={y} r={1.5} />)}
@@ -475,44 +477,43 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
   13: () => (
     <g>
       <rect x={0} y={0} width={80} height={112} fill="url(#skyDeep)" opacity={0.35} />
-      {/* the two towers on the horizon, the sun between them, the river */}
-      <rect x={4} y={40} width={8} height={30} fill={INK} opacity={0.6} />
-      <rect x={68} y={40} width={8} height={30} fill={INK} opacity={0.6} />
-      <Sun x={40} y={52} r={7} rays={8} />
-      <Water y={64} rows={2} />
-      <path d="M0 74 h80 v38 h-80 z" fill="#3a3040" opacity={0.35} />
-      {/* the fallen king, crown rolled away */}
-      <g transform="rotate(-78 14 100)">
-        <Person x={14} y={100} h={24} pose="stand" robe="#7d5aa6" inner="#d9a441" hair="#9a9088" belt={null} face={false} />
+      {/* the two towers on the horizon, the sun rising between them, the river */}
+      <rect x={4} y={34} width={9} height={28} fill={INK} opacity={0.6} />
+      <rect x={67} y={34} width={9} height={28} fill={INK} opacity={0.6} />
+      <path d="M3 34 h11 M66 34 h11" stroke={INK} strokeWidth={1} opacity={0.6} />
+      <Sun x={40} y={38} r={7} rays={8} />
+      <Water y={60} rows={2} />
+      <path d="M0 68 h80 v44 h-80 z" fill="#3a3040" opacity={0.4} />
+      <Ground y={104} fill="#2a2030" opacity={0.7} />
+      {/* the fallen king, crown rolled away, under the hooves */}
+      <g transform="rotate(-84 12 104)">
+        <Person x={12} y={104} h={26} pose="stand" robe="#7d5aa6" inner="#d9a441" hair="#9a9088" belt={null} face={false} />
       </g>
-      <path d="M4 104 l0 -4 l2 2 l2 -3 l2 3 l2 -2 l0 4 z" fill={GOLD} stroke={INK} strokeWidth={0.4} />
-      {/* the bishop stands, the woman turns away, the child kneels with flowers */}
-      <Person x={66} y={104} h={22} pose="hold" robe="#d9b86a" inner={PALE} hair="none" belt={null} />
-      <path d="M63.5 84.5 l2.5 -5 l2.5 5 z" fill={GOLD} stroke={INK} strokeWidth={0.4} />
-      <Person x={56} y={106} h={14} pose="sit" robe="#e9e2d0" hair="#d9a441" belt={null} face={false} />
-      <Rose x={52} y={104} r={1.3} color={PALE} />
-      {/* the pale horse and its rider in black armour, the black banner with the white rose */}
-      <Horse x={40} y={100} fill={PALE} w={44} />
-      <Person x={38} y={86} h={40} pose="hold" robe={INK} inner="#3a3a44" hair="none" belt="#3a3a44" face={false} />
-      <circle cx={38} cy={50} r={4} fill={PALE} stroke={INK} strokeWidth={0.5} />
-      <path d="M36.2 49.6 a1 1 0 1 0 0.1 0 M39.4 49.6 a1 1 0 1 0 0.1 0" fill={INK} />
-      <circle cx={36.4} cy={49.6} r={0.9} fill={INK} />
-      <circle cx={39.6} cy={49.6} r={0.9} fill={INK} />
-      <path d="M36.5 52.5 h3 M37.2 52.5 v1 M38.2 52.5 v1" stroke={INK} strokeWidth={0.5} />
-      <path d="M33 45 h10 l-1 -3 h-8 z" fill={INK} stroke="#3a3a44" strokeWidth={0.4} />
-      <path d="M37.5 41 l0.5 -4 l0.5 4" fill={BLOOD} stroke={INK} strokeWidth={0.3} />
-      {(() => { const hd = hands(38, 86, 40, 'hold'); return (
+      <path d="M2 108 l0 -4 l2 2 l2 -3 l2 3 l2 -2 l0 4 z" fill={GOLD} stroke={INK} strokeWidth={0.4} />
+      {/* the bishop pleads, the child kneels with a flower */}
+      <Person x={70} y={104} h={24} pose="raise-right" robe="#d9b86a" inner={PALE} hair="none" belt={null} />
+      <path d="M67.3 82.5 l2.7 -5.5 l2.7 5.5 z" fill={GOLD} stroke={INK} strokeWidth={0.4} />
+      <Person x={58} y={106} h={13} pose="sit" robe="#e9e2d0" hair="#d9a441" belt={null} face={false} />
+      <Rose x={54} y={103} r={1.3} color={PALE} />
+      {/* the pale horse, and its rider in black armour with the banner of the white rose */}
+      <Horse x={46} y={104} fill={PALE} w={48} />
+      <Person x={42} y={88} h={44} pose="hold" robe={INK} inner="#3a3a44" hair="none" belt="#3a3a44" face={false} />
+      {(() => { const hd = hands(42, 88, 44, 'hold'); return (
         <g>
-          <line x1={hd.l.x - 6} y1={hd.l.y + 6} x2={hd.l.x + 14} y2={hd.l.y - 30} stroke={INK} strokeWidth={1.3} strokeLinecap="round" />
-          <path d={`M${hd.l.x + 4} ${hd.l.y - 12} l10 -18 l14 6 l-7 12 z`} fill={INK} stroke="#3a3a44" strokeWidth={0.5} />
-          {(() => { const cx = hd.l.x + 14.5, cy = hd.l.y - 18; return (
-            <g>
-              {[0, 1, 2, 3, 4].map((i) => { const a = (i / 5) * Math.PI * 2; return <circle key={i} cx={cx + Math.cos(a) * 2.4} cy={cy + Math.sin(a) * 2.4} r={1.6} fill={PALE} />; })}
-              <circle cx={cx} cy={cy} r={1.1} fill={PALE} />
-            </g>
-          ); })()}
+          <line x1={hd.l.x + 2} y1={hd.l.y + 4} x2={24} y2={24} stroke={INK} strokeWidth={1.4} strokeLinecap="round" />
+          <path d="M24 24 h-20 l2 9 l-2 9 h20 z" fill={INK} stroke="#3a3a44" strokeWidth={0.5} />
+          {[0, 1, 2, 3, 4].map((i) => { const a = (i / 5) * Math.PI * 2; return <circle key={i} cx={13 + Math.cos(a) * 2.6} cy={33 + Math.sin(a) * 2.6} r={1.7} fill={PALE} />; })}
+          <circle cx={13} cy={33} r={1.2} fill={PALE} />
         </g>
       ); })()}
+      {/* the skull under the crested helm */}
+      <circle cx={42} cy={48.4} r={4.4} fill={PALE} stroke={INK} strokeWidth={0.5} />
+      <circle cx={40.3} cy={48} r={1} fill={INK} />
+      <circle cx={43.7} cy={48} r={1} fill={INK} />
+      <path d="M41.5 50.2 l0.5 1 l0.5 -1" fill="none" stroke={INK} strokeWidth={0.4} />
+      <path d="M40 52.2 h4 M41 52.2 v1.2 M42 52.2 v1.2 M43 52.2 v1.2" stroke={INK} strokeWidth={0.4} />
+      <path d="M37 45 q5 -5 10 0 l-0.5 -3 q-4.5 -3 -9 0 z" fill={INK} stroke="#3a3a44" strokeWidth={0.4} />
+      <path d="M41.5 42 q0.5 -5 1 -8 q1 4 0.5 8 z" fill={BLOOD} stroke={INK} strokeWidth={0.3} />
     </g>
   ),
   14: () => (
