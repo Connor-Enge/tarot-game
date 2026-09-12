@@ -72,20 +72,48 @@ function AceScene({ suit }: { suit: Suit }): ReactElement {
 }
 
 const SUIT_SCENERY: Record<Suit, () => ReactElement> = {
-  wands: () => <Mountains y={84} opacity={0.18} />,
-  cups: () => <Water y={98} rows={3} />,
+  // a desert: three pyramids on the horizon, hot ground, sparse tufts
+  wands: () => (
+    <g>
+      <Mountains y={84} opacity={0.18} />
+      <path d="M8 84 l7 -10 l7 10 z M28 86 l5 -7 l5 7 z M58 85 l8 -12 l8 12 z" fill="#b8763a" opacity={0.45} />
+      <path d="M15 74 l7 10 h-7 z M66 73 l8 12 h-8 z" fill="url(#hatch)" opacity={0.5} />
+      <path d="M0 88 q20 -4 40 0 t40 0 v24 h-80 z" fill="#d9a36a" opacity={0.35} />
+      <path d="M6 96 q2 -4 4 0 M50 100 q2 -4 4 0 M72 94 q2 -4 4 0" fill="none" stroke="#8a5a22" strokeWidth={0.6} opacity={0.6} />
+    </g>
+  ),
+  // a sea: a far cliff, a sail on the horizon, the water, a strand
+  cups: () => (
+    <g>
+      <path d="M56 86 l6 -12 l18 -2 v14 z" fill={STONE} opacity={0.35} />
+      <path d="M62 74 l18 -2 v14 h-6 z" fill="url(#hatch)" opacity={0.4} />
+      <path d="M18 84 v-9 l6 9 z M17 84 h8" fill={PALE} stroke={INK} strokeWidth={0.4} />
+      <path d="M0 86 h80" stroke={INK} strokeWidth={0.4} opacity={0.4} />
+      <Water y={98} rows={3} />
+      <path d="M0 104 q20 -4 40 0 t40 0 v8 h-80 z" fill="#e9d9b6" opacity={0.5} />
+    </g>
+  ),
+  // a windswept sky: layered clouds, a grey ridge, a tree bent by the wind
   swords: () => (
     <g>
       <Cloud x={-4} y={8} w={20} />
+      <Cloud x={50} y={30} w={18} />
       <Cloud x={60} y={104} w={24} />
+      <Mountains y={90} opacity={0.22} fill={STONE} />
+      <path d="M8 104 q3 -8 -2 -16 q6 4 8 12 q4 -6 10 -6 q-6 4 -8 10 z" fill={INK} opacity={0.5} />
+      <path d="M2 60 q8 -3 16 0 M60 70 q8 -3 16 0 M4 74 q6 -2 12 0" fill="none" stroke={PALE} strokeWidth={0.8} opacity={0.8} />
     </g>
   ),
+  // a garden: rolling hills, a far castle, a vine on a stake, worked ground
   pentacles: () => (
     <g>
+      <path d="M0 86 q20 -12 40 -4 t40 -2 v30 h-80 z" fill={GREEN} opacity={0.25} />
+      <path d="M60 78 h4 v-6 h2 v6 h4 v-8 h2 v8 h3 v10 h-15 z" fill={STONE} opacity={0.6} />
       <path d="M0 100 q20 -10 40 0 t40 0 v12 h-80 z" fill={INK} opacity={0.25} />
       {[10, 30, 50, 70].map((x) => (
         <path key={x} d={`M${x} 100 q2 -6 4 0`} fill="none" stroke={INK} strokeWidth={0.8} opacity={0.5} />
       ))}
+      <path d="M0 106 q40 -3 80 0 M0 110 q40 -3 80 0" fill="none" stroke={INK} strokeWidth={0.4} opacity={0.35} />
     </g>
   ),
 };
