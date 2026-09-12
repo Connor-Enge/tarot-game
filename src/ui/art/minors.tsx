@@ -1,8 +1,8 @@
 import type { ReactElement } from 'react';
 import type { Suit } from '../../engine';
 import { ROBE, ROBE_PALE } from './palette';
-import { BLOOD, Cloud, Flame, GOLD, GOLD_FLAT, Horse, INK, Moon, Mountains, PALE, Star, Sun, SUIT_SYMBOL, Throne, Tree, Water } from './primitives';
-import { Person, hands, SKIN, SKIN_INK, type Pose } from './figure';
+import { BLOOD, Cloud, Flame, GOLD, GOLD_FLAT, Horse, INK, Moon, Mountains, PALE, Star, Sun, SUIT_SYMBOL, Sword as SwordSym, Throne, Tree, Water } from './primitives';
+import { Person, Rose, hands, SKIN, SKIN_INK, type Pose } from './figure';
 import type { Arms } from './primitives';
 
 /** The old silhouette's arm names, mapped onto the drawn figure's poses. */
@@ -488,23 +488,40 @@ const SWORDS: Record<number, () => ReactElement> = {
   9: () => (
     <g>
       <rect x={0} y={0} width={80} height={112} fill={INK} opacity={0.85} />
-      <Row suit="swords" xs={[40, 40, 40, 40, 40, 40, 40, 40, 40]} y={20} s={0} />
-      {[14, 22, 30, 38, 46, 54, 62, 70, 78].map((y) => <rect key={y} x={4} y={y} width={72} height={2} fill={PALE} opacity={0.75} />)}
-      <rect x={6} y={84} width={68} height={22} fill={PALE} stroke={INK} strokeWidth={0.6} />
-      {[[12, 90], [30, 90], [48, 90], [66, 90], [21, 98], [39, 98], [57, 98]].map(([x, y], i) => <path key={i} d={`M${x} ${y} l3 -3 l3 3 l-3 3 z`} fill={[BLOOD, '#6ab7d6', GOLD_FLAT][i % 3]} />)}
-      <Person x={40} y={86} h={34} pose="up" robe={PALE} />
-      <path d="M33 60 q7 -6 14 0" fill="none" stroke={INK} strokeWidth={1.4} />
+      {/* nine swords hung flat on the wall of the dark */}
+      {[12, 19, 26, 33, 40, 47, 54, 61, 68].map((y) => (
+        <g key={y} transform={`rotate(90 40 ${y})`}>
+          <SwordSym x={40} y={y} s={13} />
+        </g>
+      ))}
+      {/* the bed: a carved panel, the quilt of roses and signs */}
+      <rect x={4} y={100} width={72} height={8} fill="#5a3a22" stroke={INK} strokeWidth={0.5} />
+      <path d="M8 104 q4 -3 8 0 M20 104 q4 -3 8 0 M32 104 q4 -3 8 0 M44 104 q4 -3 8 0 M56 104 q4 -3 8 0" fill="none" stroke={GOLD_FLAT} strokeWidth={0.5} opacity={0.8} />
+      <Person x={40} y={90} h={36} pose="sit-hold" robe={PALE} inner="#f3ecd8" hair="#3a2a1e" belt={null} />
+      <rect x={6} y={80} width={68} height={20} fill={PALE} stroke={INK} strokeWidth={0.6} />
+      <rect x={6} y={80} width={68} height={20} fill="url(#hatch)" opacity={0.3} />
+      {[[12, 86], [30, 86], [48, 86], [66, 86], [21, 94], [39, 94], [57, 94]].map(([x, y], i) => <path key={i} d={`M${x} ${y} l3 -3 l3 3 l-3 3 z`} fill={[BLOOD, '#6ab7d6', GOLD_FLAT][i % 3]} />)}
+      {[[16, 90], [34, 90], [52, 90], [70, 90]].map(([x, y], i) => <Rose key={i} x={x} y={y} r={1.4} />)}
+      {/* the hands over the face */}
+      <path d="M31 66 q3 -8 7 -8 M49 66 q-3 -8 -7 -8" fill="none" stroke={PALE} strokeWidth={2.6} strokeLinecap="round" />
+      <circle cx={37.5} cy={58} r={2.4} fill={SKIN} stroke={SKIN_INK} strokeWidth={0.4} />
+      <circle cx={42.5} cy={58} r={2.4} fill={SKIN} stroke={SKIN_INK} strokeWidth={0.4} />
     </g>
   ),
   10: () => (
     <g>
       <rect x={0} y={0} width={80} height={112} fill={INK} opacity={0.7} />
-      <path d="M0 62 h80 v10 h-80 z" fill={GOLD_FLAT} opacity={0.45} />
-      <Water y={74} rows={2} />
-      <Ground y={90} fill={INK} opacity={0.8} />
-      <Lying x={12} y={102} w={58} fill={BLOOD} head="right" />
-      <path d="M12 104 q10 4 22 2" fill="none" stroke={BLOOD} strokeWidth={2} opacity={0.8} />
-      <Row suit="swords" xs={[14, 20, 26, 32, 38, 44, 50, 56, 62, 68]} y={90} s={9} />
+      {/* dawn on the far shore under the black sky */}
+      <path d="M0 58 h80 v10 h-80 z" fill={GOLD_FLAT} opacity={0.45} />
+      <Mountains y={66} opacity={0.5} fill="#2a2440" />
+      <Water y={72} rows={2} />
+      <Ground y={88} fill={INK} opacity={0.8} />
+      {/* face down under the red cloak, ten blades standing in the back */}
+      <g transform="rotate(-90 70 100)">
+        <Person x={70} y={100} h={54} pose="stand" robe={BLOOD} inner="#8a2e24" hair="#3a2a1e" belt={null} face={false} />
+      </g>
+      <path d="M16 96 q20 -4 44 0 q6 2 10 6 l-54 0 z" fill={BLOOD} opacity={0.5} />
+      <Row suit="swords" xs={[24, 30, 36, 42, 48, 54, 60, 66, 71, 76]} y={86} s={8} />
     </g>
   ),
 };
