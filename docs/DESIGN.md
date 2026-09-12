@@ -1002,6 +1002,17 @@ identity, not power, which is the point.
   finger and a gold glare slides across the face like foil catching
   light, and left alone it settles and breathes.
 
+## Smoke: a full descent through the UI
+
+`scripts/playthrough.mjs` plays a whole descent through the built app in
+headless Chromium: Descend from the title, then map, reading (random
+picks, an occasional lamp or whisper), resolution and relic screens until
+the run ends, collecting page and console errors, then opens the journal.
+Run `npm run build`, serve `npx vite preview --port 4173`, and
+`npm run smoke:play`. It needs playwright installed, or `PLAYWRIGHT_PATH`
+set to its `index.mjs`. Not part of CI, which has no browser; it is the
+check to run after a change that touches several screens.
+
 ## Open questions
 
 - Should the player be able to see their whole reading before committing
