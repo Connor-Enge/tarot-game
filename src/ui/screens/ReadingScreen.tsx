@@ -45,6 +45,7 @@ function ReadingScreenInner() {
   const firstDescent = useGame((s) => s.firstDescent);
   const deckOpen = useGame((s) => s.deckOpen);
   const openDeck = useGame((s) => s.openDeck);
+  const calmRoom = useSettings((s) => s.calmRoom);
   const [zoom, setZoom] = useState<{ cardId: string; reversed: boolean } | null>(null);
   // After a card lands, bring the next hand into view on a phone, where the plate pushes it down.
   const handRef = useRef<HTMLElement>(null);
@@ -111,7 +112,7 @@ function ReadingScreenInner() {
   );
   const lastPlaced = soFar.seats[soFar.seats.length - 1];
   // The motes drifting behind the table take the reading's colour: gold as it rises, red as it falls.
-  const readingTier = soFar.placed > 0 ? soFar.tier : null;
+  const readingTier = soFar.placed > 0 && !calmRoom ? soFar.tier : null;
   useEffect(() => {
     const hue = readingTier === 'triumph' ? '48' : readingTier === 'boon' ? '44' : readingTier === 'harm' ? '8' : readingTier === 'calamity' ? '355' : '';
     document.documentElement.style.setProperty('--reading-hue', hue);
@@ -127,7 +128,7 @@ function ReadingScreenInner() {
   const soFarBySlot = Object.fromEntries(soFar.seats.map((x) => [x.slot, x]));
 
   return (
-    <main className={`screen screen--reading ${scene.terminal ? 'screen--abyss' : ''} ${soFar.placed > 0 ? `reading--${soFar.tier}` : ''}`}>
+    <main className={`screen screen--reading ${scene.terminal ? 'screen--abyss' : ''} ${soFar.placed > 0 && !calmRoom ? `reading--${soFar.tier}` : ''}`}>
       <header className="topbar">
         <span className="muted small">
           {sceneNumber(run)} / {totalScenes(run)}
@@ -186,7 +187,7 @@ function ReadingScreenInner() {
                 {SLOTS[id].glyph}
               </div>
               <div className={`seat__card ${chosen ? 'flip-in' : ''}`} key={chosen ? chosen.cardId : 'empty'}>
-                <Card cardId={chosen?.cardId} reversed={chosen?.reversed} faceDown={!chosen} size="sm" mark={chosen ? run.marks[chosen.cardId] : undefined} />
+                <Card cardId={chosen?.cardId} reversed={chosen?.reversed} faceDown={!chosen} size="sm" mark={chosen ? run.marks[chosen.cardId] : undefined} onLongPress={chosen ? () => setZoom({ cardId: chosen.cardId, reversed: chosen.reversed }) : undefined} />
                 {chosen && <span className="seat__seal" aria-hidden>{SLOTS[id].glyph}</span>}
               </div>
               <div className="seat__pos" title={SLOT_POSITION[id].gloss}>

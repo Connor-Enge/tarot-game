@@ -988,7 +988,10 @@ identity, not power, which is the point.
   can be planned for without being solved. In a reading, the room itself feels
   the tally so far: as seats land the ambient light warms toward gold for a
   boon or triumph, cools to violet for an even reading, and sinks to red
-  for harm or calamity, breathing slowly at either extreme. The
+  for harm or calamity, breathing slowly at either extreme. A "calm room"
+  setting turns that glow and the motes' colouring off for readers who
+  find it distracting; the seat flashes stay. A placed seat can be held
+  close with a long press, as a hand card can. The
   hooks are `live-*` classes on the primitives and a few major groups,
   gated by an `.alive` ancestor and switched off by reduce-motion. The
   same two places hold the card in the hand (`Held`): it tilts toward the

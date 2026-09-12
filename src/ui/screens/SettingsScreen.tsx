@@ -16,7 +16,7 @@ export function SettingsScreen() {
   const [pasted, setPasted] = useState('');
   const [note, setNote] = useState<string | null>(null);
   const newRun = useGame((s) => s.newRun);
-  const { sound, reduceMotion, haptics, fixedTint, bigCards, readingSpeed, hideSeatNames, seatTick, set } = useSettings();
+  const { sound, reduceMotion, haptics, fixedTint, bigCards, readingSpeed, hideSeatNames, seatTick, calmRoom, set } = useSettings();
   const [confirmReset, setConfirmReset] = useState(false);
   const [seed, setSeed] = useState('');
   const [sealed, setSealed] = useState(false);
@@ -75,6 +75,12 @@ export function SettingsScreen() {
           <input type="checkbox" checked={hideSeatNames} onChange={(e) => set({ hideSeatNames: e.target.checked })} />
           <span className="toggle__track" />
         </label>
+        <label className="toggle">
+          <span>A calm room</span>
+          <input type="checkbox" checked={calmRoom} onChange={(e) => set({ calmRoom: e.target.checked })} />
+          <span className="toggle__track" />
+        </label>
+        <p className="muted small settings__help">The room stops warming or cooling with the tally, and the motes keep their own colour. The seats still flash as cards land.</p>
         <label className="toggle">
           <span>One color, no scene tint</span>
           <input type="checkbox" checked={fixedTint} onChange={(e) => set({ fixedTint: e.target.checked })} />
