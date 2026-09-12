@@ -2135,3 +2135,19 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .deal--lantern .lamp-mark { top: -22px; }
 .btn--lit { color: var(--gold-2); border-color: rgba(243,220,138,0.55); box-shadow: inset 0 0 14px rgba(243,220,138,0.12); }
 .reduce-motion .hand--lit::before, .reduce-motion .lamp-mark { animation: none; }
+
+/* --- places seen or foretold show their face on the map ------------------------ */
+.node__art { position: absolute; inset: 2px; border-radius: 50%; overflow: hidden; background: hsl(var(--book-hue, 260) 30% 14%); z-index: 0; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.5), inset 0 -6px 10px rgba(0,0,0,0.45); animation: fade-in 500ms ease both; }
+.node__art-svg { display: block; width: 100%; height: 100%; filter: brightness(1.18) saturate(1.08); }
+.node__art::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 50% 38%, transparent 55%, rgba(8,6,16,0.42) 100%); }
+.node--art { background: #0b0a12; }
+.node--art.node--visited { background: #0b0a12; box-shadow: 0 0 0 2px rgba(11,10,18,0.9), 0 0 0 3px rgba(214,178,94,0.55), 0 5px 12px rgba(0,0,0,0.5); }
+.node--art.node--visited::before { display: none; }
+.node--art .node__glyph { position: absolute; top: -7px; left: -5px; z-index: 2; display: grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; font-size: 0.66rem; background: #0b0a12; border: 1px solid rgba(214,178,94,0.55); color: var(--gold-2); }
+.node--art.node--choosable .node__glyph { color: var(--gold-2); }
+.node--art.node--visited .node__glyph { color: var(--gold-2); }
+.node__art--calamity { box-shadow: inset 0 0 0 1px rgba(214,96,94,0.5), inset 0 -6px 10px rgba(60,10,10,0.6); }
+.node__art--harm { box-shadow: inset 0 0 0 1px rgba(214,96,94,0.3), inset 0 -6px 10px rgba(40,10,10,0.5); }
+.node__art--triumph { box-shadow: inset 0 0 0 1px rgba(243,220,138,0.6), inset 0 0 10px rgba(243,220,138,0.25); }
+.node--art.node--passed .node__art { opacity: 0.4; filter: saturate(0.4); }
+.reduce-motion .node__art { animation: none; }

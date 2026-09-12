@@ -896,7 +896,12 @@ identity, not power, which is the point.
   crayfish rises. Nowhere else; the hand and the seats stay still. A
   reversed face is lit from below: the art runs a little cooler and dimmer
   and a violet shadow sits over what is now its top, so a turned card reads
-  as turned at a glance, before the corner mark is found. The
+  as turned at a glance, before the corner mark is found. On the map, a
+  place you have read at, or foretold, shows its own scene art inside the
+  node as a small round porthole, the kind glyph shrunk to a badge on its
+  rim and the verdict mark beside it, so the road so far is a trail of
+  places rather than a row of discs. Unread places stay glyphs: the art
+  would give away what Foretell sells. The
   hooks are `live-*` classes on the primitives and a few major groups,
   gated by an `.alive` ancestor and switched off by reduce-motion. The
   same two places hold the card in the hand (`Held`): it tilts toward the

@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { actOfLayer, canCut, canTakeVow, currentAct, cycleLength, foretellCost, getVow, KIND_GLYPH, RITES, ritesWalked, SCENES, tallyText, visitedNodes, vowOffer, wellTurn } from '../../engine';
 import { ActBanner, ActMark } from '../art/banners';
 import { RoadStrip } from '../art/road';
+import { SceneArt } from '../art/scenes';
 import { VowArt } from '../art/relics';
 import { MemorySheet } from '../components/Memory';
 import { HowToPlay } from '../components/HowToPlay';
@@ -289,12 +290,14 @@ function MapScreenInner() {
                 const historyIndex = wasHere ? visited.findIndex((v) => v.id === node.id) : -1;
                 const tierHere = historyIndex >= 0 ? run.history[historyIndex]?.resolution.tier : undefined;
                 const passed = isPast && !wasHere;
+                // A place seen, or foretold, shows its face on the map.
+                const showArt = (wasHere || run.foretold.includes(node.id)) && node.kind !== 'abyss';
                 return (
                   <button
                     key={node.id}
                     type="button"
                     data-node={node.id}
-                    className={`node node--${node.kind} node--stakes-${SCENES[node.sceneId].stakes} ${wasHere ? 'node--visited' : ''} ${isCurrent ? 'node--choosable' : ''} ${passed ? 'node--passed' : ''}`}
+                    className={`node node--${node.kind} node--stakes-${SCENES[node.sceneId].stakes} ${wasHere ? 'node--visited' : ''} ${isCurrent ? 'node--choosable' : ''} ${passed ? 'node--passed' : ''} ${showArt ? 'node--art' : ''}`}
                     disabled={!isCurrent && !wasHere}
                     onClick={() => {
                       if (isCurrent && foretelling) {
@@ -305,6 +308,11 @@ function MapScreenInner() {
                     }}
                     aria-label={wasHere ? `remember scene ${historyIndex + 1}` : `${node.kind} node`}
                   >
+                    {showArt && (
+                      <span className={`node__art ${tierHere ? `node__art--${tierHere}` : ''}`} style={{ '--book-hue': SCENES[node.sceneId].hue } as React.CSSProperties} aria-hidden>
+                        <SceneArt id={node.sceneId} className="node__art-svg" fit="slice" />
+                      </span>
+                    )}
                     <span className="node__glyph">{KIND_GLYPH[node.kind]}</span>
                     {tierHere && <span className={`node__tier node__tier--${tierHere}`} aria-hidden>{TIER_MARK[tierHere]}</span>}
                     {run.foretold.includes(node.id) && <span className="node__place">{SCENES[node.sceneId].place}</span>}

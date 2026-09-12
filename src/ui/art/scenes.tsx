@@ -423,11 +423,11 @@ export function EndArt({ kind, className }: { kind: 'dead' | 'ascended'; classNa
   );
 }
 
-export function SceneArt({ id, className }: { id: string; className?: string }) {
+export function SceneArt({ id, className, fit = 'meet' }: { id: string; className?: string; fit?: 'meet' | 'slice' }) {
   const Art = ART[id];
   if (!Art) return null;
   return (
-    <svg viewBox="0 0 200 60" className={className} aria-hidden preserveAspectRatio="xMidYMid meet">
+    <svg viewBox="0 0 200 60" className={className} aria-hidden preserveAspectRatio={`xMidYMid ${fit}`}>
       <Art />
     </svg>
   );
