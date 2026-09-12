@@ -119,6 +119,31 @@ export function CodexDetail({ cardId, onClose }: { cardId: string; onClose: () =
             )}
           </div>
         )}
+        {(() => {
+          // Its road with you: every reading this card sat in, oldest to newest, coloured by how it ended.
+          const road = (k.omenLog ?? []).filter((o) => o.cardId === cardId).slice(-24);
+          if (road.length < 2) return null;
+          const COL: Record<string, string> = { calamity: '#d6605e', harm: '#e0a39a', neutral: '#8d86a3', boon: '#d6b25e', triumph: '#f3dc8a' };
+          const W = 240, H = 34;
+          const pts = road.map((o, i) => ({ x: 14 + (i / (road.length - 1)) * (W - 28), y: 10 + (4 - RANK[o.tier]) * 3.5 + ((i * 7) % 3), o }));
+          const d = pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x} ${p.y}`).join(' ');
+          const good = road.filter((o) => o.tier === 'boon' || o.tier === 'triumph').length;
+          return (
+            <div className="cardroad">
+              <div className="muted small">Its road with you · {road.length} reading{road.length === 1 ? '' : 's'} · {good} good</div>
+              <svg viewBox={`0 0 ${W} ${H}`} className="cardroad__svg" role="img" aria-label={`how its readings went, oldest to newest: ${road.map((o) => o.tier).join(', ')}`}>
+                <path d={d} fill="none" stroke="rgba(214,178,94,0.35)" strokeWidth={0.8} />
+                {pts.map((p, i) => (
+                  <g key={i}>
+                    <circle cx={p.x} cy={p.y} r={i === pts.length - 1 ? 4 : 3} fill="#0b0a12" stroke={COL[p.o.tier]} strokeWidth={1.2} />
+                    <text x={p.x} y={p.y + 0.4} fontSize={4.2} textAnchor="middle" dominantBaseline="middle" fill={COL[p.o.tier]} fontFamily="Georgia, serif">{SLOTS[p.o.seat].glyph}</text>
+                    {p.o.reversed && <circle cx={p.x + 3.2} cy={p.y - 3.2} r={0.9} fill="#f0a09e" />}
+                  </g>
+                ))}
+              </svg>
+            </div>
+          );
+        })()}
         {best && (
           <div className="best-seat">
             Sits well as <span className="seat__glyph">{SLOTS[best.seat].glyph}</span> {SLOT_POSITION[best.seat].n} · {SLOT_POSITION[best.seat].role}

@@ -2284,3 +2284,7 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .card--xs .card__gilt { inset: 1.5px; border-width: 0.5px; box-shadow: inset 0 0 0 1px rgba(11,10,18,0.5), inset 0 0 0 1.5px rgba(214,178,94,0.7); background: none; }
 .card--sm .card__gilt { inset: 2px; box-shadow: inset 0 0 0 1.5px rgba(11,10,18,0.5), inset 0 0 0 2.2px rgba(214,178,94,0.7), 0 0 6px rgba(243,220,138,0.2); }
 .card--mastered.card--lg .card__inner { box-shadow: 0 6px 18px rgba(0,0,0,0.5), 0 0 14px rgba(243,220,138,0.18); }
+
+/* --- its road with you: a card's readings, oldest to newest --------------------- */
+.cardroad { width: 100%; max-width: 300px; margin: 6px auto 0; display: flex; flex-direction: column; gap: 4px; align-items: center; }
+.cardroad__svg { width: 100%; height: auto; display: block; }

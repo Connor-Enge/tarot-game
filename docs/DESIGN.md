@@ -773,6 +773,14 @@ ember where you did not, deeper color for longer roads, the weather glyph
 in the corner. Tap a day for its line. It carries nothing about the cards,
 so it is safe to show in full. Cleared by "forget my records".
 
+## Its road with you
+
+A card's Codex sheet draws every reading it has sat in, oldest to newest,
+as a small road: one stop per reading, higher when it went well and lower
+when it went badly, each stop wearing the seat's glyph and a red bead when
+the card lay reversed. Consequence only, drawn from the omen log; a
+player can see at a glance whether a card has been kind to them.
+
 ## Signature
 
 Once a card is mastered (tier 3), its Codex page offers to make it your
