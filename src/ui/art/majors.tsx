@@ -577,11 +577,15 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <path d="M54 30 q12 18 2 36 q-6 12 10 30" fill="none" stroke="#d9c39a" strokeWidth={4} opacity={0.7} />
       <Mountains y={72} opacity={0.18} />
       <path d="M0 92 q20 -6 34 0 v20 h-34 z" fill="#7fa3c9" opacity={0.6} />
+      <path d="M30 90 q4 2 6 6 v16 h-6 z" fill="url(#hatch)" opacity={0.4} />
+      <path d="M2 96 q1 -6 0 -12 M5 98 q1 -6 0 -11" fill="none" stroke={LEAF} strokeWidth={0.7} />
       <Water y={96} rows={2} />
+      {[[44, 100], [50, 104], [56, 99], [62, 106], [68, 101]].map(([x, y], i) => <ellipse key={i} cx={x} cy={y} rx={2.2} ry={1.1} fill="#8c8a94" stroke={INK} strokeWidth={0.3} opacity={0.8} />)}
       {[6, 12].map((x, i) => (
         <g key={i}>
           <line x1={x} y1={100} x2={x} y2={84} stroke="#5a7a3a" strokeWidth={1} />
           <path d={`M${x} 84 l-3 -4 l3 1 l3 -1 z M${x} 84 l-2 3 M${x} 84 l2 3`} fill="#7a3fa0" stroke={INK} strokeWidth={0.3} />
+          <path d={`M${x} 94 q-3 -2 -4 -6 q3 1 4 6 M${x} 92 q3 -2 4 -6 q-3 1 -4 6`} fill={LEAF} stroke={INK} strokeWidth={0.25} />
         </g>
       ))}
       {/* the angel: one foot in the water, one on the stone, a cup in either hand */}
@@ -606,9 +610,13 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <Star x={40} y={9} r={6} points={5} fill={PALE} />
       {/* bat wings, the horned one on the half cube, torch pointed down */}
       <path d="M36 36 q-14 -12 -30 -4 q6 2 6 8 q6 -2 8 4 q6 -2 8 6 z M44 36 q14 -12 30 -4 q-6 2 -6 8 q-6 -2 -8 4 q-6 -2 -8 6 z" fill="#2a2030" stroke={PALE} strokeWidth={0.5} />
+      <path d="M28 74 l4 -4 h24 l-4 4 z" fill="#3a3040" stroke={PALE} strokeWidth={0.5} />
       <rect x={28} y={74} width={24} height={12} fill={INK} stroke={PALE} strokeWidth={0.8} />
       <rect x={28} y={74} width={24} height={12} fill="url(#hatch)" opacity={0.5} />
-      <circle cx={40} cy={80} r={1.6} fill="none" stroke={PALE} strokeWidth={0.6} />
+      <circle cx={40} cy={80} r={1.8} fill="none" stroke={PALE} strokeWidth={0.7} />
+      <path d="M40 78.2 v-2" stroke={PALE} strokeWidth={0.6} />
+      {/* veins in the bat wings */}
+      <path d="M36 36 q-8 -6 -18 -4 M36 36 q-6 -2 -12 4 M44 36 q8 -6 18 -4 M44 36 q6 -2 12 4" fill="none" stroke={PALE} strokeWidth={0.3} opacity={0.6} />
       <Person x={40} y={76} h={50} pose="raise-right" robe="#5a4a3a" inner="#6f5c48" hair="#3a2a1e" belt={null} />
       <path d="M35.5 28 q-5 -4 -3 -11 q2 4 5 8 M44.5 28 q5 -4 3 -11 q-2 4 -5 8" fill="#3a2a1e" stroke={PALE} strokeWidth={0.4} />
       <path d="M38.2 24 l1.8 3.2 l1.8 -3.2 l-3.6 2 h3.6 z" fill={PALE} opacity={0.9} />
@@ -629,8 +637,10 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <path d="M21 100 q6 -2 4 -8" fill="none" stroke={SKIN_INK} strokeWidth={1} strokeLinecap="round" />
       <path d="M59 100 q-6 -2 -4 -8" fill="none" stroke={SKIN_INK} strokeWidth={1} strokeLinecap="round" />
       <Flame x={55} y={91} s={2.6} />
-      <Chain x={20} y={87} len={9} angle={-25} />
-      <Chain x={51} y={83} len={9} angle={25} />
+      <Chain x={18} y={88} len={12} angle={-30} />
+      <Chain x={50} y={82} len={12} angle={30} />
+      <circle cx={16.5} cy={86.5} r={1.6} fill="none" stroke={INK} strokeWidth={0.7} />
+      <circle cx={63.5} cy={86.5} r={1.6} fill="none" stroke={INK} strokeWidth={0.7} />
       <Ground y={108} fill="#1a1420" />
     </g>
   ),
