@@ -284,7 +284,7 @@ export function TitleScreen() {
         </div>
       )}
       {Object.keys(k.dealt ?? {}).length >= CARDS.length / 2 && Object.keys(k.dealt ?? {}).length < CARDS.length && (
-        <p className="muted small">{CARDS.length - Object.keys(k.dealt ?? {}).length} cards have never been dealt to you.</p>
+        <p className="muted small never-dealt">{CARDS.length - Object.keys(k.dealt ?? {}).length} cards have never been dealt to you.</p>
       )}
       {k.signature && (
         <p className="muted small center signature-line">

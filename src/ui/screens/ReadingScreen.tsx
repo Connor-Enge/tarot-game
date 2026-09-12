@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSettings } from '../../settings';
-import { activeSlotState, askText, visibleTags, cardTags, canLamp, canTakeBack, canWhisperHere, kinshipAmong, seatAsk, tagFit, type SlotId, type Tag, KIN_BONUS, lampCost, lampVerdicts, namedWithinReach, readingSoFar, reckoningText, RITES, SLOT_POSITION, thresholdsFor, sceneAsRead, getCard, hasRelic, redrawCost, sceneNumber, scoreSlot, SLOT_IDS, SLOTS, totalScenes, whisperCost } from '../../engine';
+import { activeSlotState, askText, visibleTags, cardTags, canLamp, canTakeBack, canWhisperHere, kinshipAmong, seatAsk, tagFit, type SlotId, type Tag, KIN_BONUS, lampCost, lampVerdicts, namedWithinReach, readingSoFar, reckoningBrief, RITES, SLOT_POSITION, thresholdsFor, sceneAsRead, getCard, hasRelic, redrawCost, sceneNumber, scoreSlot, SLOT_IDS, SLOTS, totalScenes, whisperCost } from '../../engine';
 
 /** Dev only: show the oracle's score on each candidate when the page is opened with ?oracle. */
 const ORACLE = import.meta.env.DEV && typeof location !== 'undefined' && location.search.includes('oracle');
@@ -138,7 +138,7 @@ function ReadingScreenInner() {
       .slice(0, 5);
 
   return (
-    <main className={`screen screen--reading ${scene.terminal ? 'screen--abyss' : ''} ${soFar.placed > 0 && !calmRoom ? `reading--${soFar.tier}` : ''}`}>
+    <main className={`screen screen--reading ${scene.terminal ? 'screen--abyss' : ''} ${soFar.placed > 0 ? 'reading--underway' : ''} ${soFar.placed > 0 && !calmRoom ? `reading--${soFar.tier}` : ''}`}>
       <header className="topbar">
         <span className="muted small">
           {sceneNumber(run)} / {totalScenes(run)}
@@ -150,15 +150,15 @@ function ReadingScreenInner() {
         <Stats vitality={run.vitality} clarity={run.clarity} />
       </header>
 
-      <div className="reading__left">
+      <div className="reading__left scrollzone">
       <section className="scene alive">
         <SceneArt id={scene.id} className="scene__art" />
         <p className="scene__place muted">{scene.place}</p>
         <p className="scene__prompt">{scene.prompt}</p>
         {scene.rite && (
-          <p className={`scene__rite scene__rite--${scene.rite}`}>
+          <p className={`scene__rite scene__rite--${scene.rite}`} title={`${RITES[scene.rite].name}. ${RITES[scene.rite].text}`}>
             <span className="scene__rite-glyph" aria-hidden>{RITES[scene.rite].glyph}</span>
-            <strong>{RITES[scene.rite].name}.</strong> {RITES[scene.rite].text}
+            <strong>{RITES[scene.rite].name}.</strong> <span className="scene__rite-text">{RITES[scene.rite].text}</span>
           </p>
         )}
         {scene.stakes > 1 && (
@@ -235,12 +235,20 @@ function ReadingScreenInner() {
           );
         })}
       </section>
+      {run.held && (
+        <p className="held-note muted small center">
+          <span className="held-note__glyph" aria-hidden>⌖</span> {getCard(run.held.cardId).name} held for the next seat
+        </p>
+      )}
+      </div>
+
+      <div className="reading__right">
       {lastPlaced && (
         <div className={`sofar sofar--${soFar.tier}`} key={`sofar-${lastPlaced.card.id}-${soFar.placed}`} aria-live="polite">
           <p className="sofar__answer">
             <span className="sofar__omen">{lastPlaced.omen}</span>
             <span className={`reckon reckon--${lastPlaced.reckoning.verdict} sofar__reckon`}>
-              <span className="reckon__text">{reckoningText(lastPlaced.reckoning, lastPlaced.card.name)}</span>
+              <span className="reckon__text">{reckoningBrief(lastPlaced.reckoning, lastPlaced.card.name)}</span>
             </span>
           </p>
           <div className="sofar__meter" role="img" aria-label={`reading so far: ${soFar.total > 0 ? '+' : ''}${soFar.total}, reads as ${soFar.tier}`}>
@@ -274,14 +282,6 @@ function ReadingScreenInner() {
           </p>
         </div>
       )}
-      {run.held && (
-        <p className="held-note muted small center">
-          <span className="held-note__glyph" aria-hidden>⌖</span> {getCard(run.held.cardId).name} held for the next seat
-        </p>
-      )}
-      </div>
-
-      <div className="reading__right">
       <p className="ask" key={`ask-${active.slot}`} aria-label={askText(ask)}>
         <span className="hint__pos">{SLOT_POSITION[active.slot].n} · {SLOT_POSITION[active.slot].role}</span>
         <AskLine slot={active.slot} wanted={ask.wanted} feared={ask.feared} />
@@ -369,7 +369,7 @@ function ReadingScreenInner() {
       )}
 
       {(firstDescent || lifted === null) && (
-        <p className="nudge muted small center" key={`${run.activeSlot}-${lifted === null}`}>
+        <p className={`nudge muted small center ${firstDescent ? 'nudge--first' : ''}`} key={`${run.activeSlot}-${lifted === null}`}>
           {lifted === null ? (
             <>
               <span className="hint__pos">{SLOT_POSITION[active.slot].n} · {SLOT_POSITION[active.slot].role}</span> {SLOT_POSITION[active.slot].question}

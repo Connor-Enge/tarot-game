@@ -30,7 +30,7 @@ export function SettingsScreen() {
         </button>
       </header>
 
-      <section className="settings">
+      <section className="settings scrollzone">
         <h3 className="settings__h">Feel</h3>
         <label className="toggle">
           <span>Sound</span>

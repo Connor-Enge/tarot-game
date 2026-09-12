@@ -451,6 +451,28 @@ Localization was considered and deferred: all authored text already lives
 in three data files (`cards.ts`, `minorText.ts`, `scenes.ts`) plus relics
 and sigils, so a translation is a data swap when it is wanted.
 
+**Phones** (owner's request: the whole game on one iPhone screen, no
+scrolling): below 700px wide the page never scrolls. Every screen is a
+fixed-height column (`.screen` at the viewport's height, `html` and
+`body` clipped) with what the reader acts on pinned at the bottom (the
+hand and its buttons, Walk on, Share and Again) and one middle region
+(`.scrollzone`) that scrolls only if it must. Sizes are cut so the
+common case fits outright at 390×844: the scene vignette and place
+line are hidden, seat cards are 48px and hand cards 90px, the plate
+under the spread carries the omen and the brief reckoning
+(`reckoningBrief`: what the card brought and the verdict, since the ask
+was just read), the resolution lays the final spread in one row and
+spends its narration on the four lines, the end screen shows the four
+cards in a row with one card's page open at a time (`reveal__pick`),
+and a returning reader's title drops the weather sky, the finest
+spread's cards and the last reading's seal. Measured with a Playwright
+pass (`scratch fit.mjs`, one screenshot and a clip measurement per
+state) the title, map, reading (start, lifted, lamp, placed, the Abyss
+laid bare, larger cards), resolution, relic, memory sheet, end reveal
+and returning title all fit with no scroll. What still scrolls, inside
+its own panel, is a list by nature: the Codex shelf of 78 cards, the
+settings, the how-to sheet, and the journal's readings of the run.
+
 **Tablet and landscape**: from 700px wide the reading screen becomes two
 columns, scene and spread on the left, hand and actions on the right, with
 larger cards. Short landscape hides the scene vignette.

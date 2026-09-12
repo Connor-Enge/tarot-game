@@ -616,6 +616,14 @@ export function reckoningText(r: SlotReckoning, cardName: string): string {
   return `${OPENER[r.slot](want, fear)} ${cardName} ${brought}${extra ? `, and ${extra}` : ''}. ${verdict}`;
 }
 
+/** The short form for the plate under the spread, where the ask has just been read: what the card brought, and the verdict. */
+export function reckoningBrief(r: SlotReckoning, cardName: string): string {
+  const brought = r.met.length && r.against.length ? `brought ${list(r.met)}, but also ${list(r.against)}` : r.met.length ? `brought ${list(r.met)}` : r.against.length ? `brought ${list(r.against)}` : 'brought none of it';
+  const extra = [r.reversed ? 'lay reversed' : '', r.charged ? 'was charged' : ''].filter(Boolean).join(' and ');
+  const verdict = r.verdict === 'helped' ? 'It served you.' : r.verdict === 'hurt' ? 'It cost you.' : 'It changed little.';
+  return `${cardName} ${brought}${extra ? `, and ${extra}` : ''}. ${verdict}`;
+}
+
 /** The tally: fit, named readings, the total, and the tier it made. */
 export function tallyText(resolution: Resolution): string {
   const fit = resolution.slots.reduce((a, s) => a + s.score, 0);

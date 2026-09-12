@@ -259,7 +259,7 @@ function MapScreenInner() {
           </p>
         );
       })()}
-      <section className="map" aria-label="the descent" ref={mapRef}>
+      <section className="map scrollzone" aria-label="the descent" ref={mapRef}>
         <svg className="map__lines" width={size.w} height={size.h} aria-hidden>
           {lines.map((l, i) => {
             if (l.kind === 'open') return <line key={i} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} className="map__line map__line--open" />;

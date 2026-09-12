@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { chronicle, chronicleText, getCard, getDescent, getLore, getRelic, getVow, getWeather, handGrade, hasRelic, KIND_GLYPH, reckon, reckoningText, runHand, SCENES, SIGILS, SLOT_IDS, SLOT_POSITION, SLOTS, tallyText, type RunState } from '../../engine';
+import { chronicle, chronicleText, getCard, getDescent, getLore, getRelic, getVow, getWeather, handGrade, hasRelic, KIND_GLYPH, reckon, reckoningText, runHand, SCENES, SIGILS, SLOT_IDS, SLOT_POSITION, SLOTS, tallyText, type RunState, type SlotId } from '../../engine';
 import { shareText, useGame } from '../../store';
 import { Card } from '../components/Card';
 import { RelicArt } from '../art/relics';
@@ -31,6 +31,7 @@ function RunEndScreenInner() {
   const [copiedChronicle, setCopiedChronicle] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [replay, setReplay] = useState(0);
+  const [pick, setPick] = useState<SlotId>('vessel');
   const [busy, setBusy] = useState(false);
   const [peek, setPeek] = useState<number | null>(null);
   const [telling, setTelling] = useState(false);
@@ -117,6 +118,7 @@ function RunEndScreenInner() {
 
   return (
     <main className={`screen screen--end ${dead ? 'screen--dead' : 'screen--ascended'} screen--end-${run.phase.resolution.tier}`}>
+      <div className="end__body scrollzone">
       <EndArt kind={dead ? 'dead' : 'ascended'} className="scene__art end__art" />
       <h2>{endTitle(run, dead)}</h2>
       <p className="narration__outcome">
@@ -185,16 +187,39 @@ function RunEndScreenInner() {
               read again
             </button>
           </p>
-          {SLOT_IDS.map((id, i) => {
+          <div className="reveal__cards" role="tablist" aria-label="the final spread: pick a card to read it">
+            {SLOT_IDS.map((id, i) => {
+              const d = last.reading[id];
+              const r = lastReckoning[i];
+              return (
+                <button
+                  key={id}
+                  type="button"
+                  role="tab"
+                  aria-selected={pick === id}
+                  className={`reveal__pick rise ${pick === id ? 'reveal__pick--on' : ''}`}
+                  style={{ animationDelay: `${200 + i * (replay ? 900 : 300)}ms` }}
+                  onClick={() => setPick(id)}
+                >
+                  <div className="seat__card">
+                    <Card cardId={d.cardId} reversed={d.reversed} size="sm" mark={run.marks[d.cardId]} />
+                    {replay > 0 && <span className="seat__seal" style={{ animationDelay: `${200 + i * 900}ms` }} aria-hidden>{SLOTS[id].glyph}</span>}
+                  </div>
+                  <span className="reveal__pickpos"><span className="seat__pos-n">{SLOT_POSITION[id].n}</span></span>
+                  <span className={`reckon reckon--${r.verdict} reveal__pickscore`}><span className="reckon__score">{r.score > 0 ? '+' : r.score < 0 ? '−' : ''}{Math.abs(r.score) % 1 === 0 ? Math.abs(r.score) : Math.abs(r.score).toFixed(1)}</span></span>
+                </button>
+              );
+            })}
+          </div>
+          {(() => {
+            const id = pick;
+            const i = SLOT_IDS.indexOf(id);
             const d = last.reading[id];
             const card = getCard(d.cardId);
             const tier = knowledge.cards[d.cardId]?.tier ?? 0;
+            const r = lastReckoning[i];
             return (
-              <article key={id} className={`reveal__row reveal__row--${card.arcana === 'major' ? 'major' : card.suit} rise`} style={{ animationDelay: `${200 + i * (replay ? 900 : 300)}ms` }}>
-                <div className="seat__card">
-                  <Card cardId={d.cardId} reversed={d.reversed} size="sm" mark={run.marks[d.cardId]} />
-                  {replay > 0 && <span className="seat__seal" style={{ animationDelay: `${200 + i * 900}ms` }} aria-hidden>{SLOTS[id].glyph}</span>}
-                </div>
+              <article key={`${id}-${replay}`} className={`reveal__row reveal__row--${card.arcana === 'major' ? 'major' : card.suit} rise`}>
                 <div className="reveal__text">
                   <div className="reveal__seat">
                     {SLOT_POSITION[id].n} · {SLOT_POSITION[id].role} · {SLOTS[id].glyph} {SLOTS[id].name}
@@ -205,19 +230,14 @@ function RunEndScreenInner() {
                   </div>
                   {replay > 0 && <p className="narration__omen rise" style={{ animationDelay: `${500 + i * 900}ms` }}>{d.reversed ? card.omen.reversed : card.omen.upright}</p>}
                   <p className="reveal__meaning"><span className="reveal__fleuron" aria-hidden>❧</span>{d.reversed && tier >= 3 ? getLore(d.cardId).reversed : getLore(d.cardId).upright}</p>
-                  {(() => {
-                    const r = lastReckoning[i];
-                    return (
-                      <p className={`reckon reckon--${r.verdict} reveal__reckon`}>
-                        <span className="reckon__score">{r.score > 0 ? '+' : r.score < 0 ? '−' : ''}{Math.abs(r.score) % 1 === 0 ? Math.abs(r.score) : Math.abs(r.score).toFixed(1)}</span>
-                        <span className="reckon__text">{reckoningText(r, card.name)}</span>
-                      </p>
-                    );
-                  })()}
+                  <p className={`reckon reckon--${r.verdict} reveal__reckon`}>
+                    <span className="reckon__score">{r.score > 0 ? '+' : r.score < 0 ? '−' : ''}{Math.abs(r.score) % 1 === 0 ? Math.abs(r.score) : Math.abs(r.score).toFixed(1)}</span>
+                    <span className="reckon__text">{reckoningText(r, card.name)}</span>
+                  </p>
                 </div>
               </article>
             );
-          })}
+          })()}
         </section>
       ) : (
         <section className="journal">
@@ -313,6 +333,7 @@ function RunEndScreenInner() {
         </div>
       )}
 
+      </div>
       <footer className="actions">
         <button className="btn" onClick={share}>
           {copied ? 'Copied' : 'Share'}

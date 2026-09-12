@@ -91,6 +91,7 @@ export function CodexScreen() {
           Table
         </button>
       </div>
+      <div className="codex__body scrollzone">
       {view === 'study' && <Study />}
       {view === 'table' && <Table />}
       {view === 'sky' && (
@@ -284,6 +285,7 @@ export function CodexScreen() {
       </section>
 
       </>)}
+      </div>
       {open && <CodexDetail cardId={open} onClose={() => openCodex(null)} />}
     </main>
   );
