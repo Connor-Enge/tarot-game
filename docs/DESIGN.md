@@ -896,13 +896,17 @@ way the player can see coming.
 | majors-only | the 22 Major Arcana | see below |
 | oracle | every affinity | ~100% |
 
-Since the ask, the reader to balance for is the learner in
-`scripts/sim-learner.ts`, which reads the ask and remembers what seats
-have taken cards for: ~80% over its first ten descents, ~100% once the
-deck is learned, ~73% at Depth 3, ~67% at Depth 5. The tables below
-predate the ask and the thresholds that came with it (triumph 7, boon 4,
-neutral above 1.5, harm above −3); they are kept for the shape of the
-curve, not the numbers.
+Since the ask, the reader to balance for is the learner (`learnerPick`
+in `sim.ts`, a career of it in `scripts/sim-learner.ts`), which reads
+the ask and remembers what seats have taken cards for: ~80% over its
+first ten descents, ~100% once the deck is learned, ~73% at Depth 3,
+~67% at Depth 5. The CI balance guard (`scripts/balance-check.ts`)
+holds those bands: a fresh learner over its first twelve descents
+62-92%, a veteran at Depth 5 45-85%, the oracle 95%+, and a reader who
+ignores the ask under 20%. The tables below predate the ask and the
+thresholds that came with it (triumph 7, boon 4, neutral above 1.5,
+harm above −3); they are kept for the shape of the curve, not the
+numbers.
 
 With Depths stacked (`npx vite-node scripts/sim.ts 1200 5`):
 

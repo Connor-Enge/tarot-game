@@ -5,6 +5,7 @@
  * space the player learns into.
  */
 import type { RunConfig } from './descents';
+import { cardTags, getCard, type Tag } from './cards';
 import { createRng, type Rng } from './rng';
 import { scoreSlot } from './resolve';
 import { SCENES, TIERS, type OutcomeTier } from './scenes';
@@ -47,6 +48,54 @@ export const majorsOnlyPick: Policy = (run, rng) => {
   });
   return best >= 0 && bestScore > 0 ? best : rng.int(slot.candidates.length);
 };
+
+/**
+ * A learning reader, the one the table is balanced for since the ask:
+ * knows every seat's ask (the table states it), and a card's tags only
+ * once a seat has taken the card for them, remembered across runs as the
+ * Codex remembers them. `artSense` is the share of a card's true tags the
+ * reader can guess from its face before ever reading it. The same policy
+ * object carries its memory from run to run, so pass it to more than one
+ * `simulate` to model a veteran.
+ */
+export function learnerPick(artSense: number, seed = 1): Policy {
+  const guessRng = createRng(seed);
+  const memory = new Map<string, Set<Tag>>();
+  const guessed = new Map<string, Set<Tag>>();
+  const known = (id: string, rev: boolean) => {
+    const key = `${id}|${rev}`;
+    if (!guessed.has(key)) {
+      const g = new Set<Tag>();
+      for (const t of cardTags(getCard(id), rev)) if (guessRng.next() < artSense) g.add(t);
+      guessed.set(key, g);
+    }
+    return new Set([...(memory.get(key) ?? []), ...guessed.get(key)!]);
+  };
+  return (run, rng) => {
+    const scene = currentScene(run);
+    const slot = run.slots[run.activeSlot];
+    const aff = scene.affinity[slot.slot];
+    let best = -1;
+    let bestScore = -Infinity;
+    slot.candidates.forEach((c, j) => {
+      if (c.hidden) return;
+      let s = 0;
+      for (const t of known(c.cardId, c.reversed)) s += aff[t] ?? 0;
+      if (c.reversed) s -= 0.5;
+      s += rng.next() * 0.01;
+      if (s > bestScore) {
+        bestScore = s;
+        best = j;
+      }
+    });
+    if (best < 0) best = rng.int(slot.candidates.length);
+    const c = slot.candidates[best];
+    const key = `${c.cardId}|${c.reversed}`;
+    if (!memory.has(key)) memory.set(key, new Set());
+    for (const h of scoreSlot(scene, slot.slot, c, run.marks).hits) memory.get(key)!.add(h.tag);
+    return best;
+  };
+}
 
 export type NodePolicy = (run: RunState, rng: Rng) => number;
 export const randomNode: NodePolicy = (run, rng) => rng.int(run.map[run.layer].length);
