@@ -360,7 +360,11 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       {/* the lantern's light, then the lantern held up, then the one who carries it */}
       <circle cx={61} cy={44} r={22} fill={GOLD_FLAT} opacity={0.12} />
       <circle cx={61} cy={44} r={11} fill={GOLD_FLAT} opacity={0.18} />
+      {Array.from({ length: 18 }, (_, i) => <circle key={i} cx={(i * 17 + 5) % 80} cy={(i * 23 + 9) % 100} r={0.7} fill={PALE} opacity={0.6} />)}
       <Person x={40} y={98} h={48} pose="raise-right" robe="#a9acb8" inner="#8f93a0" hair="#d0d0d0" belt={null} shade />
+      {/* deep folds in the grey cloak */}
+      <path d="M30 70 q-2 12 -1 26 M36 66 q-1 14 0 30 M46 68 q1 14 0 28" fill="none" stroke={INK} strokeWidth={0.4} opacity={0.5} />
+      <ellipse cx={58} cy={100} rx={16} ry={4} fill={GOLD_FLAT} opacity={0.12} />
       {/* hood over the head, a long white beard */}
       <path d="M33 56 q0 -9 7 -10 q7 1 7 10 q-2 -5 -7 -5 q-5 0 -7 5 z" fill="#8f93a0" stroke={INK} strokeWidth={0.5} />
       <path d="M36.5 57 q1 6 3.5 12 q2.5 -6 3.5 -12 q-3.5 3 -7 0 z" fill="#e8e6f0" stroke={INK} strokeWidth={0.35} />
@@ -369,7 +373,9 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
           <path d={`M${hd.r.x} ${hd.r.y} q1 3 3 5`} fill="none" stroke={INK} strokeWidth={0.8} />
           <Lantern x={hd.r.x + 3} y={hd.r.y + 10} />
           <line x1={hd.l.x} y1={hd.l.y + 4} x2={hd.l.x} y2={hd.l.y - 40} stroke={GOLD_FLAT} strokeWidth={1.6} strokeLinecap="round" />
-          <circle cx={hd.l.x} cy={hd.l.y - 41} r={1.8} fill={GOLD_FLAT} />
+          <line x1={hd.l.x} y1={hd.l.y + 4} x2={hd.l.x} y2={hd.l.y - 40} stroke={INK} strokeWidth={0.4} strokeLinecap="round" opacity={0.5} />
+          <circle cx={hd.l.x} cy={hd.l.y - 41} r={1.8} fill={GOLD_FLAT} stroke={INK} strokeWidth={0.4} />
+          <path d={`M${hd.l.x - 1.6} ${hd.l.y - 20} q1.6 1.5 3.2 0 M${hd.l.x - 1.6} ${hd.l.y - 8} q1.6 1.5 3.2 0`} fill="none" stroke={INK} strokeWidth={0.4} opacity={0.6} />
         </g>
       ); })()}
     </g>
@@ -400,10 +406,18 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
           <circle cx={68.8} cy={97} r={0.4} fill={PALE} />
           <circle cx={71.2} cy={97} r={0.4} fill={PALE} />
         </g>
-        {[[10, 24], [70, 24], [10, 104], [70, 104]].map(([x, y], i) => <path key={i} d={`M${x - 4} ${y} h8 v2.5 h-8 z M${x} ${y} v2.5`} fill={PALE} stroke={INK} strokeWidth={0.35} />)}
+        {[[10, 24], [70, 24], [10, 104], [70, 104]].map(([x, y], i) => (
+          <g key={i}>
+            <path d={`M${x - 4.5} ${y} q4.5 -1.5 9 0 v3 q-4.5 -1.5 -9 0 z`} fill={PALE} stroke={INK} strokeWidth={0.35} />
+            <path d={`M${x} ${y - 0.5} v3.5 M${x - 3} ${y + 1} h2 M${x + 1} ${y + 1} h2 M${x - 3} ${y + 2} h2 M${x + 1} ${y + 2} h2`} stroke={INK} strokeWidth={0.25} opacity={0.7} />
+          </g>
+        ))}
       </g>
+      <circle cx={40} cy={56} r={30} fill={GOLD_FLAT} opacity={0.12} />
       <g className="live-spin">
         <circle cx={40} cy={56} r={26} fill={PALE} stroke={INK} strokeWidth={1.2} />
+        <circle cx={40} cy={56} r={26} fill="url(#hatch)" opacity={0.12} />
+        <circle cx={40} cy={56} r={23.5} fill="none" stroke={INK} strokeWidth={0.4} opacity={0.5} />
         <circle cx={40} cy={56} r={17} fill="none" stroke={INK} strokeWidth={0.8} />
         <circle cx={40} cy={56} r={6} fill={GOLD} stroke={INK} strokeWidth={0.8} />
         {Array.from({ length: 8 }, (_, i) => {
