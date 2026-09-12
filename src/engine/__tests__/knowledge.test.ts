@@ -282,3 +282,12 @@ describe('best seat', () => {
     expect(bestSeat(bad)).toBeNull();
   });
 });
+
+describe('the last reading remembers its scene', () => {
+  it('keeps the scene id when given, so the title can lay it on the Table', async () => {
+    const { emptyKnowledge, noteLast } = await import('../knowledge');
+    const k = noteLast(emptyKnowledge(), [{ cardId: 'major-0', reversed: false }], 'It held.', true, 1, 'boon', 'crossing');
+    expect(k.last?.scene).toBe('crossing');
+    expect(noteLast(emptyKnowledge(), [], 'x', false).last?.scene).toBeUndefined();
+  });
+});

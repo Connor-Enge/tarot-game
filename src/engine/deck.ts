@@ -46,3 +46,13 @@ export function draw(deck: DeckState, rng: Rng, n: number, reversedChance = REVE
 export function discard(deck: DeckState, cards: readonly DrawnCard[]): DeckState {
   return { draw: deck.draw, discard: [...deck.discard, ...cards.map((c) => c.cardId)] };
 }
+
+/** What remains to draw, counted by suit and the majors. Public knowledge: the deck is 78 and the discard is open. */
+export function tallyDraw(deck: DeckState): { major: number; wands: number; cups: number; swords: number; pentacles: number; total: number } {
+  const t = { major: 0, wands: 0, cups: 0, swords: 0, pentacles: 0, total: deck.draw.length };
+  for (const id of deck.draw) {
+    const suit = id.split('-')[0] as keyof typeof t;
+    if (suit in t && suit !== 'total') t[suit] += 1;
+  }
+  return t;
+}

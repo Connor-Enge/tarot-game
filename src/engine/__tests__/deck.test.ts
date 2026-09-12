@@ -34,3 +34,11 @@ describe('daily seed', () => {
     expect(a.seed).not.toBe(c.seed);
   });
 });
+
+describe('what remains', () => {
+  it('tallies the draw pile by suit and the majors', async () => {
+    const { tallyDraw } = await import('../deck');
+    const t = tallyDraw({ draw: ['major-0', 'major-21', 'wands-3', 'cups-10', 'cups-1', 'pentacles-14'], discard: ['swords-2'] });
+    expect(t).toEqual({ major: 2, wands: 1, cups: 2, swords: 0, pentacles: 1, total: 6 });
+  });
+});

@@ -655,7 +655,10 @@ Codex. The point is to make the story legible by experiment: swap the
 Situation card, turn the Guidance, see what moves.
 
 Engine: `engine/table.ts` (`tableScenes`, `tableCards`, `layTable`,
-`nextEmptySeat`), built on `readingSoFar` and `resolveReading`.
+`nextEmptySeat`), built on `readingSoFar` and `resolveReading`. The title's
+last reading remembers its scene and can be laid on the Table in one tap.
+The deck sheet tallies what remains to draw by suit and the majors: the
+deck is 78 and the discard is open, so this is counting, not divination.
 
 ## The road not taken
 

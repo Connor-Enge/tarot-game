@@ -57,7 +57,7 @@ export interface Knowledge {
   /** Omens witnessed, in order. Capped. */
   omenLog?: { run: number; scene: string; seat: SlotId; cardId: string; reversed: boolean; tier: string }[];
   /** The final spread of the most recent run, for the title screen. */
-  last?: { cards: { cardId: string; reversed: boolean }[]; outcome: string; returned: boolean; when: number; tier?: OutcomeTier };
+  last?: { cards: { cardId: string; reversed: boolean }[]; outcome: string; returned: boolean; when: number; tier?: OutcomeTier; scene?: string };
   /** Per-descent records. */
   records?: Record<
     string,
@@ -309,8 +309,8 @@ export function noteOmens(k: Knowledge, entries: { scene: string; seat: SlotId; 
   return { ...k, omenLog: log.slice(-OMEN_LOG_CAP) };
 }
 
-export function noteLast(k: Knowledge, cards: { cardId: string; reversed: boolean }[], outcome: string, returned: boolean, when = Date.now(), tier?: OutcomeTier): Knowledge {
-  return { ...k, last: { cards: cards.map((c) => ({ cardId: c.cardId, reversed: c.reversed })), outcome, returned, when, tier } };
+export function noteLast(k: Knowledge, cards: { cardId: string; reversed: boolean }[], outcome: string, returned: boolean, when = Date.now(), tier?: OutcomeTier, scene?: string): Knowledge {
+  return { ...k, last: { cards: cards.map((c) => ({ cardId: c.cardId, reversed: c.reversed })), outcome, returned, when, tier, scene } };
 }
 
 export function noteCombos(k: Knowledge, ids: string[]): Knowledge {

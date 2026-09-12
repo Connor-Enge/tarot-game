@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { canOfferInstall, useInstall } from '../../install';
 import { HowToPlay } from '../components/HowToPlay';
-import { CARDS, CHOSEN_MIN, chosenDeck, dailySeed, dailyStreakAlive, dailyWeather, dayCard, daylight, STREAK_FOR_WEEK_CARD, moonName, moonPhase, weeklySeed, weeklyWeather, DEPTHS, DESCENTS, getCard, getDescent, maxDepthUnlocked } from '../../engine';
+import { CARDS, CHOSEN_MIN, chosenDeck, dailySeed, dailyStreakAlive, dailyWeather, dayCard, daylight, STREAK_FOR_WEEK_CARD, moonName, moonPhase, weeklySeed, weeklyWeather, DEPTHS, DESCENTS, getCard, getDescent, maxDepthUnlocked, SCENES, SLOT_IDS, type TableLay } from '../../engine';
 import { CardBack, type BackVariant } from '../art/CardArt';
 import { WeatherArt } from '../art/weather';
 import { VerdictSeal } from '../art/verdict';
@@ -25,6 +25,7 @@ export function TitleScreen() {
   const abandon = useGame((s) => s.abandon);
   const goto = useGame((s) => s.goto);
   const k = useGame((s) => s.knowledge);
+  const openTable = useGame((s) => s.openTable);
   const descent = useGame((s) => s.descent);
   const setDescent = useGame((s) => s.setDescent);
   const depth = useGame((s) => s.depth);
@@ -292,6 +293,15 @@ export function TitleScreen() {
             )}
           </div>
           <div className="muted small last__outcome">{k.last.outcome}</div>
+          {k.last.scene && SCENES[k.last.scene] && k.last.cards.length === SLOT_IDS.length && (
+            <button
+              type="button"
+              className="chip last__table"
+              onClick={() => openTable(k.last!.scene!, Object.fromEntries(SLOT_IDS.map((sl, i) => [sl, { cardId: k.last!.cards[i].cardId, reversed: k.last!.cards[i].reversed }])) as TableLay)}
+            >
+              ⌗ Lay it on the Table
+            </button>
+          )}
         </div>
       )}
       <button type="button" className={`today ${todayOpen ? 'today--open' : ''}`} aria-label="card of the day, tap to turn it" onClick={() => setTodayOpen((o) => !o)}>

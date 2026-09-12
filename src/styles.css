@@ -2185,3 +2185,20 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 .reduce-motion .reach, .reduce-motion .reach__mark { animation: none; }
 .scene__rite--lit { color: var(--gold-2); border-color: rgba(243,220,138,0.5); background: rgba(243,220,138,0.08); }
 .node__rite--lit { color: var(--gold-2); border-color: rgba(243,220,138,0.7); }
+
+/* --- what remains to draw, by suit ------------------------------------------ */
+.deck-tally { display: grid; grid-template-columns: auto 1fr auto; gap: 3px 8px; align-items: center; width: 100%; max-width: 300px; margin: 6px auto 2px; font-size: 0.78rem; }
+.deck-tally__row { display: contents; }
+.deck-tally__glyph { color: var(--gold); text-align: center; width: 16px; }
+.deck-tally__row--wands .deck-tally__glyph { color: #e0a068; }
+.deck-tally__row--cups .deck-tally__glyph { color: #8fc3e0; }
+.deck-tally__row--swords .deck-tally__glyph { color: #c8c9d8; }
+.deck-tally__row--pentacles .deck-tally__glyph { color: #a9c98a; }
+.deck-tally__bar { height: 5px; border-radius: 999px; background: rgba(255,255,255,0.07); overflow: hidden; }
+.deck-tally__bar > span { display: block; height: 100%; background: var(--gold); opacity: 0.75; border-radius: 999px; transition: width 300ms ease; }
+.deck-tally__row--wands .deck-tally__bar > span { background: #e0a068; }
+.deck-tally__row--cups .deck-tally__bar > span { background: #8fc3e0; }
+.deck-tally__row--swords .deck-tally__bar > span { background: #c8c9d8; }
+.deck-tally__row--pentacles .deck-tally__bar > span { background: #a9c98a; }
+.deck-tally__n { color: var(--muted); font-variant-numeric: tabular-nums; min-width: 2ch; text-align: right; }
+.last__table { margin-top: 6px; }

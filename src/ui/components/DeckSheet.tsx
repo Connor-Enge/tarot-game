@@ -1,4 +1,4 @@
-import { getCard, SLOT_IDS, type RunState } from '../../engine';
+import { getCard, SLOT_IDS, tallyDraw, type RunState } from '../../engine';
 import { Card } from './Card';
 
 /** What has gone by this run. Faces only, no meanings. */
@@ -22,6 +22,21 @@ export function DeckSheet({ run, onClose }: { run: RunState; onClose: () => void
           {run.deck.draw.length} to draw · {discard.length} gone by
         </div>
         <div className="muted small">seed {run.seed.toString(36)}{run.cut ? ` · cut at ${run.cut}` : ''}</div>
+        {(() => {
+          const t = tallyDraw(run.deck);
+          const rows = [['major', '✦', 22], ['wands', '⚚', 14], ['cups', '♆', 14], ['swords', '⚔', 14], ['pentacles', '⛤', 14]] as const;
+          return (
+            <div className="deck-tally" aria-label="what remains to draw, by suit">
+              {rows.map(([key, glyph, full]) => (
+                <div key={key} className={`deck-tally__row deck-tally__row--${key}`} title={`${t[key]} of ${full} ${key === 'major' ? 'majors' : key} still to draw`}>
+                  <span className="deck-tally__glyph">{glyph}</span>
+                  <span className="deck-tally__bar"><span style={{ width: `${(100 * t[key]) / full}%` }} /></span>
+                  <span className="deck-tally__n">{t[key]}</span>
+                </div>
+              ))}
+            </div>
+          );
+        })()}
         {discard.length === 0 ? (
           <p className="muted">Nothing has gone by yet.</p>
         ) : (
