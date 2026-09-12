@@ -13,6 +13,7 @@ import {
   takeVow as takeVowRun,
   turnCandidate as turnRun,
   holdCandidate as holdRun,
+  lightLamp as lampRun,
   acceptTrade as acceptTradeRun,
   foretell as foretellRun,
   takeBack as takeBackRun,
@@ -141,6 +142,7 @@ interface GameStore {
   turnLifted: () => void;
   /** Hold the lifted card back for the next seat. */
   holdLifted: () => void;
+  lightLamp: () => void;
   setSignature: (id: string | null) => void;
   /** Toggle a known card in the Chosen deck. */
   toggleChosen: (id: string) => void;
@@ -452,6 +454,15 @@ export const useGame = create<GameStore>((set, get) => ({
     if (next === run) return;
     sfx.lift();
     set({ run: next, lifted: null });
+  },
+  lightLamp: () => {
+    const { run } = get();
+    if (!run) return;
+    const next = lampRun(run);
+    if (next === run) return;
+    buzz([5, 30, 5, 30, 5]);
+    sfx.lamp();
+    set({ run: next });
   },
   turnLifted: () => {
     const { run, lifted } = get();

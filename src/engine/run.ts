@@ -13,6 +13,7 @@ export const REDRAW_COST = 1;
 export const WHISPER_COST = 1;
 export const TURN_COST = 1;
 export const HOLD_COST = 1;
+export const LAMP_COST = 2;
 
 /** Per-run consequences that follow a card around. */
 export type Mark = 'charged' | 'scarred';
@@ -23,6 +24,8 @@ export interface SlotState {
   chosen: number | null; // index into candidates
   /** Candidate indices whose keyword has been whispered this seat. */
   whispered: number[];
+  /** The lamp has been held over this seat: every card in the hand shows what it would do here. */
+  lit?: boolean;
 }
 
 export type Phase =
@@ -116,6 +119,8 @@ export interface RunState {
   well?: number;
   /** True once the Stranger's trade has been taken this run. */
   traded?: boolean;
+  /** Lamps lit this run. */
+  lamps?: number;
   /** True once the peddler at the market has made an offer this run. */
   peddlerMet?: boolean;
   /** True while reading the Abyss after it was dealt from the run's own discard. */
@@ -514,6 +519,34 @@ export function holdCandidate(run: RunState, index: number): RunState {
 }
 
 /** Spend Clarity to hear one keyword of a candidate. The UI shows it; the Codex remembers it. */
+/** The Lamp: once per seat, for Clarity, see what each card in the hand would do in this seat. */
+export function canLamp(run: RunState): boolean {
+  if (run.phase.kind !== 'reading' || run.clarity < LAMP_COST) return false;
+  const slot = run.slots[run.activeSlot];
+  return !!slot && slot.chosen === null && !slot.lit && slot.candidates.some((c) => !c.hidden);
+}
+
+export function lightLamp(run: RunState): RunState {
+  if (!canLamp(run)) return run;
+  const slots = run.slots.map((s, i) => (i === run.activeSlot ? { ...s, lit: true } : s));
+  return { ...run, slots, clarity: run.clarity - LAMP_COST, lamps: (run.lamps ?? 0) + 1 };
+}
+
+export type LampVerdict = 'helped' | 'hurt' | 'neither';
+
+/** What the lamp shows for each card in the active hand: consequence, never meaning. Hidden cards stay dark. */
+export function lampVerdicts(run: RunState): (LampVerdict | null)[] {
+  const slot = run.slots[run.activeSlot];
+  if (!slot || !slot.lit || run.phase.kind !== 'reading') return [];
+  const scene = currentScene(run);
+  const bonus = hasRelic(run, 'ring') ? 2 : undefined;
+  return slot.candidates.map((c) => {
+    if (c.hidden) return null;
+    const score = scoreSlot(scene, slot.slot, c, run.marks, bonus).score;
+    return score >= 1 ? 'helped' : score <= -1 ? 'hurt' : 'neither';
+  });
+}
+
 /** The Hush forbids whispers in its scene. */
 export function canWhisperHere(run: RunState): boolean {
   return run.phase.kind === 'reading' && currentScene(run).rite !== 'hush';

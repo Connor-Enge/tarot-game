@@ -117,6 +117,12 @@ export const sfx = {
     tone(1320, 0.6, 'sine', 0.03, 0.08, 6);
   },
   node: () => tone(440, 0.15, 'triangle', 0.06),
+  lamp: () => {
+    // A wick catching: a soft low bloom, then a bright thread that lingers.
+    tone(330, 0.35, 'sine', 0.05);
+    tone(990, 0.9, 'sine', 0.025, 0.06, 4);
+    noise(0.04, 0.12, 0.02, 3200);
+  },
   redraw: () => {
     noise(0.15, 0.06, 0, 1800);
     noise(0.15, 0.06, 0.08, 1800);

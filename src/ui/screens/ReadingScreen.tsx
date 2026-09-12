@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSettings } from '../../settings';
-import { activeSlotState, canTakeBack, canWhisperHere, currentScene, readingSoFar, reckoningText, RITES, SLOT_POSITION, THRESHOLDS, getCard, hasRelic, redrawCost, sceneNumber, scoreSlot, SLOT_IDS, SLOTS, totalScenes, whisperCost, whisperWords } from '../../engine';
+import { activeSlotState, canLamp, canTakeBack, canWhisperHere, LAMP_COST, lampVerdicts, currentScene, readingSoFar, reckoningText, RITES, SLOT_POSITION, THRESHOLDS, getCard, hasRelic, redrawCost, sceneNumber, scoreSlot, SLOT_IDS, SLOTS, totalScenes, whisperCost, whisperWords } from '../../engine';
 
 /** Dev only: show the oracle's score on each candidate when the page is opened with ?oracle. */
 const ORACLE = import.meta.env.DEV && typeof location !== 'undefined' && location.search.includes('oracle');
@@ -34,6 +34,7 @@ function ReadingScreenInner() {
   const confirm = useGame((s) => s.confirm);
   const redraw = useGame((s) => s.redraw);
   const whisperLifted = useGame((s) => s.whisperLifted);
+  const lightLamp = useGame((s) => s.lightLamp);
   const takeBack = useGame((s) => s.takeBack);
   const turnLifted = useGame((s) => s.turnLifted);
   const holdLifted = useGame((s) => s.holdLifted);
@@ -71,6 +72,7 @@ function ReadingScreenInner() {
       else if (key === 'w') st.whisperLifted();
       else if (key === 't') st.turnLifted();
       else if (key === 'h') st.holdLifted();
+      else if (key === 'l') st.lightLamp();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -84,6 +86,8 @@ function ReadingScreenInner() {
   const hushed = !canWhisperHere(run);
   const canWhisper = !hushed && lifted !== null && run.clarity >= wCost && !active.whispered.includes(lifted) && !active.candidates[lifted]?.hidden;
   const bell = hasRelic(run, 'bell');
+  const lamp = lampVerdicts(run);
+  const lampOn = !!active.lit;
   // Re-key the hand when the candidates change so the deal animation replays.
   const handKey = active.candidates.map((c) => c.cardId).join('|');
   // Every placed card answers at once: its score, its omen, and what the seat made of it.
@@ -211,7 +215,7 @@ function ReadingScreenInner() {
       </div>
 
       <div className="reading__right">
-      <section className={`hand ${active.candidates.length > 3 ? 'hand--four' : ''} ${dragPull ? 'hand--pull' : ''}`} aria-label={`candidates for ${seatsNamed ? SLOTS[active.slot].name : `seat ${run.activeSlot + 1}`}: choose one`} key={handKey}>
+      <section className={`hand ${active.candidates.length > 3 ? 'hand--four' : ''} ${dragPull ? 'hand--pull' : ''} ${lampOn ? 'hand--lit' : ''}`} aria-label={`candidates for ${seatsNamed ? SLOTS[active.slot].name : `seat ${run.activeSlot + 1}`}: choose one`} key={handKey}>
         {active.candidates.map((c, i) => {
           const card = getCard(c.cardId);
           const whispered = active.whispered.includes(i);
@@ -224,6 +228,11 @@ function ReadingScreenInner() {
               key={`${c.cardId}-${i}`}
             >
               {ORACLE && <span className="oracle-badge">{scoreSlot(scene, active.slot, c, run.marks).score.toFixed(1)}</span>}
+              {lampOn && lamp[i] && (
+                <span className={`lamp-mark lamp-mark--${lamp[i]}`} style={{ animationDelay: `${i * 120}ms` }} aria-label={lamp[i] === 'helped' ? 'would serve here' : lamp[i] === 'hurt' ? 'would cost here' : 'would change little here'} title={lamp[i] === 'helped' ? 'Would serve here' : lamp[i] === 'hurt' ? 'Would cost here' : 'Would change little here'}>
+                  {lamp[i] === 'helped' ? '△' : lamp[i] === 'hurt' ? '▽' : '◇'}
+                </span>
+              )}
               <Card
                 cardId={c.cardId}
                 reversed={c.reversed}
@@ -316,6 +325,9 @@ function ReadingScreenInner() {
         </button>
         <button className="btn" disabled={!canWhisper} onClick={whisperLifted} title={hushed ? 'No whispers in this scene' : 'Hear one word of the lifted card'}>
           Whisper ◈{wCost}
+        </button>
+        <button className={`btn ${lampOn ? 'btn--lit' : ''}`} disabled={!canLamp(run)} onClick={lightLamp} title={lampOn ? 'The lamp is lit over this seat' : 'Hold a lamp over this seat: see what each card would do here'}>
+          {lampOn ? 'Lit' : `Lamp ◈${LAMP_COST}`}
         </button>
         <button className="btn btn--primary" disabled={lifted === null} onClick={confirm}>
           {run.activeSlot === SLOT_IDS.length - 1 ? 'Read' : 'Place'}

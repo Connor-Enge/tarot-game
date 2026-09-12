@@ -623,6 +623,19 @@ with the deck's size on the button. Cards land wrong more often there
 (0.35). It has its own back, a quill over the line it has written. It is the one place the game lets the reader stack the deck,
 and it is gated behind knowing enough of it to stack it well.
 
+## The Lamp
+
+Once per seat, for two Clarity, the player holds a lamp over the seat and
+every card in the hand shows what it would do there: a gold triangle if it
+would serve, a red one if it would cost, a hollow diamond if it would
+change little. Hidden cards stay dark. This is the whisper's opposite: the
+whisper gives a word of the card and leaves the seat to be guessed, the
+lamp gives the seat's answer and leaves the card unexplained. Nothing new
+is said about any card; only what this seat, in this scene, would make of
+it. The score is never shown, so a +1 and a +4 look alike under the lamp
+and the choice between two served seats is still the player's. Engine:
+`LAMP_COST`, `canLamp`, `lightLamp`, `lampVerdicts`; `SlotState.lit`.
+
 ## The Table
 
 A practice spread in the Codex. The player picks a scene they have read at,
