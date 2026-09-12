@@ -90,7 +90,7 @@ export function Pillar({ x, y = 8, h = 80, w = 8, dark = false }: P & { h?: numb
 export type Arms = 'down' | 'up' | 'raised' | 'out' | 'left-up' | 'right-up' | 'hold';
 
 /** A robed silhouette. `y` is the hem; `h` is the height to the crown. */
-export function Figure({ x, y, h = 36, arms = 'down', fill = INK, cloak = false, halo = false, crown = false }: P & { h?: number; arms?: Arms; fill?: string; cloak?: boolean; halo?: boolean; crown?: boolean }) {
+export function Figure({ x, y, h = 36, arms = 'down', fill = INK, cloak = false, halo = false, crown = false, cap = false }: P & { h?: number; arms?: Arms; fill?: string; cloak?: boolean; halo?: boolean; crown?: boolean; cap?: boolean }) {
   const r = h * 0.11;
   const top = y - h;
   const headY = top + r;
@@ -115,13 +115,31 @@ export function Figure({ x, y, h = 36, arms = 'down', fill = INK, cloak = false,
       <path d={`M${x - w} ${shoulder} L${x + w} ${shoulder} L${x + hem} ${y} L${x - hem} ${y} Z`} fill={fill} />
       <circle cx={x} cy={headY} r={r} fill={fill} />
       {crown && <path d={`M${x - r} ${headY - r * 0.6} l0 ${-r * 1.1} l${r * 0.5} ${r * 0.6} l${r * 0.5} ${-r * 1} l${r * 0.5} ${r * 1} l${r * 0.5} ${-r * 0.6} l0 ${r * 1.1} Z`} fill={GOLD} stroke={INK} strokeWidth={0.4} />}
+      {cap && (
+        <g>
+          <path d={`M${x - r * 1.5} ${headY - r * 0.5} q${r * 1.5} ${-r * 1.6} ${r * 3} 0 Z`} fill={fill} stroke={INK} strokeWidth={0.4} />
+          <ellipse cx={x} cy={headY - r * 0.45} rx={r * 1.7} ry={r * 0.35} fill={fill} stroke={INK} strokeWidth={0.4} />
+          <path d={`M${x + r * 0.6} ${headY - r * 1.4} q${r * 1.2} ${-r * 1.6} ${r * 2.2} ${-r * 1.2}`} fill="none" stroke={GOLD_FLAT} strokeWidth={0.9} strokeLinecap="round" />
+        </g>
+      )}
     </g>
   );
 }
 
-export function Throne({ x, y, w = 30, h = 34, fill = PALE }: P & { w?: number; h?: number; fill?: string }) {
+export function Throne({ x, y, w = 30, h = 34, fill = PALE, back = 'plain', dais = false }: P & { w?: number; h?: number; fill?: string; back?: 'plain' | 'arch' | 'square'; dais?: boolean }) {
   return (
     <g>
+      {dais && (
+        <g>
+          <rect x={x - w / 2 - 12} y={y} width={w + 24} height={4} fill={fill} stroke={INK} strokeWidth={0.7} />
+          <rect x={x - w / 2 - 18} y={y + 4} width={w + 36} height={4} fill={fill} stroke={INK} strokeWidth={0.7} />
+        </g>
+      )}
+      {back === 'arch' && <path d={`M${x - w / 2} ${y - h} a${w / 2} ${w / 2} 0 0 1 ${w} 0 Z`} fill={fill} stroke={INK} strokeWidth={0.8} />}
+      {back === 'arch' && <path d={`M${x - w / 2 + 4} ${y - h} a${w / 2 - 4} ${w / 2 - 4} 0 0 1 ${w - 8} 0`} fill="none" stroke={INK} strokeWidth={0.5} opacity={0.6} />}
+      {back === 'square' && <rect x={x - w / 2} y={y - h - 14} width={w} height={14} fill={fill} stroke={INK} strokeWidth={0.8} />}
+      {back === 'square' && [x - w / 2, x + w / 2].map((fx) => <circle key={fx} cx={fx} cy={y - h - 15} r={2.2} fill={GOLD_FLAT} stroke={INK} strokeWidth={0.5} />)}
+      {back === 'square' && <path d={`M${x - w / 2 + 4} ${y - h - 10} h${w - 8} M${x - w / 2 + 4} ${y - h - 6} h${w - 8}`} stroke={INK} strokeWidth={0.5} opacity={0.6} />}
       <rect x={x - w / 2} y={y - h} width={w} height={h} fill={fill} stroke={INK} strokeWidth={0.8} />
       <rect x={x - w / 2 - 3} y={y - h * 0.5} width={3} height={h * 0.5} fill={fill} stroke={INK} strokeWidth={0.8} />
       <rect x={x + w / 2} y={y - h * 0.5} width={3} height={h * 0.5} fill={fill} stroke={INK} strokeWidth={0.8} />

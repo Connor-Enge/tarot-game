@@ -896,7 +896,11 @@ identity, not power, which is the point.
   Waite-Smith convention (every pip present, and a figure doing the thing:
   the Two of Wands holds the globe on the battlement, the Five of
   Pentacles passes the lit window in snow, the Eight of Cups walks away
-  under the moon); courts wear their suit's robe. Colour is meaning
+  under the moon); courts wear their suit's robe, and each rank has its
+  own silhouette so the four read apart at thumbnail size: the Page in a
+  feathered cap with a satchel at the hip, the Knight mounted, the Queen
+  on a high arched throne, the King on a square-backed throne with
+  finials, raised on a dais, a sceptre in the off hand. Colour is meaning
   (`palette.ts`): the sky over a scene says what kind of moment it is
   before a figure is read. Yellow for illumination and success, blue for
   spirit and calm water, grey for the liminal and the difficult, black for

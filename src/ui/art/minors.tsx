@@ -621,7 +621,9 @@ function Court({ suit, rank }: { suit: Suit; rank: number }): ReactElement {
         <Dressing />
         {suit === 'swords' && [10, 24, 56, 70].map((x, i) => <path key={x} d={`M${x} ${40 + i * 6} q6 -2 12 0`} fill="none" stroke={PALE} strokeWidth={0.9} opacity={0.8} />)}
         {suit === 'pentacles' && <Ground y={96} fill={GREEN} opacity={0.5} />}
-        <Figure x={34} y={98} h={48} arms={suit === 'swords' ? 'right-up' : 'hold'} fill={robe} />
+        <Figure x={34} y={98} h={48} arms={suit === 'swords' ? 'right-up' : 'hold'} fill={robe} cap />
+        <path d="M22 84 l-3 6 h8 l-1 -6 z" fill={INK} opacity={0.75} />
+        <path d="M24 84 q4 -8 10 -6" fill="none" stroke={INK} strokeWidth={0.7} opacity={0.75} />
         {suit === 'wands' && <Sym x={34} y={66} s={9} />}
         {suit === 'cups' && (
           <g>
@@ -663,7 +665,7 @@ function Court({ suit, rank }: { suit: Suit; rank: number }): ReactElement {
         <Scenery />
         <Dressing />
         {suit === 'cups' && <Water y={96} rows={3} />}
-        <Throne x={40} y={98} w={32} h={38} fill={pale} />
+        <Throne x={40} y={98} w={32} h={38} fill={pale} back="arch" />
         <Figure x={40} y={98} h={50} arms={suit === 'swords' ? 'right-up' : 'hold'} fill={robe} cloak crown />
         {suit === 'wands' && (
           <g>
@@ -709,8 +711,11 @@ function Court({ suit, rank }: { suit: Suit; rank: number }): ReactElement {
       <Dressing />
       {suit === 'cups' && <Water y={90} rows={4} />}
       {suit === 'cups' && <rect x={12} y={84} width={56} height={8} fill={STONE} opacity={0.6} />}
-      <Throne x={40} y={98} w={38} h={44} fill={suit === 'wands' ? '#7a3a2a' : INK} />
-      <Figure x={40} y={98} h={52} arms="right-up" fill={robe} crown />
+      <Throne x={40} y={98} w={38} h={44} fill={suit === 'wands' ? '#7a3a2a' : INK} back="square" dais />
+      <Figure x={40} y={98} h={52} arms="right-up" fill={robe} cloak crown />
+      <line x1={26} y1={62} x2={26} y2={96} stroke={GOLD_FLAT} strokeWidth={1.3} strokeLinecap="round" />
+      <circle cx={26} cy={59} r={2.6} fill={GOLD_FLAT} stroke={INK} strokeWidth={0.5} />
+      <path d="M24.5 56 l1.5 -2.5 l1.5 2.5" fill="none" stroke={INK} strokeWidth={0.5} />
       {suit === 'wands' && (
         <g>
           <Sym x={58} y={58} s={8} />
