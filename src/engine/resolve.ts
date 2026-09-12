@@ -417,7 +417,7 @@ export function scoreSlot(scene: Scene, slot: SlotId, drawn: DrawnCard, marks: M
   return { slot, card, reversed: drawn.reversed, score, hits };
 }
 
-export const THRESHOLDS = { triumph: 6, boon: 3, neutral: -1.5, harm: -5 };
+export const THRESHOLDS = { triumph: 7, boon: 4, neutral: 1.5, harm: -3 };
 
 export function tierFor(total: number): OutcomeTier {
   if (total >= THRESHOLDS.triumph) return 'triumph';

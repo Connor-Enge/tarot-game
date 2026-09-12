@@ -208,6 +208,16 @@ function ReadingScreenInner() {
                 </span>
               )}
               {seatsNamed && <div className="seat__name">{SLOTS[id].name.replace(/^The /, '')}</div>}
+              {!chosen && (() => {
+                // Every seat shows its strongest want and fear, so the whole reading can be planned and a held card has somewhere to go.
+                const a = seatAsk(scene, id);
+                return (
+                  <div className="seat__ask" aria-label={askText(a)} title={askText(a)}>
+                    {a.wanted[0] && <span className="card__tag card__tag--want">{a.wanted[0]}</span>}
+                    {a.feared[0] && <span className="card__tag card__tag--fear">{a.feared[0]}</span>}
+                  </div>
+                );
+              })()}
               {run.laidBare && slot && !chosen && !isActive && (
                 <div className="seat__bare" aria-label={`${slot.candidates.length} cards waiting for this seat`}>
                   {slot.candidates.map((c, j) => (

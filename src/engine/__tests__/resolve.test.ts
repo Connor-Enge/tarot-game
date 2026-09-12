@@ -12,9 +12,10 @@ const reading = (ids: [string, string, string, string], reversed = false): Readi
 describe('resolveReading', () => {
   it('maps totals to tiers', () => {
     expect(tierFor(-10)).toBe('calamity');
-    expect(tierFor(-3)).toBe('harm');
-    expect(tierFor(0)).toBe('neutral');
-    expect(tierFor(4)).toBe('boon');
+    expect(tierFor(-2)).toBe('harm');
+    expect(tierFor(1)).toBe('harm');
+    expect(tierFor(2)).toBe('neutral');
+    expect(tierFor(5)).toBe('boon');
     expect(tierFor(8)).toBe('triumph');
   });
 

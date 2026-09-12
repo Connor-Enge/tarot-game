@@ -719,7 +719,24 @@ for are kept, so a card learns its words one scene at a time, and a
 card's reversed side is a separate memory. The Codex sheet lists them
 under "What seats have taken it for". The Lamp still earns its cost: it
 answers for tags the Codex has not yet seen. Foretell still shows a
-door's strongest want before the door is chosen.
+door's strongest want before the door is chosen. Every empty seat on the
+cross also shows its strongest want and fear under its position, so the
+whole reading can be planned and a held card has somewhere to go.
+
+**What the ask did to the numbers.** With the ask stated, a simulated
+learner (`scripts/sim-learner.ts`: knows every ask, remembers only tags
+a seat has taken a card for, carries that memory across runs) survived
+90% of its first ten descents and every one after, even at Depth 5,
+because harm only ever came from bringing a feared tag and the ask makes
+that trivial to avoid. The only death left was slow bleed, the least
+dramatic death there is. So the thresholds moved: a scene now demands
+something rather than merely forbidding it. Triumph at 7, boon at 4,
+neutral above 1.5, harm above −3: a table that brings nothing reads as
+harm, two matched seats read as neutral, and a boon needs the reading to
+answer the room. The same learner now survives about 80% of its first
+ten runs, all of them once the deck is learned, 73% at Depth 3 and 67%
+at Depth 5, and harm is 11 to 16% of its readings instead of 2%. A
+reader ignoring the ask entirely survives 3%.
 
 ## The road not taken
 
@@ -875,9 +892,17 @@ way the player can see coming.
 
 | Policy | Knows | Survives |
 |--------|-------|----------|
-| random | nothing | ~26% |
-| majors-only | the 22 Major Arcana | ~75% |
+| random | nothing, and ignores the ask | ~3% |
+| majors-only | the 22 Major Arcana | see below |
 | oracle | every affinity | ~100% |
+
+Since the ask, the reader to balance for is the learner in
+`scripts/sim-learner.ts`, which reads the ask and remembers what seats
+have taken cards for: ~80% over its first ten descents, ~100% once the
+deck is learned, ~73% at Depth 3, ~67% at Depth 5. The tables below
+predate the ask and the thresholds that came with it (triumph 7, boon 4,
+neutral above 1.5, harm above −3); they are kept for the shape of the
+curve, not the numbers.
 
 With Depths stacked (`npx vite-node scripts/sim.ts 1200 5`):
 

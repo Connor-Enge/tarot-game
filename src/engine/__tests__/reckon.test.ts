@@ -49,7 +49,7 @@ describe('the reading so far', () => {
     const none = readingSoFar(scene, []);
     expect(none.placed).toBe(0);
     expect(none.total).toBe(0);
-    expect(none.tier).toBe('neutral');
+    expect(none.tier).toBe('harm'); // nothing brought reads as harm: a scene demands something
     const two = readingSoFar(scene, cards.slice(0, 2));
     expect(two.placed).toBe(2);
     expect(two.seats[1].reckoning.reversed).toBe(true);
