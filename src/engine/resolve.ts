@@ -23,6 +23,8 @@ export interface Resolution {
   narration: string[];
   /** Pairs on the table that know each other, and what they added. */
   kinship?: { pairs: [string, string][]; score: number };
+  /** The stakes the reading was resolved at, which set the bar it was read against. */
+  stakes?: number;
 }
 
 /**
@@ -476,7 +478,7 @@ export function resolveReading(scene: Scene, reading: Reading, marks: Marks = {}
     ...comboNotes,
     scene.outcomes[tier],
   ];
-  return { slots, comboIds, comboNotes, total, tier, deltas, narration, kinship: kinship.pairs.length ? kinship : undefined };
+  return { slots, comboIds, comboNotes, total, tier, deltas, narration, kinship: kinship.pairs.length ? kinship : undefined, stakes: scene.stakes };
 }
 
 export function tierIndex(t: OutcomeTier): number {
@@ -623,5 +625,8 @@ export function tallyText(resolution: Resolution): string {
   const parts = [`The four seats ${fmt(fit)}`];
   if (named !== 0) parts.push(`named readings ${fmt(named)}`);
   if (kin !== 0) parts.push(`kinship ${fmt(kin)}`);
-  return `${parts.join(', ')}: ${fmt(resolution.total)} in all, which reads as ${resolution.tier}.`;
+  const stakes = resolution.stakes ?? 1;
+  const bar = stakes > 1 ? thresholdsFor(stakes) : null;
+  const barNote = bar ? ` At stakes ${stakes} the bar sits higher: neutral above ${bar.neutral}, boon from ${bar.boon}, triumph from ${bar.triumph}.` : '';
+  return `${parts.join(', ')}: ${fmt(resolution.total)} in all, which reads as ${resolution.tier}.${barNote}`;
 }

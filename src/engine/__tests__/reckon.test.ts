@@ -32,6 +32,10 @@ describe('the reckoning', () => {
     const t = tallyText(res);
     expect(t).toContain('in all');
     expect(t).toContain(res.tier);
+    expect(t).not.toContain('the bar sits higher');
+    const high = resolveReading({ ...scene, stakes: 3 }, reading);
+    expect(high.stakes).toBe(3);
+    expect(tallyText(high)).toContain('At stakes 3 the bar sits higher: neutral above 2.5, boon from 5, triumph from 8.');
   });
   it('numbers the seats as a mini cross', () => {
     expect(SLOT_POSITION.vessel.n).toBe(1);

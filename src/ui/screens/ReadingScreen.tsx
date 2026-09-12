@@ -373,6 +373,7 @@ function ReadingScreenInner() {
           {lifted === null ? (
             <>
               <span className="hint__pos">{SLOT_POSITION[active.slot].n} · {SLOT_POSITION[active.slot].role}</span> {SLOT_POSITION[active.slot].question}
+              {firstDescent && ' Lift the card whose face says it brings what the seat calls for.'}
             </>
           ) : run.activeSlot === SLOT_IDS.length - 1 ? (
             'Read.'
