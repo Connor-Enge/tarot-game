@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
 import type { Suit } from '../../engine';
 import { ROBE, ROBE_PALE } from './palette';
-import { BLOOD, Cloud, Flame, GOLD, GOLD_FLAT, Horse, INK, Moon, Mountains, PALE, Star, Sun, SUIT_SYMBOL, Pentacle as PentSym, Sword as SwordSym, Throne, Tree, Water } from './primitives';
+import { BLOOD, Cloud, Flame, GOLD, GOLD_FLAT, Horse, INK, Moon, Mountains, PALE, Star, Sun, SUIT_SYMBOL, Cup as CupSym, Pentacle as PentSym, Sword as SwordSym, Throne, Tree, Water } from './primitives';
 import { Person, Rose, hands, LEAF, SKIN, SKIN_INK, type Pose } from './figure';
 import type { Arms } from './primitives';
 
@@ -426,14 +426,19 @@ const CUPS: Record<number, () => ReactElement> = {
   ),
   10: () => (
     <g>
-      {[0, 1, 2].map((i) => <path key={i} d={`M-6 ${60 + i * 5} Q40 ${-4 + i * 5} 86 ${60 + i * 5}`} fill="none" stroke={[BLOOD, GOLD_FLAT, '#6ab7d6'][i]} strokeWidth={3} opacity={0.7} />)}
-      <Row suit="cups" xs={[8, 18, 28, 38, 48, 58, 68, 78, 24, 56]} y={26} s={5} />
-      <Ground y={92} fill={GREEN} opacity={0.6} />
-      <path d="M52 92 v-14 h16 v14 z M50 78 l10 -8 l10 8 z" fill={PALE} stroke={INK} strokeWidth={0.5} />
-      <Person x={22} y={104} h={40} pose="up" robe={ROBE.cups} />
-      <Person x={36} y={104} h={40} pose="up" robe={ROBE_PALE.cups} />
-      <Person x={54} y={106} h={20} pose="raise-right" robe={INK} />
-      <Person x={66} y={106} h={20} pose="raise-left" robe={INK} />
+      {/* the rainbow with its ten cups over the home on the hill; the two with arms raised, the children dancing */}
+      {[0, 1, 2, 3].map((i) => <path key={i} d={`M-6 ${64 + i * 4} Q40 ${-36 + i * 4} 86 ${64 + i * 4}`} fill="none" stroke={[BLOOD, GOLD_FLAT, LEAF, '#6ab7d6'][i]} strokeWidth={3} opacity={0.7} />)}
+      {[[6, 37], [16, 23], [27, 14], [39, 9], [51, 10], [63, 20], [74, 35], [30, 30], [50, 31], [40, 25]].map(([x, y], i) => <CupSym key={i} x={x} y={y} s={4.4} />)}
+      <Mountains y={78} opacity={0.15} />
+      <path d="M0 92 q30 -12 44 -6 q18 -6 36 4 v22 h-80 z" fill={GREEN} opacity={0.6} />
+      <path d="M52 80 q6 -3 10 4 q4 -3 8 1 v10 h-18 z" fill={LEAF} opacity={0.7} />
+      <path d="M48 88 v-12 h16 v12 z M46 76 l10 -8 l10 8 z M54 88 v-6 h4 v6" fill={PALE} stroke={INK} strokeWidth={0.5} />
+      <path d="M50 78 h12 v10 h-12 z" fill="url(#hatch)" opacity={0.3} />
+      <path d="M40 92 q10 4 20 20" fill="none" stroke="#6ab7d6" strokeWidth={2} opacity={0.6} />
+      <Person x={20} y={104} h={40} pose="raise-left" robe={ROBE.cups} inner={ROBE_PALE.cups} hair="#3a2a1e" />
+      <Person x={34} y={104} h={40} pose="raise-right" robe={ROBE_PALE.cups} inner={PALE} hair="#d9a441" belt={null} />
+      <Person x={56} y={106} h={20} pose="reach-right" robe={BLOOD} hair="#3a2a1e" belt={null} />
+      <Person x={68} y={106} h={20} pose="reach-left" robe="#3f6fa8" hair="#d9a441" belt={null} />
     </g>
   ),
 };
@@ -793,15 +798,30 @@ const PENTACLES: Record<number, () => ReactElement> = {
   ),
   10: () => (
     <g>
-      <path d="M8 112 V40 q32 -34 64 0 V112" fill="none" stroke={STONE} strokeWidth={4} />
-      <rect x={20} y={40} width={40} height={72} fill={PALE} opacity={0.3} />
-      <Row suit="pentacles" xs={[14, 14, 14, 14]} y={20} s={0} />
-      {[[14, 30], [26, 24], [14, 46], [26, 40], [14, 62], [26, 56], [14, 78], [26, 72], [20, 92], [20, 104]].map(([x, y], i) => <Row key={i} suit="pentacles" xs={[x]} y={y} s={4.4} />)}
-      <Person x={62} y={104} h={40} pose="hold" robe={ROBE_PALE.pentacles} />
-      <Person x={44} y={106} h={34} pose="hold" robe={ROBE.pentacles} />
-      <Person x={54} y={106} h={16} pose="up" robe={INK} />
-      <ellipse cx={68} cy={104} rx={6} ry={2.6} fill={INK} />
-      <ellipse cx={40} cy={106} rx={5} ry={2.2} fill={PALE} stroke={INK} strokeWidth={0.5} />
+      {/* the family under the arch of the old house: the elder seated with his dogs, the couple, the child; ten coins in the tree on the arch */}
+      <rect x={20} y={36} width={52} height={76} fill={PALE} opacity={0.3} />
+      <path d="M26 60 h40 v-16 q-20 -14 -40 0 z M30 44 v-4 h4 v4 M40 42 v-5 h4 v5 M52 42 v-5 h4 v5 M62 44 v-4 h4 v4" fill={STONE} opacity={0.4} />
+      <path d="M30 60 v-10 h6 v10 M50 60 v-8 h6 v8" fill={INK} opacity={0.3} />
+      <path d="M8 112 V40 q32 -34 64 0 V112" fill="none" stroke={STONE} strokeWidth={5} />
+      <path d="M8 112 V40 q32 -34 64 0 V112" fill="none" stroke="url(#hatch)" strokeWidth={5} opacity={0.6} />
+      <path d="M8 112 V40 q32 -34 64 0 V112" fill="none" stroke={INK} strokeWidth={0.5} opacity={0.5} />
+      <path d="M8 56 h5 M8 72 h5 M8 88 h5 M67 56 h5 M67 72 h5 M67 88 h5" stroke={INK} strokeWidth={0.4} opacity={0.5} />
+      <path d="M40 14 l3 4 h-6 z M34 22 h12 v6 h-12 z" fill={BLOOD} opacity={0.8} />
+      {[[14, 26], [8, 36], [20, 36], [8, 50], [20, 50], [14, 58], [8, 66], [20, 66], [14, 76], [14, 92]].map(([x, y], i) => <PentSym key={i} x={x} y={y} s={4.2} />)}
+      <path d="M14 30 v4 M14 62 v10 M14 80 v8 M10 38 l8 10 M18 38 l-8 10 M10 68 l8 6 M18 68 l-8 6" stroke={GOLD_FLAT} strokeWidth={0.4} opacity={0.6} />
+      <Person x={62} y={104} h={40} pose="sit-hold" robe="#7d5aa6" inner="#d9b86a" hair="#9a9088" belt={null} />
+      <path d="M58 68 q1 4 4 8 q3 -4 4 -8 q-4 2 -8 0 z" fill="#e8e2d6" stroke={INK} strokeWidth={0.3} />
+      {[[50, 78], [56, 82], [62, 88], [50, 94]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r={1.2} fill="#7a3fa0" opacity={0.8} />)}
+      <Person x={40} y={106} h={34} pose="hold" robe={ROBE.pentacles} inner={ROBE_PALE.pentacles} hair="#5a3a22" />
+      <Person x={30} y={106} h={30} pose="hold" robe={BLOOD} inner="#e9d9b6" hair="#d9a441" belt={null} />
+      <Person x={50} y={106} h={16} pose="up" robe="#3f6fa8" hair="#3a2a1e" belt={null} />
+      {/* the two dogs, one nosing the elder's hand */}
+      <path d="M62 104 q0 -6 5 -6 h6 q3 1 3 4 v2 z" fill={PALE} stroke={INK} strokeWidth={0.5} />
+      <circle cx={76} cy={99} r={2.6} fill={PALE} stroke={INK} strokeWidth={0.5} />
+      <path d="M74 97 l-1 -2.5 l2 1.5 M78 97 l1 -2.5 l-2 1.5" fill="none" stroke={INK} strokeWidth={0.5} />
+      <path d="M66 106 q0 -5 4 -5 h6 q3 1 3 3 v2 z" fill={PALE} stroke={INK} strokeWidth={0.5} />
+      <circle cx={65} cy={102} r={2.4} fill={PALE} stroke={INK} strokeWidth={0.5} />
+      <path d="M63.5 100 l-1 -2.5 l2 1.5 M66.5 100 l1 -2.5 l-2 1.5" fill="none" stroke={INK} strokeWidth={0.5} />
     </g>
   ),
 };
