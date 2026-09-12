@@ -17,6 +17,8 @@ interface Props {
   yours?: boolean;
   /** Held back from the seat before. */
   held?: boolean;
+  /** Knows a card already on the table. */
+  kin?: boolean;
   /** Re-runs the enter animation when this changes. */
   animKey?: string | number;
   delay?: number;
@@ -33,7 +35,7 @@ interface Props {
 }
 
 /** Card faces show name and art only. Meaning lives in the Codex. */
-export function Card({ cardId, reversed = false, faceDown = false, size = 'md', lifted, dim, mark, whisper, yours, held, animKey, delay = 0, onClick, onLongPress, echo, hiddenSuit, onDragMove, onDragEnd }: Props) {
+export function Card({ cardId, reversed = false, faceDown = false, size = 'md', lifted, dim, mark, whisper, yours, held, kin, animKey, delay = 0, onClick, onLongPress, echo, hiddenSuit, onDragMove, onDragEnd }: Props) {
   const mode = useGame((s) => s.mode);
   const variant: BackVariant = mode.kind === 'weekly' ? 'weekly' : mode.kind === 'free' && mode.descent !== 'standard' && mode.descent !== 'short' ? (mode.descent as BackVariant) : 'standard';
   const timer = useRef<number | null>(null);
@@ -130,6 +132,7 @@ export function Card({ cardId, reversed = false, faceDown = false, size = 'md', 
       {yours && !whisper && <div className="card__whisper card__whisper--yours">yours</div>}
       {held && !whisper && !yours && <div className="card__whisper card__whisper--held">held</div>}
       {echo && !whisper && !yours && !held && <div className="card__whisper card__whisper--echo">echo</div>}
+      {kin && !whisper && !yours && !held && !echo && <div className="card__whisper card__whisper--kin">✶ kin</div>}
     </button>
   );
 }

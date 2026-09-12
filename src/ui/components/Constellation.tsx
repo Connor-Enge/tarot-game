@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { CARDS, getCard, type Knowledge } from '../../engine';
+import { CARDS, getCard, type Knowledge, BOND_MIN } from '../../engine';
 import { renderSkyImage } from '../art/render';
 
 const SUIT_GLYPH = { wands: 'Wands', cups: 'Cups', swords: 'Swords', pentacles: 'Pentacles' } as const;
@@ -58,7 +58,8 @@ export function Constellation({ knowledge: k, live = [] }: { knowledge: Knowledg
           const pb = pos[b];
           if (!pa || !pb) return null;
           const lit = !focus || key.includes(focus);
-          return <line key={key} x1={pa.x} y1={pa.y} x2={pb.x} y2={pb.y} stroke="#d6b25e" strokeWidth={0.4 + (n / maxLink) * 1.2} opacity={lit ? 0.18 + (n / maxLink) * 0.5 : 0.04} />;
+          const kin = n >= BOND_MIN;
+          return <line key={key} x1={pa.x} y1={pa.y} x2={pb.x} y2={pb.y} stroke={kin ? '#bfe6f5' : '#d6b25e'} strokeWidth={(kin ? 0.8 : 0.4) + (n / maxLink) * 1.2} opacity={lit ? (kin ? 0.45 : 0.18) + (n / maxLink) * 0.5 : 0.04} />;
         })}
         {live.length > 1 && (
           <path
@@ -108,7 +109,7 @@ export function Constellation({ knowledge: k, live = [] }: { knowledge: Knowledg
           ? `${getCard(focus).name} · read alongside ${focusSet.size - 1} other card${focusSet.size === 2 ? '' : 's'}`
           : links.length === 0
             ? 'Every reading you make joins its four cards here.'
-            : `${Object.values(k.cards).filter((c) => c.tier > 0).length} lit · ${links.length} bonds${live.length ? ` · ${live.length} on the last road` : ''} · tap a star`}
+            : `${Object.values(k.cards).filter((c) => c.tier > 0).length} lit · ${links.length} bonds${links.filter(([, n]) => n >= BOND_MIN).length ? ` · ${links.filter(([, n]) => n >= BOND_MIN).length} kin` : ''}${live.length ? ` · ${live.length} on the last road` : ''} · tap a star`}
       </p>
     </div>
   );

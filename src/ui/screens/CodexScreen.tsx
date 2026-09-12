@@ -1,5 +1,5 @@
 import { Fragment, useState } from 'react';
-import { bestSeat, CARDS, CHOSEN_MIN, chosenDeck, COMBO_IDS, comboNote, comboScore, getDescent, SLOT_POSITION, getCard, getVow, KIND_GLYPH, SCENES, SIGILS, SLOT_IDS, SLOTS, type Tier } from '../../engine';
+import { bestSeat, bondedPairs, CARDS, CHOSEN_MIN, chosenDeck, COMBO_IDS, KIN_BONUS, comboNote, comboScore, getDescent, SLOT_POSITION, getCard, getVow, KIND_GLYPH, SCENES, SIGILS, SLOT_IDS, SLOTS, type Tier } from '../../engine';
 import { SceneArt } from '../art/scenes';
 import { SigilToken } from '../art/sigil';
 
@@ -330,6 +330,8 @@ function buildLedger(k: ReturnType<typeof useGame.getState>['knowledge']): [stri
     const pct = Math.round((100 * k.hand.best) / k.hand.seats);
     rows.push(['The hand', `best card ${pct}% of seats · ${k.hand.clean} scene${k.hand.clean === 1 ? '' : 's'} played clean`]);
   }
+  const kin = bondedPairs(k);
+  if (kin.length) rows.push(['Kin', `${kin.length} pair${kin.length === 1 ? '' : 's'} know each other · +${KIN_BONUS} when both sit`]);
   const vows = Object.entries(k.vows ?? {});
   if (vows.length) {
     const kept = vows.reduce((a, [, v]) => a + v.kept, 0);

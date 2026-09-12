@@ -100,6 +100,8 @@ function ReadingScreenInner() {
   const lastPlaced = soFar.seats[soFar.seats.length - 1];
   const knownCombos = useGame((s) => s.knowledge.combos);
   const kinSoFar = kinshipAmong(soFar.seats.map((x) => x.card.id), run.kin);
+  const placedIds = soFar.seats.map((x) => x.card.id);
+  const kinHere = (cardId: string) => !!run.kin && placedIds.some((p) => run.kin!.includes([p, cardId].sort().join('|')));
   const withinReach = soFar.placed === SLOT_IDS.length - 1
     ? namedWithinReach(Object.fromEntries(soFar.seats.map((x) => [x.slot, { cardId: x.card.id, reversed: x.reckoning.reversed }])), knownCombos ?? [])
     : [];
@@ -266,6 +268,7 @@ function ReadingScreenInner() {
                 whisper={whispered ? kw : undefined}
                 yours={c.yours}
                 held={c.held}
+                kin={!c.hidden && kinHere(c.cardId)}
                 onClick={() => lift(lifted === i ? null : i)}
                 onLongPress={c.hidden ? undefined : () => setZoom({ cardId: c.cardId, reversed: c.reversed })}
                 onDragMove={(_dx, dy) => {

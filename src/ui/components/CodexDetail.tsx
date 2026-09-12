@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { bestSeat, CARDS, getCard, getLore, SCENES, SLOT_IDS, SLOT_POSITION, SLOTS, witnessed, type Tier } from '../../engine';
+import { bestSeat, BOND_MIN, CARDS, getCard, getLore, SCENES, SLOT_IDS, SLOT_POSITION, SLOTS, witnessed, type Tier } from '../../engine';
 import { SceneArt } from '../art/scenes';
 import { useGame } from '../../store';
 import { Card } from './Card';
@@ -127,11 +127,12 @@ export function CodexDetail({ cardId, onClose }: { cardId: string; onClose: () =
         )}
         {bonds.length > 0 && (
           <div className="bonds">
-            <div className="muted small">Read beside</div>
+            <div className="muted small">Read beside{bonds.some((b) => b.n >= BOND_MIN) ? ' · ✶ knows each other' : ''}</div>
             <div className="bonds__row">
               {bonds.map((b, i) => (
-                <button key={b.other} type="button" className={`bond ${i === 0 && b.n > 1 ? 'bond--strong' : ''}`} onClick={() => openCodex(b.other)} aria-label={`${getCard(b.other).name}, read beside this ${b.n} time${b.n === 1 ? '' : 's'}`}>
+                <button key={b.other} type="button" className={`bond ${i === 0 && b.n > 1 ? 'bond--strong' : ''} ${b.n >= BOND_MIN ? 'bond--kin' : ''}`} onClick={() => openCodex(b.other)} aria-label={`${getCard(b.other).name}, read beside this ${b.n} time${b.n === 1 ? '' : 's'}${b.n >= BOND_MIN ? ', they know each other' : ''}`}>
                   <Card cardId={b.other} size="xs" faceDown={!k.cards[b.other] && !k.dealt?.[b.other]} />
+                  {b.n >= BOND_MIN && <span className="bond__kin" aria-hidden>✶</span>}
                   <span className="bond__strength" aria-hidden>
                     {Array.from({ length: Math.min(5, b.n) }, (_, j) => <i key={j} />)}
                     {b.n > 5 && <span className="muted small">+</span>}
