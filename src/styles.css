@@ -2106,3 +2106,20 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 }
 @keyframes fracture { 0% { opacity: 0; clip-path: inset(50% 0 50% 0); } 30% { opacity: 1; clip-path: inset(0 0 0 0); } 100% { opacity: 0; clip-path: inset(0 0 0 0); transform: translateY(2px); } }
 .reduce-motion .seat--helped .seat__card::before, .reduce-motion .seat--hurt .seat__card::before { animation: none; opacity: 0; }
+
+/* --- the hand, graded at the end ---------------------------------------------- */
+.hand-grade { margin: 4px auto 0; max-width: 44ch; font-size: 0.95rem; line-height: 1.4; }
+.hand-grade__mark { color: var(--gold); }
+.hand-grade--sure strong { color: var(--gold-2); text-shadow: 0 0 10px rgba(243,220,138,0.45); }
+.hand-grade--steady strong { color: var(--gold); }
+.hand-grade--wavering strong { color: var(--ink); }
+.hand-grade--reckless strong { color: #f0a09e; }
+
+/* --- a reversed face is lit from below: cooler, dimmer, its top in shadow --------- */
+.card--rev:not(.card--down) .card__svg { filter: saturate(0.82) hue-rotate(-10deg) brightness(0.93) contrast(1.04); }
+.card--rev:not(.card--down) .card__inner::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1; border-radius: inherit;
+  background: linear-gradient(0deg, rgba(58,40,110,0.28) 0%, rgba(58,40,110,0.06) 45%, transparent 60%, rgba(20,14,40,0.22) 100%);
+  mix-blend-mode: multiply;
+}
+.card--rev.card--lg:not(.card--down) .card__inner::before { background: linear-gradient(0deg, rgba(58,40,110,0.3) 0%, rgba(58,40,110,0.08) 40%, transparent 58%, rgba(20,14,40,0.26) 100%); }

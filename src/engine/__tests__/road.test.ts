@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { startRun, chooseNode, chooseCandidate, type RunState } from '../run';
-import { roadNotTaken, roadText } from '../road';
+import { advance, chooseRelic, startRun, chooseNode, chooseCandidate, type RunState } from '../run';
+import { handGrade, roadNotTaken, roadText, runHand } from '../road';
 import { SCENES, SLOT_IDS } from '../scenes';
 import { scoreSlot } from '../resolve';
 
 function playScene(run: RunState): RunState {
-  let r = chooseNode(run, 0);
+  let r = run.phase.kind === 'resolved' ? advance(run) : run;
+  if (r.phase.kind === 'relic') r = chooseRelic(r, 0);
+  r = chooseNode(r, 0);
   for (let i = 0; i < SLOT_IDS.length; i++) r = chooseCandidate(r, 0);
   return r;
 }
@@ -82,5 +84,22 @@ describe('the hand remembered', () => {
     expect(newSigils(empty, emptyKnowledge())).not.toContain('sure-hand');
     const k = { ...emptyKnowledge(), hand: { seats: 120, best: 100, regret: 9, clean: 3 } };
     expect(newSigils(run, k)).toContain('steady-hand');
+  });
+});
+
+describe('the hand graded', () => {
+  it('sums the descent and names the reader by the rate of best cards played', () => {
+    const run = playScene(playScene(startRun(5, {})) as RunState);
+    const h = runHand(run.history, run.marks);
+    expect(h.scenes).toBe(run.history.length);
+    expect(h.seats).toBe(4 * run.history.length);
+    expect(h.best).toBeLessThanOrEqual(h.seats);
+    expect(handGrade({ seats: 3, best: 3, regret: 0, clean: 1, scenes: 1 })).toBeNull();
+    expect(handGrade({ seats: 12, best: 11, regret: 1, clean: 2, scenes: 3 })!.name).toBe('A sure hand');
+    expect(handGrade({ seats: 12, best: 9, regret: 3, clean: 1, scenes: 3 })!.name).toBe('A steady hand');
+    expect(handGrade({ seats: 12, best: 6, regret: 7, clean: 0, scenes: 3 })!.name).toBe('A wavering hand');
+    expect(handGrade({ seats: 12, best: 2, regret: 14.5, clean: 0, scenes: 3 })!.name).toBe('A reckless hand');
+    expect(handGrade({ seats: 12, best: 12, regret: 0, clean: 3, scenes: 3 })!.line).toContain('nothing left in the hand');
+    expect(handGrade({ seats: 12, best: 2, regret: 14.5, clean: 0, scenes: 3 })!.line).toContain('+14.5 left in the hand');
   });
 });

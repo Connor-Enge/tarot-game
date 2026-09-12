@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getCard, getDescent, getLore, getRelic, getVow, getWeather, KIND_GLYPH, reckon, reckoningText, SCENES, SIGILS, SLOT_IDS, SLOT_POSITION, SLOTS, tallyText, type RunState } from '../../engine';
+import { getCard, getDescent, getLore, getRelic, getVow, getWeather, handGrade, hasRelic, KIND_GLYPH, reckon, reckoningText, runHand, SCENES, SIGILS, SLOT_IDS, SLOT_POSITION, SLOTS, tallyText, type RunState } from '../../engine';
 import { shareText, useGame } from '../../store';
 import { Card } from '../components/Card';
 import { RelicArt } from '../art/relics';
@@ -138,6 +138,16 @@ function RunEndScreenInner() {
       })()}
       {run.well !== undefined && run.well > 0 && <p className="muted small center">The Well · {run.well} {run.well === 1 ? 'Abyss' : 'Abysses'} passed · {run.history.length} scenes down</p>}
       {finest && <p className="finest center">Your finest descent yet.</p>}
+      {(() => {
+        const grade = handGrade(runHand(run.history, run.marks, hasRelic(run, 'ring') ? 2 : undefined));
+        if (!grade) return null;
+        const tone = grade.name.includes('sure') ? 'hand-grade--sure' : grade.name.includes('steady') ? 'hand-grade--steady' : grade.name.includes('wavering') ? 'hand-grade--wavering' : 'hand-grade--reckless';
+        return (
+          <p className={`hand-grade center rise ${tone}`} style={{ animationDelay: '700ms' }}>
+            <span className="hand-grade__mark" aria-hidden>☞</span> <strong>{grade.name}.</strong> <span className="muted small">{grade.line}</span>
+          </p>
+        );
+      })()}
       {mode.kind === 'daily' && <p className="muted small center">Daily descent · {mode.label}{mode.weather ? ` · ${getWeather(mode.weather).glyph} ${getWeather(mode.weather).name}` : ''}</p>}
       {mode.kind === 'weekly' && <p className="muted small center">Weekly descent · {mode.label}{mode.weather ? ` · ${getWeather(mode.weather).glyph} ${getWeather(mode.weather).name}` : ''}</p>}
       {earned.length > 0 && (

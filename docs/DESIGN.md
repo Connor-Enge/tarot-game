@@ -657,7 +657,11 @@ The Codex keeps a running record (`knowledge.hand`): seats with a choice,
 how often the best card was played, the regret left behind, scenes played
 clean. The ledger shows it once eight seats are in. Two sigils hang on it:
 Sure Hand (a return with every seat best-played) and Steady Hand (a hundred
-best cards played).
+best cards played). At the end of a descent the whole hand is graded in a
+word (`runHand`, `handGrade`): a sure hand played the best card in nine
+seats of ten, a steady hand in seven, a wavering hand in five, and a
+reckless hand in fewer. The line under it counts seats, clean scenes and
+what was left in the hand; the share text carries the word.
 
 ## The Long Night
 
@@ -876,7 +880,10 @@ identity, not power, which is the point.
   the Codex sheet) the art is alive: the Wheel and the World's wreath
   turn, the Sun's rays wheel, stars twinkle, water and clouds drift, the
   Tower's bolt flickers, flames lick, the Hanged Man sways, the Moon's
-  crayfish rises. Nowhere else; the hand and the seats stay still. The
+  crayfish rises. Nowhere else; the hand and the seats stay still. A
+  reversed face is lit from below: the art runs a little cooler and dimmer
+  and a violet shadow sits over what is now its top, so a turned card reads
+  as turned at a glance, before the corner mark is found. The
   hooks are `live-*` classes on the primitives and a few major groups,
   gated by an `.alive` ancestor and switched off by reduce-motion. The
   same two places hold the card in the hand (`Held`): it tilts toward the

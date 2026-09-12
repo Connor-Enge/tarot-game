@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { CARDS, setKnownCards, scoreSlot, currentScene, hasRelic, roadNotTaken, noteHand, type TableLay } from './engine';
+import { CARDS, setKnownCards, scoreSlot, currentScene, hasRelic, roadNotTaken, noteHand, runHand, handGrade, type TableLay } from './engine';
 setKnownCards(CARDS.map((c) => c.id));
 import { sfx, startDrone, stopDrone } from './audio';
 import { clearRun, loadRun, saveRun } from './persist';
@@ -570,6 +570,9 @@ export function shareText(run: RunState, mode: RunMode, knowledge?: Knowledge): 
   const carried = run.relics.length ? `\nCarried: ${run.relics.map((r) => getRelic(r).name).join(', ')}` : '';
   const vow = run.vow ? `\nVow: ${getVow(run.vow.id).name} · ${run.vow.kept ? 'kept' : run.vow.broken ? 'broken' : 'held so far'}` : '';
   const dealt = run.traded ? '\nDealt with the Stranger.' : '';
+  const handOfRun = runHand(run.history, run.marks, hasRelic(run, 'ring') ? 2 : undefined);
+  const grade = handGrade(handOfRun);
+  const hand = grade ? `\nHand: ${grade.name.replace(/^A /, '').toLowerCase()} · best card in ${handOfRun.best} of ${handOfRun.seats} seats` : '';
   const head =
     mode.kind === 'daily'
       ? `Arcana Descent · Daily ${mode.label}${mode.weather ? ` · ${getWeather(mode.weather).name}` : ''}`
@@ -579,7 +582,7 @@ export function shareText(run: RunState, mode: RunMode, knowledge?: Knowledge): 
   const streak = mode.kind === 'daily' && knowledge?.daily && knowledge.daily.streak > 1 ? `\nStreak: ${knowledge.daily.streak} days` : '';
   const who = knowledge ? `${streak}\n— ${readerTitle(knowledge)}, ${Object.values(knowledge.cards).filter((c) => c.tier > 0).length} of 78 known` : '';
   const weekly = mode.kind === 'weekly' && knowledge?.records?.weekly ? `\nDeepest this week: ${Math.max(knowledge.records.weekly.bestDepth, run.history.length)} of ${run.map.length}` : '';
-  return `${head}\n${end}\n${tiers}\n${spread}${carried}${vow}${dealt}${weekly}${who}`;
+  return `${head}\n${end}\n${tiers}\n${spread}${carried}${vow}${dealt}${hand}${weekly}${who}`;
 }
 
 // Persist the run after every change so a closed tab can resume.

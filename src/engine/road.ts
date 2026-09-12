@@ -1,7 +1,9 @@
 import type { DrawnCard } from './deck';
 import type { HistoryEntry } from './run';
 import { CHARGED_BONUS, scoreSlot, type Marks } from './resolve';
-import { SLOT_IDS, type Scene, type SlotId } from './scenes';
+import { SCENES, SLOT_IDS, type Scene, type SlotId } from './scenes';
+
+const SCENES_BY_ID = (id: string): Scene => SCENES[id];
 
 /**
  * The road not taken: for each seat of a remembered reading, the cards
@@ -48,4 +50,39 @@ export function roadText(road: Road): string {
   const n = road.seats.filter((s) => s.better).length;
   const fmt = (x: number) => (x % 1 === 0 ? `${x}` : x.toFixed(1));
   return n === 1 ? `One seat held a better card: +${fmt(road.regret)} left in the hand.` : `${n} seats held a better card: +${fmt(road.regret)} left in the hand.`;
+}
+
+/** The hand across a whole descent. */
+export interface HandOfRun {
+  seats: number;
+  best: number;
+  regret: number;
+  clean: number;
+  scenes: number;
+}
+
+export function runHand(history: HistoryEntry[], marks: Marks = {}, chargedBonus = CHARGED_BONUS): HandOfRun {
+  const out: HandOfRun = { seats: 0, best: 0, regret: 0, clean: 0, scenes: 0 };
+  for (const h of history) {
+    const road = roadNotTaken(SCENES_BY_ID(h.sceneId), h, marks, chargedBonus);
+    if (!road) continue;
+    const withChoice = road.seats.filter((s) => s.passed.length > 0);
+    if (withChoice.length === 0) continue;
+    out.scenes += 1;
+    out.seats += withChoice.length;
+    out.best += withChoice.filter((s) => !s.better).length;
+    out.regret += road.regret;
+    if (road.regret === 0) out.clean += 1;
+  }
+  return out;
+}
+
+/** What kind of reader this descent showed, in a word and a line. */
+export function handGrade(h: HandOfRun): { name: string; line: string } | null {
+  if (h.seats < 4) return null;
+  const rate = h.best / h.seats;
+  const name = rate >= 0.9 ? 'A sure hand' : rate >= 0.7 ? 'A steady hand' : rate >= 0.5 ? 'A wavering hand' : 'A reckless hand';
+  const fmt = (x: number) => (x % 1 === 0 ? `${x}` : x.toFixed(1));
+  const left = h.regret === 0 ? 'nothing left in the hand' : `+${fmt(h.regret)} left in the hand`;
+  return { name, line: `best card in ${h.best} of ${h.seats} seats · ${h.clean} of ${h.scenes} scene${h.scenes === 1 ? '' : 's'} clean · ${left}` };
 }
