@@ -152,7 +152,13 @@ const COURT_DRESSING: Record<Suit, () => ReactElement> = {
 };
 
 /** A plain ground band. */
-const Ground = ({ y, fill = GREEN, opacity = 0.7 }: { y: number; fill?: string; opacity?: number }) => <path d={`M0 ${y} Q20 ${y - 3} 40 ${y} T80 ${y} L80 112 L0 112 Z`} fill={fill} opacity={opacity} />;
+const Ground = ({ y, fill = GREEN, opacity = 0.7 }: { y: number; fill?: string; opacity?: number }) => (
+  <g opacity={opacity}>
+    <path d={`M0 ${y} Q20 ${y - 3} 40 ${y} T80 ${y} L80 112 L0 112 Z`} fill={fill} />
+    <path d={`M0 ${y} Q20 ${y - 3} 40 ${y} T80 ${y} L80 ${y + 7} Q60 ${y + 4} 40 ${y + 7} T0 ${y + 7} Z`} fill="url(#hatch)" opacity={0.45} />
+    <path d={`M0 ${y} Q20 ${y - 3} 40 ${y} T80 ${y}`} fill="none" stroke={INK} strokeWidth={0.45} opacity={0.5} />
+  </g>
+);
 
 /** A row of pips laid on the ground as a fence or a stack. */
 function Row({ suit, xs, y, s, angle }: { suit: Suit; xs: number[]; y: number; s: number; angle?: number }) {
