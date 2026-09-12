@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 import {
   BLOOD, Chain, Cloud, Cup, Flame, GOLD, GOLD_FLAT, Ground, Horse, INK, Infinity, Lantern, Lightning, Moon, Mountains, PALE, Pentacle, Pillar, Star, Sun, Sword, Throne, Tree, Wand, Water, Wings,
 } from './primitives';
-import { Cliff, Grass, Head, Lily, Person, Pomegranate, Rose, Wheat, hands, SKIN, SKIN_INK, LEAF } from './figure';
+import { Cliff, Grass, Head, Lily, Person, Pomegranate, Rose, Sphinx, Wheat, hands, SKIN, SKIN_INK, LEAF } from './figure';
 
 /** One composition per Major Arcana, drawn in the 80 x 112 art window. */
 export const MAJOR_ART: Record<number, () => ReactElement> = {
@@ -266,23 +266,9 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <circle cx={22} cy={96} r={6} fill={GOLD} stroke={INK} strokeWidth={0.8} />
       <circle cx={58} cy={96} r={6} fill={GOLD} stroke={INK} strokeWidth={0.8} />
       <path d="M22 90 v12 M16 96 h12 M58 90 v12 M52 96 h12 M18 92 l8 8 M18 100 l8 -8 M54 92 l8 8 M54 100 l8 -8" stroke={INK} strokeWidth={0.5} />
-      {/* two sphinxes, black and white, lying in wait */}
-      <g>
-        <path d="M2 106 v-6 q1 -7 8 -8 h6 q4 1 4 6 v8 z" fill={INK} />
-        <circle cx={17} cy={93} r={3.4} fill={INK} />
-        <path d="M13.5 91 l-1.5 6 h10 l-1.5 -6 z" fill={INK} />
-        <path d="M14 91 q3 -3 6 0" fill="none" stroke={GOLD_FLAT} strokeWidth={0.6} />
-        <circle cx={16} cy={93.5} r={0.5} fill={PALE} />
-        <circle cx={18.5} cy={93.5} r={0.5} fill={PALE} />
-      </g>
-      <g>
-        <path d="M78 106 v-6 q-1 -7 -8 -8 h-6 q-4 1 -4 6 v8 z" fill={PALE} stroke={INK} strokeWidth={0.6} />
-        <circle cx={63} cy={93} r={3.4} fill={PALE} stroke={INK} strokeWidth={0.6} />
-        <path d="M59.5 91 l-1.5 6 h10 l-1.5 -6 z" fill={PALE} stroke={INK} strokeWidth={0.5} />
-        <path d="M60 91 q3 -3 6 0" fill="none" stroke={GOLD_FLAT} strokeWidth={0.6} />
-        <circle cx={61.5} cy={93.5} r={0.5} fill={INK} />
-        <circle cx={64} cy={93.5} r={0.5} fill={INK} />
-      </g>
+      {/* two sphinxes, black and white, couchant either side */}
+      <Sphinx x={2} y={106} fill={INK} face="#4a4a58" feature={PALE} />
+      <Sphinx x={78} y={106} fill={PALE} face={SKIN} feature={INK} facing="left" />
       <Ground y={106} fill={GOLD_FLAT} opacity={0.5} />
     </g>
   ),
@@ -403,12 +389,9 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
         <path d="M68 62 l3 1" stroke={INK} strokeWidth={0.6} />
       </g>
       <g>
-        <path d="M30 30 h20 v-6 q-2 -6 -10 -6 q-8 0 -10 6 z" fill="#5f7fb0" stroke={INK} strokeWidth={0.5} />
-        <circle cx={40} cy={16} r={3.6} fill="#5f7fb0" stroke={INK} strokeWidth={0.5} />
-        <path d="M36 14 l-1.5 6 h11 l-1.5 -6 z" fill="#5f7fb0" stroke={INK} strokeWidth={0.4} />
-        <circle cx={38.8} cy={16.4} r={0.5} fill={INK} />
-        <circle cx={41.2} cy={16.4} r={0.5} fill={INK} />
-        <line x1={47} y1={26} x2={47} y2={12} stroke={GOLD_FLAT} strokeWidth={1.2} />
+        <Sphinx x={26} y={30} fill="#5f7fb0" face="#8fa8d0" feature={INK} />
+        <line x1={51} y1={28} x2={51} y2={12} stroke={GOLD_FLAT} strokeWidth={1.2} strokeLinecap="round" />
+        <path d="M49 26 h4" stroke={GOLD_FLAT} strokeWidth={1} />
       </g>
     </g>
   ),

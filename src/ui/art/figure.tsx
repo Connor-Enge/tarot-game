@@ -210,3 +210,29 @@ export function Cliff({ x = 0, y = 78, w = 40, drop = 34 }: { x?: number; y?: nu
     </g>
   );
 }
+
+/**
+ * A couchant sphinx: lion body with the forelegs out, a human face under a
+ * striped nemes. Rests on the baseline `y`, its back at `x`, and faces right
+ * unless told otherwise. About 24 wide and 18 tall.
+ */
+export function Sphinx({ x, y, fill = INK, face = '#4a4a58', feature = PALE, facing = 'right' }: P & { fill?: string; face?: string; feature?: string; facing?: 'right' | 'left' }) {
+  const flip = facing === 'left' ? `translate(${x} ${y}) scale(-1 1)` : `translate(${x} ${y})`;
+  const line = fill === INK ? feature : INK;
+  return (
+    <g transform={flip}>
+      <path d="M0 -6 q-4 -2 -3 -8" fill="none" stroke={fill} strokeWidth={1.2} strokeLinecap="round" />
+      <path d="M0 0 v-7 q0 -6 5 -7 l4 -1 h7 q3 0 4 3 l1 5 h3 v7 z" fill={fill} stroke={line} strokeWidth={0.5} strokeLinejoin="round" />
+      <path d="M3 -7 q3 -4 6 -2" fill="none" stroke={line} strokeWidth={0.4} opacity={0.6} />
+      <path d="M14 0 v-4 q0 -2 2 -2 h6 q2 0 2 2 v4 z" fill={fill} stroke={line} strokeWidth={0.5} />
+      <path d="M16.5 -0.5 v-1.5 M19 -0.5 v-1.5 M21.5 -0.5 v-1.5" stroke={line} strokeWidth={0.35} opacity={0.7} />
+      {fill !== INK && <path d="M5 -10 h10 v9 h-10 z" fill="url(#hatch)" opacity={0.5} />}
+      <circle cx={19} cy={-13.5} r={3.4} fill={face} stroke={line} strokeWidth={0.4} />
+      <path d="M15 -16 q4 -5 8 0 l1.5 7.5 h-11 z" fill={fill} stroke={line} strokeWidth={0.4} />
+      <path d="M15.5 -13 h8 M15 -10.5 h9" stroke={GOLD_FLAT} strokeWidth={0.4} opacity={0.9} />
+      <circle cx={17.8} cy={-13.8} r={0.5} fill={feature} />
+      <circle cx={20.2} cy={-13.8} r={0.5} fill={feature} />
+      <path d="M18 -11.6 q1 0.7 2 0" fill="none" stroke={feature} strokeWidth={0.35} />
+    </g>
+  );
+}
