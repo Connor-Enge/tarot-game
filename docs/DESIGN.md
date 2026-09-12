@@ -875,7 +875,11 @@ identity, not power, which is the point.
 - **Scenes**: 30 exist (29 plus the Abyss), which was the target; more are welcome. Latest: the mill, the drowned chapel, the hunt.
 - **Named readings**: 34. Each is a memorable line, never a definition.
 - **Relics**: 14 boons, 9 curses. **Vows**: 7. **Weathers**: 14. **Trades**: 6. **Sigils**: 34. **Rites**: 8.
-- **Combos**: 47 named readings exist. Two older tone readings were
+- **Combos**: 47 named readings exist. With three seats down, the reading
+  plate says which of the readings the player has already found could still
+  be completed by the fourth seat ("Within reach: You reached for the
+  light, and it was there."), never which card would do it. Unfound
+  readings are never teased. `namedWithinReach` in `engine/resolve.ts`. Two older tone readings were
   retired because they duplicated newer ones: `all-reversed` contradicted
   `four-reversed` on the same hand, and a second `one-suit` fired twice
   for one reading. Ids a Codex still carries from before are simply not

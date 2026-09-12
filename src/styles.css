@@ -2173,3 +2173,13 @@ a.btn { text-decoration: none; display: grid; place-items: center; }
 /* the meter's pin carries an ember of the same light */
 .reading--triumph .sofar__pin, .reading--boon .sofar__pin { box-shadow: 0 0 10px rgba(243,220,138,0.8); }
 .reading--harm .sofar__pin, .reading--calamity .sofar__pin { box-shadow: 0 0 10px rgba(214,96,94,0.8); }
+
+/* --- a named reading within reach ------------------------------------------- */
+.sofar__reach { margin: 2px 0 0; display: flex; flex-direction: column; gap: 2px; }
+.reach { color: var(--gold-2); animation: reach-in 500ms ease both; }
+.reach__mark { display: inline-block; margin-right: 3px; animation: reach-note 2.4s ease-in-out infinite; }
+.reach em { font-style: italic; }
+.reach--ill { color: #f0a09e; }
+@keyframes reach-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+@keyframes reach-note { 0%, 100% { transform: translateY(0); opacity: 0.8; } 50% { transform: translateY(-2px); opacity: 1; } }
+.reduce-motion .reach, .reduce-motion .reach__mark { animation: none; }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSettings } from '../../settings';
-import { activeSlotState, canLamp, canTakeBack, canWhisperHere, lampCost, lampVerdicts, currentScene, readingSoFar, reckoningText, RITES, SLOT_POSITION, THRESHOLDS, getCard, hasRelic, redrawCost, sceneNumber, scoreSlot, SLOT_IDS, SLOTS, totalScenes, whisperCost, whisperWords } from '../../engine';
+import { activeSlotState, canLamp, canTakeBack, canWhisperHere, lampCost, lampVerdicts, namedWithinReach, currentScene, readingSoFar, reckoningText, RITES, SLOT_POSITION, THRESHOLDS, getCard, hasRelic, redrawCost, sceneNumber, scoreSlot, SLOT_IDS, SLOTS, totalScenes, whisperCost, whisperWords } from '../../engine';
 
 /** Dev only: show the oracle's score on each candidate when the page is opened with ?oracle. */
 const ORACLE = import.meta.env.DEV && typeof location !== 'undefined' && location.search.includes('oracle');
@@ -98,6 +98,10 @@ function ReadingScreenInner() {
     hasRelic(run, 'ring') ? 2 : undefined,
   );
   const lastPlaced = soFar.seats[soFar.seats.length - 1];
+  const knownCombos = useGame((s) => s.knowledge.combos);
+  const withinReach = soFar.placed === SLOT_IDS.length - 1
+    ? namedWithinReach(Object.fromEntries(soFar.seats.map((x) => [x.slot, { cardId: x.card.id, reversed: x.reckoning.reversed }])), knownCombos ?? [])
+    : [];
   const soFarBySlot = Object.fromEntries(soFar.seats.map((x) => [x.slot, x]));
 
   return (
@@ -200,6 +204,16 @@ function ReadingScreenInner() {
           {run.mods.seatTick && lastPlaced.reckoning.verdict !== 'neither' && (
             <p className={`sofar__tick center small ${lastPlaced.reckoning.verdict === 'hurt' ? 'sofar__tick--hurt' : 'sofar__tick--helped'}`}>
               ◈ {lastPlaced.reckoning.verdict === 'hurt' ? '−1 taken at once' : '+1 given at once'}
+            </p>
+          )}
+          {withinReach.length > 0 && (
+            <p className="sofar__reach center small">
+              {withinReach.slice(0, 2).map((w) => (
+                <span key={w.id} className={`reach ${w.score < 0 ? 'reach--ill' : ''}`}>
+                  <span className="reach__mark" aria-hidden>♪</span> Within reach: <em>{w.note}</em>
+                </span>
+              ))}
+              {withinReach.length > 2 && <span className="muted"> · and {withinReach.length - 2} more</span>}
             </p>
           )}
           <p className="sofar__tally muted small center">

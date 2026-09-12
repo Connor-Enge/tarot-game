@@ -1,4 +1,4 @@
-import { cardTags, getCard, type Card, type Tag } from './cards';
+import { CARDS, cardTags, getCard, type Card, type Tag } from './cards';
 import type { DrawnCard } from './deck';
 import { SLOT_IDS, TIERS, type OutcomeTier, type Scene, type SlotId } from './scenes';
 
@@ -331,6 +331,32 @@ const COMBOS: Combo[] = [
     note: 'Two fives. Nobody left the table happy.',
   },
 ];
+
+/**
+ * Named readings within reach: with every seat but one placed, which of the
+ * readings the player has already found could still be completed by some
+ * card in the last seat. Only found readings are named, and the card that
+ * would complete one is never said. A tease, not a hint.
+ */
+export function namedWithinReach(placed: Partial<Reading>, known: readonly string[]): { id: string; note: string; score: number }[] {
+  const empty = SLOT_IDS.filter((s) => !placed[s]);
+  if (empty.length !== 1 || known.length === 0) return [];
+  const last = empty[0];
+  const candidates = COMBOS.filter((c) => known.includes(c.id));
+  const out: { id: string; note: string; score: number }[] = [];
+  for (const c of candidates) {
+    let reach = false;
+    for (const card of CARDS) {
+      for (const reversed of [false, true]) {
+        const r = { ...placed, [last]: { cardId: card.id, reversed } } as Reading;
+        if (c.when(r)) { reach = true; break; }
+      }
+      if (reach) break;
+    }
+    if (reach) out.push({ id: c.id, note: c.note, score: c.score });
+  }
+  return out;
+}
 
 /** Names of every combo, for the Codex once discovered. */
 export const COMBO_IDS = COMBOS.map((c) => c.id);

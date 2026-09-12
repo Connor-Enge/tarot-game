@@ -121,3 +121,17 @@ describe('named readings, the newer set', () => {
     expect(COMBO_IDS.length).toBeGreaterThanOrEqual(47);
   });
 });
+
+describe('named readings within reach', () => {
+  it('names only found readings that some fourth card could complete, and nothing with fewer seats down', async () => {
+    const { namedWithinReach } = await import('../resolve');
+    const up = (cardId: string) => ({ cardId, reversed: false });
+    const three = { vessel: up('cups-2'), threshold: up('major-16'), wake: up('major-13') };
+    expect(namedWithinReach(three, ['star-hand', 'death-and-tower'])).toEqual(expect.arrayContaining([expect.objectContaining({ id: 'star-hand' }), expect.objectContaining({ id: 'death-and-tower' })]));
+    expect(namedWithinReach(three, [])).toEqual([]);
+    expect(namedWithinReach(three, ['all-major'])).toEqual([]); // the Two of Cups is already down
+    expect(namedWithinReach({ vessel: up('cups-2'), threshold: up('major-16') }, ['star-hand'])).toEqual([]);
+    const full = { ...three, hand: up('major-17') };
+    expect(namedWithinReach(full, ['star-hand'])).toEqual([]);
+  });
+});
