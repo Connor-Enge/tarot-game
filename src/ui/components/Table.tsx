@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { CARDS, getCard, layTable, SCENES, nextEmptySeat, reckoningText, SLOT_IDS, SLOT_POSITION, SLOTS, tableCards, tableScenes, THRESHOLDS, type SlotId, type TableLay } from '../../engine';
+import { CARDS, getCard, layTable, SCENES, nextEmptySeat, reckoningText, SLOT_IDS, SLOT_POSITION, SLOTS, tableCards, tableScenes, thresholdsFor, type SlotId, type TableLay } from '../../engine';
 import { useGame } from '../../store';
 import { SceneArt } from '../art/scenes';
 import { VerdictSeal } from '../art/verdict';
@@ -131,7 +131,7 @@ export function Table() {
             {(['calamity', 'harm', 'neutral', 'boon', 'triumph'] as const).map((t) => (
               <span key={t} className={`sofar__band sofar__band--${t} ${tier === t ? 'sofar__band--on' : ''}`} />
             ))}
-            <span className="sofar__pin" style={{ left: `${Math.max(2, Math.min(98, ((total - (THRESHOLDS.harm - 3)) / ((THRESHOLDS.triumph + 3) - (THRESHOLDS.harm - 3))) * 100))}%` }} aria-hidden />
+            <span className="sofar__pin" style={{ left: `${Math.max(2, Math.min(98, ((total - (thresholdsFor(scene.stakes).harm - 3)) / ((thresholdsFor(scene.stakes).triumph + 3) - (thresholdsFor(scene.stakes).harm - 3))) * 100))}%` }} aria-hidden />
           </div>
           {reading.seats
             .slice()

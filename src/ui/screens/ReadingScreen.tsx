@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSettings } from '../../settings';
-import { activeSlotState, askText, broughtTags, canLamp, canTakeBack, canWhisperHere, kinshipAmong, seatAsk, tagFit, type SlotId, type Tag, KIN_BONUS, lampCost, lampVerdicts, namedWithinReach, currentScene, readingSoFar, reckoningText, RITES, SLOT_POSITION, THRESHOLDS, getCard, hasRelic, redrawCost, sceneNumber, scoreSlot, SLOT_IDS, SLOTS, totalScenes, whisperCost, whisperWords } from '../../engine';
+import { activeSlotState, askText, broughtTags, canLamp, canTakeBack, canWhisperHere, kinshipAmong, seatAsk, tagFit, type SlotId, type Tag, KIN_BONUS, lampCost, lampVerdicts, namedWithinReach, readingSoFar, reckoningText, RITES, SLOT_POSITION, thresholdsFor, sceneAsRead, getCard, hasRelic, redrawCost, sceneNumber, scoreSlot, SLOT_IDS, SLOTS, totalScenes, whisperCost, whisperWords } from '../../engine';
 
 /** Dev only: show the oracle's score on each candidate when the page is opened with ?oracle. */
 const ORACLE = import.meta.env.DEV && typeof location !== 'undefined' && location.search.includes('oracle');
@@ -87,7 +87,8 @@ function ReadingScreenInner() {
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, []);
-  const scene = currentScene(run);
+  // The scene as the table reads it: the Abyss at the depth's stakes, the Well's toll folded in.
+  const scene = sceneAsRead(run);
   const active = activeSlotState(run);
   if (!active) return null;
   const rCost = redrawCost(run);
@@ -111,6 +112,7 @@ function ReadingScreenInner() {
     hasRelic(run, 'ring') ? 2 : undefined,
   );
   const lastPlaced = soFar.seats[soFar.seats.length - 1];
+  const bar = thresholdsFor(scene.stakes);
   // The motes drifting behind the table take the reading's colour: gold as it rises, red as it falls.
   const readingTier = soFar.placed > 0 && !calmRoom ? soFar.tier : null;
   useEffect(() => {
@@ -158,6 +160,11 @@ function ReadingScreenInner() {
           <p className={`scene__rite scene__rite--${scene.rite}`}>
             <span className="scene__rite-glyph" aria-hidden>{RITES[scene.rite].glyph}</span>
             <strong>{RITES[scene.rite].name}.</strong> {RITES[scene.rite].text}
+          </p>
+        )}
+        {scene.stakes > 1 && (
+          <p className="scene__stakes muted small" title="Stakes lift what a reading must bring for neutral, boon and triumph, and scale what harm costs">
+            <span className="scene__stakes-marks" aria-hidden>{'◆'.repeat(scene.stakes)}</span> Stakes {scene.stakes}: the bar sits {liftWords(scene.stakes)} higher, and harm costs {scene.stakes}-fold.
           </p>
         )}
         {scene.terminal && run.abyssRemade && <p className="scene__remade muted small">It deals from what you have already read.</p>}
@@ -241,7 +248,7 @@ function ReadingScreenInner() {
             {(['calamity', 'harm', 'neutral', 'boon', 'triumph'] as const).map((t) => (
               <span key={t} className={`sofar__band sofar__band--${t} ${soFar.tier === t ? 'sofar__band--on' : ''}`} />
             ))}
-            <span className="sofar__pin" style={{ left: `${Math.max(2, Math.min(98, ((soFar.total - (THRESHOLDS.harm - 3)) / ((THRESHOLDS.triumph + 3) - (THRESHOLDS.harm - 3))) * 100))}%` }} aria-hidden />
+            <span className="sofar__pin" style={{ left: `${Math.max(2, Math.min(98, ((soFar.total - (bar.harm - 3)) / ((bar.triumph + 3) - (bar.harm - 3))) * 100))}%` }} aria-hidden />
           </div>
           {run.mods.seatTick && lastPlaced.reckoning.verdict !== 'neither' && (
             <p className={`sofar__tick center small ${lastPlaced.reckoning.verdict === 'hurt' ? 'sofar__tick--hurt' : 'sofar__tick--helped'}`}>
@@ -418,6 +425,14 @@ function ReadingScreenInner() {
 }
 
 const ORDER = { want: 0, fear: 1, none: 2 } as const;
+
+/** How far a scene's stakes lift the bar, in words. */
+function liftWords(stakes: number): string {
+  const lift = thresholdsFor(stakes).boon - thresholdsFor(1).boon;
+  if (lift === 0.5) return 'half a point';
+  if (lift === 1) return 'a point';
+  return `${lift} points`;
+}
 
 /** The ask's opener per position, with the tags set as chips so they can be matched against a card at a glance. */
 const ASK_PARTS: Record<SlotId, { pre: string; fearPre: string; fearPost: string }> = {

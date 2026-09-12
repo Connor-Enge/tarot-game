@@ -164,3 +164,28 @@ describe('kinship', () => {
     expect(ids.length).toBeGreaterThan(0);
   });
 });
+
+describe('stakes raise the bar', () => {
+  it('lifts neutral, boon and triumph by half a point per stake above the first, and leaves harm alone', async () => {
+    const { STAKES_BAR, THRESHOLDS, thresholdsFor, tierFor } = await import('../resolve');
+    expect(thresholdsFor(1)).toEqual(THRESHOLDS);
+    const three = thresholdsFor(3);
+    expect(three.boon).toBe(THRESHOLDS.boon + 2 * STAKES_BAR);
+    expect(three.triumph).toBe(THRESHOLDS.triumph + 2 * STAKES_BAR);
+    expect(three.neutral).toBe(THRESHOLDS.neutral + 2 * STAKES_BAR);
+    expect(three.harm).toBe(THRESHOLDS.harm);
+    expect(tierFor(THRESHOLDS.boon)).toBe('boon');
+    expect(tierFor(THRESHOLDS.boon, 3)).toBe('neutral');
+    expect(tierFor(THRESHOLDS.boon + 2 * STAKES_BAR, 3)).toBe('boon');
+  });
+  it('is the bar the reading is resolved against', async () => {
+    const { SCENES } = await import('../scenes');
+    const { resolveReading } = await import('../resolve');
+    const reading = { vessel: { cardId: 'major-8', reversed: false }, threshold: { cardId: 'major-16', reversed: false }, hand: { cardId: 'major-8', reversed: false }, wake: { cardId: 'major-13', reversed: false } };
+    const low = resolveReading({ ...SCENES.beast, stakes: 1 }, reading);
+    const high = resolveReading({ ...SCENES.beast, stakes: 3 }, reading);
+    expect(low.total).toBe(high.total);
+    const order = ['calamity', 'harm', 'neutral', 'boon', 'triumph'];
+    expect(order.indexOf(high.tier)).toBeLessThanOrEqual(order.indexOf(low.tier));
+  });
+});

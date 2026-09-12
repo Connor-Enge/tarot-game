@@ -738,6 +738,23 @@ ten runs, all of them once the deck is learned, 73% at Depth 3 and 67%
 at Depth 5, and harm is 11 to 16% of its readings instead of 2%. A
 reader ignoring the ask entirely survives 3%.
 
+**Stakes raise the bar** (`STAKES_BAR`, `thresholdsFor`, `tierFor`
+with stakes). Playing a whole descent as an informed reader after the
+retune still went 12 to 16 vitality with three triumphs and eleven
+Clarity never spent: the middle of the road did not push back, and the
+Abyss was one more scene. Stakes used to scale only the penalty; now
+every point of stakes above the first also lifts the neutral, boon and
+triumph lines by half a point, harm staying where it is. A stakes-3
+scene needs 5 for a boon and 8 for a triumph, and the Abyss at Depth 5
+(stakes 4) needs 5.5 and 8.5, so the charged cards, kin and relics
+gathered on the way are what carry the last table: the run has a build
+and a boss. The reading screen states the stakes under the prompt, and
+the meter's bands move with them. The learner now survives ~80% of its
+first twelve descents; the Depths fall 97, 87, 80, 70, 63; the oracle
+99%; a reader ignoring the ask 2%. A full point per stake was tried and
+was too much (fresh 64%, Depth 5 41%, oracle 91%, triumphs a tenth of
+readings).
+
 ## The road not taken
 
 Every remembered scene keeps the cards passed over in each seat, as they

@@ -53,7 +53,7 @@ export function layTable(scene: Scene, lay: TableLay, k: Knowledge): TableReadin
   const named = res.comboIds.filter((id) => found.has(id)).map((id) => ({ id, note: comboNote(id) ?? '', score: comboScore(id) }));
   const hidden = res.comboIds.filter((id) => !found.has(id));
   const unnamed = { count: hidden.length, score: hidden.reduce((a, id) => a + comboScore(id), 0) };
-  return { ...so, full: { total: res.total, tier: tierFor(res.total), named, unnamed } };
+  return { ...so, full: { total: res.total, tier: tierFor(res.total, scene.stakes), named, unnamed } };
 }
 
 /** The next empty seat in position order, or null when the table is full. */

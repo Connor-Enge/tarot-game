@@ -418,12 +418,21 @@ export function scoreSlot(scene: Scene, slot: SlotId, drawn: DrawnCard, marks: M
 }
 
 export const THRESHOLDS = { triumph: 7, boon: 4, neutral: 1.5, harm: -3 };
+/** How much each point of stakes above the first lifts the bar for neutral, boon and triumph. Harm stays where it is. */
+export const STAKES_BAR = 0.5;
 
-export function tierFor(total: number): OutcomeTier {
-  if (total >= THRESHOLDS.triumph) return 'triumph';
-  if (total >= THRESHOLDS.boon) return 'boon';
-  if (total > THRESHOLDS.neutral) return 'neutral';
-  if (total > THRESHOLDS.harm) return 'harm';
+/** The bar a scene sets: its stakes raise what a reading must bring, so the deep road and the Abyss demand a strong table. */
+export function thresholdsFor(stakes = 1): typeof THRESHOLDS {
+  const lift = Math.max(0, stakes - 1) * STAKES_BAR;
+  return { triumph: THRESHOLDS.triumph + lift, boon: THRESHOLDS.boon + lift, neutral: THRESHOLDS.neutral + lift, harm: THRESHOLDS.harm };
+}
+
+export function tierFor(total: number, stakes = 1): OutcomeTier {
+  const t = thresholdsFor(stakes);
+  if (total >= t.triumph) return 'triumph';
+  if (total >= t.boon) return 'boon';
+  if (total > t.neutral) return 'neutral';
+  if (total > t.harm) return 'harm';
   return 'calamity';
 }
 
@@ -453,7 +462,7 @@ export function resolveReading(scene: Scene, reading: Reading, marks: Marks = {}
   }
   const kinship = kinshipAmong(SLOT_IDS.map((s) => reading[s].cardId), opts.kin, opts.kinBonus ?? KIN_BONUS);
   if (kinship.pairs.length) total += kinship.score;
-  const tier = tierFor(total);
+  const tier = tierFor(total, scene.stakes);
   const base = BASE_DELTAS[tier];
   const mend = scene.mend ? scene.mend + (opts.mendBonus ?? 0) : undefined;
   let vitality: number;
@@ -531,7 +540,7 @@ export function readingSoFar(scene: Scene, placed: { slot: SlotId; drawn: DrawnC
     return { slot, card: s.card, score: s.score, reckoning: reckonSlot(scene, s, marks), omen: drawn.reversed ? s.card.omen.reversed : s.card.omen.upright };
   });
   const total = seats.reduce((a, x) => a + x.score, 0);
-  return { seats, total, tier: tierFor(total), placed: seats.length };
+  return { seats, total, tier: tierFor(total, scene.stakes), placed: seats.length };
 }
 
 const list = (tags: readonly string[]) => (tags.length === 0 ? '' : tags.length === 1 ? tags[0] : `${tags.slice(0, -1).join(', ')} and ${tags[tags.length - 1]}`);

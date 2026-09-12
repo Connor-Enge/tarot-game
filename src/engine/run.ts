@@ -583,14 +583,21 @@ export function readingOf(run: RunState): Reading | null {
   return out;
 }
 
+/** The scene as the table reads it: the Abyss at the depth's stakes, and every Abyss passed in the Well adding one. */
+export function sceneAsRead(run: RunState): Scene {
+  const baseScene = currentScene(run);
+  const baseStakes = baseScene.terminal && run.mods.abyssStakes ? run.mods.abyssStakes : baseScene.stakes;
+  const stakes = baseStakes + (run.well ?? 0);
+  return stakes === baseScene.stakes ? baseScene : { ...baseScene, stakes };
+}
+
 function resolve(run: RunState): RunState {
   const dealt = readingOf(run);
   if (!dealt) return run;
   const baseScene = currentScene(run);
   // The Mirror: every card reads the other way up. What is recorded is what was read.
   const reading = baseScene.rite === 'mirror' ? (Object.fromEntries(SLOT_IDS.map((s) => [s, { ...dealt[s], reversed: !dealt[s].reversed }])) as Reading) : dealt;
-  const baseStakes = baseScene.terminal && run.mods.abyssStakes ? run.mods.abyssStakes : baseScene.stakes;
-  const scene = { ...baseScene, stakes: baseStakes + (run.well ?? 0) };
+  const scene = sceneAsRead(run);
   const read = resolveReading(scene, reading, run.marks, {
     chargedBonus: hasRelic(run, 'ring') ? 2 : undefined,
     extraNeutralCost: (hasRelic(run, 'weight') ? 1 : 0) + run.mods.extraNeutralCost || undefined,
