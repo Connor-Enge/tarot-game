@@ -96,6 +96,12 @@ export function ArtDefs() {
           <stop offset="0" stopColor="#3f4252" />
           <stop offset="1" stopColor="#9a9eae" />
         </linearGradient>
+        <pattern id="hatch" width="2.6" height="2.6" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+          <path d="M0 0 V2.6" stroke="#2a2118" strokeWidth="0.45" opacity="0.32" />
+        </pattern>
+        <pattern id="crosshatch" width="2.6" height="2.6" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+          <path d="M0 0 V2.6 M0 1.3 H2.6" stroke="#2a2118" strokeWidth="0.4" opacity="0.38" />
+        </pattern>
         <pattern id="veil" width="6" height="6" patternUnits="userSpaceOnUse">
           <circle cx="3" cy="3" r="1.2" fill="#c9a24a" opacity="0.5" />
         </pattern>

@@ -954,7 +954,16 @@ identity, not power, which is the point.
   judge drift over several seeds (three of them readings of tone: four upright, four reversed, one suit). Their banners are coloured by what they are: pale gold for four upright, violet for four reversed, the suit's colour for one suit, and a dark red ribbon for any named reading that drags the total down. This is the richest vein for "the
   combined meaning" and should keep growing with named, memorable results.
 - **Art**: all 78 faces are procedural SVG (`src/ui/art/`). Majors are
-  bespoke compositions; the numbered Minors are scenes after the
+  bespoke compositions, being redrawn one by one as illustrations rather
+  than silhouettes: `ui/art/figure.tsx` holds a drawn person (a head with
+  hair and a face, neck, a robe with an inner panel, a belt, folds, feet,
+  arms posed by name: standing, walking, one hand raised, arms out,
+  holding, seated, pointing down) shaded on one side with the `hatch`
+  pattern from `ArtDefs`, and a small garden (rose, lily, wheat,
+  pomegranate, grass, a cliff edge). `hands()` returns where a pose's
+  hands end up so a card can put a wand, a rose or a sceptre in them. The
+  Fool, Magician, High Priestess and Empress are the first four drawn this
+  way; the rest follow in order, then the courts and pips; the numbered Minors are scenes after the
   Waite-Smith convention (every pip present, and a figure doing the thing:
   the Two of Wands holds the globe on the battlement, the Five of
   Pentacles passes the lit window in snow, the Eight of Cups walks away

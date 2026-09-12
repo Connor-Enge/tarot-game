@@ -2,64 +2,139 @@ import type { ReactElement } from 'react';
 import {
   BLOOD, Chain, Cloud, Cup, Figure, Flame, GOLD, GOLD_FLAT, Ground, Horse, INK, Infinity, Lantern, Lightning, Moon, Mountains, PALE, Pentacle, Pillar, Star, Sun, Sword, Throne, Tree, Wand, Water, Wings,
 } from './primitives';
+import { Cliff, Grass, Lily, Person, Pomegranate, Rose, Wheat, hands, SKIN_INK, LEAF } from './figure';
 
 /** One composition per Major Arcana, drawn in the 80 x 112 art window. */
 export const MAJOR_ART: Record<number, () => ReactElement> = {
   0: () => (
     <g>
-      <Sun x={66} y={16} r={8} />
-      <Mountains y={70} opacity={0.3} />
-      <path d="M0 78 L34 78 Q40 80 40 88 L40 112 L0 112 Z" fill={INK} />
-      <Figure x={28} y={78} h={38} arms="left-up" />
-      <line x1={18} y1={44} x2={24} y2={62} stroke={INK} strokeWidth={1.2} />
-      <circle cx={17} cy={44} r={3} fill={PALE} stroke={INK} strokeWidth={0.5} />
-      <circle cx={17} cy={44} r={1} fill={GOLD_FLAT} />
-      <ellipse cx={12} cy={75} rx={4} ry={2.4} fill={PALE} stroke={INK} strokeWidth={0.6} />
-      <circle cx={15.5} cy={72.5} r={1.8} fill={PALE} stroke={INK} strokeWidth={0.6} />
+      <Sun x={64} y={16} r={8} face />
+      <Mountains y={66} opacity={0.35} />
+      <path d="M0 74 Q30 70 46 82 L46 112 L0 112 Z" fill="#c9c9c9" opacity={0.25} />
+      <Cliff x={0} y={80} w={44} drop={32} />
+      {/* the walker: fine clothes, a feather in the cap, eyes on the sky */}
+      {(() => { const hd = hands(28, 80, 54, 'raise-left'); return (
+        <g>
+          {/* the bindle staff runs from the raised hand back over the shoulder */}
+          <line x1={hd.l.x} y1={hd.l.y} x2={hd.l.x + 31} y2={hd.l.y - 5} stroke={INK} strokeWidth={1.2} strokeLinecap="round" />
+        </g>
+      ); })()}
+      <Person x={28} y={80} h={54} pose="raise-left" robe="#e9d9b6" inner="#b8462f" hair="#8a5a3a" />
+      {(() => { const hd = hands(28, 80, 54, 'raise-left'); return (
+        <g>
+          {/* the bundle hangs behind, a white rose in the near hand */}
+          <path d={`M${hd.l.x + 29} ${hd.l.y - 5} q1 5 3 7`} fill="none" stroke={INK} strokeWidth={0.6} />
+          <circle cx={hd.l.x + 33} cy={hd.l.y + 2} r={3.6} fill={BLOOD} stroke={INK} strokeWidth={0.5} />
+          <path d={`M${hd.l.x + 30.5} ${hd.l.y + 0.5} q2.5 -2 5 0`} fill="none" stroke={INK} strokeWidth={0.5} />
+          <Rose x={hd.r.x + 1} y={hd.r.y - 3} r={2.6} color={PALE} />
+        </g>
+      ); })()}
+      {/* the feather, worn to the left */}
+      <path d="M25 27 q-6 -8 -12 -6 q4 3 9 8" fill="none" stroke={PALE} strokeWidth={1.4} strokeLinecap="round" />
+      <path d="M25 27 q-6 -8 -12 -6" fill="none" stroke={INK} strokeWidth={0.4} />
+      {/* the little white dog, up on its hind legs */}
+      <g>
+        <path d="M14 78 q3 -8 9 -6 q3 1 3 5 l-1 3 q-4 2 -8 0 z" fill={PALE} stroke={INK} strokeWidth={0.6} />
+        <circle cx={24} cy={70} r={2.6} fill={PALE} stroke={INK} strokeWidth={0.6} />
+        <path d="M22 68 l-1.5 -3 l2.5 1.5 M25.5 68 l1.5 -3 l-2.5 1.5" fill="none" stroke={INK} strokeWidth={0.6} />
+        <circle cx={25} cy={70} r={0.4} fill={INK} />
+        <path d="M15 79 q-3 -3 -1 -6" fill="none" stroke={INK} strokeWidth={0.7} strokeLinecap="round" />
+        <path d="M18 80 l-1 3 M21 80 l0 3" stroke={INK} strokeWidth={0.7} strokeLinecap="round" />
+      </g>
+      <Grass x={2} y={80} w={12} n={5} color={PALE} />
     </g>
   ),
   1: () => (
     <g>
-      <Infinity x={40} y={16} s={5} />
-      <Figure x={40} y={80} h={44} arms="left-up" fill={BLOOD} />
-      <line x1={26} y1={38} x2={26} y2={28} stroke={GOLD_FLAT} strokeWidth={1.4} />
-      <rect x={14} y={82} width={52} height={5} fill={PALE} stroke={INK} strokeWidth={0.8} />
+      <Infinity x={40} y={12} s={5} />
+      {/* rose arbour above, lilies and roses below */}
+      <path d="M0 4 q40 10 80 0" fill="none" stroke={LEAF} strokeWidth={1} />
+      {[8, 22, 40, 58, 72].map((x, i) => <Rose key={x} x={x} y={6 + (i % 2) * 2} r={2.4} />)}
+      <path d="M0 96 q20 -8 40 0 t40 0 v16 h-80 z" fill={LEAF} opacity={0.5} />
+      {[6, 18, 30].map((x, i) => <Rose key={x} x={x} y={101 + (i % 2) * 3} r={2.6} />)}
+      {[50, 62, 74].map((x, i) => <Lily key={x} x={x} y={100 + (i % 2) * 2} s={3.2} />)}
+      {/* the table and the four tools */}
+      <rect x={13} y={82} width={54} height={4} fill={PALE} stroke={INK} strokeWidth={0.7} />
+      <rect x={14} y={86} width={52} height={2} fill="url(#hatch)" />
+      {[17, 63].map((x) => <rect key={x} x={x} y={86} width={2.2} height={12} fill={INK} />)}
       <Wand x={22} y={76} s={5} />
       <Cup x={34} y={77} s={4.5} />
       <Sword x={47} y={76} s={5} />
       <Pentacle x={59} y={76} s={4.5} />
-      <path d="M0 96 q20 -8 40 0 t40 0 v16 h-80 z" fill="#5a7a3a" opacity={0.55} />
-      {[8, 20, 32].map((x) => <circle key={x} cx={x} cy={100 + (x % 3)} r={2} fill={BLOOD} stroke={INK} strokeWidth={0.3} />)}
-      {[50, 62, 74].map((x) => <path key={x} d={`M${x} 104 l-2 -5 l2 2 l2 -2 z`} fill={PALE} stroke={INK} strokeWidth={0.3} />)}
+      {/* the magician: red mantle over white, wand raised, hand to the earth */}
+      <Person x={40} y={82} h={50} pose="point-down" robe="#b8462f" inner={PALE} hair="#3a2a1e" belt={null} />
+      {(() => { const hd = hands(40, 82, 50, 'point-down'); return (
+        <g>
+          <line x1={hd.r.x} y1={hd.r.y + 3} x2={hd.r.x} y2={hd.r.y - 11} stroke={PALE} strokeWidth={1.4} strokeLinecap="round" />
+          <line x1={hd.r.x} y1={hd.r.y + 3} x2={hd.r.x} y2={hd.r.y - 11} stroke={INK} strokeWidth={0.4} />
+          <circle cx={hd.r.x} cy={hd.r.y - 12.5} r={1.4} fill={GOLD} stroke={INK} strokeWidth={0.4} />
+          <circle cx={hd.r.x} cy={hd.r.y + 4.5} r={1.4} fill={GOLD} stroke={INK} strokeWidth={0.4} />
+          <line x1={hd.l.x} y1={hd.l.y} x2={hd.l.x - 1} y2={hd.l.y + 4} stroke={SKIN_INK} strokeWidth={0.6} strokeLinecap="round" />
+        </g>
+      ); })()}
+      {/* the serpent belt, biting its tail */}
+      <path d="M34 57 q6 -3 12 0 q-6 3 -12 0 z" fill="none" stroke={LEAF} strokeWidth={1} />
+      <circle cx={46} cy={57} r={0.7} fill={LEAF} />
+      <circle cx={40} cy={30} r={2} fill={PALE} stroke={INK} strokeWidth={0.4} />
     </g>
   ),
   2: () => (
     <g>
-      <Pillar x={10} y={6} h={90} dark />
-      <Pillar x={70} y={6} h={90} />
-      <rect x={16} y={6} width={48} height={70} fill="url(#veil)" opacity={0.8} />
-      <Moon x={40} y={12} r={5} />
-      <Throne x={40} y={92} w={26} h={20} fill={PALE} back="arch" />
-      <Figure x={40} y={92} h={44} arms="hold" fill="#3f6fa8" cloak crown />
-      <path d="M32 96 q8 -6 16 0" fill="none" stroke={GOLD_FLAT} strokeWidth={1.4} />
-      <Water y={100} rows={2} />
+      <Pillar x={8} y={4} h={94} dark />
+      <Pillar x={72} y={4} h={94} />
+      <text x={12} y={30} fontSize={7} fill={PALE} fontFamily="Georgia, serif" textAnchor="middle">B</text>
+      <text x={76} y={30} fontSize={7} fill={INK} fontWeight="bold" fontFamily="Georgia, serif" textAnchor="middle">J</text>
+      {/* the veil, hung with pomegranates and palms */}
+      <rect x={16} y={4} width={48} height={74} fill="#e8e0c4" opacity={0.9} />
+      <rect x={16} y={4} width={48} height={74} fill="url(#hatch)" opacity={0.5} />
+      {[[24, 12], [40, 10], [56, 12], [20, 28], [36, 26], [52, 28], [28, 44], [44, 42], [60, 44], [24, 60], [40, 58], [56, 60]].map(([x, y], i) => <Pomegranate key={i} x={x} y={y} r={2.3} />)}
+      {[[32, 18], [48, 18], [32, 52], [48, 52]].map(([x, y], i) => <path key={i} d={`M${x} ${y + 4} q-3 -6 0 -9 q3 3 0 9 M${x} ${y + 4} q-5 -3 -6 -7 M${x} ${y + 4} q5 -3 6 -7`} fill="none" stroke={LEAF} strokeWidth={0.5} />)}
+      {/* the throne, the priestess, the scroll on her knee */}
+      <Throne x={40} y={94} w={30} h={22} fill={PALE} back="plain" />
+      <Person x={40} y={94} h={50} pose="sit-hold" robe="#3f6fa8" inner="#d9e4f2" hair="#3a2a1e" belt={null} />
+      {/* the veil falls either side of her face */}
+      <path d="M35.5 46 q-2 5 -2 12 M44.5 46 q2 5 2 12" fill="none" stroke="#d9e4f2" strokeWidth={1.6} strokeLinecap="round" />
+      <path d="M35.5 46 q-2 5 -2 12 M44.5 46 q2 5 2 12" fill="none" stroke={INK} strokeWidth={0.35} />
+      {/* the crown: horns of the moon about a full orb, above the brow */}
+      <g>
+        <circle cx={40} cy={41.5} r={2.3} fill={PALE} stroke={INK} strokeWidth={0.5} />
+        <path d="M35.5 39.5 q-3 3 0 6 M44.5 39.5 q3 3 0 6" fill="none" stroke={PALE} strokeWidth={1.4} />
+        <path d="M35.5 39.5 q-3 3 0 6 M44.5 39.5 q3 3 0 6" fill="none" stroke={INK} strokeWidth={0.4} />
+      </g>
+      {/* the cross on her breast, the scroll, the moon at her feet */}
+      <path d="M40 60 v6 M37 63 h6" stroke={PALE} strokeWidth={1.2} />
+      <rect x={34} y={70} width={13} height={5} rx={1} fill={PALE} stroke={INK} strokeWidth={0.5} />
+      <text x={40.5} y={73.8} fontSize={3.4} fill={INK} fontFamily="Georgia, serif" textAnchor="middle" letterSpacing={0.4}>TORA</text>
+      <path d="M32 96 q8 -7 16 0 q-8 -3 -16 0 z" fill={GOLD} stroke={INK} strokeWidth={0.5} />
+      <Water y={101} rows={2} />
     </g>
   ),
   3: () => (
     <g>
-      {[14, 26, 40, 54, 66].map((x, i) => (
-        <Star key={i} x={x} y={8 + (i % 2) * 4} r={2.5} points={6} />
-      ))}
-      <Tree x={12} y={70} h={24} fill={INK} />
-      <Throne x={44} y={88} w={34} h={32} fill={PALE} back="arch" />
-      <Figure x={44} y={88} h={44} arms="out" fill="#e9d9b6" cloak crown />
-      <path d="M52 78 l4 -4 l4 4 l-4 6 z" fill={BLOOD} stroke={INK} strokeWidth={0.5} />
-      <g stroke={GOLD_FLAT} strokeWidth={1} fill="none">
-        {Array.from({ length: 12 }, (_, i) => (
-          <path key={i} d={`M${4 + i * 6.6} 112 l1.5 -8 l1.5 8`} />
-        ))}
-      </g>
-      <Water y={98} rows={2} />
+      {/* twelve stars over her, cypresses and a stream behind */}
+      {Array.from({ length: 12 }, (_, i) => <Star key={i} x={40 + Math.cos((i / 12) * Math.PI * 2 - Math.PI / 2) * 11} y={8 + Math.sin((i / 12) * Math.PI * 2 - Math.PI / 2) * 5} r={1.4} points={6} />)}
+      {[6, 12, 68, 74].map((x, i) => <path key={x} d={`M${x} 62 q-3 -14 0 -30 q3 16 0 30 z`} fill={LEAF} opacity={0.85 - (i % 2) * 0.2} stroke={INK} strokeWidth={0.3} />)}
+      <path d="M0 64 q20 -4 40 0 t40 0 v6 q-20 4 -40 0 t-40 0 z" fill="#5a7a3a" opacity={0.6} />
+      <path d="M0 62 q22 -3 44 1 t36 -1" fill="none" stroke="#8fc3e0" strokeWidth={2.2} opacity={0.8} />
+      <path d="M0 62 q22 -3 44 1 t36 -1" fill="none" stroke={PALE} strokeWidth={0.6} opacity={0.6} strokeDasharray="3 4" />
+      {/* the cushioned throne, the empress, sceptre and shield */}
+      <Throne x={42} y={92} w={34} h={26} fill="#c94a3a" back="arch" />
+      <rect x={26} y={68} width={32} height={6} rx={3} fill="#e0a39a" stroke={INK} strokeWidth={0.4} />
+      <Person x={42} y={92} h={50} pose="raise-right" robe="#f1e5c8" inner="#e9d9b6" hair="#d9a441" crown belt="#c94a3a" />
+      {[[36, 74], [44, 78], [40, 84], [48, 86]].map(([x, y], i) => <Pomegranate key={i} x={x} y={y} r={1.5} />)}
+      {(() => { const hd = hands(42, 92, 50, 'raise-right'); return (
+        <g>
+          <line x1={hd.r.x} y1={hd.r.y + 2} x2={hd.r.x + 1} y2={hd.r.y - 9} stroke={GOLD_FLAT} strokeWidth={1.2} strokeLinecap="round" />
+          <circle cx={hd.r.x + 1} cy={hd.r.y - 10.5} r={2.2} fill={GOLD} stroke={INK} strokeWidth={0.4} />
+          <path d={`M${hd.r.x + 1} ${hd.r.y - 12.7} v-2.4 M${hd.r.x - 0.2} ${hd.r.y - 14} h2.4`} fill="none" stroke={INK} strokeWidth={0.5} />
+        </g>
+      ); })()}
+      <path d="M18 84 q0 -8 7 -8 q7 0 7 8 q0 6 -7 10 q-7 -4 -7 -10 z" fill={BLOOD} stroke={INK} strokeWidth={0.5} />
+      <circle cx={25} cy={81} r={2.2} fill="none" stroke={PALE} strokeWidth={0.8} />
+      <path d="M25 83.2 v5 M23 86 h4" stroke={PALE} strokeWidth={0.8} />
+      {/* the wheat */}
+      <path d="M0 100 q40 -6 80 0 v12 h-80 z" fill="#d9c08a" opacity={0.7} />
+      {Array.from({ length: 11 }, (_, i) => <Wheat key={i} x={3 + i * 7.5} y={112} h={12 + (i % 3) * 2} />)}
     </g>
   ),
   4: () => (
