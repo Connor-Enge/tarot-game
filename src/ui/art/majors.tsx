@@ -461,11 +461,16 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <Pillar x={70} y={4} h={94} />
       <rect x={16} y={4} width={48} height={90} fill="#5a2d7a" opacity={0.28} />
       <rect x={16} y={4} width={48} height={90} fill="url(#hatch)" opacity={0.25} />
+      {/* the veil hangs from a rod, its folds falling straight */}
+      <path d="M14 6 h52" stroke={GOLD_FLAT} strokeWidth={1.2} strokeLinecap="round" />
+      {[22, 30, 38, 46, 54, 62].map((x) => <path key={x} d={`M${x} 7 q-1 40 0 86`} fill="none" stroke="#5a2d7a" strokeWidth={0.6} opacity={0.5} />)}
+      {[10, 70].map((x) => <path key={x} d={`M${x - 6} 8 q3 -3 6 0 q3 -3 6 0 v2 h-12 z`} fill={PALE} stroke={INK} strokeWidth={0.5} />)}
       <Throne x={40} y={92} w={30} h={30} fill="#b8b4a8" back="square" />
       {/* the green mantle, then the red robe, crown with its square jewel */}
       <path d="M28 52 L18 92 H62 L52 52 Z" fill={LEAF} stroke={INK} strokeWidth={0.5} />
       <Person x={40} y={92} h={50} pose="raise-right" robe="#b8462f" inner="#c94a3a" hair="#3a2a1e" crown belt={GOLD_FLAT} />
       <rect x={38.4} y={40.2} width={3.2} height={3.2} fill={PALE} stroke={INK} strokeWidth={0.4} />
+      <rect x={37.5} y={55} width={5} height={5} rx={0.5} fill={GOLD} stroke={INK} strokeWidth={0.4} transform="rotate(45 40 57.5)" />
       {(() => { const hd = hands(40, 92, 50, 'raise-right'); return (
         <g>
           {/* the sword upright in one hand, the scales in the other */}
@@ -488,10 +493,14 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
       <rect x={13} y={6} width={5} height={102} fill="#5a3a22" stroke={INK} strokeWidth={0.5} />
       <rect x={62} y={6} width={5} height={102} fill="#5a3a22" stroke={INK} strokeWidth={0.5} />
       <rect x={10} y={6} width={60} height={5} fill="#5a3a22" stroke={INK} strokeWidth={0.5} />
+      <path d="M15 12 q1 20 -0.5 40 q1.5 24 0 54 M64.5 12 q-1 20 0.5 40 q-1.5 24 0 54 M12 8.5 q30 1 56 0" fill="none" stroke={INK} strokeWidth={0.35} opacity={0.5} />
+      <rect x={16} y={6} width={2} height={102} fill="url(#hatch)" opacity={0.6} />
+      <rect x={65} y={6} width={2} height={102} fill="url(#hatch)" opacity={0.6} />
+      <circle cx={40} cy={82} r={12} fill={GOLD_FLAT} opacity={0.12} />
       {[20, 30, 46, 56].map((x) => (
         <path key={x} d={`M${x} 11 q3 4 0 8 q-3 -4 0 -8`} fill={LEAF} stroke={INK} strokeWidth={0.4} />
       ))}
-      {[[13, 30], [18, 50], [13, 70], [67, 40], [62, 60], [67, 84]].map(([x, y], i) => (
+      {[[13, 30], [18, 50], [13, 70], [67, 40], [62, 60], [67, 84], [18, 90], [62, 24], [13, 100]].map(([x, y], i) => (
         <path key={i} d={`M${x} ${y} q${x < 40 ? 4 : -4} -3 ${x < 40 ? 6 : -6} 0 q${x < 40 ? -3 : 3} 3 ${x < 40 ? -6 : 6} 0 z`} fill={LEAF} stroke={INK} strokeWidth={0.35} />
       ))}
       <g className="live-sway">
@@ -508,6 +517,7 @@ export const MAJOR_ART: Record<number, () => ReactElement> = {
         {/* the blue tunic, belted, and the head with its halo */}
         <path d="M32 50 h16 l-1 24 q-7 3 -14 0 z" fill="#3f6fa8" stroke={INK} strokeWidth={0.6} />
         <path d="M40 50 h8 l-1 24 q-3.5 1.5 -7 1.5 z" fill="url(#hatch)" />
+        <path d="M35 54 q0 10 0.5 18 M44.5 54 q0 10 -0.5 18" fill="none" stroke={INK} strokeWidth={0.35} opacity={0.5} />
         <path d="M32 52 h16" stroke={GOLD_FLAT} strokeWidth={1.4} />
         <path d="M34 76 q6 -3 12 0" fill="none" stroke={INK} strokeWidth={0.4} />
         {Array.from({ length: 12 }, (_, i) => { const a = (i / 12) * Math.PI * 2; return <line key={i} x1={40 + Math.cos(a) * 7} y1={82 + Math.sin(a) * 7} x2={40 + Math.cos(a) * 10} y2={82 + Math.sin(a) * 10} stroke={GOLD_FLAT} strokeWidth={0.9} strokeLinecap="round" />; })}
