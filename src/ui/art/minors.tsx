@@ -243,10 +243,15 @@ const WANDS: Record<number, () => ReactElement> = {
   ),
   7: () => (
     <g>
-      <Row suit="wands" xs={[8, 20, 32, 46, 58, 70]} y={92} s={10} />
-      <path d="M0 78 Q40 60 80 78 L80 112 L0 112 Z" fill={GREEN} opacity={0.7} />
-      <Person x={40} y={80} h={40} pose="hold" robe={ROBE.wands} />
-      <Row suit="wands" xs={[52]} y={58} s={11} angle={20} />
+      <Mountains y={70} opacity={0.15} />
+      {/* he holds the high ground with his staff crosswise; six rise at him from below */}
+      <path d="M0 80 Q40 60 80 80 L80 112 L0 112 Z" fill={GREEN} opacity={0.7} />
+      <path d="M0 80 Q40 60 80 80 L80 86 Q40 68 0 86 Z" fill="url(#hatch)" opacity={0.4} />
+      <Person x={40} y={78} h={42} pose="hold" robe={ROBE.wands} inner={ROBE_PALE.wands} hair="#3a2a1e" />
+      <ellipse cx={36.2} cy={78} rx={3.8} ry={1.4} fill={BLOOD} />
+      <Row suit="wands" xs={[40]} y={60} s={13} angle={-38} />
+      <Row suit="wands" xs={[6, 20, 34, 48, 62, 76]} y={104} s={13} />
+      <Row suit="wands" xs={[13, 41, 69]} y={106} s={11} angle={8} />
     </g>
   ),
   8: () => (
@@ -263,11 +268,16 @@ const WANDS: Record<number, () => ReactElement> = {
   ),
   9: () => (
     <g>
-      <Row suit="wands" xs={[8, 18, 28, 38, 48, 58, 68, 76]} y={70} s={12} />
-      <Ground y={96} fill={STONE} opacity={0.6} />
-      <Person x={30} y={104} h={44} pose="hold" robe={ROBE.wands} />
-      <rect x={26} y={62} width={8} height={2.4} fill={PALE} />
-      <Row suit="wands" xs={[42]} y={90} s={12} />
+      <Mountains y={62} opacity={0.15} />
+      <Ground y={96} fill="#8a6a3a" opacity={0.6} />
+      {/* eight staves stand behind him as a palisade; he leans on the ninth, bandaged, wary */}
+      <Row suit="wands" xs={[6, 26, 46, 66]} y={70} s={12} />
+      <Row suit="wands" xs={[16, 36, 56, 76]} y={72} s={12} angle={-4} />
+      <path d="M0 84 h80" stroke={INK} strokeWidth={0.4} opacity={0.3} />
+      <Person x={30} y={104} h={44} pose="hold" robe={ROBE.wands} inner={ROBE_PALE.wands} hair="#3a2a1e" />
+      <rect x={25.4} y={60.4} width={9.2} height={2.6} rx={0.5} fill={PALE} stroke={INK} strokeWidth={0.35} />
+      <path d="M27 63 l-1 1.5 M33 63 l1 1.5" stroke={INK} strokeWidth={0.3} opacity={0.6} />
+      <Row suit="wands" xs={[36]} y={88} s={13} angle={6} />
     </g>
   ),
   10: () => (
